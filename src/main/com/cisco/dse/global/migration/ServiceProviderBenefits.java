@@ -1,35 +1,20 @@
 package com.cisco.dse.global.migration;
 
+import java.io.IOException;
+
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.version.VersionException;
+
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-
-import javax.jcr.*;
-
-import org.apache.jackrabbit.commons.JcrUtils;
-
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.query.InvalidQueryException;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.version.VersionException;
-
-
-import org.apache.sling.commons.json.JSONObject;
-import org.apache.commons.lang.StringUtils; 
 public class ServiceProviderBenefits {
 
 	Document doc;
@@ -53,12 +38,15 @@ public class ServiceProviderBenefits {
 	javax.jcr.Node subdrawer = null;
 	javax.jcr.Node subdrawerpanel = null;
 
+	static Logger log = Logger.getLogger(ServiceProviderBenefits.class);
+	
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
 
 	// Repo node paths
 
 	String benefitLeft = "/content/<locale>/solutions/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
 	String benefitRight = "/content/<locale>/solutions/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
+	String pageUrl = "http://chard.cisco.com:4502/content/<locale>/solutions/<prod>/benefit.html";
 	
 	public String translate(String loc, String prod, String type,
 			String locale, Session session) throws IOException,
@@ -67,50 +55,59 @@ public class ServiceProviderBenefits {
 
 		benefitLeft = benefitLeft.replace("<locale>", locale).replace("<prod>", prod);
 		benefitRight = benefitRight.replace("<locale>", locale).replace("<prod>", prod);
+		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		
 		javax.jcr.Node benefitLeftNode = null;
 		javax.jcr.Node benefitRightNode = null;
 		
-		sb.append("<td>"+"url"+"</td>");
-		sb.append("<td>"+loc+"</td>");
+		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
+		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
+		
 		
 		try {
 
 			benefitLeftNode = session.getNode(benefitLeft);
 			benefitRightNode = session.getNode(benefitRight);
+
 			
 			try {
 				doc = Jsoup.connect(loc).get();
-				sb.append("<li>Connected to "+doc.baseUri()+"</li>");
+				log.debug("Connected to "+doc.baseUri());
+				if ("me_ar".equals(locale)) {
+					sb.append("<li>The alignment of content for all arabic pages post migration will be from left to right by default. This has to be corrected manually.\n </li>");
+				}
+				
 			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n</li>");
+				sb.append("<li>Cannot Connect to given URL.</li>");
+				log.error("Exception : ",e);
 			}
 
 			title = doc.title();
 
 			// start set unified computing benifit text properties.
 			try {
-				Element spTextElement = doc.select("div.c00-pilot").first();
-//				System.out.println("");
-				String spText = null;
-				int count = 0;
-					spText = spTextElement.getElementsByTag("h2").first().outerHtml(); //spTextEle.html();
-					String spParaText = spTextElement.getElementsByTag("p").outerHtml(); 
-					benefitLeftNode.getNode("text").setProperty("text", spText);
-					benefitLeftNode.getNode("text_1").setProperty("text", spParaText);
-				sb.append("<li>Updated text and text_1 at "+benefitLeftNode.getPath()+"<li>");
+				NodeIterator textNodes  = benefitLeftNode.getNodes("text*");
+				Elements spTextElements = doc.select("div.c00-pilot");
+				javax.jcr.Node textNode = null;
+				for (Element spTextElement:spTextElements) {
+					String spText = spTextElement.getElementsByTag("h2").first().outerHtml(); 
+					String spParaText = spTextElement.getElementsByTag("p").outerHtml();
+					if (!spTextElement.parent().parent().hasClass("gd23-pilot")) {
+						if (textNodes.hasNext())
+							textNode = textNodes.nextNode();
+						if (textNode != null) {
+							textNode.setProperty("text", spText.concat(spParaText));
+						}
+						log.debug("Updated text at "+textNode.getPath());
+					}
+				}
+				
 			} catch (Exception e) {
-				sb.append("<li>Unable to update service provider benefits text component.\n</li>");
+				sb.append("<li>Unable to update service provider benefits text component.</li>");
+				log.error("Exception : ",e);
 			}
-			try {
-				sb.append("<li>could not find spotlight_large_v2 component\n</li>");
-				sb.append("<li>could not find spotlight_large_v2_0 component\n</li>");
-				sb.append("<li>could not find htmlblob component\n</li>");
-				sb.append("<li>could not find text_0 component\n</li>");
-			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits text component.\n</li>");
-			}
+			
 			try {
 				if (doc.select("div.c50-pilot").select("div.frame").size() > 0) {
 					sb.append("<li>Additional Hero component found\n</li>");
@@ -119,9 +116,49 @@ public class ServiceProviderBenefits {
 					sb.append("<li>Additional list component found\n</li>");
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits text component.\n</li>");
+				sb.append("<li>Unable to update benefits text component.</li>");
+				log.error("Exception : ",e);
 			}
 			// end set unified computing benifit text properties.
+			// start set spotlight_large_v2 component properties
+			try {
+				//
+				//
+				NodeIterator spotLightLargeNodes  = benefitLeftNode.getNodes("spotlight_large_v2*");
+				Elements benefitSpotLightElements  = doc.select("div.c11-pilot");
+				javax.jcr.Node spotLightNode = null;
+				if (doc.select("div.c11-pilot").size() == 0) {
+					sb.append("<li>could not find spotlight_large_v2 component\n</li>");
+				}
+				if (doc.select("div.htmlblob").size() == 0) {
+					sb.append("<li>could not find htmlblob component\n</li>");
+				}
+				for (Element benefitSpotLightEle : benefitSpotLightElements) {
+					Element spotLightTitle = benefitSpotLightEle.getElementsByTag("h2").first();
+					
+					Element spotLightDescription = benefitSpotLightEle.getElementsByTag("p").first();
+					Element spotLightAnchor = benefitSpotLightEle.getElementsByTag("a").first();
+					String linkText = spotLightAnchor.text();
+					System.out.println(linkText);
+					String linkUrl = spotLightAnchor.attr("href");
+					System.out.println(linkUrl);
+					if (spotLightLargeNodes.hasNext())
+						spotLightNode = spotLightLargeNodes.nextNode();
+					if (spotLightNode != null) {
+						spotLightNode.setProperty("title", spotLightTitle.text());
+						spotLightNode.setProperty("description", spotLightDescription.text());
+						spotLightNode.setProperty("linktext", linkText);
+						javax.jcr.Node ctaNode = spotLightNode.getNode("cta");
+						ctaNode.setProperty("url", linkUrl);
+						log.debug("Updated title, descriptoin and linktext at "+spotLightNode.getPath());
+					}
+				}
+
+			} catch (Exception e) {
+				sb.append("<li>Unable to update benefits tile_bordered component.</li>");
+				log.error("Exception : ",e);
+			}	
+			// end set spotlight_large_v2 component properties
 			//start set service provider tile_bordered properties.
 			
 			try {
@@ -146,19 +183,21 @@ public class ServiceProviderBenefits {
 						tileBorderedNode.setProperty("description", desc);
 						tileBorderedNode.setProperty("linktext", anchorText);
 						tileBorderedNode.setProperty("linkurl", anchorHref);
-						sb.append("<li>Updated title, description, linktext, linkurl at "+tileBorderedNode.getPath()+"</li>");
+						log.debug("<li>Updated title, description, linktext, linkurl at "+tileBorderedNode.getPath()+"</li>");
 					}
 				}
 
 			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits tile_bordered component.\n</li>");
+				sb.append("<li>Unable to update benefits tile_bordered component.</li>");
+				log.error("Exception : ",e);
 			}	
 			//end set service provider tile_bordered properties.
 			
 			session.save();
 
 		} catch (Exception e) {
-			sb.append("<li>UnKnown Error.\n</li>");
+			sb.append("<li>Unable to migrate the content due to some error.</li>");
+			log.error("Exception : ",e);
 		}
 		
 		sb.append("</ul></td>");

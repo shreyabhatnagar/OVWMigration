@@ -1,35 +1,20 @@
 package com.cisco.dse.global.migration;
 
+import java.io.IOException;
+
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.version.VersionException;
+
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-
-import javax.jcr.*;
-
-import org.apache.jackrabbit.commons.JcrUtils;
-
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.query.InvalidQueryException;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.version.VersionException;
-
-
-import org.apache.sling.commons.json.JSONObject;
-import org.apache.commons.lang.StringUtils; 
 public class UnifiedComputingBenefits {
 
 	Document doc;
@@ -55,10 +40,13 @@ public class UnifiedComputingBenefits {
 
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
 
+	static Logger log = Logger.getLogger(ServiceProviderBenefits.class);
+	
 	// Repo node paths
 
 	String benefitLeft = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
 	String benefitRight = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
+	String pageUrl = "http://chard.cisco.com:4502/content/<locale>/products/<prod>/benefit.html";	
 	
 	public String translate(String loc, String prod, String type,
 			String locale, Session session) throws IOException,
@@ -67,12 +55,11 @@ public class UnifiedComputingBenefits {
 
 		benefitLeft = benefitLeft.replace("<locale>", locale).replace("<prod>", prod);
 		benefitRight = benefitRight.replace("<locale>", locale).replace("<prod>", prod);
-
+		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		
-		sb.append("<td>"+"url"+"</td>");
-		sb.append("<td>"+loc+"</td>");
+		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
+		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
-
 		
 		javax.jcr.Node benefitLeftNode = null;
 		javax.jcr.Node benefitRightNode = null;
@@ -82,35 +69,38 @@ public class UnifiedComputingBenefits {
 			benefitRightNode = session.getNode(benefitRight);
 			
 			try {
-
+							
 				doc = Jsoup.connect(loc).get();
-				sb.append("<li>"+doc.baseUri()+"</li>");
+				log.debug("Connected to "+loc);
+				if ("me_ar".equals(locale)) {
+					sb.append("<li>The alignment of content for all arabic pages post migration will be from left to right by default. This has to be corrected manually.\n </li>");
+				}
+				
 			} catch (Exception e) {
 				sb.append("<li>Cannot Connect to given URL. \n</li>");
+				log.error("Exception : "+e);
 			}
 
 			title = doc.title();
 
 			// start set unified computing benifit text properties.
 			try {
+				NodeIterator textNodes  = benefitLeftNode.getNodes("text*");
 				Elements benefitTextElements = doc.select("div.c00-pilot");
-				
-				String benefitText = null;
-				int count = 0;
-				for (Element benefitTextEle : benefitTextElements) {
-					benefitText = benefitTextEle.html();
-					if (count == 0) {
-						benefitLeftNode.getNode("text").setProperty("text", benefitText);
-						count++;
-					} else {
-						benefitLeftNode.getNode("text_"+(count-1)).setProperty("text", benefitText);
-						count++;
+				javax.jcr.Node textNode = null;
+				for (Element benefitTextElement:benefitTextElements) {
+					String benefitText = benefitTextElement.html();
+					if (textNodes.hasNext())
+						textNode = textNodes.nextNode();
+					if (textNode != null) {
+						textNode.setProperty("text", benefitText);
 					}
-					
+					log.debug("Updated text at "+textNode.getPath());
 				}
 				
 			} catch (Exception e) {
-				sb.append("<li>Unable to update unified computing benefits text component.\n</li>");
+				sb.append("<li>Unable to update unified computing benefits text component.</li>");
+				log.error("Exception : "+e);
 			}
 
 			// end set unified computing benifit text properties.
@@ -136,21 +126,18 @@ public class UnifiedComputingBenefits {
 					heroLargeNode.getNode("heropanel_0").setProperty("description", heroPanelDescription);
 					heroLargeNode.getNode("heropanel_0").setProperty("linktext", linkText);
 					heroLargeNode.getNode("heropanel_0").setProperty("linkurl", linkUrl);
-					sb.append("<li>Updated title, description, linktext and linkurl at "+heroLargeNode.getPath()+"</li>");
+					log.debug("Updated title, description, linktext and linkurl at "+heroLargeNode.getPath());
 				}
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update unified computing benefits hero_large component..\n"+e+"</li>");
+				sb.append("<li>Unable to update unified computing benefits hero_large component.</li>");
+				log.error("Exception : "+e);
 			}
 				//end set unified computing benefit hero properties.
-				try {
-					sb.append("<li>could not find c26v4_popup_cq component\n</li>");
-					sb.append("<li>could not find c26v4_popup_cq component\n</li>");
-					sb.append("<li>could not find htmlblob component\n</li>");
-					sb.append("<li>could not find text_0 component\n</li>");
-				} catch (Exception e) {
-					sb.append("<li>Unable to find components.\n</li>");
-				}
+				sb.append("<li>could not find c26v4_popup_cq component on left</li>");
+				sb.append("<li>could not find c26v4_popup_cq component on right rail</li>");
+				sb.append("<li>could not find htmlblob component</li>");
+					
 				//start set unified computing benefit spotlight properties.
 				try {
 				Elements benefitSpotLightElements = doc.select("div.c11-pilot");
@@ -165,19 +152,18 @@ public class UnifiedComputingBenefits {
 						Element spotLightDescription = benefitSpotLightEle.getElementsByTag("p").first();
 						Element spotLightAnchor = benefitSpotLightEle.getElementsByTag("a").first();
 						String linkText = spotLightAnchor.text();
-						System.out.println(linkText);
 						String linkUrl = spotLightAnchor.attr("href");
-						System.out.println(linkUrl);
 						spotLightNode.setProperty("title", spotLightTitle.text());
 						spotLightNode.setProperty("description", spotLightDescription.text());
 						spotLightNode.setProperty("linktext", linkText);
 						javax.jcr.Node ctaNode = spotLightNode.getNode("cta");
 						ctaNode.setProperty("url", linkUrl);
-						sb.append("<li>Updated title, descriptoin and linktext at "+spotLightNode.getPath()+"</li>");
+						log.debug("Updated title, descriptoin and linktext at "+spotLightNode.getPath());
 					}
 				}
 				} catch (Exception e) {
-					sb.append("<li>Unable to update unified computing benefits spotlight_medium_v2 component..\n"+e+"</li>");
+					sb.append("<li>Unable to update unified computing benefits spotlight_medium_v2 component.</li>");
+					log.error("Exception : "+e);
 				} 
 				//end set unified computing benefit spotlight properties.
 				//start set unified computing benefit tile_bordered properties.
@@ -199,28 +185,34 @@ public class UnifiedComputingBenefits {
 						if (tileBorderedNodes.hasNext())
 							tileBorderedNode = tileBorderedNodes.nextNode();
 						if (tileBorderedNode != null) {
+							if (title.isEmpty()) {
+								sb.append("<li>Title element for the right rail tile with node name "+tileBorderedNode.getName()+" is not a h2 tag. Hence tile will not be migrated properly.</li>\n");
+							}
 							tileBorderedNode.setProperty("title", title);
 							tileBorderedNode.setProperty("description", desc);
 							tileBorderedNode.setProperty("linktext", anchorText);
 							tileBorderedNode.setProperty("linkurl", anchorHref);
-							sb.append("<li>Updated title, description, linktext and linkurl at "+tileBorderedNode.getPath()+"</li>");
+							log.debug("Updated title, description, linktext and linkurl at "+tileBorderedNode.getPath());
 						}
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>Unable to update benefits tile_bordered component.\n"+e+"</li>");
+					sb.append("<li>Unable to update benefits tile_bordered component.</li>");
+					log.error("Exception : ",e);
 				}
 			//end set benefit list.
 			// start of benefit list right rail.
-
+				
+				if (doc.select("div.c46-pilot").size() > 0) {
+					sb.append("<li>Additional c46-pilot component found in Right Rail\n</li>");
+				}
 			session.save();
-			
+
 		} catch (Exception e) {
-			sb.append("<li>UnKnown Error.\n"+e+"</li>");
+			sb.append("<li>Could not create the content due to some error.</li>");
+			log.error("Exception : ",e);
 		}
-		
 		sb.append("</ul></td>");
-		
 		return sb.toString();
 	}
 }

@@ -48,6 +48,8 @@ public class Benefits {
 	String benefitLeft = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
 	String benefitRight = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
 
+	String pageUrl = "http://chard.cisco.com:4502/content/<locale>/products/<prod>/benefit.html";
+	
 	static Logger log = Logger.getLogger(Benefits.class);
 
 	public String translate(String loc, String prod, String type,
@@ -57,8 +59,10 @@ public class Benefits {
 		BasicConfigurator.configure();
 		log.debug("In the translate method");
 		
-		sb.append("<td>" + "url" + "</td>");
-		sb.append("<td>" + loc + "</td>");
+		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+		
+		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
+		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
 
 
@@ -73,9 +77,8 @@ public class Benefits {
 
 			try {
 				doc = Jsoup.connect(loc).get();
-				sb.append("<li> Connected to : " + doc.baseUri() + "</li>");
 			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n</li>");
+				sb.append("<li>Cannot Connect to given URL. \n"+loc+"</li>");
 			}
 
 			title = doc.title();
@@ -89,7 +92,11 @@ public class Benefits {
 				String benefitText0 = null;
 				for (Element benefitTextEle : benefitTextElements) {
 
-					benefitText = benefitTextEle.getElementsByTag("h2").first().outerHtml();
+					Elements h2Ele = benefitTextEle.getElementsByTag("h2");
+					
+					if(h2Ele.size()>0){
+						benefitText = h2Ele.first().outerHtml();
+					}
 					
 					Elements migrate = benefitTextEle.getElementsByTag("migrate");
 					if(migrate.size()>0){
@@ -100,12 +107,12 @@ public class Benefits {
 				
 					Node textNode = benefitLeftNode.getNode("text");
 					if(textNode != null){
-						if(migrate.size()>0){
+						if(migrate.size()>0 && benefitText != null){
 						textNode.setProperty("text", benefitText);
 						}else{
 							textNode.setProperty("text", "");
 						}
-						sb.append("<li>Updated text at " + textNode.getPath() + "</li>");
+						log.debug("Updated text at " + textNode.getPath());
 					}else{
 						sb.append("<li>'text' node does not exists at "+benefitLeftNode.getPath()+"</li>");
 					}
@@ -114,16 +121,16 @@ public class Benefits {
 					Node text_0_Node = benefitLeftNode.getNode("text_0");
 					if(text_0_Node != null){
 						text_0_Node.setProperty("text", benefitText0);
-						sb.append("<li>Updated text at " + text_0_Node.getPath() + "</li>");
+						log.debug("Updated text at " + text_0_Node.getPath());
 					}else{
 						sb.append("<li>'text_0' node doesn't exists at "+benefitLeftNode.getPath()+"</li>");
 					}
 				}
 				}else{
-					sb.append("<li style='color:red'>'div.c00-pilot' div class doesn't exists.</li>");
+					sb.append("<li>'div.c00-pilot' div class doesn't exists.</li>");
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits text component.\n"+e+"</li>");
+				sb.append("<li>Unable to update benefits text component."+e+"</li>");
 			}
 
 			// end set benefit text.
@@ -176,7 +183,7 @@ public class Benefits {
 							listNode = benefitLeftNode.getNode("list");
 							if (listNode != null) {
 								listNode.setProperty("title", benefitTitleText);
-								sb.append("<li>Updated title at " + listNode.getPath() + "</li>");
+								log.debug("Updated title at " + listNode.getPath());
 								count++;
 							}
 						} else {
@@ -185,7 +192,7 @@ public class Benefits {
 							if (listNode != null) {
 								listNode.setProperty("title",
 										benefitAnchorTitleText);
-								sb.append("<li>Updated title at " + listNode.getPath() + "</li>");
+								log.debug("Updated title at " + listNode.getPath());
 								count++;
 							}
 						}
@@ -196,7 +203,7 @@ public class Benefits {
 							if (elementList != null) {
 								elementList.setProperty("listitems",
 										list.toArray(new String[list.size()]));
-								sb.append("<li>Updated listitesm at " + elementList.getPath() + "</li>");
+								log.debug("Updated listitesm at " + elementList.getPath());
 							} else {
 								sb.append("<li>element_list_0 node doesn't exists</li>");
 							}
@@ -207,8 +214,8 @@ public class Benefits {
 					sb.append("<li>div class 'div.n13-pilot' not found in dom</li>");
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits list component.\n" + e +"</li>");
-				log.error(e);
+				sb.append("<li>Unable to update benefits list component.\n</li>");
+				log.error("Exceptoin : ",e);
 			}
 			// end set benefit list.
 			// --------------------------------------------------------------------------------------------------------------------------
@@ -216,13 +223,12 @@ public class Benefits {
 
 			try {
 
-				Elements rightRail = doc.select("div.c23-pilot");
-				javax.jcr.Node rightRailNode = null;
+				Elements rightRail = doc.select("div.c23-pilot,div.cc23-pilot");
 				int rightcount = 0;
 				boolean entry = true;
 				if(rightRail != null){
 				for (Element ele : rightRail) {
-
+					javax.jcr.Node rightRailNode = null;
 					String title = ele.getElementsByTag("h2").text();
 					String desc = ele.getElementsByTag("p").text();
 					Elements anchor = ele.getElementsByTag("a");
@@ -245,13 +251,17 @@ public class Benefits {
 						}
 					
 					if (rightRailNode != null) {
+						if(title != null && title != "" && desc != null && desc != "" && anchorText != null && anchorText != ""){
 						rightRailNode.setProperty("title", title);
 						rightRailNode.setProperty("description", desc);
 						rightRailNode.setProperty("linktext", anchorText);
 						rightRailNode.setProperty("linkurl", anchorHref);
-						sb.append("<li>title, description, linktext and linkurl are created at "+rightRailNode.getPath()+"</li>");
+						log.debug("title, description, linktext and linkurl are created at "+rightRailNode.getPath());
+						}else{
+							sb.append("<li>Content miss match for "+ele.className()+"</li>");
+						}
 					}else{
-						sb.append("<li>title_bordered node doesn't exist in aem.</li>");
+						sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
 					}
 				}
 				}else{
@@ -259,7 +269,6 @@ public class Benefits {
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update benefits tile_bordered component.\n</li>");
-				e.printStackTrace();
 			}
 			// End of benefit list right rail.
 			// -----------------------------------------------------------------------------------------------------
@@ -267,7 +276,7 @@ public class Benefits {
 			session.save();
 
 		} catch (Exception e) {
-			sb.append("<li>UnKnown Error.\n</li>");
+			sb.append("<li>Exception "+e+"</li>");
 		}
 		
 		sb.append("</ul></td>");

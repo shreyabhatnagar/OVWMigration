@@ -87,12 +87,15 @@ public class OVWMigration {
 				
 				
 				sb.append("<table widht='500' border='1'>");
-				sb.append("<tr><th style='width:500px'>AEM url</th><th style='width:500px'>WEM url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>AEM url</th><th style='width:500px'>WEM url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg1);
-				sb.append("<tr><th style='width:500px'>AEM url</th><th style='width:500px'>WEM url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>AEM url</th><th style='width:500px'>WEM url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg2);
-				sb.append("<tr><th style='width:500px'>AEM url</th><th style='width:500px'>WEM url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>AEM url</th><th style='width:500px'>WEM url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg3);
+				sb.append("<tr><td colspan='3'>.</td></tr>");
 				sb.append("</table>");
 				
 				
