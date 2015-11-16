@@ -90,6 +90,10 @@ public class Benefits {
 				if(benefitTextElements != null && benefitTextElements.size()>0){
 				String benefitText = null;
 				String benefitText0 = null;
+				
+				String h2Text = doc.select("h2.header-1").first().outerHtml();
+				
+								
 				for (Element benefitTextEle : benefitTextElements) {
 
 					Elements h2Ele = benefitTextEle.getElementsByTag("h2");
@@ -107,11 +111,7 @@ public class Benefits {
 				
 					Node textNode = benefitLeftNode.getNode("text");
 					if(textNode != null){
-						if(migrate.size()>0 && benefitText != null){
-						textNode.setProperty("text", benefitText);
-						}else{
-							textNode.setProperty("text", "");
-						}
+						textNode.setProperty("text", h2Text);
 						log.debug("Updated text at " + textNode.getPath());
 					}else{
 						sb.append("<li>'text' node does not exists at "+benefitLeftNode.getPath()+"</li>");
@@ -227,6 +227,10 @@ public class Benefits {
 				int rightcount = 0;
 				boolean entry = true;
 				if(rightRail != null){
+				if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
+                    sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>");
+				}
+				if(rightRail.size()>0){
 				for (Element ele : rightRail) {
 					javax.jcr.Node rightRailNode = null;
 					String title = ele.getElementsByTag("h2").text();
@@ -263,6 +267,9 @@ public class Benefits {
 					}else{
 						sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
 					}
+				}
+				}else{
+					sb.append("<li>No Content with class 'c23-pilot or cc23-pilot' found</li>");
 				}
 				}else{
 					sb.append("<li>div class c23-pilot not found in dom</li>");
