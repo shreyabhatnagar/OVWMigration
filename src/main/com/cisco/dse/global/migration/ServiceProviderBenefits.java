@@ -166,6 +166,9 @@ public class ServiceProviderBenefits {
 				//
 				NodeIterator tileBorderedNodes  = benefitRightNode.getNodes("tile_bordered*");
 				Elements rightRail = doc.select("div.c23-pilot");
+				if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
+                    sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>");
+				}
 				javax.jcr.Node tileBorderedNode = null;
 
 				for (Element ele : rightRail) {

@@ -136,7 +136,6 @@ public class UnifiedComputingBenefits {
 				//end set unified computing benefit hero properties.
 				sb.append("<li>could not find c26v4_popup_cq component on left</li>");
 				sb.append("<li>could not find c26v4_popup_cq component on right rail</li>");
-				sb.append("<li>could not find htmlblob component</li>");
 					
 				//start set unified computing benefit spotlight properties.
 				try {
@@ -172,6 +171,10 @@ public class UnifiedComputingBenefits {
 					//
 					NodeIterator tileBorderedNodes  = benefitRightNode.getNodes("tile_bordered*");
 					Elements rightRail = doc.select("div.c23-pilot");
+					if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
+                        sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>");
+					}
+					
 					javax.jcr.Node tileBorderedNode = null;
 
 					for (Element ele : rightRail) {
