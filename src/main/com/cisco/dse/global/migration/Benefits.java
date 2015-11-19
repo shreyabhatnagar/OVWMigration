@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
@@ -43,21 +44,23 @@ public class Benefits {
 
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
 
-	// Repo node paths
-
-	String benefitLeft = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
-	String benefitRight = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
-
-	String pageUrl = "http://chard.cisco.com:4502/content/<locale>/products/<prod>/benefit.html";
 	
 	static Logger log = Logger.getLogger(Benefits.class);
 
-	public String translate(String loc, String prod, String type,
+	public String translate(String loc, String prod, String type, String catType,
 			String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
 		log.debug("In the translate method");
+		log.debug("In the translate method, catType is :"+ catType);
+
+		// Repo node paths
+
+		String benefitLeft = "/content/<locale>/"+catType+"/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
+		String benefitRight = "/content/<locale>/"+catType+"/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
+
+		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/benefit.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		
@@ -85,49 +88,27 @@ public class Benefits {
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set benefit text content.
 			try {
-				Elements benefitTextElements = doc.select("div.c00-pilot,div.cc00-pilot");
+				Elements benefitTextElements = doc.select("div.c00-pilot");
+				int eleSize = benefitTextElements.size();
+				NodeIterator textNodeIterator = benefitLeftNode.getNodes("text*");
+				int nodeSize = (int)textNodeIterator.getSize();
 				
-				if(benefitTextElements != null && benefitTextElements.size()>0){
-				String benefitText = null;
-				String benefitText0 = null;
-				
-				String h2Text = doc.select("h2.header-1").first().outerHtml();
-				
-								
-				for (Element benefitTextEle : benefitTextElements) {
-
-					Elements h2Ele = benefitTextEle.getElementsByTag("h2");
-					
-					if(h2Ele.size()>0){
-						benefitText = h2Ele.first().outerHtml();
-					}
-					
-					Elements migrate = benefitTextEle.getElementsByTag("migrate");
-					if(migrate.size()>0){
-					benefitText0 = migrate.first().html();
-					}else{
-					benefitText0 = benefitTextEle.html();
-					}
-				
-					Node textNode = benefitLeftNode.getNode("text");
-					if(textNode != null){
-						textNode.setProperty("text", h2Text);
-						log.debug("Updated text at " + textNode.getPath());
-					}else{
-						sb.append("<li>'text' node does not exists at "+benefitLeftNode.getPath()+"</li>");
-					}
-					
-					
-					Node text_0_Node = benefitLeftNode.getNode("text_0");
-					if(text_0_Node != null){
-						text_0_Node.setProperty("text", benefitText0);
-						log.debug("Updated text at " + text_0_Node.getPath());
-					}else{
-						sb.append("<li>'text_0' node doesn't exists at "+benefitLeftNode.getPath()+"</li>");
+				if(eleSize == nodeSize){
+					for(Element ele : benefitTextElements){
+						textNodeIterator.hasNext();
+						Node textNode = (Node)textNodeIterator.next();
+						textNode.setProperty("text", ele.html());
 					}
 				}
-				}else{
-					sb.append("<li>'div.c00-pilot' div class doesn't exists.</li>");
+				if(nodeSize < eleSize){
+					String content = "";
+					for(Element ele : benefitTextElements){
+						content = content + benefitTextElements.first().getElementsByTag("h1,h2").outerHtml();
+						content = content + ele.html();
+					}
+					textNodeIterator.hasNext();
+					Node textNode = (Node)textNodeIterator.next();
+					textNode.setProperty("text", content);
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update benefits text component."+e+"</li>");
@@ -152,6 +133,29 @@ public class Benefits {
 
 					int count = 0;
 
+					javax.jcr.Node listNode = null;
+
+					if (count == 0) {
+						listNode = benefitLeftNode.getNode("list");
+						if (listNode != null) {
+							listNode.setProperty("title", benefitTitleText);
+							log.debug("Updated title at " + listNode.getPath());
+							count++;
+						}
+					} else {
+						listNode = benefitLeftNode.getNode("list_"
+								+ (count - 1));
+						if (listNode != null) {
+							listNode.setProperty("title",
+									benefitAnchorTitleText);
+							log.debug("Updated title at " + listNode.getPath());
+							count++;
+						}
+					}
+
+					
+					NodeIterator elementList = listNode.getNodes("element_list*");
+					
 					for (Element ele : benefitUlList) {
 						java.util.List<String> list = new ArrayList<String>();
 						Elements benefitLiList = ele.getElementsByTag("li");
@@ -177,37 +181,16 @@ public class Benefits {
 							list.add(jsonObj.toString());
 
 						}
-						javax.jcr.Node listNode = null;
-
-						if (count == 0) {
-							listNode = benefitLeftNode.getNode("list");
-							if (listNode != null) {
-								listNode.setProperty("title", benefitTitleText);
-								log.debug("Updated title at " + listNode.getPath());
-								count++;
-							}
-						} else {
-							listNode = benefitLeftNode.getNode("list_"
-									+ (count - 1));
-							if (listNode != null) {
-								listNode.setProperty("title",
-										benefitAnchorTitleText);
-								log.debug("Updated title at " + listNode.getPath());
-								count++;
-							}
-						}
-
-						if (listNode != null) {
-							Node elementList = listNode
-									.getNode("element_list_0");
-							if (elementList != null) {
-								elementList.setProperty("listitems",
+						
+						elementList.hasNext();
+						Node eleNode = (Node)elementList.next();						
+							if (eleNode != null) {
+								eleNode.setProperty("listitems",
 										list.toArray(new String[list.size()]));
-								log.debug("Updated listitesm at " + elementList.getPath());
+								log.debug("Updated listitesm at " + eleNode.getPath());
 							} else {
-								sb.append("<li>element_list_0 node doesn't exists</li>");
+								sb.append("<li>element_list node doesn't exists</li>");
 							}
-						}
 					}
 				}
 				}else{
@@ -228,31 +211,26 @@ public class Benefits {
 				boolean entry = true;
 				if(rightRail != null){
 				if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
-                    sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>");
+                    sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>"+rightRail.size()+"tile***"+benefitRightNode.getNodes("tile_bordered*").getSize());
 				}
 				if(rightRail.size()>0){
+					
+				NodeIterator titleBorderNodes = benefitRightNode.getNodes("tile_bordered*");
+					
 				for (Element ele : rightRail) {
 					javax.jcr.Node rightRailNode = null;
-					String title = ele.getElementsByTag("h2").text();
-					String desc = ele.getElementsByTag("p").text();
+					String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").text():"";
+					if(StringUtils.isBlank(title)){
+						title = ele.getElementsByTag("h3")!=null?ele.getElementsByTag("h3").text():"";
+					}
+					String desc = ele.getElementsByTag("p")!=null?ele.getElementsByTag("p").text():"";
 					Elements anchor = ele.getElementsByTag("a");
 
-					String anchorText = anchor.text();
+					String anchorText = anchor!=null?anchor.text():"";
 					String anchorHref = anchor.attr("href");
 										
-						if(benefitRightNode.hasNode("tile_bordered") && entry == true){
-							rightRailNode = benefitRightNode.getNode("tile_bordered");
-							entry = false;
-						}else{
-							boolean hasNode = false;
-							while(!hasNode && rightcount<20){
-								hasNode = benefitRightNode.hasNode("tile_bordered_"+rightcount);
-								if(hasNode){
-									rightRailNode = benefitRightNode.getNode("tile_bordered_"+rightcount);
-								}
-								rightcount++;
-							}
-						}
+					titleBorderNodes.hasNext();
+					rightRailNode = (Node)titleBorderNodes.next();
 					
 					if (rightRailNode != null) {
 						if(title != null && title != "" && desc != null && desc != "" && anchorText != null && anchorText != ""){
