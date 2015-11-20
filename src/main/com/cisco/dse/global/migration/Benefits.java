@@ -91,6 +91,7 @@ public class Benefits {
 				Elements benefitTextElements = doc.select("div.c00-pilot");
 				int eleSize = benefitTextElements.size();
 				NodeIterator textNodeIterator = benefitLeftNode.getNodes("text*");
+				NodeIterator blobNodeIterator = benefitLeftNode.getNodes("htmlblob*");
 				int nodeSize = (int)textNodeIterator.getSize();
 				
 				if(eleSize == nodeSize){
@@ -102,13 +103,19 @@ public class Benefits {
 				}
 				if(nodeSize < eleSize){
 					String content = "";
-					for(Element ele : benefitTextElements){
-						content = content + benefitTextElements.first().getElementsByTag("h1,h2").outerHtml();
-						content = content + ele.html();
-					}
+					
+					Element textContent = benefitTextElements.get(0);
+					Element blobContent = benefitTextElements.get(1);
+					if(textContent != null){
 					textNodeIterator.hasNext();
 					Node textNode = (Node)textNodeIterator.next();
-					textNode.setProperty("text", content);
+					textNode.setProperty("text", textContent.html());
+					}
+					if(blobContent != null){
+					blobNodeIterator.hasNext();
+					Node blobNode = (Node)blobNodeIterator.next();
+					blobNode.setProperty("html", blobContent.html());
+					}
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update benefits text component."+e+"</li>");
@@ -118,15 +125,16 @@ public class Benefits {
 			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start set benefit list.
 			try {
-				Elements benefitListElem = doc.select("div.gd-left").select("div.n13-pilot");
+				Elements benefitListElem = doc.select("div.gd-left").select("div.n13-pilot,div.nn13-pilot");
 				if(benefitListElem != null){
+				sb.append("<li>Resource link sub-title is not migrated in-consistant node structure.</li>");
 				for (Element benefitList : benefitListElem) {
 					Element benefitTitle = benefitList.getElementsByTag("h3")
 							.first();
 					String benefitTitleText = benefitTitle != null ? benefitTitle.text() : "";
 					
 					if(StringUtils.isBlank(benefitTitleText)){
-						benefitTitleText = benefitList.getElementsByTag("h3").first() != null ? benefitList.getElementsByTag("h3").first().text() : "";
+						benefitTitleText = benefitList.getElementsByTag("h2").first() != null ? benefitList.getElementsByTag("h2").first().text() : "";
 					}
 					
 					Elements benefitAnchorTitle = benefitList.parent()
@@ -141,11 +149,13 @@ public class Benefits {
 					javax.jcr.Node listNode = null;
 
 					if (count == 0) {
-						listNode = benefitLeftNode.getNode("list");
+						listNode = benefitLeftNode.hasNode("list")?benefitLeftNode.getNode("list"):null;
 						if (listNode != null) {
 							listNode.setProperty("title", benefitTitleText);
 							log.debug("Updated title at " + listNode.getPath());
 							count++;
+						}else{
+							sb.append("<li>No list node found in left rail</li>");
 						}
 					} else {
 						listNode = benefitLeftNode.getNode("list_"
@@ -160,6 +170,10 @@ public class Benefits {
 
 					
 					NodeIterator elementList = listNode.getNodes("element_list*");
+					
+					if(elementList.getSize() != benefitUlList.size()){
+						sb.append("<li>Mis-Match in Resource list Panels count/content."+benefitUlList.size()+"not equal to "+elementList.getSize()+"</li>");
+					}
 					
 					for (Element ele : benefitUlList) {
 						java.util.List<String> list = new ArrayList<String>();
@@ -187,7 +201,7 @@ public class Benefits {
 							list.add(jsonObj.toString());
 
 						}
-						
+						log.debug("div class 'div.n13-pilot' not found in dom  list ::"+list.toString());
 						elementList.hasNext();
 						Node eleNode = (Node)elementList.next();						
 							if (eleNode != null ) {
@@ -221,7 +235,7 @@ public class Benefits {
 				boolean entry = true;
 				if(rightRail != null){
 				if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
-                    sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>"+rightRail.size()+"tile***"+benefitRightNode.getNodes("tile_bordered*").getSize());
+                    sb.append("<li>Mis-Match in tilebordered Panels count/content."+rightRail.size()+" is not equal "+benefitRightNode.getNodes("tile_bordered*").getSize()+"</li>");
 				}
 				if(rightRail.size()>0){
 					
