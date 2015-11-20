@@ -1,3 +1,9 @@
+/* 
+ * S.No		Name			Description of change
+ * 1		Rohan 			Modified the html report related comments.
+ * 
+ * */
+
 package com.cisco.dse.global.migration;
 
 import java.io.IOException;
@@ -134,9 +140,11 @@ public class UnifiedComputingBenefits {
 				log.error("Exception : "+e);
 			}
 				//end set unified computing benefit hero properties.
-				sb.append("<li>could not find c26v4_popup_cq component on left</li>");
-				sb.append("<li>could not find c26v4_popup_cq component on right rail</li>");
-					
+				// #1 start - Commented the below 2 lines
+				/* sb.append("<li>could not find c26v4_popup_cq component on left</li>");
+				sb.append("<li>could not find c26v4_popup_cq component on right rail</li>"); */
+				// #1 end
+				
 				//start set unified computing benefit spotlight properties.
 				try {
 				Elements benefitSpotLightElements = doc.select("div.c11-pilot");
@@ -172,7 +180,7 @@ public class UnifiedComputingBenefits {
 					NodeIterator tileBorderedNodes  = benefitRightNode.getNodes("tile_bordered*");
 					Elements rightRail = doc.select("div.c23-pilot");
 					if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
-                        sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>");
+                        sb.append("<li>Mis-match in tile bordered panel count in the right rail.</li>");
 					}
 					
 					javax.jcr.Node tileBorderedNode = null;
@@ -209,12 +217,14 @@ public class UnifiedComputingBenefits {
 				if (doc.select("div.c46-pilot").size() > 0) {
 					sb.append("<li>Additional c46-pilot component found in Right Rail\n</li>");
 				}
+				sb.append("<li>The node 'c26v4_popup_cq' is not available in the right rail for the locale page.</li>"); //#1
 			session.save();
 
 		} catch (Exception e) {
 			sb.append("<li>Could not create the content due to some error.</li>");
 			log.error("Exception : ",e);
 		}
+		
 		sb.append("</ul></td>");
 		return sb.toString();
 	}

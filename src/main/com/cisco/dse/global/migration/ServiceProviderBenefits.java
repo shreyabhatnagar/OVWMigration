@@ -1,3 +1,9 @@
+/* 
+ * S.No		Name			Description of change
+ * 1		Rohan 			Modified the html report related comments.
+ * 
+ * */
+
 package com.cisco.dse.global.migration;
 
 import java.io.IOException;
@@ -89,6 +95,11 @@ public class ServiceProviderBenefits {
 			try {
 				NodeIterator textNodes  = benefitLeftNode.getNodes("text*");
 				Elements spTextElements = doc.select("div.c00-pilot");
+				//#1 start
+				if (spTextElements.size() != textNodes.getSize()) {
+					sb.append("<li>Mis-match in text component count in the left rail.</li>");	
+				}
+				//#1 end
 				javax.jcr.Node textNode = null;
 				for (Element spTextElement:spTextElements) {
 					String spText = spTextElement.getElementsByTag("h2").first().outerHtml(); 
@@ -110,10 +121,10 @@ public class ServiceProviderBenefits {
 			
 			try {
 				if (doc.select("div.c50-pilot").select("div.frame").size() > 0) {
-					sb.append("<li>Additional Hero component found\n</li>");
+					sb.append("<li>Additional Hero component found on the locale page.\n</li>"); //#1
 				}
 				if (doc.select("div.gd23-pilot").size() > 0) {
-					sb.append("<li>Additional list component found\n</li>");
+					sb.append("<li>Additional list component found on the locale page.\n</li>"); //#1
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update benefits text component.</li>");
@@ -128,10 +139,10 @@ public class ServiceProviderBenefits {
 				Elements benefitSpotLightElements  = doc.select("div.c11-pilot");
 				javax.jcr.Node spotLightNode = null;
 				if (doc.select("div.c11-pilot").size() == 0) {
-					sb.append("<li>could not find spotlight_large_v2 component\n</li>");
+					sb.append("<li>The spotlight component 'spotlight_large_v2' is not available in the locale page.\n</li>"); //#1
 				}
-				if (doc.select("div.htmlblob").size() == 0) {
-					sb.append("<li>could not find htmlblob component\n</li>");
+				if (doc.select("div.htmlblob").size() != benefitLeftNode.getNodes("htmlblob").getSize()) { //#1
+					sb.append("<li>The Htmlblob component is not available in the locale page.\n</li>"); //#1
 				}
 				for (Element benefitSpotLightEle : benefitSpotLightElements) {
 					Element spotLightTitle = benefitSpotLightEle.getElementsByTag("h2").first();
@@ -167,7 +178,7 @@ public class ServiceProviderBenefits {
 				NodeIterator tileBorderedNodes  = benefitRightNode.getNodes("tile_bordered*");
 				Elements rightRail = doc.select("div.c23-pilot");
 				if (rightRail.size() != benefitRightNode.getNodes("tile_bordered*").getSize()) {
-                    sb.append("<li>Mis-Match in tilebordered Panels count/content.</li>");
+					sb.append("<li>Mis-match in tile bordered panel count in the right rail.</li>");	//#1
 				}
 				javax.jcr.Node tileBorderedNode = null;
 

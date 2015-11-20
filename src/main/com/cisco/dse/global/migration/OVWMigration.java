@@ -55,9 +55,10 @@ public class OVWMigration {
 				
 				for (Row tempRow : sheet) {
 					
-					String gLink = tempRow.getCell(0).getStringCellValue();
-					String prod = tempRow.getCell(1).getStringCellValue();
-					String type = tempRow.getCell(2).getStringCellValue();
+					String gLink = tempRow.getCell(0)!=null?tempRow.getCell(0).getStringCellValue():"";
+					String prod = tempRow.getCell(1)!=null?tempRow.getCell(1).getStringCellValue():"";
+					String type = tempRow.getCell(2)!=null?tempRow.getCell(2).getStringCellValue():"";
+					String cattype = tempRow.getCell(3)!=null?tempRow.getCell(3).getStringCellValue():"";
 					
 					log.debug("gLink : "+gLink);
 														
@@ -72,9 +73,9 @@ public class OVWMigration {
 						 msg2 = msg2 + new ServiceProviderBenefits().translate(gLink, prod, type,
 							sheet.getSheetName(), session);
 						 msg2 = msg2+"</tr>";
-					} else {
+					} else if("var1".equals(type)){
 						msg3 = msg3 + "<tr>";
-						msg3 = msg3 + new Benefits().translate(gLink, prod, type,
+						msg3 = msg3 + new Benefits().translate(gLink, prod, type,cattype,
 							sheet.getSheetName(), session);
 						msg3 = msg3 + "</tr>";
 					}
