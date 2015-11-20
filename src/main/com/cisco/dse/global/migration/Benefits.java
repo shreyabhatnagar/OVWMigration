@@ -121,13 +121,18 @@ public class Benefits {
 				Elements benefitListElem = doc.select("div.gd-left").select("div.n13-pilot");
 				if(benefitListElem != null){
 				for (Element benefitList : benefitListElem) {
-					Element benefitTitle = benefitList.getElementsByTag("h2")
+					Element benefitTitle = benefitList.getElementsByTag("h3")
 							.first();
-					String benefitTitleText = benefitTitle.text();
+					String benefitTitleText = benefitTitle != null ? benefitTitle.text() : "";
+					
+					if(StringUtils.isBlank(benefitTitleText)){
+						benefitTitleText = benefitList.getElementsByTag("h3").first() != null ? benefitList.getElementsByTag("h3").first().text() : "";
+					}
+					
 					Elements benefitAnchorTitle = benefitList.parent()
-							.select("div.n13-pilot a").select("h2");
+							.select("div.n13-pilot a").select("h2,h3");
 
-					String benefitAnchorTitleText = benefitAnchorTitle.text();
+					String benefitAnchorTitleText = benefitAnchorTitle != null ? benefitAnchorTitle.text() : "";
 
 					Elements benefitUlList = benefitList.getElementsByTag("ul");
 
@@ -165,10 +170,11 @@ public class Benefits {
 							Elements listItemAnchor = li.getElementsByTag("a");
 							Elements listItemSpan = li.getElementsByTag("span");
 
-							String anchorText = listItemAnchor.text();
+							String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
 							String anchorHref = listItemAnchor.attr("href");
 							String anchorTarget = listItemAnchor.attr("target");
 							String listIcon = listItemSpan.attr("class");
+							String icon= li.ownText();
 
 							jsonObj.put("linktext", anchorText);
 							jsonObj.put("linkurl", anchorHref);
@@ -184,11 +190,15 @@ public class Benefits {
 						
 						elementList.hasNext();
 						Node eleNode = (Node)elementList.next();						
-							if (eleNode != null) {
-								eleNode.setProperty("listitems",
+							if (eleNode != null ) {
+								if(list.size()>1)
+									eleNode.setProperty("listitems",
 										list.toArray(new String[list.size()]));
-								log.debug("Updated listitesm at " + eleNode.getPath());
-							} else {
+								else
+									eleNode.setProperty("listitems",
+											list.get(0));
+								log.debug("Updated listitems at " + eleNode.getPath());
+							} else {								
 								sb.append("<li>element_list node doesn't exists</li>");
 							}
 					}
