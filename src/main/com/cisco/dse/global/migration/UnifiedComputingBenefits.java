@@ -1,6 +1,7 @@
 /* 
  * S.No		Name			Description of change
- * 1		Rohan 			Modified the html report related comments.
+ * #1		Rohan 			Modified the html report related comments.
+ * #2		Rohan			Added logic to get the title of tile bordered component when title is not in a h2 tag. 
  * 
  * */
 
@@ -197,7 +198,13 @@ public class UnifiedComputingBenefits {
 							tileBorderedNode = tileBorderedNodes.nextNode();
 						if (tileBorderedNode != null) {
 							if (title.isEmpty()) {
-								sb.append("<li>Title element for the right rail tile with node name "+tileBorderedNode.getName()+" is not a h2 tag. Hence tile will not be migrated properly.</li>\n");
+								// #2 starts
+								title = ele.getElementsByTag("h3").text();
+								if (title.isEmpty()) {
+									sb.append("<li>Title element for the right rail tile with node name "+tileBorderedNode.getName()+" is " +
+											"not a h2 or h3 tag. Hence tile will not be migrated properly.</li>\n");
+								}
+								// #2 ends
 							}
 							tileBorderedNode.setProperty("title", title);
 							tileBorderedNode.setProperty("description", desc);
