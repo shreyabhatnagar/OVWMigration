@@ -89,7 +89,7 @@ public class ServiceProviderBenefits {
 				log.error("Exception : ",e);
 			}
 
-			title = doc.title();
+			title = doc !=null ? doc.title() : "";
 
 			// start set unified computing benifit text properties.
 			try {
@@ -149,7 +149,7 @@ public class ServiceProviderBenefits {
 					
 					Element spotLightDescription = benefitSpotLightEle.getElementsByTag("p").first();
 					Element spotLightAnchor = benefitSpotLightEle.getElementsByTag("a").first();
-					String linkText = spotLightAnchor.text();
+					String linkText = spotLightAnchor != null? spotLightAnchor.text() : "";
 					System.out.println(linkText);
 					String linkUrl = spotLightAnchor.attr("href");
 					System.out.println(linkUrl);

@@ -88,7 +88,7 @@ public class UnifiedComputingBenefits {
 				log.error("Exception : "+e);
 			}
 
-			title = doc.title();
+			title = doc != null? doc.title() : "";
 
 			// start set unified computing benifit text properties.
 			try {
