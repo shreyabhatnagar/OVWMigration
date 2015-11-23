@@ -51,6 +51,8 @@ public class OVWMigration {
 				String msg1="";
 				String msg2="";
 				String msg3="";
+				String msg4="";
+				String msg5="";
 				StringBuilder sb = new StringBuilder(1024);
 				
 				for (Row tempRow : sheet) {
@@ -63,12 +65,12 @@ public class OVWMigration {
 					log.debug("gLink : "+gLink);
 														
 					System.out.println("gLink : "+gLink);
-					if ("servers-unified-computing".equalsIgnoreCase(prod)) {
+					if ("servers-unified-computing1".equalsIgnoreCase(prod)) {
 						msg1 = msg1+"<tr>";
 						msg1 = msg1 + new UnifiedComputingBenefits().translate(gLink, prod, type,
 							sheet.getSheetName(), session);
 						 msg1 = msg1+"</tr>";
-					} else if ("service-provider".equalsIgnoreCase(prod)) {
+					} else if ("service-provider1".equalsIgnoreCase(prod)) {
 						msg2 = msg2+"<tr>";
 						 msg2 = msg2 + new ServiceProviderBenefits().translate(gLink, prod, type,
 							sheet.getSheetName(), session);
@@ -78,6 +80,17 @@ public class OVWMigration {
 						msg3 = msg3 + new Benefits().translate(gLink, prod, type,cattype,
 							sheet.getSheetName(), session);
 						msg3 = msg3 + "</tr>";
+					} else if ("index-var1".equals(type)) {
+						msg4 = msg4 + "<tr>";
+						msg4 = msg4 + new ProductLandingVariation1().translate(gLink, prod, type,cattype,
+							sheet.getSheetName(), session);
+						msg4 = msg4 + "</tr>";
+					}
+					else if ("index-var2".equals(type)) {
+						msg5 = msg5 + "<tr>";
+						msg5 = msg5 + new ProductLandingVariation2().translate(gLink, prod, type,cattype,
+							sheet.getSheetName(), session);
+						msg5 = msg5 + "</tr>";
 					}
 					/*
 					Cell conceptCell = tempRow.createCell(3);
@@ -97,6 +110,13 @@ public class OVWMigration {
 				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg3);
 				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append(msg4);
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append(msg5);
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+
 				sb.append("</table>");
 				
 				
