@@ -182,7 +182,7 @@ public class ProductLandingVariation9 {
 							Elements descriptionText = ele
 									.getElementsByTag("p");
 							if (descriptionText != null) {
-								pText = descriptionText.html();
+								pText = descriptionText.text();
 							} else {
 								sb.append("<li>Hero Component description element not having any title in it ('p' is blank)</li>");
 							}
