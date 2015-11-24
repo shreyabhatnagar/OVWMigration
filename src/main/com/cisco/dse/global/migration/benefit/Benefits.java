@@ -1,4 +1,4 @@
-package com.cisco.dse.global.migration;
+package com.cisco.dse.global.migration.benefit;
 
 import java.io.IOException;
 import java.util.ArrayList;
