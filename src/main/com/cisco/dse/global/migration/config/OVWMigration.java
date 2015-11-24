@@ -21,7 +21,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation2;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
 
 
@@ -87,19 +89,17 @@ public class OVWMigration {
 						msg3 = msg3 + new Benefits().translate(gLink, prod, type,cattype,
 							sheet.getSheetName(), session);
 						msg3 = msg3 + "</tr>";
-//					} else if ("index-var1".equals(type)) {
-//						msg4 = msg4 + "<tr>";
-//						msg4 = msg4 + new ProductLandingVariation1().translate(gLink, prod, type,cattype,
-//							sheet.getSheetName(), session);
-//						msg4 = msg4 + "</tr>";
-					}
-					else if ("index-var2".equals(type)) {
+					} else if ("index-var1".equals(type)) {
+						msg4 = msg4 + "<tr>";
+						msg4 = msg4 + new ProductLandingVariation1().translate(gLink, prod, type,cattype,
+							sheet.getSheetName(), session);
+						msg4 = msg4 + "</tr>";
+					} else if ("index-var3".equals(type)) {
 						msg5 = msg5 + "<tr>";
-						msg5 = msg5 + new ProductLandingVariation2().translate(gLink, prod, type,cattype,
+						msg5 = msg5 + new ProductLandingVariation3().translate(gLink, prod, type,cattype,
 							sheet.getSheetName(), session);
 						msg5 = msg5 + "</tr>";
-					}
-					else if("index-var9".equals(type)){
+					}else if("index-var9".equals(type)){
 					msg6 = msg6 + "<tr>";
 					msg6 = msg6 + new ProductLandingVariation9().translate(gLink, prod, type,cattype,
 						sheet.getSheetName(), session);

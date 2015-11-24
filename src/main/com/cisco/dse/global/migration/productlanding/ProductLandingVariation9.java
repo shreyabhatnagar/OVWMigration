@@ -454,6 +454,7 @@ public class ProductLandingVariation9 {
 									nodeCount++;
 
 								} else {
+									sb.append("<li>Unable to migate one spotlight component. Count MisMatch.</li>");
 									log.debug("Could not migrate one spotlight large node.");
 								}
 							}
