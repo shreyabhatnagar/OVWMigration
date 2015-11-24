@@ -1,4 +1,4 @@
-package com.cisco.dse.global.migration;
+package com.cisco.dse.global.migration.config;
 
 import java.io.BufferedWriter;
 import java.io.File;
