@@ -22,11 +22,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ProductLandingVariation2 {
+public class ProductLandingVariation5 {
 
 	Document doc;
 	StringBuilder sb = new StringBuilder(1024);
-	static Logger log = Logger.getLogger(ProductLandingVariation2.class);
+	static Logger log = Logger.getLogger(ProductLandingVariation5.class);
 
 	public String translate(String loc, String prod, String type,
 			String catType, String locale, Session session) throws IOException,

@@ -67,6 +67,7 @@ public class OVWMigration {
 				String msg7="";
 				String msg8="";
 				String msg9="";
+				String msg10="";
 				StringBuilder sb = new StringBuilder(1024);
 				
 				for (Row tempRow : sheet) {
@@ -110,9 +111,9 @@ public class OVWMigration {
 						sheet.getSheetName(), session);
 					msg6 = msg6 + "</tr>";
 				}
-					else if ("index-var2".equals(type)) {
+					else if ("index-var5".equals(type)) {
 						msg7 = msg7 + "<tr>";
-						msg7 = msg7 + new ProductLandingVariation2().translate(gLink, prod, type,cattype,
+						msg7 = msg7 + new ProductLandingVariation5().translate(gLink, prod, type,cattype,
 							sheet.getSheetName(), session);
 						msg7 = msg7 + "</tr>";
 					}
@@ -127,6 +128,12 @@ public class OVWMigration {
 						msg9 = msg9 + new ProductLandingVariation10().translate(gLink, prod, type,cattype,
 							sheet.getSheetName(), session);
 						msg9 = msg9 + "</tr>";
+					}
+					else if ("index-var6".equals(type)) {
+						msg10 = msg10 + "<tr>";
+						msg10 = msg10 + new ProductLandingVariation6().translate(gLink, prod, type,cattype,
+							sheet.getSheetName(), session);
+						msg10 = msg10 + "</tr>";
 					}
 					/*
 					Cell conceptCell = tempRow.createCell(3);
@@ -158,12 +165,16 @@ public class OVWMigration {
 				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg7);
 				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr><td colspan='3'>.</td></tr>");
 				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg8);
 				sb.append("<tr><td colspan='3'>.</td></tr>");
 				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg9);
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append(msg10);
+				sb.append("<tr><td colspan='3'>.</td></tr>");
 				sb.append("</table>");
 				
 				java.util.Date date = new java.util.Date();
