@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
@@ -45,7 +46,7 @@ public class ProductLandingVariation1 {
 		String indexUpperRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-right";
 		String indexLowerLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
 		String indexLowerRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
-		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/benefit.html";
+		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/index.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		
@@ -333,6 +334,31 @@ public class ProductLandingVariation1 {
 									} else {
 										sb.append("title property is not set at " + drawersContainerNode.getPath());
 									}
+									Elements hTextElements = doc.getElementsByAttribute(
+											"data-config-hidetext");
+									if (hTextElements != null) {
+										Element hText = hTextElements.first();
+										if (hText != null) {
+											System.out
+											.println("Hide TEXT:::::::::" + hText == null ? "NULL"
+													: "NOT NULL"
+															+ hText.attr("data-config-hidetext"));
+		
+											System.out
+													.println("Show TEXT:::::::::" + hText == null ? "NULL"
+															: "NOT NULL"
+																	+ hText.attr("data-config-showtext"));
+											drawersContainerNode.setProperty("closetext",
+													hText.attr("data-config-hidetext"));
+											drawersContainerNode.setProperty("opentext",
+													hText.attr("data-config-showtext"));
+										} else {
+											sb.append("<li>data-config-hidetext not found</li>");
+										}
+										
+									} else {
+										sb.append("<li>data-config-hidetext Section not found</li>");
+									}/*
 									Element hText = doc.getElementsByAttribute(
 											"data-config-hidetext").first();
 									System.out
@@ -348,7 +374,7 @@ public class ProductLandingVariation1 {
 											hText.attr("data-config-hidetext"));
 									drawersContainerNode.setProperty("opentext",
 											hText.attr("data-config-showtext"));
-									Element drawerHeaderLinksElement = drawerComponentHeader.select("div.clearfix").first();
+		*/							Element drawerHeaderLinksElement = drawerComponentHeader.select("div.clearfix").first();
 									JSONObject jsonObj = new JSONObject();
 									String anchorText = "";
 									String anchorHref = "";
@@ -370,6 +396,11 @@ public class ProductLandingVariation1 {
 										log.debug("anchorText " + anchorText + "\n");
 										log.debug("anchorHref " + anchorHref + "\n");
 										if (jsonObj != null && jsonObj.length() > 0) {
+											if (drawersContainerNode.hasProperty("headerlinks")) {
+												Property p = drawersContainerNode.getProperty("headerlinks");
+												p.remove();
+												session.save();
+											}
 											drawersContainerNode.setProperty("headerlinks",jsonObj.toString());
 										} else {
 											sb.append("headerlinks property is not set at " + drawersContainerNode.getPath());
@@ -379,12 +410,14 @@ public class ProductLandingVariation1 {
 									if (drawersContainerNode != null && drawersContainerNode.hasNodes()) {
 										NodeIterator drawerPanelsIterator = drawersContainerNode.getNodes("drawerspanel*");
 										javax.jcr.Node drawersPanelNode = null;
-										Elements drawersPanelElements = doc.select("div.drawerspanel");
+										Elements drawersPanelElements = doc.select("div.n21,ul.n21");
 										if (drawersPanelElements != null) {
-											for (Element drawersPanelElement : drawersPanelElements) {
+											Element drawersPanelElement = drawersPanelElements.first();
+											
+												if (drawersPanelElement != null) {
 												Elements seriesElements = drawersPanelElement.select("div.series");
-												if (seriesElements != null) {
-													Element seriesElement = seriesElements.first();
+												if (seriesElements != null && seriesElements.size() > 0) {
+													for (Element seriesElement : seriesElements) {
 													if (seriesElement != null) {
 														String panelTitle = "";
 														String linkUrl = "";
@@ -441,75 +474,167 @@ public class ProductLandingVariation1 {
 															javax.jcr.Node subdrawerpanel = null;
 															Elements SeriesColl = drawersPanelElement.select("ul.items");
 															if (SeriesColl.size() != subDrawerIterator.getSize())
-																sb.append("Mis-Match on subdrawer_product.\n");
+																log.debug("Mis-Match on subdrawer_product.\n");
 															for (Element ss : SeriesColl) {
 																if (subDrawerIterator.hasNext()) {
 																	subdrawerpanel = subDrawerIterator.nextNode();
 																}
 																Elements subItems = ss.select("div.prodinfo");
-																for (Element si : subItems) {
-																	Element siTitle = si.getElementsByTag("h4").first();
-																	Element siATitle = siTitle.getElementsByTag("a")
-																			.first();
-																	log.debug("Sub Series Title:::::::::::::"
-																			+ siATitle.text());
-																	Elements indItems = si.select("ul.details").first()
-																			.getElementsByTag("li");
-																	List<String> list1 = new ArrayList<String>();
-																	for (Element indItem : indItems) {
-																		JSONObject jsonObj = new JSONObject();
-																		System.out
-																				.println("\t\t Feature Text :::::::::::::::"
-																						+ indItem.text());
-																		jsonObj.put("linktext", indItem.text());
-																		list1.add( jsonObj.toString());
+																if (subItems != null) {
+																	for (Element si : subItems) {
+																		String title = "";
+																		String linkTitleUrl = "";
+																		Elements siTitles = si.getElementsByTag("h4");
+																		if (siTitles != null) {
+																			Element siTitle = siTitles.first();
+																			if (siTitle != null) {
+																				Elements siATitles = siTitle.getElementsByTag("a");
+																				if (siATitles != null) {
+																					Element siATitle = siATitles.first();
+																					if (siATitle != null) {
+																						log.debug("Sub Series Title:::::::::::::"
+																								+ siATitle.text());
+																						log.debug("siATitle.text() " + siATitle.text() + "\n");
+																						log.debug("siATitle.text() " + siATitle.attr("href") + "\n");
+																						title = siATitle.text();
+																						linkTitleUrl = siATitle.attr("href");
+																					} else {
+																						sb.append("<li>sub series title Element anchor not found</li>");
+																					}
+																				} else {
+																					sb.append("<li>sub series title Element anchor Section not found</li>");
+																				}
+																			} else {
+																				sb.append("<li>sub series title Element not found</li>");
+																			}
+																			
+																		} else {
+																			sb.append("<li>sub series title Elements section not found</li>");
+																		}
+																		if (StringUtils.isNotBlank(title)) {
+																			subdrawerpanel
+																			.setProperty("title", title);
+																		} else {
+																			sb.append("title property is not set at " + subdrawerpanel.getPath());
+																		}
+																		if (StringUtils.isNotBlank(linkTitleUrl)) {
+																			subdrawerpanel.setProperty("linkurl", linkTitleUrl);
+																		} else {
+																			sb.append("linkurl property is not set at " + subdrawerpanel.getPath());
+																		}
+																		Elements indDetailsElements = si.select("ul.details");
+																		List<String> list1 = new ArrayList<String>();
+																		if (indDetailsElements != null) {
+																			Element indDetailsElement = indDetailsElements.first();
+																			if (indDetailsElement != null) {
+																				Elements indItems = indDetailsElement
+																						.getElementsByTag("li");
+																				if (indItems != null) {
+																					for (Element indItem : indItems) {
+																						JSONObject jsonObj = new JSONObject();
+																						System.out
+																								.println("\t\t Feature Text :::::::::::::::"
+																										+ indItem.text());
+																						jsonObj.put("linktext", indItem.text());
+																						list1.add( jsonObj.toString());
+																					}
+																				} else {
+																					sb.append("<li>li elements in details Element not found</li>");
+																				}
+																			} else {
+																				sb.append("<li>details Element not found</li>");
+																			}
+																		} else {
+																			sb.append("<li>details Element section not found</li>");
+																		}
+																		if (list1.size() > 0) {
+																			
+																			if (subdrawerpanel.hasProperty("highlights")) {
+																				Property p = subdrawerpanel.getProperty("highlights");
+																				p.remove();
+																				session.save();
+																			}
+																			subdrawerpanel.setProperty("highlights",
+																					list1.toArray(new String[list1.size()]));
+																		}
 																	}
-																	log.debug("siATitle.text() " + siATitle.text() + "\n");
-																	log.debug("siATitle.text() " + siATitle.attr("href") + "\n");
-																	subdrawerpanel
-																	.setProperty("title", siATitle.text());
-																	subdrawerpanel.setProperty("linkurl", siATitle.attr("href"));
-																	subdrawerpanel.setProperty("highlights",
-																			list1.toArray(new String[list1.size()]));
-																	
-																	
+															    }
+																Elements subItemUlInfoLinks = ss.select("ul.infolinks");
+																if (subItemUlInfoLinks != null) {
+																	Element subItemUlInfoLink = subItemUlInfoLinks.first();
+																	if (subItemUlInfoLink != null) {
+																		Elements subItemInfoLinks = subItemUlInfoLink.getElementsByTag("li");
+																		List<String> list2 = new ArrayList<String>();
+																		for (Element si : subItemInfoLinks) {
+																			JSONObject jsonObj = new JSONObject();
+																			System.out
+																					.println("\t\t FeatureSubInfoLinks Text :::::::::::::::"
+																							+ si.text());
+																			/*System.out
+																			.println("\t\t FeatureSubInfoLinks neww Text :::::::::::::::"
+																					+ si.getElementsByTag("a").first().text());
+																			System.out
+																			.println("\t\t FeatureSubInfoLinks hrefText :::::::::::::::"
+																					+ si.getElementsByTag("a").first().attr("href"));*/
+																			String linkText = "";
+																			String linkTextUrl = "";
+																			Elements linkTextElements = si.getElementsByTag("a");
+																			if (linkTextElements != null) {
+																				Element linkTextElement = linkTextElements.first();
+																				if (linkTextElement != null) {
+																					linkText = linkTextElement.text();
+																					linkTextUrl = linkTextElement.attr("href");
+																				} else {
+																					sb.append("<li>info links anchor element not found</li>");
+																				}
+																			} else {
+																				sb.append("<li>info links anchor element section not found</li>");
+																			}
+																			if (StringUtils.isNotBlank(linkText)) {
+																				jsonObj.put("linktext", linkText);
+																			}
+																			if (StringUtils.isNotBlank(linkTextUrl)) {
+																				jsonObj.put("linkurl", linkTextUrl);
+																			}
+																			list2.add(jsonObj.toString());
+																			System.out
+																			.println("\t\t FeatureSubInfoLinks json Text :::::::::::::::"
+																					+ jsonObj.toString());
+																		}
+																		log.debug("list2.size()" + list2.size());
+																		if (list2.size() > 0) {
+																			if (subdrawerpanel.hasProperty("infolinks")) {
+																				Property p = subdrawerpanel.getProperty("infolinks");
+																				p.remove();
+																				session.save();
+																			}
+																			subdrawerpanel.setProperty("infolinks",
+																					list2.toArray(new String[list2.size()]));
+																		}
+																	}
+																	}
 																}
-																Elements subItemInfoLinks = ss.select("ul.infolinks").first().getElementsByTag("li");
-																List<String> list2 = new ArrayList<String>();
-																for (Element si : subItemInfoLinks) {
-																	JSONObject jsonObj = new JSONObject();
-																	System.out
-																			.println("\t\t FeatureSubInfoLinks Text :::::::::::::::"
-																					+ si.text());
-																	System.out
-																	.println("\t\t FeatureSubInfoLinks neww Text :::::::::::::::"
-																			+ si.getElementsByTag("a").first().text());
-																	System.out
-																	.println("\t\t FeatureSubInfoLinks hrefText :::::::::::::::"
-																			+ si.getElementsByTag("a").first().attr("href"));
-																	jsonObj.put("linktext", si.getElementsByTag("a").first().text());
-																	jsonObj.put("linkurl", si.getElementsByTag("a").first().attr("href"));
-																	list2.add(jsonObj.toString());
-																	System.out
-																	.println("\t\t FeatureSubInfoLinks json Text :::::::::::::::"
-																			+ jsonObj.toString());
-																}
-																log.debug("list2.size()" + list2.size());
-																subdrawerpanel.setProperty("infolinks",
-																		list2.toArray(new String[list2.size()]));
-															}
+															
+														}else {
+															sb.append("<li>drawer panel node not found</li>");
 														}
 													}
 												}else {
 													sb.append("<li>drawer panel Series element not found</li>");
 												}
+												}
 											} else {
 												sb.append("<li>drawer panel Series elements section notfound</li>");
 											}
-										}
+											}else {
+												sb.append("<li>drawersPanelElement not found</li>");
+											}
+										
 									} else {
 										sb.append("<li>drawer panel elements section not found</li>");
 									}
+									}else {
+										sb.append("<li>drawers_container node is not found</li>");
 									}
 								}
 							} else {
@@ -530,12 +655,31 @@ public class ProductLandingVariation1 {
 			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start of html blob components content.
 			try {
-				Element htmlblobElement = doc.select("div.icon-block").first();
+				String html = "";
+				Elements iconBlockElements = doc.select("div.icon-block");
+				if (iconBlockElements != null) {
+					Element htmlblobElement = iconBlockElements.first();
+					if (htmlblobElement != null) {
+						html = htmlblobElement.outerHtml();
+					} else {
+						sb.append("<li>htmlblob/icon-block Element section not found</li>");
+					}
+				} else {
+					sb.append("<li>htmlblob/icon-block Element section not found</li>");
+				}
 				if (indexLowerRightNode.hasNode("htmlblob")) {
 					javax.jcr.Node htmlBlobNode = indexLowerRightNode.getNode("htmlblob");
-					log.debug("htmlblobElement.outerHtml() " + htmlblobElement.outerHtml() + "\n");
-					htmlBlobNode.setProperty("html", htmlblobElement.outerHtml());
+					log.debug("htmlblobElement.outerHtml() " + html + "\n");
+					if (StringUtils.isNotBlank(html)) {
+						htmlBlobNode.setProperty("html", html);
+					} else {
+						sb.append("html property is not set at " + htmlBlobNode.getPath());
+					}
+					
+				} else {
+					sb.append("htmlblob component not present at " + indexLowerRightNode.getPath());
 				}
+				
 			} catch (Exception e) {
 				sb.append("<li>Unable to update html blob component."+e+"</li>");
 			}
@@ -572,10 +716,13 @@ public class ProductLandingVariation1 {
 					Elements anchor = ele.getElementsByTag("a");
 
 					String anchorText = anchor!=null?anchor.text():"";
-					String anchorHref = anchor.attr("href");
+					String anchorHref = anchor!=null?anchor.attr("href"):"";
 										
-					titleBorderNodes.hasNext();
+					if (titleBorderNodes.hasNext()) {
 					rightRailNode = (Node)titleBorderNodes.next();
+					} else {
+						sb.append("<li>all tile_boredered components are migrated</li>");
+					}
 					
 					if (rightRailNode != null) {
 						if(title != null && title != "" && desc != null && desc != "" && anchorText != null && anchorText != ""){
@@ -585,7 +732,7 @@ public class ProductLandingVariation1 {
 						rightRailNode.setProperty("linkurl", anchorHref);
 						log.debug("title, description, linktext and linkurl are created at "+rightRailNode.getPath());
 						}else{
-							sb.append("<li>Content miss match for "+ele.className()+"</li>");
+							sb.append("<li>Content miss match for "+"</li>");
 						}
 					}else{
 						sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
@@ -598,6 +745,7 @@ public class ProductLandingVariation1 {
 					sb.append("<li>div class c23-pilot not found in dom</li>");
 				}
 			} catch (Exception e) {
+				log.debug("Exception ",e);
 				sb.append("<li>Unable to update tile_bordered component.\n</li>");
 			}
 			// End of tile bordered components.

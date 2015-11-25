@@ -1,8 +1,6 @@
 package com.cisco.dse.global.migration.productlanding;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -16,7 +14,6 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,7 +42,7 @@ public class ProductLandingVariation3 {
 		String indexUpperRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-right";
 		String indexLowerLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
 		String indexLowerRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
-		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/benefit.html";
+		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/index.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		
@@ -394,9 +391,12 @@ public class ProductLandingVariation3 {
 
 					String anchorText = anchor!=null?anchor.text():"";
 					String anchorHref = anchor.attr("href");
-										
-					titleBorderNodes.hasNext();
-					rightRailNode = (Node)titleBorderNodes.next();
+					if (titleBorderNodes.hasNext()) {
+						rightRailNode = (Node)titleBorderNodes.next();
+					} else {
+							sb.append("<li>all tile_boredered components are migrated</li>");
+					}		
+					
 					
 					if (rightRailNode != null) {
 						if(title != null && title != "" && desc != null && desc != "" && anchorText != null && anchorText != ""){
