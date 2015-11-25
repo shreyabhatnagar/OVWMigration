@@ -22,6 +22,7 @@ import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation2;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
@@ -65,6 +66,7 @@ public class OVWMigration {
 				String msg6="";
 				String msg7="";
 				String msg8="";
+				String msg9="";
 				StringBuilder sb = new StringBuilder(1024);
 				
 				for (Row tempRow : sheet) {
@@ -120,6 +122,12 @@ public class OVWMigration {
 							sheet.getSheetName(), session);
 						msg8 = msg8 + "</tr>";
 					}
+					else if ("index-var10".equals(type)) {
+						msg9 = msg9 + "<tr>";
+						msg9 = msg9 + new ProductLandingVariation10().translate(gLink, prod, type,cattype,
+							sheet.getSheetName(), session);
+						msg9 = msg9 + "</tr>";
+					}
 					/*
 					Cell conceptCell = tempRow.createCell(3);
 					conceptCell.setCellValue(msg);*/
@@ -153,8 +161,10 @@ public class OVWMigration {
 				sb.append("<tr><td colspan='3'>.</td></tr>");
 				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg8);
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append(msg9);
 				sb.append("</table>");
-				
 				
 				java.util.Date date = new java.util.Date();
 				File file = new File("c:/test/OVWMigrationReport_"
