@@ -63,6 +63,7 @@ public class OVWMigration {
 				String msg5="";
 				String msg6="";
 				String msg7="";
+				String msg8="";
 				StringBuilder sb = new StringBuilder(1024);
 				
 				for (Row tempRow : sheet) {
@@ -112,6 +113,12 @@ public class OVWMigration {
 							sheet.getSheetName(), session);
 						msg7 = msg7 + "</tr>";
 					}
+					else if ("index-var11".equals(type)) {
+						msg8 = msg8 + "<tr>";
+						msg8 = msg8 + new ProductLandingVariation11().translate(gLink, prod, type,cattype,
+							sheet.getSheetName(), session);
+						msg8 = msg8 + "</tr>";
+					}
 					/*
 					Cell conceptCell = tempRow.createCell(3);
 					conceptCell.setCellValue(msg);*/
@@ -142,7 +149,9 @@ public class OVWMigration {
 				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 				sb.append(msg7);
 				sb.append("<tr><td colspan='3'>.</td></tr>");
-
+				sb.append("<tr><td colspan='3'>.</td></tr>");
+				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+				sb.append(msg8);
 				sb.append("</table>");
 				
 				
