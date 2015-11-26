@@ -23,8 +23,9 @@ import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
-import com.cisco.dse.global.migration.productlanding.ProductLandingVariation2;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation5;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation11;
 
