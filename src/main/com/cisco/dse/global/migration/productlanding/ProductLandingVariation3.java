@@ -142,19 +142,19 @@ public class ProductLandingVariation3 {
 							 if(StringUtils.isNotBlank(primaryCTATitle)){
 								 primartCTANode.setProperty("title", primaryCTATitle);
 			                  } else{
-			                	  sb.append("title of primary CTA is not migrated");
+			                	  sb.append("<li>title of primary CTA is not migrated</li>");
 			                	  log.debug("title property is not set at " + primartCTANode.getPath());
 			                  }
 							 if(StringUtils.isNotBlank(primaryCTADescription)){
 								 primartCTANode.setProperty("description", primaryCTADescription);
 			                  } else{
-			                	  sb.append("description of primary CTA is not migrated");
+			                	  sb.append("<li>description of primary CTA is not migrated</li>");
 			                	  log.debug("description property is not set at " + primartCTANode.getPath());
 			                  }
 							 if(StringUtils.isNotBlank(primaryCTALinkText)){
 								 primartCTANode.setProperty("linktext", primaryCTALinkText);
 			                  } else{
-			                	  sb.append("link text of primary CTA is not migrated");
+			                	  sb.append("<li>link text of primary CTA is not migrated</li>");
 			                	  log.debug("linktext property is not set at " + primartCTANode.getPath());
 			                  }
 							
@@ -163,7 +163,7 @@ public class ProductLandingVariation3 {
 								if(StringUtils.isNotBlank(primaryCTALinkUrl)){
 									primartCTALinkUrlNode.setProperty("url", primaryCTALinkUrl);
 				                  } else{
-				                	  sb.append("link url of primary CTA is not migrated");
+				                	  sb.append("<li>link url of primary CTA is not migrated</li>");
 				                	  log.debug("url property is not set at " + primartCTALinkUrlNode.getPath());
 				                 }
 							} else {
@@ -207,7 +207,7 @@ public class ProductLandingVariation3 {
 				
 						if (heroLargeFrameElements != null) {
 							if (heroLargeFrameElements.size() != heroLargeNode.getNodes("heropanel*").getSize()) {
-								sb.append("Mismatch in Hero Panels count.\n");
+								sb.append("<li>Mismatch in Hero Panels count.</li>");
 							}
 							for (Element ele : heroLargeFrameElements) {
 								String heroPanelTitle = "";
@@ -268,25 +268,25 @@ public class ProductLandingVariation3 {
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
 										} else {
-											sb.append("title of hero slide is not migrated");
+											sb.append("<li>title of hero slide is not migrated</li>");
 											log.debug("title property is not set at " + heroPanelNode.getPath());
 										}
 										if (StringUtils.isNotBlank(heroPanelDescription)) {
 											heroPanelNode.setProperty("description", heroPanelDescription);
 										} else {
-											sb.append("description of hero slide is not migrated");
+											sb.append("<li>description of hero slide is not migrated</li>");
 											log.debug("description property is not set at " + heroPanelNode.getPath());
 										}
 										if (StringUtils.isNotBlank(heroPanelLinkText)) {
 											heroPanelNode.setProperty("linktext", heroPanelLinkText);
 										} else {
-											sb.append("link text of hero slide is not migrated");
+											sb.append("<li>link text of hero slide is not migrated</li>");
 											log.debug("linktext property is not set at " + heroPanelNode.getPath());
 										}
 										if (StringUtils.isNotBlank(heroPanellinkUrl)) {
 											heroPanelNode.setProperty("linkurl", heroPanellinkUrl);
 										} else {
-											sb.append("link url of hero slide is not migrated / found video as link url for the slide on web publisher page ");
+											sb.append("<li>link url of hero slide is not migrated / found video as link url for the slide on web publisher page</li> ");
 											log.debug("linkurl property is not set at " + heroPanelNode.getPath());
 										}
 										
@@ -327,7 +327,7 @@ public class ProductLandingVariation3 {
 					if (StringUtils.isNotBlank(text)) {
 						textNode.setProperty("text", text);
 					} else {
-						sb.append("text is not migrated");
+						sb.append("<li>text is not migrated</li>");
 					}
 				}
 				
@@ -359,7 +359,7 @@ public class ProductLandingVariation3 {
 					if (StringUtils.isNotBlank(html)) {
 						htmlBlobNode.setProperty("html", html);
 					} else {
-						sb.append("htmlblob content is not migrated");
+						sb.append("<li>htmlblob content is not migrated</li>");
 					}
 				}
 			} catch (Exception e) {
