@@ -160,13 +160,18 @@ public class ProductLandingVariation9 {
 				Node heroNode = indexRightNode.hasNode("hero_large") ? indexRightNode
 						.getNode("hero_large") : null;
 
-				if (heroNode != null) {
-					log.debug("heronode found: " + heroNode.getPath());
+				if(heroElements != null){
+					if (heroNode != null) {
+				
 					int eleSize = heroElements.size();
 					NodeIterator heroPanelNodeIterator = heroNode
 							.getNodes("heropanel*");
 					int nodeSize = (int) heroPanelNodeIterator.getSize();
-					if (eleSize == nodeSize) {
+					if(eleSize != nodeSize){
+						log.debug("Hero component node count mismatch!");
+						sb.append("<li>Hero Component count mis match. Elements on page are: "+eleSize+" Node Count is: "+nodeSize+"</li>");
+					}
+
 						for (Element ele : heroElements) {
 							heroPanelNodeIterator.hasNext();
 							Node heroPanelNode = (Node) heroPanelNodeIterator
@@ -199,10 +204,16 @@ public class ProductLandingVariation9 {
 							heroPanelNode.setProperty("description", pText);
 							heroPanelNode.setProperty("linktext", aText);
 							heroPanelNode.setProperty("linkurl", aHref);
-						}
+						
 					}
-				}
+					
+									}
 
+				}
+				else{
+					sb.append("<li>Hero Component elements are Not found</li>");
+					
+				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update hero large component." + e
 						+ "</li>");
@@ -454,7 +465,7 @@ public class ProductLandingVariation9 {
 									nodeCount++;
 
 								} else {
-									sb.append("<li>Unable to migate one spotlight component. Count MisMatch.</li>");
+									sb.append("<li>Unable to migrate one spotlight component. Count MisMatch.</li>");
 									log.debug("Could not migrate one spotlight large node.");
 								}
 							}
