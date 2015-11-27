@@ -28,94 +28,100 @@ public class ProductLandingVariation10 {
 	 */
 	// TODO Auto-generated method stub
 	Document doc;
-	
+
 	StringBuilder sb = new StringBuilder(1024);
-	
+
 	Logger log = Logger.getLogger(ProductLandingVariation10.class);
-	
+
 	public String translate(String loc, String prod, String type,
 			String catType, String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-		
+
 		log.debug("In the translate method");
 		log.debug("In the translate method, catType is :" + catType);
-		
+
 		String indexLeft = "/content/<locale>/"+ catType+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
 		String indexRight = "/content/<locale>/"+ catType+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
-		
+
 		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+ catType + "/<prod>/index.html";
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-		
+
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
 
 		indexLeft = indexLeft.replace("<locale>", locale).replace("<prod>", prod);
 		indexRight = indexRight.replace("<locale>", locale).replace("<prod>", prod);
-		
+
 		javax.jcr.Node indexLeftNode = null;
 		javax.jcr.Node indexRightNode = null;
-		
+
 		try {
 			indexLeftNode = session.getNode(indexLeft);
 			indexRightNode = session.getNode(indexRight);
-			
+
 			try {
 				doc = Jsoup.connect(loc).get();
 				log.debug("Connected to the provided URL");
-				
+
 				// start set hero large component properties.			
 				try {
 					log.debug("Start of Hero component");
 					Elements heroElements = doc.select("div.frame");				
 					Node heroNode = indexLeftNode.hasNode("hero_large") ? indexLeftNode.getNode("hero_large") : null;
-							
+
 					if (heroNode != null) {
 						log.debug("hero node found: "+ heroNode.getPath());
-						int eleSize = heroElements.size();
-						log.debug("hero node element size: "+ eleSize);
-						NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
-						int nodeSize = (int)heroPanelNodeIterator.getSize();
-						log.debug("hero node nodeSize : "+ nodeSize);
-						if(eleSize == nodeSize){
-							for(Element ele : heroElements){
-								Node heroPanelNode;
-								if (heroPanelNodeIterator.hasNext()) {
-									heroPanelNode = (Node)heroPanelNodeIterator.next();
-									heroPanelTranslate(heroPanelNode, ele);
-								}
-								else {
-									log.debug("Next node not found");								
+						if (heroElements.isEmpty()) {
+							log.debug("No hero element found with div class name frame.");
+							sb.append("<li>Hero component with class name 'frame' does not exist on locale page.</li>");
+						}
+						else {
+							int eleSize = heroElements.size();
+							log.debug("hero node element size: "+ eleSize);
+							NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
+							int nodeSize = (int)heroPanelNodeIterator.getSize();
+							log.debug("hero node nodeSize : "+ nodeSize);
+							if(eleSize == nodeSize){
+								for(Element ele : heroElements){
+									Node heroPanelNode;
+									if (heroPanelNodeIterator.hasNext()) {
+										heroPanelNode = (Node)heroPanelNodeIterator.next();
+										heroPanelTranslate(heroPanelNode, ele);
+									}
+									else {
+										log.debug("Next node not found");								
+									}
 								}
 							}
-						}
-						else if(nodeSize < eleSize){
-							for(Element ele : heroElements){
-								Node heroPanelNode;
-								if (heroPanelNodeIterator.hasNext()) {
-									heroPanelNode = (Node)heroPanelNodeIterator.next();
-									heroPanelTranslate(heroPanelNode, ele);		
-								}
-								else {
-									log.debug("Next node not found");
-									sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page.</li>");
-									break;
-								}
-							}										
-						}
-						else if (nodeSize > eleSize) {
-							for(Element ele : heroElements){
-								Node heroPanelNode;
-								if (heroPanelNodeIterator.hasNext()) {
-									heroPanelNode = (Node)heroPanelNodeIterator.next();
-									heroPanelTranslate(heroPanelNode, ele);		
-								}
-								else {
-									log.debug("Next node not found");								
-								}
+							else if(nodeSize < eleSize){
+								for(Element ele : heroElements){
+									Node heroPanelNode;
+									if (heroPanelNodeIterator.hasNext()) {
+										heroPanelNode = (Node)heroPanelNodeIterator.next();
+										heroPanelTranslate(heroPanelNode, ele);		
+									}
+									else {
+										log.debug("Next node not found");
+										sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+										break;
+									}
+								}										
 							}
-							sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found.</li>");
+							else if (nodeSize > eleSize) {
+								for(Element ele : heroElements){
+									Node heroPanelNode;
+									if (heroPanelNodeIterator.hasNext()) {
+										heroPanelNode = (Node)heroPanelNodeIterator.next();
+										heroPanelTranslate(heroPanelNode, ele);		
+									}
+									else {
+										log.debug("Next node not found");								
+									}
+								}
+								sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+							}
 						}
 					}
 					else {
@@ -128,7 +134,7 @@ public class ProductLandingVariation10 {
 					sb.append("<li>Unable to update hero large component." + e
 							+ "</li>");
 				}		
-				
+
 				// end set Hero Large component properties.
 
 				// start set selectorbar large component properties.				
@@ -138,53 +144,59 @@ public class ProductLandingVariation10 {
 					if (selectorBarLargeElements.size() == 0) {
 						selectorBarLargeElements = doc.select("div.c58-pilot").select("div.left,div.mid,div.right"); //("div.selectorbarpanel");
 					}
-					
+
 					Node selectorBarNode = indexLeftNode.hasNode("selectorbarlarge_0") ? indexLeftNode.getNode("selectorbarlarge_0") : null;
-					
+
 					if (selectorBarNode != null) {
-						log.debug("selector bar node component found at : "+ indexLeftNode.getPath());
-						int eleSize = selectorBarLargeElements.size();
-						log.debug("selector component element size: "+ eleSize);
-						NodeIterator selectorBarPanel = selectorBarNode.getNodes("selectorbarpanel*");
-						int nodeSize = (int)selectorBarPanel.getSize();
-						log.debug("selector component nodeSize : "+ nodeSize);
-						if(eleSize == nodeSize){
-							
-							for(Element ele : selectorBarLargeElements){
-								Node selectorBarPanelNode;
-								if (selectorBarPanel.hasNext()) {
-									selectorBarPanelNode = (Node)selectorBarPanel.next();
-									selectorBarTranslate(selectorBarPanelNode, ele);
-								}
-								else {
-									log.debug("Next node not found");								
-								}
-							}
+						if (selectorBarLargeElements.isEmpty()) {
+							log.debug("No selector bar element found with div class name selectorbarpanel.");
+							sb.append("<li>Selector bar component with class name 'selectorbarpanel' does not exist on locale page.</li>");
 						}
-						else if(eleSize > nodeSize){
-							for(Element ele : selectorBarLargeElements){
-								Node selectorBarPanelNode;
-								if (selectorBarPanel.hasNext()) {
-									selectorBarPanelNode = (Node)selectorBarPanel.next();
-									selectorBarTranslate(selectorBarPanelNode, ele);
-								}
-								else {
-									log.debug("Next node not found");
-									sb.append("<li>Mismatch in the count of selector bar panel. Additional panel(s) found on locale page.</li>");
-									break;
-								}
-							}
-							
-						}
-						else if(eleSize < nodeSize){
-							for(Element ele : selectorBarLargeElements){
-								Node selectorBarPanelNode;
-								if (selectorBarPanel.hasNext()) {
-									selectorBarPanelNode = (Node)selectorBarPanel.next();
-									selectorBarTranslate(selectorBarPanelNode, ele);
+						else {
+							log.debug("selector bar node component found at : "+ indexLeftNode.getPath());
+							int eleSize = selectorBarLargeElements.size();
+							log.debug("selector component element size: "+ eleSize);
+							NodeIterator selectorBarPanel = selectorBarNode.getNodes("selectorbarpanel*");
+							int nodeSize = (int)selectorBarPanel.getSize();
+							log.debug("selector component nodeSize : "+ nodeSize);
+							if(eleSize == nodeSize){
+
+								for(Element ele : selectorBarLargeElements){
+									Node selectorBarPanelNode;
+									if (selectorBarPanel.hasNext()) {
+										selectorBarPanelNode = (Node)selectorBarPanel.next();
+										selectorBarTranslate(selectorBarPanelNode, ele);
+									}
+									else {
+										log.debug("Next node not found");								
+									}
 								}
 							}
-							sb.append("<li>Mismatch in the count of selector bar panels. Additional node(s) found.</li>");						
+							else if(eleSize > nodeSize){
+								for(Element ele : selectorBarLargeElements){
+									Node selectorBarPanelNode;
+									if (selectorBarPanel.hasNext()) {
+										selectorBarPanelNode = (Node)selectorBarPanel.next();
+										selectorBarTranslate(selectorBarPanelNode, ele);
+									}
+									else {
+										log.debug("Next node not found");
+										sb.append("<li>Mismatch in the count of selector bar panel. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+										break;
+									}
+								}
+
+							}
+							else if(eleSize < nodeSize){
+								for(Element ele : selectorBarLargeElements){
+									Node selectorBarPanelNode;
+									if (selectorBarPanel.hasNext()) {
+										selectorBarPanelNode = (Node)selectorBarPanel.next();
+										selectorBarTranslate(selectorBarPanelNode, ele);
+									}
+								}
+								sb.append("<li>Mismatch in the count of selector bar panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");						
+							}
 						}
 					}
 					else {
@@ -195,111 +207,146 @@ public class ProductLandingVariation10 {
 					sb.append("<li>Unable to update Selecotr bar large component." + e
 							+ "</li>");
 				}		
-				
+
 				// end set Selector bar.
-				
+
 				// start of text component
 				Node textNode2 = null;
 				try {
 					Elements textElements = doc.select("div.gd-left").select("div.c00-pilot");
 					Node textNode1 =indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-left").getNode("text") : indexLeftNode.getNode("text"); 
 					textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
-					textNode1.setProperty("text", textElements.first().html());
+					if (textNode1 != null) {
+						if (textElements.first().html() != null) {
+							textNode1.setProperty("text", textElements.first().html());
+						}
+						else {
+							sb.append("<li>The first text element is not available on the locale page.</li>");
+						}							
+					}
+					else {
+						if (textElements.first().html() != null) {
+							sb.append("<li>The first text node is not available on the locale page.</li>");
+						}
+					}
 					
 					if (textNode2 != null) {
 						Node textChildNode = textNode2.getNode("text");
-						textChildNode.setProperty("text", textElements.get(1).html());						
-					}
-					else {
-						sb.append("<li>The second text node is not available on the locale page.</li>");
-					}
-					
-				} catch (Exception e) {
-					sb.append("<li>Unable to update text components." + e + "</li>");
-				}
-				// end of text component
-				
-				// Start of button
-				try {
-					if (textNode2 != null) {
-						Node buttonNode = textNode2.getNode("a00v1_cq");
-						Element a00v1CqElement = doc.select("div.a00v1-cq").first();
-						
-						if (a00v1CqElement != null) {
-							Elements cqAnchor = a00v1CqElement.getElementsByTag("a");
-							String anchorText = cqAnchor != null ? cqAnchor.text() : "";
-							String anchorHref = cqAnchor.attr("href");
-							buttonNode.setProperty("linkText", anchorText);
-							buttonNode.setProperty("linkUrl", anchorHref);
+						if (textElements.get(1).html() != null) { 
+							textChildNode.setProperty("text", textElements.get(1).html());
 						}
 						else {
-							sb.append("<li>Button is not available on the locale page.</li>");
+							sb.append("<li>The second text element is not available on the locale page.</li>");
 						}
-						
+												
 					}
 					else {
-						log.debug("This button does not exist.");
-						sb.append("<li>Button is not available on the locale page.</li>");
+						if (textElements.size() >= 2) {
+							if (textElements.get(1).html() != null) {
+								sb.append("<li>The second text node is not available on the locale page.</li>");
+							}
+						}
+					}
+
+				} catch (Exception e) {
+					log.error("Exception "+e);
+					sb.append("<li>Unable to update text components.</li>");
+				}
+				// end of text component
+
+				// Start of button
+				try {
+					Element a00v1CqElement = doc.select("div.a00v1-cq").first();
+					if (textNode2 != null) {
+						Node buttonNode = textNode2.getNode("a00v1_cq");
+						if (buttonNode != null) {
+							if (a00v1CqElement != null) {
+								Elements cqAnchor = a00v1CqElement.getElementsByTag("a");
+								String anchorText = cqAnchor != null ? cqAnchor.text() : "";
+								String anchorHref = cqAnchor.attr("href");
+								buttonNode.setProperty("linkText", anchorText);
+								buttonNode.setProperty("linkUrl", anchorHref);
+							}
+							else {
+								sb.append("<li>Button is not available on the locale page.</li>");
+								log.debug("This button does not exist.");
+							}
+						}
+						else {
+							if (a00v1CqElement != null) {
+								sb.append("<li>Additional button is available on the locale page.</li>");
+							}
+						}
+					}
+					else {
+						if (a00v1CqElement != null) {
+							sb.append("<li>Additional button is available on the locale page.</li>");
+						}
 					}
 				}catch (Exception e) {
 					sb.append("<li>Unable to update button component." + e + "</li>");
 				}
 				//End of button
-				
+
 				// start set spotlight component.
 				try {
 					Elements spotLightElements = doc.select("div.c11-pilot");
-//					Node spotLightNode = indexLeftNode.hasNode("spotlight_large_v2*") ? indexLeftNode
-//							.getNode("spotlight_large_v2*") : null;
-							
+
 					if (indexLeftNode != null) {
 						log.debug("Spotlight node found: "+ indexLeftNode.getPath());
-						int eleSize = spotLightElements.size();
-						log.debug("Spotlight node element size: "+ eleSize);
-						NodeIterator slNodeIterator = indexLeftNode.getNodes("spotlight_large_v2*");
-						int nodeSize = (int)slNodeIterator.getSize();
-						log.debug("Spotlight node nodeSize : "+ nodeSize);
-						if(eleSize == nodeSize){
-							for (Element spElement : spotLightElements) {
-								Node slNode;
-								if (slNodeIterator.hasNext()) {
-									slNode = (Node)slNodeIterator.next();
-									spotLightTranslate(slNode, spElement);
-								}
-								else {
-									log.debug("Next node not found");								
-								}
-								
-							}
+						if (spotLightElements.isEmpty()) {
+							log.debug("No spot light element found with div class name c11-pilot.");
+							sb.append("<li>Spot light component with class name 'c11-pilot' does not exist on locale page.</li>");
 						}
-						else if (nodeSize < eleSize) {
-							for (Element spElement : spotLightElements) {
-								Node slNode;
-								if (slNodeIterator.hasNext()) {
-									slNode = (Node)slNodeIterator.next();
-									spotLightTranslate(slNode, spElement);
-								}
-								else {
-									log.debug("Next node not found");
-									sb.append("<li>Mismatch in the count of spot light panels. Additional panel(s) found on locale page.</li>");
-									break;								
+						else {
+							int eleSize = spotLightElements.size();
+							log.debug("Spotlight node element size: "+ eleSize);
+							NodeIterator slNodeIterator = indexLeftNode.getNodes("spotlight_large_v2*");
+							int nodeSize = (int)slNodeIterator.getSize();
+							log.debug("Spotlight node nodeSize : "+ nodeSize);
+							if(eleSize == nodeSize){
+								for (Element spElement : spotLightElements) {
+									Node slNode;
+									if (slNodeIterator.hasNext()) {
+										slNode = (Node)slNodeIterator.next();
+										spotLightTranslate(slNode, spElement);
+									}
+									else {
+										log.debug("Next node not found");								
+									}
+
 								}
 							}
-						
-						}
-						else if (nodeSize > eleSize) {
-							for (Element spElement : spotLightElements) {
-								Node slNode;
-								if (slNodeIterator.hasNext()) {
-									slNode = (Node)slNodeIterator.next();
-									spotLightTranslate(slNode, spElement);
+							else if (nodeSize < eleSize) {
+								for (Element spElement : spotLightElements) {
+									Node slNode;
+									if (slNodeIterator.hasNext()) {
+										slNode = (Node)slNodeIterator.next();
+										spotLightTranslate(slNode, spElement);
+									}
+									else {
+										log.debug("Next node not found");
+										sb.append("<li>Mismatch in the count of spot light panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+										break;								
+									}
 								}
-								else {
-									log.debug("Next node not found");
-								}
+
 							}
-							sb.append("<li>Mismatch in the count of spot light panels. Additional node(s) found.</li>");
+							else if (nodeSize > eleSize) {
+								for (Element spElement : spotLightElements) {
+									Node slNode;
+									if (slNodeIterator.hasNext()) {
+										slNode = (Node)slNodeIterator.next();
+										spotLightTranslate(slNode, spElement);
+									}
+									else {
+										log.debug("Next node not found");
+									}
+								}
+								sb.append("<li>Mismatch in the count of spot light panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+							}
 						}
+
 					}
 					else {
 						log.debug("No spot light node found at "+indexLeftNode);
@@ -307,68 +354,90 @@ public class ProductLandingVariation10 {
 					}
 				}
 				catch (Exception e) {
-						sb.append("<li>Unable to update Spot light component.</li>");
-						log.error("Exception : "+e);
+					sb.append("<li>Unable to update Spot light component.</li>");
+					log.error("Exception : "+e);
 				} 
 				//end set spotlight properties.
-							
+
 				//start right rail properties
 				try {
+					boolean migrate = true;
 					Elements rightRailList = doc.select("div.gd-right").select("div.mlb-pilot").select("div.c00-pilot");				
 					if (rightRailList.isEmpty()) {
 						rightRailList = doc.select("div.gd-right").select("div.n13-pilot");
-					}
-					int eleSize = rightRailList.size();
-					NodeIterator listIterator = indexRightNode.getNodes("list*");
-					int nodeSize = (int)listIterator.getSize();
-					
-					if(eleSize == nodeSize){
-						for (Element rightListEle : rightRailList) {
-							Node listNode;
-							if (listIterator.hasNext()) {
-								listNode = (Node)listIterator.next();
-								rightRailList(listNode, rightListEle);
-							}
-							else {
-								log.debug("Next node not found");								
-							}
-							
-						}
-					}
-					else if (eleSize > nodeSize) {
-						for (Element rightListEle : rightRailList) {
-							Node listNode;
-							if (listIterator.hasNext()) {
-								listNode = (Node)listIterator.next();
-								rightRailList(listNode, rightListEle);						}
-							else {
-								log.debug("Next node not found");
-								sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page.</li>");
-								break;								
-							}
-							
-						}
-					}
-					else if (eleSize < nodeSize) {
-						for (Element rightListEle : rightRailList) {
-							Node listNode;
-							if (listIterator.hasNext()) {
-								listNode = (Node)listIterator.next();
-								rightRailList(listNode, rightListEle);						}
-							else {
-								log.debug("Next node not found");
+						if (rightRailList != null) {
+							int eleSize = rightRailList.size();
+							if (eleSize == 1) {
+								Element rightListElem =  rightRailList.first();
+								if (rightListElem != null) {
+									Elements ulElements = rightListElem.getElementsByTag("ul");
+									if (ulElements.size() > 1) {
+										sb.append("<li>The HTML structure for the locale page is different and hence migration needs to be done manually.</li>");
+										migrate = false;
+									}
+								}
 							}
 						}
-						sb.append("<li>Mismatch in the count of list panels. Additional node(s) found.</li>");
 					}
 					
+					if (migrate) {
+						if (rightRailList.isEmpty()) {
+							log.debug("No right rail elements found with div class name c00-pilot or n13-pilot.");
+							sb.append("<li>Right rail component with class name 'c00-pilot' or 'n13-pilot' does not exist on locale page.</li>");
+						}
+						else {
+							int eleSize = rightRailList.size();
+							NodeIterator listIterator = indexRightNode.getNodes("list*");
+							int nodeSize = (int)listIterator.getSize();
 
+							if(eleSize == nodeSize){
+								for (Element rightListEle : rightRailList) {
+									Node listNode;
+									if (listIterator.hasNext()) {
+										listNode = (Node)listIterator.next();
+										rightRailList(listNode, rightListEle);
+									}
+									else {
+										log.debug("Next node not found");								
+									}
+
+								}
+							}
+							else if (eleSize > nodeSize) {
+								for (Element rightListEle : rightRailList) {
+									Node listNode;
+									if (listIterator.hasNext()) {
+										listNode = (Node)listIterator.next();
+										rightRailList(listNode, rightListEle);						}
+									else {
+										log.debug("Next node not found");
+										sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+										break;								
+									}
+
+								}
+							}
+							else if (eleSize < nodeSize) {
+								for (Element rightListEle : rightRailList) {
+									Node listNode;
+									if (listIterator.hasNext()) {
+										listNode = (Node)listIterator.next();
+										rightRailList(listNode, rightListEle);						}
+									else {
+										log.debug("Next node not found");
+									}
+								}
+								sb.append("<li>Mismatch in the count of list panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+							}
+						}
+					}
+					
 				} catch (Exception e) {
 					sb.append("<li>Unable to update benefits tile_bordered component.</li>");
 					log.error("Exception : ",e);
 				}
-			//end set index list.
-				
+				//end set index list.
+
 				// start of follow us component
 				try {
 					String h2Content = "";
@@ -409,14 +478,12 @@ public class ProductLandingVariation10 {
 					} else {
 						followUsEle = false; 
 					}
-					
+
 					if (indexRightNode.hasNode("followus")) {
 						Node followus = indexRightNode.getNode("followus");
 						if (StringUtils.isNotBlank(h2Content)) {
 							followus.setProperty("title", h2Content);
-						} else {
-							sb.append("<li>No title found at right rail social media pilot.</li>");							
-						}
+						} 
 
 						if (list.size() > 1) {
 							followus.setProperty("links", list.toArray(new String[list.size()]));
@@ -425,7 +492,7 @@ public class ProductLandingVariation10 {
 					} else {
 						followUsNode = false;
 					}
-					
+
 					if (followUsEle) {
 						if (followUsNode) {
 							log.debug("Follow us element and node are available.");
@@ -437,7 +504,7 @@ public class ProductLandingVariation10 {
 					else {
 						if (followUsNode) {
 							sb.append("<li>No follow us element found in right rail on the locale page.</li>");
-							
+
 						}
 						else {
 							log.debug("Follow us element and node are not available.");
@@ -449,33 +516,33 @@ public class ProductLandingVariation10 {
 					sb.append("<li>Unable to update follow us component.</li>");
 					log.error("Exception : ",e);
 				}
-				
+
 				// end of follow us component
-				
+
 			} catch (Exception e) {
 				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
 			}
-							
+
 		} catch (Exception e) {
 			sb.append("<li>Exception " + e + "</li>");
 		}
-		
+
 		sb.append("</ul></td>");
 		session.save();
 		return sb.toString();
 	}
-		
-		
+
+
 	public void heroPanelTranslate(Node heroPanelNode, Element ele) {
-		
+
 		try {			
 			String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").text():"";
 			String desc = ele.getElementsByTag("p")!=null?ele.getElementsByTag("p").first().text():"";
-			
+
 			Elements anchor = ele.getElementsByTag("a");		
 			String anchorText = anchor!=null?anchor.text():"";
 			String anchorHref = anchor.attr("href");
-			
+
 			heroPanelNode.setProperty("title", title);
 			heroPanelNode.setProperty("description", desc);
 			heroPanelNode.setProperty("linktext", anchorText);
@@ -483,49 +550,64 @@ public class ProductLandingVariation10 {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}	
-	
+
 	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele) {
-		
+
 		try {
 			String title = (ele!=null?ele.getElementsByTag("a").first().text():"");
 			String titleUrl = ele.getElementsByTag("a").first().attr("href");
 			log.debug("selector component titleUrl: "+ titleUrl);							
 			selectorBarPanelNode.setProperty("title", title);
 			selectorBarPanelNode.setProperty("titleurl", titleUrl);
-			Element menuEle = ele.child(1);
-			log.debug("selector component menuEle: "+ menuEle.toString());
-			Element anchor = menuEle.getElementsByTag("a").last();
-			String allLinkText = anchor!=null? anchor.text():"";
-			String allLinkUrl = anchor!=null?anchor.attr("href"):"";
-			selectorBarPanelNode.setProperty("alllinktext", allLinkText);
-			selectorBarPanelNode.setProperty("alllinkurl", allLinkUrl);
-			
-			Elements menuUlList = menuEle.getElementsByTag("ul");
-			for (Element element : menuUlList) {
-				java.util.List<String> list = new ArrayList<String>();
-				Elements menuLiList = element.getElementsByTag("li");
+			if (ele.childNodeSize() >= 2) {
+				Element menuEle = ele.child(1);
+				if (menuEle != null) {
+					log.debug("selector component menuEle: "+ menuEle.toString());
+					Element anchor = menuEle.getElementsByTag("a").last();
+					String allLinkText = anchor!=null? anchor.text():"";
+					String allLinkUrl = anchor!=null?anchor.attr("href"):"";
+					selectorBarPanelNode.setProperty("alllinktext", allLinkText);
+					selectorBarPanelNode.setProperty("alllinkurl", allLinkUrl);
 
-				for (Element li : menuLiList) {
-					JSONObject jsonObj = new JSONObject();
-					Elements listItemAnchor = li.getElementsByTag("a");
-					String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
-					String anchorHref = listItemAnchor.attr("href");
-					
-					jsonObj.put("linktext", anchorText);
-					jsonObj.put("linkurl", anchorHref);
-					list.add(jsonObj.toString());
+					Elements menuUlList = menuEle.getElementsByTag("ul");
+					System.out.println("/////////"+menuUlList.size());
+					for (Element element : menuUlList) {
+						java.util.List<String> list = new ArrayList<String>();
+						Elements menuLiList = element.getElementsByTag("li");
+						System.out.println(menuLiList.size());
+
+						for (Element li : menuLiList) {
+							JSONObject jsonObj = new JSONObject();
+							Elements listItemAnchor = li.getElementsByTag("a");
+							String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
+							String anchorHref = listItemAnchor.attr("href");
+
+							jsonObj.put("linktext", anchorText);
+							jsonObj.put("linkurl", anchorHref);
+							jsonObj.put("size", "");
+							list.add(jsonObj.toString());
+						}
+
+						selectorBarPanelNode.setProperty("panelitems", list.toArray(new String[list.size()]));	
+					}
 				}
-				
-				selectorBarPanelNode.setProperty("panelitems", list.toArray(new String[list.size()]));	
+				else {
+					sb.append("<li>Menu elements does not exist on the locale page.</li>");
+				}
+
 			}
+			else {
+				sb.append("<li>Menu elements does not exist on the locale page.</li>");
+			}
+						
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void spotLightTranslate (Node slNode, Element spElement) {
 		try {
 			Element spotLightTitle = spElement.getElementsByTag("h2").first();
@@ -533,18 +615,42 @@ public class ProductLandingVariation10 {
 			Element spotLightAnchor = spElement.getElementsByTag("a").first();
 			String linkText = spotLightAnchor.text();
 			String linkUrl = spotLightAnchor.attr("href");
-			slNode.setProperty("title", spotLightTitle.text());
+			
 			slNode.setProperty("description", spotLightDescription.text());
 			slNode.setProperty("linktext", linkText);
 			javax.jcr.Node ctaNode = slNode.getNode("cta");
-			ctaNode.setProperty("url", linkUrl);
+			if (ctaNode != null) {
+				if (linkUrl != null) {
+//					ctaNode.setProperty("linktype", "Url");
+					ctaNode.setProperty("url", linkUrl);
+				}
+			}
+			if (spotLightTitle != null) {
+				Elements spotLightLink = spotLightTitle.getElementsByTag("a");
+				if (spotLightLink.isEmpty()) {
+					slNode.setProperty("title", spotLightTitle.text());
+				}
+				else {
+					Element spotLightLinkEle = spotLightLink.first();
+					String slLinkText = spotLightLinkEle.text();
+					String slLinkUrl = spotLightLinkEle.attr("href");
+					slNode.setProperty("title", slLinkText);
+					javax.jcr.Node titleLinkNode = slNode.getNode("titlelink");
+					if (titleLinkNode != null) {
+						if (slLinkUrl != null) {
+							titleLinkNode.setProperty("linktype", "Url");
+							titleLinkNode.setProperty("url", slLinkUrl);
+						}
+					}
+				}
+			}
 			log.debug("Updated title, descriptoin and linktext at "+slNode.getPath());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void rightRailList (Node listNode, Element rightListEle) {
 		try {
 			Element title = rightListEle.getElementsByTag("h2").first();
@@ -553,7 +659,7 @@ public class ProductLandingVariation10 {
 			javax.jcr.Node introNode = listNode.getNode("intro");
 			introNode.setProperty("paragraph_rte", description.text());
 			javax.jcr.Node eleListNode = listNode.getNode("element_list_0");
-			
+
 			Elements ulList = rightListEle.getElementsByTag("ul");
 			for (Element element : ulList) {
 				java.util.List<String> list = new ArrayList<String>();
@@ -564,7 +670,7 @@ public class ProductLandingVariation10 {
 					Elements listItemAnchor = li.getElementsByTag("a");
 					String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
 					String anchorHref = listItemAnchor.attr("href");
-					
+
 					jsonObjrr.put("linktext", anchorText);
 					jsonObjrr.put("linkurl", anchorHref);
 					jsonObjrr.put("icon", "none");
@@ -580,7 +686,7 @@ public class ProductLandingVariation10 {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }
