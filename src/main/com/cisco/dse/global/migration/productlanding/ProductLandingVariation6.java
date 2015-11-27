@@ -63,149 +63,167 @@ public class ProductLandingVariation6 {
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
+				log.error("Exception : ", e);
 				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
 			}
 
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start of hero panel section.
 			try {
-
-				Elements frameElements = null;
-				Elements heropanelElements = doc.select("div.c50-pilot");
-				if (heropanelElements != null) {
-					Element heropanelElement = heropanelElements.first();
-					if (heropanelElement != null) {
-						frameElements = heropanelElement.select("div.frame");
-					} else {
-						sb.append("<li>Hero Panel is empty.</li>");
-					}
-				} else {
-					sb.append("<li>No Hero Panel found.</li>");
-				}
-
-				String parbaseContent = "";
-				Elements gridLeftElements = doc.select("div.gd12v2-left");
-				Elements parbaseTextElements = gridLeftElements
-						.select("div.parbase");
-				if (parbaseTextElements != null) {
-					parbaseTextElements = parbaseTextElements
-							.select("div.c00v0-pilot");
-					if (parbaseTextElements != null) {
-						Element parbaseTextElement = parbaseTextElements
-								.first();
-						if (parbaseTextElement != null) {
-							parbaseContent = parbaseTextElement.html();
+				if (doc != null) {
+					Elements frameElements = null;
+					Elements heropanelElements = doc.select("div.c50-pilot");
+					if (heropanelElements != null) {
+						Element heropanelElement = heropanelElements.first();
+						if (heropanelElement != null) {
+							frameElements = heropanelElement
+									.select("div.frame");
 						} else {
-							sb.append("<li>No parbse text found.('div.parbase' element not found in 'div.gd-left')</li>");
+							sb.append("<li>Hero Panel is empty.</li>");
+						}
+					} else {
+						sb.append("<li>No Hero Panel found.</li>");
+					}
+
+					String parbaseContent = "";
+					Elements gridLeftElements = doc.select("div.gd12v2-left");
+					Elements parbaseTextElements = gridLeftElements
+							.select("div.parbase");
+					if (parbaseTextElements != null) {
+						parbaseTextElements = parbaseTextElements
+								.select("div.c00v0-pilot");
+						if (parbaseTextElements != null) {
+							Element parbaseTextElement = parbaseTextElements
+									.first();
+							if (parbaseTextElement != null) {
+								parbaseContent = parbaseTextElement.html();
+							} else {
+								sb.append("<li>No parbse text found.('div.parbase' element not found in 'div.gd-left')</li>");
+							}
+						} else {
+							sb.append("<li>No parbse text found.('div.text parbase section' element not found in 'div.gd-left')</li>");
 						}
 					} else {
 						sb.append("<li>No parbse text found.('div.text parbase section' element not found in 'div.gd-left')</li>");
 					}
-				} else {
-					sb.append("<li>No parbse text found.('div.text parbase section' element not found in 'div.gd-left')</li>");
-				}
 
-				if (layoutOverViewNode != null) {
-					if (layoutOverViewNode.hasNode("gd12v2_0")) {
-						Node gd12v2_0 = layoutOverViewNode.getNode("gd12v2_0");
-						if (gd12v2_0.hasNode("gd12v2-left")) {
-							Node gd12v2_left = gd12v2_0.getNode("gd12v2-left");
-							if (gd12v2_left.hasNode("hero_large")) {
-								Node hero_large = gd12v2_left
-										.getNode("hero_large");
-								NodeIterator heropanel = hero_large
-										.getNodes("heropanel*");
-								if (frameElements != null) {
-									if (heropanel.getSize() == frameElements
-											.size()) {
-										for (Element ele : frameElements) {
-											heropanel.hasNext();
-											Node heropanelNode = (Node) heropanel
-													.next();
-											Elements h2Elements = ele
-													.getElementsByTag("h2");
-											if (h2Elements != null) {
-												Element h2element = h2Elements
-														.first();
-												if (h2element != null) {
-													String h2 = h2element
-															.text();
-													heropanelNode.setProperty(
-															"title", h2);
+					if (layoutOverViewNode != null) {
+						if (layoutOverViewNode.hasNode("gd12v2_0")) {
+							Node gd12v2_0 = layoutOverViewNode
+									.getNode("gd12v2_0");
+							if (gd12v2_0.hasNode("gd12v2-left")) {
+								Node gd12v2_left = gd12v2_0
+										.getNode("gd12v2-left");
+								if (gd12v2_left.hasNode("hero_large")) {
+									Node hero_large = gd12v2_left
+											.getNode("hero_large");
+									NodeIterator heropanel = hero_large
+											.getNodes("heropanel*");
+									if (frameElements != null) {
+										if (heropanel.getSize() == frameElements
+												.size()) {
+											for (Element ele : frameElements) {
+												heropanel.hasNext();
+												Node heropanelNode = (Node) heropanel
+														.next();
+												Elements h2Elements = ele
+														.getElementsByTag("h2");
+												if (h2Elements != null) {
+													Element h2element = h2Elements
+															.first();
+													if (h2element != null) {
+														String h2 = h2element
+																.text();
+														heropanelNode
+																.setProperty(
+																		"title",
+																		h2);
+													} else {
+														sb.append("<li>No heading foundin hero panel.</li>");
+													}
 												} else {
-													sb.append("<li>No heading foundin hero panel.</li>");
+													sb.append("<li>No heading found in hero panel.</li>");
 												}
-											} else {
-												sb.append("<li>No heading found in hero panel.</li>");
-											}
-											Elements pElements = ele
-													.getElementsByTag("p");
-											if (pElements != null) {
-												Element pElement = pElements
-														.first();
-												if (pElement != null) {
-													String p = pElement.text();
-													heropanelNode.setProperty(
-															"description", p);
+												Elements pElements = ele
+														.getElementsByTag("p");
+												if (pElements != null) {
+													Element pElement = pElements
+															.first();
+													if (pElement != null) {
+														String p = pElement
+																.text();
+														heropanelNode
+																.setProperty(
+																		"description",
+																		p);
+													} else {
+														sb.append("<li>No description found in hero panel.</li>");
+													}
 												} else {
 													sb.append("<li>No description found in hero panel.</li>");
 												}
-											} else {
-												sb.append("<li>No description found in hero panel.</li>");
-											}
-											Elements aElements = ele
-													.getElementsByTag("a");
-											if (aElements != null) {
-												Element aElement = aElements
-														.first();
-												if (aElement != null) {
-													String aText = aElement
-															.text();
-													String ahref = aElement
-															.attr("href");
-													heropanelNode.setProperty(
-															"linktext", aText);
-													heropanelNode.setProperty(
-															"linkurl", ahref);
+												Elements aElements = ele
+														.getElementsByTag("a");
+												if (aElements != null) {
+													Element aElement = aElements
+															.first();
+													if (aElement != null) {
+														String aText = aElement
+																.text();
+														String ahref = aElement
+																.attr("href");
+														heropanelNode
+																.setProperty(
+																		"linktext",
+																		aText);
+														heropanelNode
+																.setProperty(
+																		"linkurl",
+																		ahref);
+													} else {
+														sb.append("<li>No anchor link found in hero panel.</li>");
+													}
 												} else {
 													sb.append("<li>No anchor link found in hero panel.</li>");
 												}
-											} else {
-												sb.append("<li>No anchor link found in hero panel.</li>");
 											}
+										} else {
+											sb.append("<li>Hero panel nodes("
+													+ heropanel.getSize()
+													+ ") and elements("
+													+ frameElements.size()
+													+ ") size doesn't match.</li>");
 										}
 									} else {
-										sb.append("<li>Hero panel nodes("
-												+ heropanel.getSize()
-												+ ") and elements("
-												+ frameElements.size()
-												+ ") size doesn't match.</li>");
+										sb.append("<li>No Frames found inside hero panel.</li>");
 									}
-								} else {
-									sb.append("<li>No Frames found inside hero panel.</li>");
-								}
-								if (gd12v2_left.hasNode("text")) {
-									Node textNode = gd12v2_left.getNode("text");
-									if (StringUtils.isNotBlank(parbaseContent)) {
-										textNode.setProperty("text",
-												parbaseContent);
+									if (gd12v2_left.hasNode("text")) {
+										Node textNode = gd12v2_left
+												.getNode("text");
+										if (StringUtils
+												.isNotBlank(parbaseContent)) {
+											textNode.setProperty("text",
+													parbaseContent);
+										} else {
+											sb.append("<li>parbase sectoin content not found.</li>");
+										}
 									} else {
-										sb.append("<li>parbase sectoin content not found.</li>");
+										sb.append("<li>'text' node doesn't exist.</li>");
 									}
 								} else {
-									sb.append("<li>'text' node doesn't exist.</li>");
+									sb.append("<li>'hero_large' Node doesn't exists.</li>");
 								}
 							} else {
-								sb.append("<li>'hero_large' Node doesn't exists.</li>");
+								sb.append("<li>'gd12v2-left' Node doesn't exists.</li>");
 							}
 						} else {
-							sb.append("<li>'gd12v2-left' Node doesn't exists.</li>");
+							sb.append("<li>'gd12v2_0' Node doesn't exists.</li>");
 						}
 					} else {
-						sb.append("<li>'gd12v2_0' Node doesn't exists.</li>");
+						sb.append("<li>Content path doesn't exist in WEM</li>");
 					}
 				} else {
-					sb.append("<li>Content path doesn't exist in WEM</li>");
+					sb.append("<li>Cannot connect to the Web publisher page.</li>");
 				}
 			} catch (Exception e) {
 				log.error("Exception : ", e);
@@ -216,194 +234,204 @@ public class ProductLandingVariation6 {
 			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start of primary CTA section.
 			try {
-				String h3Text = "";
-				String pText = "";
-				String aText = "";
-				String aHref = "";
-				String h2Content = "";
-				List<String> list = new ArrayList<String>();
-				Elements gridRightElements = doc.select("div.gd-right");
-				if (gridRightElements != null) {
-					Elements primaryCTAElements = gridRightElements
-							.select("div.c47-pilot");
-					if (primaryCTAElements != null) {
-						Element primaryCTAElement = primaryCTAElements.first();
-						if (primaryCTAElement != null) {
-							Elements h3TagElements = primaryCTAElement
-									.getElementsByTag("h3");
-							if (h3TagElements != null) {
-								Element h3TagElement = h3TagElements.first();
-								if (h3TagElement != null) {
-									h3Text = h3TagElement.text();
+				if (doc != null) {
+					String h3Text = "";
+					String pText = "";
+					String aText = "";
+					String aHref = "";
+					String h2Content = "";
+					List<String> list = new ArrayList<String>();
+					Elements gridRightElements = doc.select("div.gd-right");
+					if (gridRightElements != null) {
+						Elements primaryCTAElements = gridRightElements
+								.select("div.c47-pilot");
+						if (primaryCTAElements != null) {
+							Element primaryCTAElement = primaryCTAElements
+									.first();
+							if (primaryCTAElement != null) {
+								Elements h3TagElements = primaryCTAElement
+										.getElementsByTag("h3");
+								if (h3TagElements != null) {
+									Element h3TagElement = h3TagElements
+											.first();
+									if (h3TagElement != null) {
+										h3Text = h3TagElement.text();
+									} else {
+										sb.append("<li>Primary CTA Heding element not having any title in it ('h2' is blank)</li>");
+									}
 								} else {
-									sb.append("<li>Primary CTA Heding element not having any title in it ('h2' is blank)</li>");
+									sb.append("<li>Primary CTA Heading element not found ('h2' tag not found in 'div.c50-text' div element)</li>");
 								}
-							} else {
-								sb.append("<li>Primary CTA Heading element not found ('h2' tag not found in 'div.c50-text' div element)</li>");
-							}
-							Elements pTagElements = primaryCTAElement
-									.getElementsByTag("p");
-							if (pTagElements != null) {
-								Element pTagElement = pTagElements.first();
-								if (pTagElement != null) {
-									pText = pTagElement.text();
+								Elements pTagElements = primaryCTAElement
+										.getElementsByTag("p");
+								if (pTagElements != null) {
+									Element pTagElement = pTagElements.first();
+									if (pTagElement != null) {
+										pText = pTagElement.text();
+									} else {
+										sb.append("<li>Primary CTA Paragraph element is not having any paragraph in it ('p' is blank)</li>");
+									}
 								} else {
-									sb.append("<li>Primary CTA Paragraph element is not having any paragraph in it ('p' is blank)</li>");
+									sb.append("<li>Primary CTA Paragraph element not found ('p' tag not found in 'div.c50-text' div element)</li>");
 								}
-							} else {
-								sb.append("<li>Primary CTA Paragraph element not found ('p' tag not found in 'div.c50-text' div element)</li>");
-							}
-							Elements aTagElements = primaryCTAElement
-									.getElementsByTag("a");
-							if (aTagElements != null) {
-								Element aTagElement = aTagElements.first();
-								if (aTagElement != null) {
-									aText = aTagElement.text();
-									aHref = aTagElement.attr("href");
+								Elements aTagElements = primaryCTAElement
+										.getElementsByTag("a");
+								if (aTagElements != null) {
+									Element aTagElement = aTagElements.first();
+									if (aTagElement != null) {
+										aText = aTagElement.text();
+										aHref = aTagElement.attr("href");
+									} else {
+										sb.append("<li>No anchor tag found in 'div. c47-pilot' div element</li>");
+									}
 								} else {
-									sb.append("<li>No anchor tag found in 'div. c47-pilot' div element</li>");
+									sb.append("<li>No anchor tags found in 'div. c47-pilot' div element</li>");
 								}
-							} else {
-								sb.append("<li>No anchor tags found in 'div. c47-pilot' div element</li>");
-							}
 
-						} else {
-							sb.append("<li>Hero Panel text element not found ('div.c50-text' elements exists but size of the elements is zero)</li>");
-						}
-					} else {
-						sb.append("<li>Hero Panel text elements not found ('div.c50-text' class not found in the document)</li>");
-					}
-
-					Elements rightRailPilotElements = gridRightElements
-							.select("div.s14-pilot");
-					if (rightRailPilotElements != null) {
-						Element rightRailPilotElement = rightRailPilotElements
-								.first();
-						if (rightRailPilotElement != null) {
-							Elements h2Elements = rightRailPilotElement
-									.getElementsByTag("h2");
-							if (h2Elements != null) {
-								Element h2Element = h2Elements.first();
-								h2Content = h2Element.text();
 							} else {
-								sb.append("<li>h2 of right rail with class 'div.s14-pilot' is blank.</li>");
-							}
-							Elements liElements = rightRailPilotElement
-									.getElementsByTag("li");
-							for (Element ele : liElements) {
-								JSONObject obj = new JSONObject();
-								String icon = ele.attr("class");
-								obj.put("icon", icon);
-								Elements aElements = ele.getElementsByTag("a");
-								if (aElements != null) {
-									Element aElement = aElements.first();
-									String title = aElement.attr("title");
-									String href = aElement.attr("href");
-									obj.put("linktext", title);
-									obj.put("linkurl", href);
-								} else {
-									sb.append("<li>No anchor tag found in the right rail social links</li>");
-								}
-								list.add(obj.toString());
+								sb.append("<li>Hero Panel text element not found ('div.c50-text' elements exists but size of the elements is zero)</li>");
 							}
 						} else {
-							sb.append("<li>right rail with class 'div.s14-pilot' is blank.</li>");
+							sb.append("<li>Hero Panel text elements not found ('div.c50-text' class not found in the document)</li>");
 						}
+
+						Elements rightRailPilotElements = gridRightElements
+								.select("div.s14-pilot");
+						if (rightRailPilotElements != null) {
+							Element rightRailPilotElement = rightRailPilotElements
+									.first();
+							if (rightRailPilotElement != null) {
+								Elements h2Elements = rightRailPilotElement
+										.getElementsByTag("h2");
+								if (h2Elements != null) {
+									Element h2Element = h2Elements.first();
+									h2Content = h2Element.text();
+								} else {
+									sb.append("<li>h2 of right rail with class 'div.s14-pilot' is blank.</li>");
+								}
+								Elements liElements = rightRailPilotElement
+										.getElementsByTag("li");
+								for (Element ele : liElements) {
+									JSONObject obj = new JSONObject();
+									String icon = ele.attr("class");
+									obj.put("icon", icon);
+									Elements aElements = ele
+											.getElementsByTag("a");
+									if (aElements != null) {
+										Element aElement = aElements.first();
+										String title = aElement.attr("title");
+										String href = aElement.attr("href");
+										obj.put("linktext", title);
+										obj.put("linkurl", href);
+									} else {
+										sb.append("<li>No anchor tag found in the right rail social links</li>");
+									}
+									list.add(obj.toString());
+								}
+							} else {
+								sb.append("<li>right rail with class 'div.s14-pilot' is blank.</li>");
+							}
+						} else {
+							sb.append("<li>No pilot found on right rail with class 'div.s14-pilot'</li>");
+						}
+
 					} else {
-						sb.append("<li>No pilot found on right rail with class 'div.s14-pilot'</li>");
+						sb.append("<li>Hero panel not found. ('div.gd-left' class not found in the document)</li>");
 					}
 
-				} else {
-					sb.append("<li>Hero panel not found. ('div.gd-left' class not found in the document)</li>");
-				}
-
-				Node gd12v2 = null;
-				Node gd12v2_right = null;
-				Node primary_cta_v2 = null;
-				if (layoutOverViewNode != null) {
-					if (layoutOverViewNode.hasNode("gd12v2_0")) {
-						gd12v2 = layoutOverViewNode.getNode("gd12v2_0");
-						if (gd12v2.hasNode("gd12v2-right")) {
-							gd12v2_right = gd12v2.getNode("gd12v2-right");
-							if (gd12v2_right.hasNode("primary_cta_v2")) {
-								primary_cta_v2 = gd12v2_right
-										.getNode("primary_cta_v2");
-								if (StringUtils.isNotBlank(h3Text)) {
-									primary_cta_v2.setProperty("title", h3Text);
-									log.debug(h3Text
-											+ "is set to the property title at : "
-											+ primary_cta_v2.getPath());
-								} else {
-									sb.append("<li>h3 text is blank in primary cta.</li>");
-								}
-								if (StringUtils.isNotBlank(pText)) {
-									primary_cta_v2.setProperty("description",
-											pText);
-									log.debug(pText
-											+ "is set to the property title at : "
-											+ primary_cta_v2.getPath());
-								} else {
-									sb.append("<li>p text is blank in primary cta.</li>");
-								}
-								if (StringUtils.isNotBlank(aText)) {
-									primary_cta_v2.setProperty("linktext",
-											aText);
-									log.debug(aText
-											+ "is set to the property title at : "
-											+ primary_cta_v2.getPath());
-								} else {
-									sb.append("<li>anchor text is blank in primary cta.</li>");
-								}
-								if (StringUtils.isNotBlank(aHref)) {
-									if (primary_cta_v2.hasNode("linkurl")) {
-										Node linkurlNode = primary_cta_v2
-												.getNode("linkurl");
-										linkurlNode.setProperty("url", aHref);
-										log.debug(aHref
+					Node gd12v2 = null;
+					Node gd12v2_right = null;
+					Node primary_cta_v2 = null;
+					if (layoutOverViewNode != null) {
+						if (layoutOverViewNode.hasNode("gd12v2_0")) {
+							gd12v2 = layoutOverViewNode.getNode("gd12v2_0");
+							if (gd12v2.hasNode("gd12v2-right")) {
+								gd12v2_right = gd12v2.getNode("gd12v2-right");
+								if (gd12v2_right.hasNode("primary_cta_v2")) {
+									primary_cta_v2 = gd12v2_right
+											.getNode("primary_cta_v2");
+									if (StringUtils.isNotBlank(h3Text)) {
+										primary_cta_v2.setProperty("title",
+												h3Text);
+										log.debug(h3Text
 												+ "is set to the property title at : "
 												+ primary_cta_v2.getPath());
 									} else {
-										sb.append("<li>linkurl node doesn't exists under : "
-												+ primary_cta_v2.getPath()
-												+ "</li>");
+										sb.append("<li>h3 text is blank in primary cta.</li>");
+									}
+									if (StringUtils.isNotBlank(pText)) {
+										primary_cta_v2.setProperty(
+												"description", pText);
+										log.debug(pText
+												+ "is set to the property title at : "
+												+ primary_cta_v2.getPath());
+									} else {
+										sb.append("<li>p text is blank in primary cta.</li>");
+									}
+									if (StringUtils.isNotBlank(aText)) {
+										primary_cta_v2.setProperty("linktext",
+												aText);
+										log.debug(aText
+												+ "is set to the property title at : "
+												+ primary_cta_v2.getPath());
+									} else {
+										sb.append("<li>anchor text is blank in primary cta.</li>");
+									}
+									if (StringUtils.isNotBlank(aHref)) {
+										if (primary_cta_v2.hasNode("linkurl")) {
+											Node linkurlNode = primary_cta_v2
+													.getNode("linkurl");
+											linkurlNode.setProperty("url",
+													aHref);
+											log.debug(aHref
+													+ "is set to the property title at : "
+													+ primary_cta_v2.getPath());
+										} else {
+											sb.append("<li>linkurl node doesn't exists under : "
+													+ primary_cta_v2.getPath()
+													+ "</li>");
+										}
+									} else {
+										sb.append("<li>anchor href is blank for primary cta.</li>");
 									}
 								} else {
-									sb.append("<li>anchor href is blank for primary cta.</li>");
+									sb.append("<li>Node with name 'hero_large' doesn't exist under "
+											+ gd12v2_right.getPath() + "</li>");
 								}
-							} else {
-								sb.append("<li>Node with name 'hero_large' doesn't exist under "
-										+ gd12v2_right.getPath() + "</li>");
-							}
-							if (gd12v2_right.hasNode("followus")) {
-								Node followus = gd12v2_right
-										.getNode("followus");
-								if (StringUtils.isNotBlank(h2Content)) {
-									followus.setProperty("title", h2Content);
+								if (gd12v2_right.hasNode("followus")) {
+									Node followus = gd12v2_right
+											.getNode("followus");
+									if (StringUtils.isNotBlank(h2Content)) {
+										followus.setProperty("title", h2Content);
+									} else {
+										sb.append("<li>No title found at right rail social media piolot.</li>");
+									}
+
+									if (list.size() > 1) {
+										followus.setProperty("links",
+												list.toArray(new String[list
+														.size()]));
+									}
+
 								} else {
-									sb.append("<li>No title found at right rail social media piolot.</li>");
-								}
-
-								if (list.size() > 1) {
-									followus.setProperty("links", list
-											.toArray(new String[list.size()]));
+									sb.append("<li>No 'followus' node found under "
+											+ gd12v2_right.getPath() + "</li>");
 								}
 
 							} else {
-								sb.append("<li>No 'followus' node found under "
-										+ gd12v2_right.getPath() + "</li>");
+								sb.append("<li>Node with name 'gd12v2-left' doesn't exist under "
+										+ gd12v2.getPath() + "</li>");
 							}
-
 						} else {
-							sb.append("<li>Node with name 'gd12v2-left' doesn't exist under "
-									+ gd12v2.getPath() + "</li>");
+							sb.append("<li>Node with name 'gd12v2' doesn't exist under "
+									+ layoutOverView + "</li>");
 						}
 					} else {
-						sb.append("<li>Node with name 'gd12v2' doesn't exist under "
+						sb.append("<li>Node doesn't exist with path : "
 								+ layoutOverView + "</li>");
 					}
 				} else {
-					sb.append("<li>Node doesn't exist with path : "
-							+ layoutOverView + "</li>");
+					sb.append("<li>Unable to connect to web publisher url.</li>");
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update benefits list component.\n</li>");
@@ -414,93 +442,102 @@ public class ProductLandingVariation6 {
 			// --------------------------------------------------------------------------------------------------------------------------
 			// start of Grid one.
 			try {
-				Elements bdr_1 = null;
-				Elements gd12v2_pilots = doc.select("div.gd12v2-pilot");
-				if (gd12v2_pilots != null) {
-					bdr_1 = gd12v2_pilots.select("h2.bdr-1");
+				if (doc != null) {
+					Elements bdr_1 = null;
+					Elements gd12v2_pilots = doc.select("div.gd12v2-pilot");
+					if (gd12v2_pilots != null) {
+						bdr_1 = gd12v2_pilots.select("h2.bdr-1");
+						if (bdr_1.size() == 0) {
+							bdr_1 = doc.select("h2.bdr-1");
+						}
+					} else {
+						sb.append("<li>Html blob element not found.</li>");
+					}
+
+					if (layoutOverViewNode != null) {
+
+						if (layoutOverViewNode.hasNode("gd11v1")) {
+							Node gd11v1_Nodes = layoutOverViewNode
+									.getNode("gd11v1");
+							if (gd11v1_Nodes.hasNode("gd11v1-mid")) {
+								Node gd11v1_mid = gd11v1_Nodes
+										.getNode("gd11v1-mid");
+								if (gd11v1_mid.hasNode("htmlblob_0")) {
+									Node htmlblob_0 = gd11v1_mid
+											.getNode("htmlblob_0");
+									if (bdr_1 != null && bdr_1.size() > 0
+											&& bdr_1.get(0) != null) {
+										htmlblob_0.setProperty("html", bdr_1
+												.get(0).parent().html());
+									} else {
+										sb.append("<li>Heading of the grid is blank.</li>");
+									}
+								} else {
+									sb.append("<li>'htmlblob_0' node doesn't exists.</li>");
+								}
+							} else {
+								sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
+							}
+						} else {
+							sb.append("<li>'gd11v1' Node doesn't exist.</li>");
+						}
+
+						if (layoutOverViewNode.hasNode("gd11v1_0")) {
+							Node gd11v1_0_Nodes = layoutOverViewNode
+									.getNode("gd11v1_0");
+							if (gd11v1_0_Nodes.hasNode("gd11v1-mid")) {
+								Node gd11v1_mid = gd11v1_0_Nodes
+										.getNode("gd11v1-mid");
+								if (gd11v1_mid.hasNode("htmlblob")) {
+									Node htmlblob = gd11v1_mid
+											.getNode("htmlblob");
+									if (bdr_1 != null && bdr_1.size() > 1
+											&& bdr_1.get(1) != null) {
+										htmlblob.setProperty("html",
+												bdr_1.get(1).parent().html());
+									} else {
+										sb.append("<li>Heading of the grid is blank.</li>");
+									}
+								} else {
+									sb.append("<li>'htmlblob' node doesn't exists.</li>");
+								}
+							} else {
+								sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
+							}
+						} else {
+							sb.append("<li>'gd11v1_0' Node doesn't exist.</li>");
+						}
+
+						if (layoutOverViewNode.hasNode("gd11v1_1")) {
+							Node gd11v1_1_Nodes = layoutOverViewNode
+									.getNode("gd11v1_1");
+							if (gd11v1_1_Nodes.hasNode("gd11v1-mid")) {
+								Node gd11v1_mid = gd11v1_1_Nodes
+										.getNode("gd11v1-mid");
+								if (gd11v1_mid.hasNode("text")) {
+									Node text = gd11v1_mid.getNode("text");
+									if (bdr_1 != null && bdr_1.size() > 2
+											&& bdr_1.get(2) != null) {
+										text.setProperty("text", bdr_1.get(2)
+												.parent().html());
+									} else {
+										sb.append("<li>Heading of the grid is blank.</li>");
+									}
+								} else {
+									sb.append("<li>'text' node doesn't exists.</li>");
+								}
+							} else {
+								sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
+							}
+						} else {
+							sb.append("<li>'gd11v1_1' Node doesn't exist.</li>");
+						}
+					} else {
+						sb.append("<li>Node doesn't exist with path : "
+								+ layoutOverView + "</li>");
+					}
 				} else {
-					sb.append("<li>Html blob element not found.</li>");
 				}
-
-				if (layoutOverViewNode != null) {
-
-					if (layoutOverViewNode.hasNode("gd11v1")) {
-						Node gd11v1_Nodes = layoutOverViewNode
-								.getNode("gd11v1");
-						if (gd11v1_Nodes.hasNode("gd11v1-mid")) {
-							Node gd11v1_mid = gd11v1_Nodes
-									.getNode("gd11v1-mid");
-							if (gd11v1_mid.hasNode("htmlblob_0")) {
-								Node htmlblob_0 = gd11v1_mid
-										.getNode("htmlblob_0");
-								if (bdr_1 != null && bdr_1.get(0) != null) {
-									htmlblob_0.setProperty("html", bdr_1.get(0)
-											.parent().html());
-								} else {
-									sb.append("<li>Heading of the grid is blank.</li>");
-								}
-							} else {
-								sb.append("<li>'htmlblob_0' node doesn't exists.</li>");
-							}
-						} else {
-							sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
-						}
-					} else {
-						sb.append("<li>'gd11v1' Node doesn't exist.</li>");
-					}
-
-					if (layoutOverViewNode.hasNode("gd11v1_0")) {
-						Node gd11v1_0_Nodes = layoutOverViewNode
-								.getNode("gd11v1_0");
-						if (gd11v1_0_Nodes.hasNode("gd11v1-mid")) {
-							Node gd11v1_mid = gd11v1_0_Nodes
-									.getNode("gd11v1-mid");
-							if (gd11v1_mid.hasNode("htmlblob")) {
-								Node htmlblob = gd11v1_mid.getNode("htmlblob");
-								if (bdr_1 != null && bdr_1.get(1) != null) {
-									htmlblob.setProperty("html", bdr_1.get(1)
-											.parent().html());
-								} else {
-									sb.append("<li>Heading of the grid is blank.</li>");
-								}
-							} else {
-								sb.append("<li>'htmlblob' node doesn't exists.</li>");
-							}
-						} else {
-							sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
-						}
-					} else {
-						sb.append("<li>'gd11v1_0' Node doesn't exist.</li>");
-					}
-
-					if (layoutOverViewNode.hasNode("gd11v1_1")) {
-						Node gd11v1_1_Nodes = layoutOverViewNode
-								.getNode("gd11v1_1");
-						if (gd11v1_1_Nodes.hasNode("gd11v1-mid")) {
-							Node gd11v1_mid = gd11v1_1_Nodes
-									.getNode("gd11v1-mid");
-							if (gd11v1_mid.hasNode("text")) {
-								Node text = gd11v1_mid.getNode("text");
-								if (bdr_1 != null && bdr_1.get(2) != null) {
-									text.setProperty("text", bdr_1.get(2)
-											.parent().html());
-								} else {
-									sb.append("<li>Heading of the grid is blank.</li>");
-								}
-							} else {
-								sb.append("<li>'text' node doesn't exists.</li>");
-							}
-						} else {
-							sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
-						}
-					} else {
-						sb.append("<li>'gd11v1_1' Node doesn't exist.</li>");
-					}
-				} else {
-					sb.append("<li>Node doesn't exist with path : "
-							+ layoutOverView + "</li>");
-				}
-
 			} catch (Exception e) {
 				log.error("Exception : ", e);
 				sb.append("<li>Unable to update grid component.\n</li>");
@@ -509,258 +546,274 @@ public class ProductLandingVariation6 {
 			// -----------------------------------------------------------------------------------------------------
 			// Start of the grid one elements.
 			try {
+				if (doc != null) {
+					NodeIterator gd14v1_Iterator = null;
+					if (layoutOverViewNode != null) {
+						if (layoutOverViewNode.hasNode("gd14v1")) {
+							Node gd14v1 = layoutOverViewNode.getNode("gd14v1");
+							gd14v1_Iterator = gd14v1.getNodes("gd14v1-*");
+						} else {
+							sb.append("<li>'gd14v1' Node doesn't exists.</li>");
+						}
 
-				NodeIterator gd14v1_Iterator = null;
-				if (layoutOverViewNode != null) {
-					if (layoutOverViewNode.hasNode("gd14v1")) {
-						Node gd14v1 = layoutOverViewNode.getNode("gd14v1");
-						gd14v1_Iterator = gd14v1.getNodes("gd14v1-*");
 					} else {
-						sb.append("<li>'gd14v1' Node doesn't exists.</li>");
+						sb.append("<li>Node doesn't exist with path : "
+								+ layoutOverView + "</li>");
 					}
 
-				} else {
-					sb.append("<li>Node doesn't exist with path : "
-							+ layoutOverView + "</li>");
-				}
+					Elements gd14v1_left_Elements = doc
+							.select("div.gd14v1-pilot");
+					if (gd14v1_left_Elements != null) {
+						Elements list_Elements = gd14v1_left_Elements
+								.select("div.list");
+						if (list_Elements != null) {
 
-				Elements gd14v1_left_Elements = doc.select("div.gd14v1-pilot");
-				if (gd14v1_left_Elements != null) {
-					Elements list_Elements = gd14v1_left_Elements
-							.select("div.list");
-					if (list_Elements != null) {
+							for (Element list_Element : list_Elements) {
 
-						for (Element list_Element : list_Elements) {
+								String title = "";
+								String paragraph = "";
+								List<String> list = new ArrayList<String>();
 
-							String title = "";
-							String paragraph = "";
-							List<String> list = new ArrayList<String>();
-
-							if (list_Element != null) {
-								Elements h2Tags = list_Element
-										.getElementsByTag("h2");
-								if (h2Tags != null) {
-									Element h2Tag = h2Tags.first();
-									if (h2Tag != null) {
-										title = h2Tag.text();
-									} else {
-										sb.append("<li>No header foundi the left grid.</li>");
-									}
-								} else {
-									sb.append("<li>No header found in the left grid.</li>");
-								}
-
-								Elements pElements = list_Element
-										.getElementsByTag("p");
-								if (pElements != null) {
-									Element pElement = pElements.first();
-									if (pElement != null) {
-										paragraph = pElement.outerHtml();
-									} else {
-										sb.append("<li>No header foundi the left grid.</li>");
-									}
-								} else {
-									sb.append("<li>No header found in the left grid.</li>");
-								}
-
-								Elements ulElements = list_Element
-										.getElementsByTag("ul");
-								if (ulElements != null) {
-									Element ulElement = ulElements.first();
-									if (ulElement != null) {
-										Elements aTagElements = ulElement
-												.getElementsByTag("a");
-										for (Element ele : aTagElements) {
-											JSONObject obj = new JSONObject();
-											String aText = ele.text();
-											String aLink = ele.attr("href");
-											obj.put("linktext", aText);
-											obj.put("linkurl", aLink);
-											obj.put("icon", "");
-											obj.put("size", "");
-											obj.put("description", "");
-											obj.put("openInNewWindow", false);
-											list.add(obj.toString());
+								if (list_Element != null) {
+									Elements h2Tags = list_Element
+											.getElementsByTag("h2");
+									if (h2Tags != null) {
+										Element h2Tag = h2Tags.first();
+										if (h2Tag != null) {
+											title = h2Tag.text();
+										} else {
+											sb.append("<li>No header foundi the left grid.</li>");
 										}
 									} else {
-										sb.append("<li>No list found the left grid.</li>");
+										sb.append("<li>No header found in the left grid.</li>");
 									}
-								} else {
-									sb.append("<li>No list found in the left grid.</li>");
-								}
 
-								if (gd14v1_Iterator != null) {
-									if (gd14v1_Iterator.hasNext()) {
-										Node gd14v1 = (Node) gd14v1_Iterator
-												.next();
-										if (gd14v1.hasNode("list")) {
-											Node listNode = gd14v1
-													.getNode("list");
+									Elements pElements = list_Element
+											.getElementsByTag("p");
+									if (pElements != null) {
+										Element pElement = pElements.first();
+										if (pElement != null) {
+											paragraph = pElement.outerHtml();
+										} else {
+											sb.append("<li>No header foundi the left grid.</li>");
+										}
+									} else {
+										sb.append("<li>No header found in the left grid.</li>");
+									}
 
-											if (StringUtils.isNotBlank(title)) {
-												listNode.setProperty("title",
-														title);
-											} else {
-												sb.append("<li>No title found in the grid.</li>");
-											}
-
-											if (listNode.hasNode("intro")) {
-												Node introNode = listNode
-														.getNode("intro");
-
-												if (StringUtils
-														.isNotBlank(paragraph)) {
-													introNode.setProperty(
-															"paragraph_rte",
-															paragraph);
-												} else {
-													sb.append("<li>no paragraph found in the grid.</li>");
-												}
-
-											} else {
-												sb.append("<li>'intro' node doesn't exist.</li>");
-											}
-
-											NodeIterator element_list_Iterator = listNode
-													.getNodes("element_list*");
-
-											if (element_list_Iterator.hasNext()) {
-												Node element_list = (Node) element_list_Iterator
-														.next();
-
-												if (element_list
-														.hasProperty("listitems")) {
-													Property listitems = element_list
-															.getProperty("listitems");
-													if (!listitems.isMultiple()) {
-														listitems.remove();
-														session.save();
-													}
-												}
-												if (list.size() > 0) {
-													element_list
-															.setProperty(
-																	"listitems",
-																	list.toArray(new String[list
-																			.size()]));
-												} else {
-													sb.append("<li>No list elements found.</li>");
-												}
-											} else {
+									Elements ulElements = list_Element
+											.getElementsByTag("ul");
+									if (ulElements != null) {
+										Element ulElement = ulElements.first();
+										if (ulElement != null) {
+											Elements aTagElements = ulElement
+													.getElementsByTag("a");
+											for (Element ele : aTagElements) {
+												JSONObject obj = new JSONObject();
+												String aText = ele.text();
+												String aLink = ele.attr("href");
+												obj.put("linktext", aText);
+												obj.put("linkurl", aLink);
+												obj.put("icon", "");
+												obj.put("size", "");
+												obj.put("description", "");
+												obj.put("openInNewWindow",
+														false);
+												list.add(obj.toString());
 											}
 										} else {
-											sb.append("<li>'list' doesn't exists.</li>");
+											sb.append("<li>No list found the left grid.</li>");
+										}
+									} else {
+										sb.append("<li>No list found in the left grid.</li>");
+									}
+
+									if (gd14v1_Iterator != null) {
+										if (gd14v1_Iterator.hasNext()) {
+											Node gd14v1 = (Node) gd14v1_Iterator
+													.next();
+											if (gd14v1.hasNode("list")) {
+												Node listNode = gd14v1
+														.getNode("list");
+
+												if (StringUtils
+														.isNotBlank(title)) {
+													listNode.setProperty(
+															"title", title);
+												} else {
+													sb.append("<li>No title found in the grid.</li>");
+												}
+
+												if (listNode.hasNode("intro")) {
+													Node introNode = listNode
+															.getNode("intro");
+
+													if (StringUtils
+															.isNotBlank(paragraph)) {
+														introNode
+																.setProperty(
+																		"paragraph_rte",
+																		paragraph);
+													} else {
+														sb.append("<li>no paragraph found in the grid.</li>");
+													}
+
+												} else {
+													sb.append("<li>'intro' node doesn't exist.</li>");
+												}
+
+												NodeIterator element_list_Iterator = listNode
+														.getNodes("element_list*");
+
+												if (element_list_Iterator
+														.hasNext()) {
+													Node element_list = (Node) element_list_Iterator
+															.next();
+
+													if (element_list
+															.hasProperty("listitems")) {
+														Property listitems = element_list
+																.getProperty("listitems");
+														if (!listitems
+																.isMultiple()) {
+															listitems.remove();
+															session.save();
+														}
+													}
+													if (list.size() > 0) {
+														element_list
+																.setProperty(
+																		"listitems",
+																		list.toArray(new String[list
+																				.size()]));
+													} else {
+														sb.append("<li>No list elements found.</li>");
+													}
+												} else {
+												}
+											} else {
+												sb.append("<li>'list' doesn't exists.</li>");
+											}
+										} else {
+											sb.append("<li>'gd14v1-*' Node does not exists.</li>");
 										}
 									} else {
 										sb.append("<li>'gd14v1-*' Node does not exists.</li>");
 									}
 								} else {
-									sb.append("<li>'gd14v1-*' Node does not exists.</li>");
+									sb.append("<li>left grid element is blank.</li>");
 								}
-							} else {
-								sb.append("<li>left grid element is blank.</li>");
 							}
+						} else {
+							sb.append("<li>left grid not foundin the first section.</li>");
 						}
 					} else {
-						sb.append("<li>left grid not foundin the first section.</li>");
+						sb.append("<li>left grid not found in the first section.</li>");
 					}
 				} else {
-					sb.append("<li>left grid not found in the first section.</li>");
+					sb.append("<li>Unable to connect to Web publisher url.</li>");
 				}
 			} catch (Exception e) {
 				log.error("Exception : ", e);
-				sb.append("<li>Unable to update grid component.\n</li>");
+				sb.append("<li>Unable to update grid component." + e + "</li>");
 			}
 			// End of grid one elements.
 			// -------------------------------------------------------------------------------------
 			// Start of grid two elements.
 			try {
+				if (doc != null) {
+					NodeIterator gd14v1_Iterator = null;
+					if (layoutOverViewNode != null) {
+						if (layoutOverViewNode.hasNode("gd14v1_0")) {
+							Node gd14v1 = layoutOverViewNode
+									.getNode("gd14v1_0");
+							gd14v1_Iterator = gd14v1.getNodes("gd14v1-*");
+						} else {
+							sb.append("<li>'gd14v1' Node doesn't exists.</li>");
+						}
 
-				NodeIterator gd14v1_Iterator = null;
-				if (layoutOverViewNode != null) {
-					if (layoutOverViewNode.hasNode("gd14v1_0")) {
-						Node gd14v1 = layoutOverViewNode.getNode("gd14v1_0");
-						gd14v1_Iterator = gd14v1.getNodes("gd14v1-*");
 					} else {
-						sb.append("<li>'gd14v1' Node doesn't exists.</li>");
+						sb.append("<li>Node doesn't exist with path : "
+								+ layoutOverView + "</li>");
 					}
 
-				} else {
-					sb.append("<li>Node doesn't exist with path : "
-							+ layoutOverView + "</li>");
-				}
+					Elements gd14v1_left_Elements = doc
+							.select("div.gd14v1-pilot");
+					if (gd14v1_left_Elements != null) {
+						Elements slp_Elements = gd14v1_left_Elements
+								.select("div.tile_slp_small");
+						if (slp_Elements != null) {
 
-				Elements gd14v1_left_Elements = doc.select("div.gd14v1-pilot");
-				if (gd14v1_left_Elements != null) {
-					Elements slp_Elements = gd14v1_left_Elements
-							.select("div.tile_slp_small");
-					if (slp_Elements != null) {
-
-						for (Element slp_Element : slp_Elements) {
-							String h2Text = "";
-							String pText = "";
-							Elements h2Elements = slp_Element
-									.getElementsByTag("h2");
-							if (h2Elements != null) {
-								Element h2Element = h2Elements.first();
-								h2Text = h2Element.text();
-							} else {
-								sb.append("<li>No heading found in grid two.</li>");
-							}
-							Elements pElements = slp_Element
-									.getElementsByTag("p");
-							if (pElements != null) {
-								Element pElement = pElements.first();
-								pText = pElement.text();
-							} else {
-								sb.append("<li>No description found in grid two.</li>");
-							}
-
-							String aHref = "";
-							Elements aElements = slp_Element
-									.getElementsByTag("a");
-							if (aElements != null) {
-								Element aElement = aElements.first();
-								aHref = aElement.attr("href");
-							} else {
-								sb.append("<li>No anchors found in grid two.</li>");
-							}
-							if (gd14v1_Iterator.hasNext()) {
-								Node gd14v1_Node = (Node) gd14v1_Iterator
-										.next();
-								if (gd14v1_Node.hasNode("tile_slp_small")) {
-									Node tile_slp_small = gd14v1_Node
-											.getNode("tile_slp_small");
-									if (StringUtils.isNotBlank(h2Text)) {
-										tile_slp_small.setProperty("title",
-												h2Text);
-									} else {
-										sb.append("<li>No heading text found in the grid two.</li>");
-									}
-									if (StringUtils.isNotBlank(pText)) {
-										tile_slp_small.setProperty(
-												"description", pText);
-									} else {
-										sb.append("<li>No description text found in the grid two.</li>");
-									}
-									if (StringUtils.isNotBlank(aHref)) {
-										tile_slp_small.setProperty("linkurl",
-												aHref);
-									} else {
-										sb.append("<li>No anchor tag found in the grid two.</li>");
-									}
+							for (Element slp_Element : slp_Elements) {
+								String h2Text = "";
+								String pText = "";
+								Elements h2Elements = slp_Element
+										.getElementsByTag("h2");
+								if (h2Elements != null) {
+									Element h2Element = h2Elements.first();
+									h2Text = h2Element.text();
 								} else {
-									sb.append("<li>'tile_slp_small' Node doesn't exist.</li>");
+									sb.append("<li>No heading found in grid two.</li>");
+								}
+								Elements pElements = slp_Element
+										.getElementsByTag("p");
+								if (pElements != null) {
+									Element pElement = pElements.first();
+									pText = pElement.text();
+								} else {
+									sb.append("<li>No description found in grid two.</li>");
+								}
+
+								String aHref = "";
+								Elements aElements = slp_Element
+										.getElementsByTag("a");
+								if (aElements != null) {
+									Element aElement = aElements.first();
+									aHref = aElement.attr("href");
+								} else {
+									sb.append("<li>No anchors found in grid two.</li>");
+								}
+								if (gd14v1_Iterator.hasNext()) {
+									Node gd14v1_Node = (Node) gd14v1_Iterator
+											.next();
+									if (gd14v1_Node.hasNode("tile_slp_small")) {
+										Node tile_slp_small = gd14v1_Node
+												.getNode("tile_slp_small");
+										if (StringUtils.isNotBlank(h2Text)) {
+											tile_slp_small.setProperty("title",
+													h2Text);
+										} else {
+											sb.append("<li>No heading text found in the grid two.</li>");
+										}
+										if (StringUtils.isNotBlank(pText)) {
+											tile_slp_small.setProperty(
+													"description", pText);
+										} else {
+											sb.append("<li>No description text found in the grid two.</li>");
+										}
+										if (StringUtils.isNotBlank(aHref)) {
+											tile_slp_small.setProperty(
+													"linkurl", aHref);
+										} else {
+											sb.append("<li>No anchor tag found in the grid two.</li>");
+										}
+									} else {
+										sb.append("<li>'tile_slp_small' Node doesn't exist.</li>");
+									}
 								}
 							}
+						} else {
+							sb.append("<li>Second grid element not found.</li>");
 						}
 					} else {
-						sb.append("<li>Second grid element not found.</li>");
+						sb.append("<li>Node doesn't exist with path : "
+								+ layoutOverView + "</li>");
 					}
+
 				} else {
-					sb.append("<li>Node doesn't exist with path : "
-							+ layoutOverView + "</li>");
+					sb.append("<li>Unable to connect to web publisher url.</li>");
 				}
+
 			} catch (Exception e) {
 				log.error("Exception : ", e);
 				sb.append("<li>Unable to update grid two component.\n</li>");
@@ -823,7 +876,7 @@ public class ProductLandingVariation6 {
 						sb.append("<li>No spotlight content found.</li>");
 					}
 				} else {
-					sb.append("<li>doc object is blank.</li>");
+					sb.append("<li>Unable to connect to web publisher url.</li>");
 				}
 
 				NodeIterator gd14v1_Iterator = null;
@@ -879,12 +932,10 @@ public class ProductLandingVariation6 {
 				sb.append("<li>Unable to update grid two component.\n</li>");
 			}
 			// End of grid three.
-//-----------------------------------------------------------------------------
-			//Start of grid four.
-			
-			
-			
-			try{
+			// -----------------------------------------------------------------------------
+			// Start of grid four.
+
+			try {
 				NodeIterator gd14v1_Iterator = null;
 				if (layoutOverViewNode != null) {
 					if (layoutOverViewNode.hasNode("gd14v1_1")) {
@@ -898,221 +949,205 @@ public class ProductLandingVariation6 {
 					sb.append("<li>Node doesn't exist with path : "
 							+ layoutOverView + "</li>");
 				}
-				
-			if(doc != null){
-				Elements gd14v1_pilots = doc.select("div.gd14v1-pilot");
-				if(gd14v1_pilots != null){
-						Elements c23v2_pilots = gd14v1_pilots.select("div.c23v2-pilot");
-						for(Element ele : c23v2_pilots){
+
+				if (doc != null) {
+					Elements gd14v1_pilots = doc.select("div.gd14v1-pilot");
+					if (gd14v1_pilots != null) {
+						Elements c23v2_pilots = gd14v1_pilots
+								.select("div.c23v2-pilot");
+						for (Element ele : c23v2_pilots) {
 							String h2Text = "";
 							String pText = "";
 							String aText = "";
 							String aHref = "";
 							Elements h2Elements = ele.getElementsByTag("h2");
-							if(h2Elements != null){
+							if (h2Elements != null) {
 								Element h2Element = h2Elements.first();
-								if(h2Element != null){
+								if (h2Element != null) {
 									h2Text = h2Element.text();
-								}else{
+								} else {
 									sb.append("<li>No heading found in fouth grid.</li>");
 								}
-							}else{
+							} else {
 								sb.append("<li>No heading found in fouth grid.</li>");
 							}
 							Elements pElements = ele.getElementsByTag("p");
-							if(pElements != null){
+							if (pElements != null) {
 								Element pElement = pElements.first();
-								if(pElement != null){
+								if (pElement != null) {
 									pText = pElement.text();
-								}else{
+								} else {
 									sb.append("<li>No description found in fouth grid.</li>");
 								}
-							}else{
+							} else {
 								sb.append("<li>No description found in fouth grid.</li>");
 							}
 							Elements aElements = ele.getElementsByTag("a");
-							if(aElements != null){
+							if (aElements != null) {
 								Element aElement = aElements.first();
-								if(aElement != null){
+								if (aElement != null) {
 									aText = aElement.text();
 									aHref = aElement.attr("href");
-								}else{
+								} else {
 									sb.append("<li>No anchor found in fouth grid.</li>");
 								}
-							}else{
+							} else {
 								sb.append("<li>No anchor found in fouth grid.</li>");
 							}
-							if(gd14v1_Iterator.hasNext()){
-								Node gd14v1Node = (Node)gd14v1_Iterator.next();
-								if(gd14v1Node.hasNode("tile_bordered")){
-									Node tile_bordered = gd14v1Node.getNode("tile_bordered");
-									
-									if(StringUtils.isNotBlank(h2Text)){
-										tile_bordered.setProperty("title", h2Text);
-									}else{
+							if (gd14v1_Iterator.hasNext()) {
+								Node gd14v1Node = (Node) gd14v1_Iterator.next();
+								if (gd14v1Node.hasNode("tile_bordered")) {
+									Node tile_bordered = gd14v1Node
+											.getNode("tile_bordered");
+
+									if (StringUtils.isNotBlank(h2Text)) {
+										tile_bordered.setProperty("title",
+												h2Text);
+									} else {
 										sb.append("<li>No Header found in the fourth grids.</li>");
 									}
-									
-									if(StringUtils.isNotBlank(pText)){
-										tile_bordered.setProperty("description", pText);
-									}else{
+
+									if (StringUtils.isNotBlank(pText)) {
+										tile_bordered.setProperty(
+												"description", pText);
+									} else {
 										sb.append("<li>No description found in the fourth grids.</li>");
 									}
-									
-									if(StringUtils.isNotBlank(aText)){
-										tile_bordered.setProperty("linktext", aText);
-									}else{
+
+									if (StringUtils.isNotBlank(aText)) {
+										tile_bordered.setProperty("linktext",
+												aText);
+									} else {
 										sb.append("<li>No link text found in the fourth grids.</li>");
 									}
-									
-									if(StringUtils.isNotBlank(aHref)){
-										tile_bordered.setProperty("linkurl", aHref);
-									}else{
+
+									if (StringUtils.isNotBlank(aHref)) {
+										tile_bordered.setProperty("linkurl",
+												aHref);
+									} else {
 										sb.append("<li>No linkurl found in the fourth grids.</li>");
 									}
-								}else{
+								} else {
 									sb.append("<li>'tile_bordered' Node doesn't exist.</li>");
 								}
-								
-							}else{
+
+							} else {
 								sb.append("<li>'gd14v1*' Node doesn't exists.</li>");
 							}
 						}
-						
+
 						Elements mbwtiles = gd14v1_pilots.select("div.mbwtile");
 						String h3Text = "";
 						String pText = "";
 						String aText = "";
 						String aHref = "";
-						if(mbwtiles != null){
+						if (mbwtiles != null) {
 							Element mbwtile = mbwtiles.first();
-							if(mbwtile != null){
-								Elements h3Elements = mbwtile.getElementsByTag("h3");
-								if(h3Elements != null){
+							if (mbwtile != null) {
+								Elements h3Elements = mbwtile
+										.getElementsByTag("h3");
+								if (h3Elements != null) {
 									Element h3Element = h3Elements.first();
-									if(h3Element != null){
+									if (h3Element != null) {
 										h3Text = h3Element.text();
-									}else{
+									} else {
 										sb.append("<li>No heading found in right grid.</li>");
 									}
-									
-									
-								}else{
+
+								} else {
 									sb.append("<li>No heading found in the right grid.</li>");
 								}
-								
-								
-								Elements pElements = mbwtile.getElementsByTag("p");
-								if(pElements != null){
+
+								Elements pElements = mbwtile
+										.getElementsByTag("p");
+								if (pElements != null) {
 									Element pElement = pElements.first();
-									if(pElement != null){
+									if (pElement != null) {
 										pText = pElement.text();
-									}else{
+									} else {
 										sb.append("<li>No heading found in right grid.</li>");
 									}
-									
-									
-								}else{
+
+								} else {
 									sb.append("<li>No heading found in the right grid.</li>");
 								}
-								
-								
-								Elements aElements = mbwtile.getElementsByTag("a");
-								if(aElements != null){
+
+								Elements aElements = mbwtile
+										.getElementsByTag("a");
+								if (aElements != null) {
 									Element aElement = aElements.first();
-									if(aElement != null){
+									if (aElement != null) {
 										aText = aElement.text();
 										aHref = aElement.attr("href");
-									}else{
+									} else {
 										sb.append("<li>No heading found in right grid.</li>");
 									}
-									
-									
-								}else{
+
+								} else {
 									sb.append("<li>No heading found in the right grid.</li>");
 								}
-								
-								
-								
-								
-								
-								
-								if(gd14v1_Iterator.hasNext()){
-									Node gd14v1Node = (Node)gd14v1_Iterator.next();
-									if(gd14v1Node.hasNode("tile_bordered")){
-										
-										
-									Node tile_bordered = gd14v1Node.getNode("tile_bordered");
-									
-									if(StringUtils.isNotBlank(h3Text)){
-										tile_bordered.setProperty("title", h3Text);
-									}else{
-										sb.append("<li>heading is blank in last grid.</li>");
-									}
-									
-									if(StringUtils.isNotBlank(pText)){
-										tile_bordered.setProperty("description", pText);
-									}else{
-										sb.append("<li>heading is blank in last grid.</li>");
-									}
-									
-									
-									if(StringUtils.isNotBlank(aText)){
-										tile_bordered.setProperty("linktext", aText);
-									}else{
-										sb.append("<li>heading is blank in last grid.</li>");
-									}
-									
-									if(StringUtils.isNotBlank(aHref)){
-										tile_bordered.setProperty("linkurl", aHref);
-									}else{
-										sb.append("<li>heading is blank in last grid.</li>");
-									}
-									
-									
-									
-									
-									
-									
-									}else{
+
+								if (gd14v1_Iterator.hasNext()) {
+									Node gd14v1Node = (Node) gd14v1_Iterator
+											.next();
+									if (gd14v1Node.hasNode("tile_bordered")) {
+
+										Node tile_bordered = gd14v1Node
+												.getNode("tile_bordered");
+
+										if (StringUtils.isNotBlank(h3Text)) {
+											tile_bordered.setProperty("title",
+													h3Text);
+										} else {
+											sb.append("<li>heading is blank in last grid.</li>");
+										}
+
+										if (StringUtils.isNotBlank(pText)) {
+											tile_bordered.setProperty(
+													"description", pText);
+										} else {
+											sb.append("<li>heading is blank in last grid.</li>");
+										}
+
+										if (StringUtils.isNotBlank(aText)) {
+											tile_bordered.setProperty(
+													"linktext", aText);
+										} else {
+											sb.append("<li>heading is blank in last grid.</li>");
+										}
+
+										if (StringUtils.isNotBlank(aHref)) {
+											tile_bordered.setProperty(
+													"linkurl", aHref);
+										} else {
+											sb.append("<li>heading is blank in last grid.</li>");
+										}
+
+									} else {
 										sb.append("<li>'tile_bordered' Node doesn't exist.</li>");
 									}
-									
+
 								}
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-							}else{
+
+							} else {
 								sb.append("<li>right grid element is blank in fourth grid.</li>");
 							}
-							
-							
-						}else{
-							sb.append("<li>right grid element not found in the fourth grid.</li>");
+
+						} else {
+							sb.append("<li>right grid element not found in the fourth grid.('mbwtile' element doesn't exists.)</li>");
 						}
-						
-						
-						
-						
-						
-				}else{
-					sb.append("<li>Grid Four title border section not found. </li>");
+
+					} else {
+						sb.append("<li>Grid Four title border section not found. </li>");
+					}
+				} else {
+					sb.append("<li>doc object is blank.</li>");
 				}
-			}else{
-				sb.append("<li>doc object is blank.</li>");
-			}
 			} catch (Exception e) {
 				log.error("Exception : ", e);
 				sb.append("<li>Unable to update grid two component.\n</li>");
 			}
-			//End of grid four.
+			// End of grid four.
 			session.save();
 		} catch (Exception e) {
 			log.error("Exception : ", e);

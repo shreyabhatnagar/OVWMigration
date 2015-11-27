@@ -19,7 +19,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>com.cisco.dse.global.migration.OVWMigration</mainClass>
+            <mainClass>com.cisco.dse.global.migration.config.OVWMigration</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>

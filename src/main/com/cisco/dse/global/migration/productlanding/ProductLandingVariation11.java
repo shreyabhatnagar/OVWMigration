@@ -330,7 +330,9 @@ public class ProductLandingVariation11 {
 			try {
 				int count = 0;
 				Elements indexlistElem = doc.select("div.n13-pilot");
-				if (indexlistElem != null) {
+				Element rightRailPilotElement = indexlistElem
+						.first();
+				if (rightRailPilotElement != null) {
 					for (Element indexListItem : indexlistElem) {
 						String indexTitle = indexListItem
 								.getElementsByTag("h2").text();
@@ -446,10 +448,10 @@ public class ProductLandingVariation11 {
 						}
 					}
 				} else {
-					sb.append("<li>div class 'div.n13-pilot' not found in dom</li>");
+					sb.append("<li>List component element is not found.</li>");
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits list component.\n</li>");
+				sb.append("<li>Unable to update index list component.\n</li>");
 				log.error("Exceptoin : ", e);
 			}
 			// end set benefit list.
