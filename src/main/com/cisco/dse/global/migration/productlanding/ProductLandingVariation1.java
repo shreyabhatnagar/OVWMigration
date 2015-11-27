@@ -486,8 +486,7 @@ public class ProductLandingVariation1 {
 																.getNodes("subdrawer_product*");
 														javax.jcr.Node subdrawerpanel = null;
 														Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
-														if (subDrawerColl.size() != subDrawerIterator.getSize())
-															sb.append("<li>Mis-Match in subdrawer panels count</li>");
+														
 														for (Element ss : subDrawerColl) {
 															String title = "";
 															String linkTitleUrl = "";
@@ -497,7 +496,10 @@ public class ProductLandingVariation1 {
 															} */
 															Elements subItems = ss.select("div.prodinfo");
 															Elements subItemUlInfoLinks = ss.select("ul.infolinks");
+															
 															if (subItems != null) {
+																if (subItems.size() != subDrawerIterator.getSize())
+																	sb.append("<li>Mis-Match in subdrawer panels count</li>");
 //																Element subItem = subItems.first();
 																for (Element subItem : subItems) {
 																	List<String> list1 = new ArrayList<String>();
@@ -723,17 +725,69 @@ public class ProductLandingVariation1 {
 			// start of html blob components content.
 			try {
 				String html = "";
-				Elements iconBlockElements = doc.select("div.icon-block, poly");
-				if (iconBlockElements != null) {
-					Element htmlblobElement = iconBlockElements.first();
-					if (htmlblobElement != null) {
-						html = htmlblobElement.outerHtml();
+				Elements iconBlockElements = doc.select("div.icon-block");
+//				boolean test = doc.select("div.c23-pilot").contains("div.icon-block");
+				if (iconBlockElements.isEmpty()) {
+					iconBlockElements = doc.select("div.poly");
+					if (iconBlockElements != null) {
+						//Element htmlblobElement = iconBlockElements.first();
+						for (Element htmlblobElement : iconBlockElements) {
+							if (htmlblobElement.hasClass("c47-pilot")) {
+								continue;
+							}
+							log.debug("found icon/poly elentsssssssssssssssssssss");
+							if (htmlblobElement != null) {
+								log.debug("htmlblobElement)))))))))))))))))");
+								Elements ulElements = htmlblobElement.getElementsByTag("ul");
+								if (ulElements.size() > 0) {
+										log.debug("ul is there in icon block so cinsidering**************");
+										html = htmlblobElement.outerHtml();
+								}
+							} else {
+								log.debug("<li>htmlblob/icon-block Element section not found</li>");
+							}
+						}
 					} else {
-						log.debug("<li>htmlblob/icon-block Element section not found</li>");
+						sb.append("<li>htmlblob component not found on publisher page </li>");
 					}
-				} else {
-					sb.append("<li>htmlblob component not found on publisher page </li>");
 				}
+				else {
+					if (iconBlockElements != null) {
+						//Element htmlblobElement = iconBlockElements.first();
+						for (Element htmlblobElement : iconBlockElements) {
+							log.debug("found icon/poly elentsssssssssssssssssssss");
+							if (htmlblobElement != null) {
+								log.debug("htmlblobElement)))))))))))))))))");
+										log.debug("ul is there in icon block so cinsidering**************");
+										html = htmlblobElement.outerHtml();
+										if (htmlblobElement.getElementsByTag("ul").size() > 0) {
+											log.debug("Nothing to add");
+										}
+										else {
+											Element iconBlockParent = htmlblobElement.parent();
+											if (iconBlockParent != null) {
+												Elements anchorTagEle = iconBlockParent.getElementsByTag("a");
+												if (anchorTagEle != null) {
+													for (Element aTagElement : anchorTagEle) {
+														log.debug("Anchor tag wala info ---"+anchorTagEle.outerHtml());
+														html = html + aTagElement.outerHtml();
+														html = html + "<br>";
+													}
+													
+												}
+											}
+										}
+										
+							} else {
+								log.debug("<li>htmlblob/icon-block Element section not found</li>");
+							}
+						}
+					} else {
+						sb.append("<li>htmlblob component not found on publisher page </li>");
+					}
+				}
+//				Elements iconBlockElements = doc.select("div.icon-block, div.poly");
+				
 				if (indexLowerRightNode.hasNode("htmlblob")) {
 					javax.jcr.Node htmlBlobNode = indexLowerRightNode.getNode("htmlblob");
 					log.debug("htmlblobElement.outerHtml() " + html + "\n");
@@ -760,22 +814,22 @@ public class ProductLandingVariation1 {
 				Elements rightRail = doc.select("div.c23-pilot,div.cc23-pilot");
 				if(rightRail != null){
 					log.debug("rightRail size" + rightRail.size());
-				if (rightRail.size() != indexLowerRightNode.getNodes("tile_bordered*").getSize()) {
-                    sb.append("<li>Mis-Match in tilebordered Panels count/content."+rightRail.size()+" is not equal "+indexLowerRightNode.getNodes("tile_bordered*").getSize()+"</li>");
-				}
+				
 				if(rightRail.size()>0){
 					
 				NodeIterator titleBorderNodes = indexLowerRightNode.getNodes("tile_bordered*");
-					
+				int count = 0;
 				for (Element ele : rightRail) {
 					Elements iconBlock = ele.select("div.icon-block");
 					if (iconBlock != null && iconBlock.size() > 0) {
 						continue;
 					}
-					if (ele.hasClass("poly")) {
-						log.debug("poly class found and skipping");
+					Elements ulElements = ele.getElementsByTag("ul");
+					if (ulElements.size() > 0) {
+						log.debug("found ul elements in c23-pilot so skipping");
 						continue;
 					}
+					count = count + 1;
 					javax.jcr.Node rightRailNode = null;
 					String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").text():"";
 					if(StringUtils.isBlank(title)){
@@ -806,6 +860,9 @@ public class ProductLandingVariation1 {
 					}else{
 						sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
 					}
+				}
+				if (count != indexLowerRightNode.getNodes("tile_bordered*").getSize()) {
+                    sb.append("<li>Mis-Match in tilebordered Panels count/content."+count+" is not equal "+indexLowerRightNode.getNodes("tile_bordered*").getSize()+"</li>");
 				}
 				}else{
 					log.debug("<li>No Content with class 'c23-pilot or cc23-pilot' found</li>");
