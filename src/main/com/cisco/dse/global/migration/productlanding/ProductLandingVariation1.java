@@ -381,6 +381,9 @@ public class ProductLandingVariation1 {
 										} else {
 											log.debug("<li>drawerComponent link Element section not found</li>");
 										}
+										if (anchorElements.size() > 1) {
+											sb.append("<li>extra link found in drawer container header</li>");
+										}
 										jsonObj.put("linktext", anchorText);
 										jsonObj.put("linkurl", anchorHref);
 										log.debug("anchorText " + anchorText + "\n");
@@ -402,9 +405,9 @@ public class ProductLandingVariation1 {
 										javax.jcr.Node drawersPanelNode = null;
 										Elements drawersPanelElements = doc.select("div.n21,ul.n21");
 										if (drawersPanelElements != null) {
-											Element drawersPanelElement = drawersPanelElements.first();
+											//Element drawersPanelElement = drawersPanelElements.first();
 											// start new code
-											if (drawersPanelElement != null) {
+											for (Element drawersPanelElement : drawersPanelElements) {
 												Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 												if (drawerPanelLiElements != null) {
 													int count = 0;
@@ -484,7 +487,7 @@ public class ProductLandingVariation1 {
 														javax.jcr.Node subdrawerpanel = null;
 														Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
 														if (subDrawerColl.size() != subDrawerIterator.getSize())
-															sb.append("Mis-Match in subdrawer panels count\n");
+															sb.append("<li>Mis-Match in subdrawer panels count</li>");
 														for (Element ss : subDrawerColl) {
 															String title = "";
 															String linkTitleUrl = "";
@@ -765,8 +768,12 @@ public class ProductLandingVariation1 {
 				NodeIterator titleBorderNodes = indexLowerRightNode.getNodes("tile_bordered*");
 					
 				for (Element ele : rightRail) {
-					Elements iconBlock = ele.select("div.icon-block, poly");
+					Elements iconBlock = ele.select("div.icon-block");
 					if (iconBlock != null && iconBlock.size() > 0) {
+						continue;
+					}
+					if (ele.hasClass("poly")) {
+						log.debug("poly class found and skipping");
 						continue;
 					}
 					javax.jcr.Node rightRailNode = null;
@@ -816,7 +823,7 @@ public class ProductLandingVariation1 {
 			session.save();
 
 		} catch (Exception e) {
-			log.debug("<li>Exception "+e+"</li>");
+			log.debug("Exception ", e);
 		}
 		
 		sb.append("</ul></td>");

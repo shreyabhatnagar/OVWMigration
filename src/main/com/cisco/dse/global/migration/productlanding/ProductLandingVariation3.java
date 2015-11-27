@@ -310,7 +310,7 @@ public class ProductLandingVariation3 {
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set text component content.
 			try {
-				Elements textElements = doc.select("div.c00-pilot");
+				Elements textElements = doc.select("div.c00-pilot,div.c100-pilot");
 				String text = "";
 				if (textElements != null) {
 					Element textElement = textElements.first();
@@ -344,12 +344,10 @@ public class ProductLandingVariation3 {
 				Elements htmlblobElements = doc.select("ul.n21");
 				String html = "";
 				if (htmlblobElements != null) {
-					Element htmlblobElement = htmlblobElements.first();
-					if (htmlblobElement != null) {
-						html = htmlblobElement.outerHtml();
-					} else {
-						log.debug("<li>html blob Element not found</li>");
-					}
+					//Element htmlblobElement = htmlblobElements.first();
+					for (Element htmlblobElement : htmlblobElements) {
+						html = html + htmlblobElement.outerHtml();
+					} 
 				} else {
 					sb.append("<li>htmlblob component not found on web publisher page</li>");
 				}
