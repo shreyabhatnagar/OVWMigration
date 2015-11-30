@@ -653,9 +653,23 @@ public class ProductLandingVariation10 {
 
 	public void rightRailList (Node listNode, Element rightListEle) {
 		try {
-			Element title = rightListEle.getElementsByTag("h2").first();
+			// Test code start
+			Element title;
+			Element description;
+			Elements headElements = rightListEle.getElementsByTag("h2");
+			if (headElements.size() > 1) {
+				title = rightListEle.getElementsByTag("h2").last();
+				description = rightListEle.getElementsByTag("p").last();
+				sb.append("<li>Mismatch in count of list panel component in right rail.</li>");
+			}
+			else {
+				title = rightListEle.getElementsByTag("h2").first();
+				description = rightListEle.getElementsByTag("p").first();
+			}
+			// Test code end
+//			title = rightListEle.getElementsByTag("h2").first();
 			listNode.setProperty("title", title.text());
-			Element description = rightListEle.getElementsByTag("p").first();
+//			description = rightListEle.getElementsByTag("p").first();
 			javax.jcr.Node introNode = listNode.getNode("intro");
 			introNode.setProperty("paragraph_rte", description.text());
 			javax.jcr.Node eleListNode = listNode.getNode("element_list_0");
