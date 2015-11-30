@@ -404,15 +404,16 @@ public class ProductLandingVariation1 {
 										NodeIterator drawerPanelsIterator = drawersContainerNode.getNodes("drawerspanel*");
 										javax.jcr.Node drawersPanelNode = null;
 										Elements drawersPanelElements = doc.select("div.n21,ul.n21");
+										int count = 0;
 										if (drawersPanelElements != null) {
 											//Element drawersPanelElement = drawersPanelElements.first();
 											// start new code
 											for (Element drawersPanelElement : drawersPanelElements) {
 												Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 												if (drawerPanelLiElements != null) {
-													int count = 0;
-													log.debug("li elements size" + drawerPanelLiElements.size());
 													
+													log.debug("li elements size" + drawerPanelLiElements.size());
+													count = count + 1;
 													for (Element drawerPanelLiElement : drawerPanelLiElements) {
 														Elements iconBlock = drawerPanelLiElement.select("div.series");
 														if (iconBlock.size() == 0) {
@@ -420,7 +421,7 @@ public class ProductLandingVariation1 {
 															continue;
 														}
 														log.debug("SERIES SIZE NOTTTTTTTTTTTTT 0");
-														count = count + 1;
+														
 														if (drawerPanelsIterator.hasNext()) {
 															drawersPanelNode = drawerPanelsIterator.nextNode();
 														}
@@ -693,10 +694,11 @@ public class ProductLandingVariation1 {
 														}
 														
 													}
-													if (count != drawerPanelsIterator.getSize())
-														sb.append("<li>Mis-Match in drawer panels count</li>");
+													
 												}
 											}
+											if (count != drawerPanelsIterator.getSize())
+												sb.append("<li>Mis-Match in drawer panels count</li>");
 											//end new code
 										
 									} else {
