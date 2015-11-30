@@ -340,7 +340,7 @@ public class ProductLandingVariation1 {
 									}
 									Elements hTextElements = doc.getElementsByAttribute(
 											"data-config-hidetext");
-									if (hTextElements != null) {
+									if (hTextElements != null && hTextElements.size() > 0) {
 										Element hText = hTextElements.first();
 										if (hText != null) {
 											System.out
@@ -404,24 +404,28 @@ public class ProductLandingVariation1 {
 										NodeIterator drawerPanelsIterator = drawersContainerNode.getNodes("drawerspanel*");
 										javax.jcr.Node drawersPanelNode = null;
 										Elements drawersPanelElements = doc.select("div.n21,ul.n21");
-										int count = 0;
+										
 										if (drawersPanelElements != null) {
 											//Element drawersPanelElement = drawersPanelElements.first();
 											// start new code
+											int count = 0;
 											for (Element drawersPanelElement : drawersPanelElements) {
 												Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 												if (drawerPanelLiElements != null) {
 													
 													log.debug("li elements size" + drawerPanelLiElements.size());
-													count = count + 1;
+													
+													
 													for (Element drawerPanelLiElement : drawerPanelLiElements) {
+														boolean flag = true;
+														
 														Elements iconBlock = drawerPanelLiElement.select("div.series");
 														if (iconBlock.size() == 0) {
 															log.debug("SERIES SIZE0");
 															continue;
 														}
 														log.debug("SERIES SIZE NOTTTTTTTTTTTTT 0");
-														
+														count = count + 1;
 														if (drawerPanelsIterator.hasNext()) {
 															drawersPanelNode = drawerPanelsIterator.nextNode();
 														}
@@ -487,8 +491,11 @@ public class ProductLandingVariation1 {
 																.getNodes("subdrawer_product*");
 														javax.jcr.Node subdrawerpanel = null;
 														Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
+														Elements clearfixdivs = drawerPanelLiElement.select("li.clearfix");
 														
 														for (Element ss : subDrawerColl) {
+															
+															
 															String title = "";
 															String linkTitleUrl = "";
 															
@@ -499,16 +506,18 @@ public class ProductLandingVariation1 {
 															Elements subItemUlInfoLinks = ss.select("ul.infolinks");
 															
 															if (subItems != null) {
-																if (subItems.size() != subDrawerIterator.getSize())
-																	sb.append("<li>Mis-Match in subdrawer panels count</li>");
+																
 //																Element subItem = subItems.first();
 																for (Element subItem : subItems) {
+																	if ((clearfixdivs.size() != subDrawerIterator.getSize()) && flag) {
+																		sb.append("<li> Mis Match of subdrawer panel </li>");
+																		flag = false;
+																	}
 																	List<String> list1 = new ArrayList<String>();
 																	List<String> list2 = new ArrayList<String>();
 																	if (subDrawerIterator.hasNext()) {
 																		subdrawerpanel = subDrawerIterator.nextNode();
 																	}
-																	
 																	if (subItem != null) {
 																		
 																		Elements siTitles = subItem.getElementsByTag("h4");
@@ -648,6 +657,7 @@ public class ProductLandingVariation1 {
 																		}
 																	}
 																}
+																
 //																if (subItem != null) {}
 															}
 															/*		Elements subItemUlInfoLinks = ss.select("ul.infolinks");
@@ -694,11 +704,15 @@ public class ProductLandingVariation1 {
 														}
 														
 													}
+													//
 													
 												}
 											}
+											log.debug("countttttttt" + count);
+											log.debug("iterator size" + drawerPanelsIterator.getSize());
 											if (count != drawerPanelsIterator.getSize())
 												sb.append("<li>Mis-Match in drawer panels count</li>");
+											
 											//end new code
 										
 									} else {
@@ -864,7 +878,7 @@ public class ProductLandingVariation1 {
 					}
 				}
 				if (count != indexLowerRightNode.getNodes("tile_bordered*").getSize()) {
-                    sb.append("<li>Mis-Match in tilebordered Panels count/content."+count+" is not equal "+indexLowerRightNode.getNodes("tile_bordered*").getSize()+"</li>");
+                    sb.append("<li>Mis-Match in tilebordered Panels count."+count+" is not equal "+indexLowerRightNode.getNodes("tile_bordered*").getSize()+"</li>");
 				}
 				}else{
 					log.debug("<li>No Content with class 'c23-pilot or cc23-pilot' found</li>");
