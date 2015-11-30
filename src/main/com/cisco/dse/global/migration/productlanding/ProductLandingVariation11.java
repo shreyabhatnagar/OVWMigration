@@ -507,7 +507,9 @@ public class ProductLandingVariation11 {
 							+ indexRightRailNode.getPath() + "</li>");
 				}
 			} catch (Exception e) {
-
+				
+				sb.append("<li>Unable to update followus component. Exception found is:  "
+						+ e + "</li>");
 			}
 
 			session.save();
