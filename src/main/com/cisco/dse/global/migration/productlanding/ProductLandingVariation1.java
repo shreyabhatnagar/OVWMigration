@@ -146,19 +146,19 @@ public class ProductLandingVariation1 {
 							 if(StringUtils.isNotBlank(primaryCTATitle)){
 								 primartCTANode.setProperty("title", primaryCTATitle);
 			                  } else{
-			                	 sb.append("<li>title of primary CTA is not migrated</li>");
+			                	 sb.append("<li>title of primary CTA doesn't exist</li>");
                                  log.debug("title property is not set at " + primartCTANode.getPath());
 			                  }
 							 if(StringUtils.isNotBlank(primaryCTADescription)){
 								 primartCTANode.setProperty("description", primaryCTADescription);
 			                  } else{
-			                	  sb.append("<li>description of primary CTA is not migrated</li>");
+			                	  sb.append("<li>description of primary CTA doesn't exist</li>");
 			                	  log.debug("description property is not set at " + primartCTANode.getPath());
 			                  }
 							 if(StringUtils.isNotBlank(primaryCTALinkText)){
 								 primartCTANode.setProperty("linktext", primaryCTALinkText);
 			                  } else{
-			                	  sb.append("<li>link text of primary CTA is not migrated</li>");
+			                	  sb.append("<li>link text of primary CTA doesn't exist</li>");
 			                	  log.debug("linktext property is not set at " + primartCTANode.getPath());
 			                  }
 							
@@ -167,7 +167,7 @@ public class ProductLandingVariation1 {
 								if(StringUtils.isNotBlank(primaryCTALinkUrl)){
 									primartCTALinkUrlNode.setProperty("url", primaryCTALinkUrl);
 				                  } else{
-				                	  sb.append("<li>link url of primary CTA is not migrated</li>");
+				                	  sb.append("<li>link url of primary CTA doesn't exist</li>");
 				                	  log.debug("url property is not set at " + primartCTALinkUrlNode.getPath());
 				                 }
 							} else {
@@ -272,22 +272,22 @@ public class ProductLandingVariation1 {
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
 										} else {
-											sb.append("<li>title of hero slide is not migrated</li>");
+											sb.append("<li>title of hero slide doesn't exist</li>");
 										}
 										if (StringUtils.isNotBlank(heroPanelDescription)) {
 											heroPanelNode.setProperty("description", heroPanelDescription);
 										} else {
-											sb.append("<li>description of hero slide is not migrated</li>");
+											sb.append("<li>description of hero slide doesn't exist</li>");
 										}
 										if (StringUtils.isNotBlank(heroPanelLinkText)) {
 											heroPanelNode.setProperty("linktext", heroPanelLinkText);
 										} else {
-											sb.append("<li>link text of hero slide is not migrated</li>");
+											sb.append("<li>link text of hero slide doesn't exist</li>");
 										}
 										if (StringUtils.isNotBlank(heroPanellinkUrl)) {
 											heroPanelNode.setProperty("linkurl", heroPanellinkUrl);
 										} else {
-											sb.append("<li>link url of hero slide is not migrated / found video as link url for the slide on web publisher page </li>");
+											sb.append("<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>");
 										}
 										
 									}
@@ -336,7 +336,7 @@ public class ProductLandingVariation1 {
 									if (StringUtils.isNotBlank(drawerComponentHeaderTitle)) {
 										drawersContainerNode.setProperty("title", drawerComponentHeaderTitle);
 									} else {
-										sb.append("<li>title of drawer container is not migrated</li>");
+										sb.append("<li>title of drawer container doesn't exist</li>");
 									}
 									Elements hTextElements = doc.getElementsByAttribute(
 											"data-config-hidetext");
@@ -361,7 +361,7 @@ public class ProductLandingVariation1 {
 										}
 										
 									} else {
-										sb.append("<li>showtext and hidetext links are not migrated</li>");
+										sb.append("<li>showtext and hidetext links doesn't exist</li>");
 									}
 									
 									Element drawerHeaderLinksElement = drawerComponentHeader.select("div.clearfix").first();
@@ -396,7 +396,7 @@ public class ProductLandingVariation1 {
 											}
 											drawersContainerNode.setProperty("headerlinks",jsonObj.toString());
 										} else {
-											sb.append("<li>link of drawer container is not migrated</li>");
+											sb.append("<li>link of drawer container doesn't exist</li>");
 										}
 									}
 								}
@@ -470,17 +470,17 @@ public class ProductLandingVariation1 {
 																	if (StringUtils.isNotBlank(panelTitle)) {
 																		drawersPanelNode.setProperty("title", panelTitle);
 																	} else {
-																		sb.append("<li>title of drawer panel is not migrated</li>");
+																		sb.append("<li>title of drawer panel doesn't exist</li>");
 																	}
 																	if (StringUtils.isNotBlank(linkUrl)) {
 																		drawersPanelNode.setProperty("linkurl", linkUrl);
 																	} else {
-																		sb.append("<li>link of the title of drawer panel is not migrated</li>");
+																		sb.append("<li>link of the title of drawer panel doesn't exist</li>");
 																	}
 																	if (StringUtils.isNotBlank(panelDescription)) {
 																		drawersPanelNode.setProperty("description", panelDescription);
 																	} else {
-																		sb.append("<li>description of drawer panel is not migrated</li>");
+																		sb.append("<li>description of drawer panel doesn't exist</li>");
 																	}
 																}
 															}
@@ -624,12 +624,12 @@ public class ProductLandingVariation1 {
 																			subdrawerpanel
 																			.setProperty("title", title);
 																		} else {
-																			sb.append("<li>title of sub drawer is not migrated</li>");
+																			sb.append("<li>title of sub drawer doesn't exist</li>");
 																		}
 																		if (StringUtils.isNotBlank(linkTitleUrl)) {
 																			subdrawerpanel.setProperty("linkurl", linkTitleUrl);
 																		} else {
-																			sb.append("<li>link url of sub drawer is not migrated</li>");
+																			sb.append("<li>link url of sub drawer doesn't exist</li>");
 																			log.debug("linkurl property is not set at " + subdrawerpanel.getPath());
 																		}
 																		if (list1.size() > 0) {
@@ -642,7 +642,7 @@ public class ProductLandingVariation1 {
 																			subdrawerpanel.setProperty("highlights",
 																					list1.toArray(new String[list1.size()]));
 																		} else {
-																			sb.append("<li>highlights of sub drawer are not migrated</li>");
+																			sb.append("<li>highlights of sub drawer doesn't exist</li>");
 																		}
 																		if (list2.size() > 0) {
 																			if (subdrawerpanel.hasProperty("infolinks")) {
@@ -653,7 +653,7 @@ public class ProductLandingVariation1 {
 																			subdrawerpanel.setProperty("infolinks",
 																					list2.toArray(new String[list2.size()]));
 																		} else {
-																			sb.append("<li>infolinks of sub drawer are not migrated</li>");
+																			sb.append("<li>infolinks of sub drawer doesn't exist</li>");
 																		}
 																	}
 																}
@@ -668,12 +668,12 @@ public class ProductLandingVariation1 {
 																	subdrawerpanel
 																	.setProperty("title", title);
 																} else {
-																	sb.append("title of sub drawer is not migrated");
+																	sb.append("title of sub drawer doesn't exist");
 																}
 																if (StringUtils.isNotBlank(linkTitleUrl)) {
 																	subdrawerpanel.setProperty("linkurl", linkTitleUrl);
 																} else {
-																	sb.append("link url of sub drawer is not migrated");
+																	sb.append("link url of sub drawer doesn't exist");
 																	log.debug("linkurl property is not set at " + subdrawerpanel.getPath());
 																}
 																if (list1.size() > 0) {
@@ -810,7 +810,7 @@ public class ProductLandingVariation1 {
 					if (StringUtils.isNotBlank(html)) {
 						htmlBlobNode.setProperty("html", html);
 					} else {
-						sb.append("<li>htmlblob content is not migrated</li>");
+						sb.append("<li>htmlblob content doesn't exist</li>");
 					}
 					
 				} else {
