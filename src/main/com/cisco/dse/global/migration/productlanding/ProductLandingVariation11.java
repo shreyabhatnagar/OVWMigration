@@ -116,7 +116,7 @@ public class ProductLandingVariation11 {
 							Elements descriptionText = ele
 									.getElementsByTag("p");
 							if (descriptionText != null) {
-								pText = descriptionText.text();
+								pText = descriptionText.first().text();
 							} else {
 								sb.append("<li>Hero Component description element not having any title in it ('p' is blank)</li>");
 							}
@@ -328,7 +328,7 @@ public class ProductLandingVariation11 {
 
 			// start set ENTERPRISE NETWORK INDEX list.
 			try {
-				int count = 0;
+				NodeIterator listNodeIterator = indexRightRailNode.getNodes("list*");
 				Elements indexlistElem = doc.select("div.n13-pilot");
 				Element rightRailPilotElement = indexlistElem
 						.first();
@@ -340,33 +340,39 @@ public class ProductLandingVariation11 {
 						Elements indexUlList = indexListItem
 								.getElementsByTag("ul");
 
+						Elements listDescription = indexListItem.select(
+								"div.intro").select("p");
+						
 						javax.jcr.Node listNode = null;
 
-						if (count == 0) {
-							listNode = indexRightRailNode.hasNode("list") ? indexRightRailNode
-									.getNode("list") : null;
-							if (listNode != null) {
+						
+						if(listNodeIterator.hasNext()){
+							listNode = (Node) listNodeIterator.next();
+							log.debug("path of list node: "+ listNode.getPath());
+						}
+						if (listNode != null) {
 								listNode.setProperty("title", indexTitle);
-								log.debug("Updated title at "
-										+ listNode.getPath());
-								count++;
-								log.debug("count title at " + count);
 							} else {
 								sb.append("<li>No list node found in left rail</li>");
 							}
-						} else {
-							listNode = indexRightRailNode.getNode("list_"
-									+ (count - 1));
-							if (listNode != null) {
-								log.debug("listnode path " + listNode.getPath());
-								listNode.setProperty("title", indexTitle);
-								count++;
+						if(listNode !=null) {
+							if (listNode.hasNode("intro")) {
+								Node introNode = listNode.getNode("intro");
+								String descProperty = "";
+								if (listDescription != null) {
+									descProperty = listDescription.html();
+									introNode.setProperty("paragraph_rte",
+											descProperty.trim());
+									log.debug("Updated descriptions at "
+											+ introNode.getPath());
+
+							} else {
+								sb.append("<li>Paragraph description is not migrated as it has no content.</li>");
+							}
 							}
 						}
-
 						NodeIterator elementList = listNode
 								.getNodes("element_list*");
-						NodeIterator intro = listNode.getNodes("intro");
 
 						if (elementList.getSize() != indexUlList.size()) {
 							sb.append("<li>Mis-Match in Resource list Panels count/content."
@@ -428,31 +434,15 @@ public class ProductLandingVariation11 {
 							} else {
 								sb.append("<li>element_list node doesn't exists</li>");
 							}
-							intro.hasNext();
-							Node introNode = (Node) intro.next();
-							Elements listDescription = indexListItem.select(
-									"div.intro").select("p");
-							String descProperty = "";
-							if (listDescription != null) {
-								descProperty = listDescription.html();
-								if (introNode != null) {
-									introNode.setProperty("paragraph_rte",
-											descProperty.trim());
-								}
-								log.debug("Updated descriptions at "
-										+ introNode.getPath());
-							} else {
-								sb.append("<li>Paragraph description is not migrated as it has no content.</li>");
-							}
-
 						}
-					}
-				} else {
+					
+				} 
+				}else {
 					sb.append("<li>List component element is not found.</li>");
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update index list component.\n</li>");
-				log.error("Exceptoin : ", e);
+				log.error("Exception : ", e);
 			}
 			// end set benefit list.
 			// --------------------------------------------------------------------------------------------------------------------------
@@ -517,13 +507,16 @@ public class ProductLandingVariation11 {
 							+ indexRightRailNode.getPath() + "</li>");
 				}
 			} catch (Exception e) {
-
+				
+				sb.append("<li>Unable to update followus component. Exception found is:  "
+						+ e + "</li>");
 			}
 
 			session.save();
 
 		} catch (Exception e) {
-			sb.append("<li>Exception " + e + "</li>");
+			sb.append("<li>Exception as URL cannot be connected! </li>");
+			log.debug("Exception as url cannot be connected: "+ e);
 		}
 
 		sb.append("</ul></td>");

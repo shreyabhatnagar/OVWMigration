@@ -187,7 +187,7 @@ public class ProductLandingVariation9 {
 							Elements descriptionText = ele
 									.getElementsByTag("p");
 							if (descriptionText != null) {
-								pText = descriptionText.text();
+								pText = descriptionText.first().text();
 							} else {
 								sb.append("<li>Hero Component description element not having any title in it ('p' is blank)</li>");
 							}
@@ -560,7 +560,8 @@ public class ProductLandingVariation9 {
 			session.save();
 
 		} catch (Exception e) {
-			sb.append("<li>Exception " + e + "</li>");
+			sb.append("<li>Exception as URL cannot be connected! </li>");
+			log.debug("Exception as url cannot be connected: "+ e);
 		}
 
 		sb.append("</ul></td>");
