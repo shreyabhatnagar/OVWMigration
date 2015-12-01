@@ -6,12 +6,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.Properties;
 
 import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Row;
@@ -38,187 +41,256 @@ public class OVWMigration {
 	public static void main(String s[]) throws FileNotFoundException,
 			IOException {
 
-		log.debug("In the main method of OVWMigration");
-		String REPO = "http://chard.cisco.com:4502/crx/server";
-		String WORKSPACE = "crx.default";
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		String host = null;
+		String userId = null;
+		String pwd = null;
+		String workspace = null;
+		String workbookpath = null;
+		String reportspath = null;
+		String repo = null;
+
 		try {
-			repository = JcrUtils.getRepository(REPO);
-			session = repository.login(
-					new SimpleCredentials("admin", "admin".toCharArray()),
-					WORKSPACE);
-			XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(
-					"c:/test/OVWDEMO.xlsx"));
-
-			for (XSSFSheet sheet : workbook) {
-				log.debug("Sheet name : " + sheet.getSheetName());
-				String sheetName = sheet.getSheetName();
-				String msg1 = "";
-				String msg2 = "";
-				String msg3 = "";
-				String msg4 = "";
-				String msg5 = "";
-				String msg6 = "";
-				String msg7 = "";
-				String msg8 = "";
-				String msg9 = "";
-				String msg10 = "";
-				StringBuilder sb = new StringBuilder(1024);
-
-				sb.append("<table widht='500' border='1'>");
-
-				for (Row tempRow : sheet) {
-
-					String gLink = tempRow.getCell(0) != null ? tempRow
-							.getCell(0).getStringCellValue() : "";
-					String prod = tempRow.getCell(1) != null ? tempRow.getCell(
-							1).getStringCellValue() : "";
-					String type = tempRow.getCell(2) != null ? tempRow.getCell(
-							2).getStringCellValue() : "";
-					String cattype = tempRow.getCell(3) != null ? tempRow
-							.getCell(3).getStringCellValue() : "";
-
-					log.debug("gLink : " + gLink);
-					log.debug("prod : " + prod);
-
-					if ("benefit-var1".equalsIgnoreCase(prod)) {
-						msg1 = msg1 + "<tr>";
-						msg1 = msg1
-								+ new UnifiedComputingBenefits().translate(
-										gLink, prod, type,
-										sheet.getSheetName(), session);
-						msg1 = msg1 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg1);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("benefit-var2".equalsIgnoreCase(prod)) {
-						msg2 = msg2 + "<tr>";
-						msg2 = msg2
-								+ new ServiceProviderBenefits().translate(
-										gLink, prod, type,
-										sheet.getSheetName(), session);
-						msg2 = msg2 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg2);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("benefit-var3".equals(type)) {
-						msg3 = msg3 + "<tr>";
-						msg3 = msg3
-								+ new Benefits().translate(gLink, prod, type,
-										cattype, sheet.getSheetName(), session);
-						msg3 = msg3 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg3);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var1".equals(type)) {
-						msg4 = msg4 + "<tr>";
-						msg4 = msg4
-								+ new ProductLandingVariation1().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg4 = msg4 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg4);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var3".equals(type)) {
-						msg5 = msg5 + "<tr>";
-						msg5 = msg5
-								+ new ProductLandingVariation3().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg5 = msg5 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg5);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var9".equals(type)) {
-						msg6 = msg6 + "<tr>";
-						msg6 = msg6
-								+ new ProductLandingVariation9().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg6 = msg6 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg6);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var5".equals(type)) {
-						msg7 = msg7 + "<tr>";
-						msg7 = msg7
-								+ new ProductLandingVariation5().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg7 = msg7 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg7);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var11".equals(type)) {
-						msg8 = msg8 + "<tr>";
-						msg8 = msg8
-								+ new ProductLandingVariation11().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg8 = msg8 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg8);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var10".equals(type)) {
-						msg9 = msg9 + "<tr>";
-						msg9 = msg9
-								+ new ProductLandingVariation10().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg9 = msg9 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg9);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					} else if ("index-var6".equals(type)) {
-						msg10 = msg10 + "<tr>";
-						msg10 = msg10
-								+ new ProductLandingVariation6().translate(
-										gLink, prod, type, cattype,
-										sheet.getSheetName(), session);
-						msg10 = msg10 + "</tr>";
-
-						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-						sb.append(msg10);
-						sb.append("<tr><td colspan='3'>.</td></tr>");
-
-					}
-				}
-
-				sb.append("</table>");
-
-				java.util.Date date = new java.util.Date();
-				File file = new File("c:/test/OVWMigrationReport_"
-						+ sheetName
-						+ "_"
-						+ new Timestamp(date.getTime()).toString()
-								.replace(":", "-").replace(".", "-") + ".html");
-				FileWriter fileWriter = new FileWriter(file);
-				BufferedWriter bwr = new BufferedWriter(fileWriter);
-				bwr.write(sb.toString());
-				bwr.flush();
-				bwr.close();
-
+			String filename = "config.properties";
+			input = OVWMigration.class.getClassLoader().getResourceAsStream(
+					filename);
+			if (input == null) {
+				log.debug("input is null");
+				return;
 			}
-			workbook.close();
-			session.logout();
+			// load a properties file from class path, inside static method
+			prop.load(input);
+
+			host = StringUtils.isNotBlank(prop.getProperty("serverurl")) ? prop
+					.getProperty("serverurl") : "";
+			repo = host + "/crx/server";
+			userId = StringUtils.isNotBlank(prop.getProperty("aemuser")) ? prop
+					.getProperty("aemuser") : "";
+			pwd = StringUtils.isNotBlank(prop.getProperty("aempassword")) ? prop
+					.getProperty("aempassword") : "";
+			workspace = StringUtils.isNotBlank(prop.getProperty("workspace")) ? prop
+					.getProperty("workspace") : "";
+			workbookpath = StringUtils.isNotBlank(prop
+					.getProperty("workbookpath")) ? prop
+					.getProperty("workbookpath") : "";
+			reportspath = StringUtils.isNotBlank(prop
+					.getProperty("reportspath")) ? prop
+					.getProperty("reportspath") : "";
+
+			log.debug("host : " + host);
+			log.debug("userId : " + userId);
+			log.debug("pwd : " + pwd);
+			log.debug("workspace : " + workspace);
+			log.debug("workbookpath : " + workbookpath);
+			log.debug("reportspath : " + reportspath);
+
+		} catch (IOException ex) {
+			log.error("IOException : ", ex);
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		log.debug("In the main method of OVWMigration");
+
+		try {
+			if (host != "" && userId != "" && pwd != "" && workspace != ""
+					&& workbookpath != "" && reportspath != "") {
+				repository = JcrUtils.getRepository(repo);
+				session = repository.login(
+						new SimpleCredentials(userId, pwd.toCharArray()),
+						workspace);
+				XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(
+						workbookpath));
+
+				for (XSSFSheet sheet : workbook) {
+					log.debug("Sheet name : " + sheet.getSheetName());
+					String sheetName = sheet.getSheetName();
+					StringBuilder sb = new StringBuilder(1024);
+
+					sb.append("<table widht='500' border='1'>");
+
+					for (Row tempRow : sheet) {
+
+						String gLink = tempRow.getCell(0) != null ? tempRow
+								.getCell(0).getStringCellValue() : "";
+						String prod = tempRow.getCell(1) != null ? tempRow
+								.getCell(1).getStringCellValue() : "";
+						String type = tempRow.getCell(2) != null ? tempRow
+								.getCell(2).getStringCellValue() : "";
+						String cattype = tempRow.getCell(3) != null ? tempRow
+								.getCell(3).getStringCellValue() : "";
+
+						log.debug("gLink : " + gLink);
+						log.debug("prod : " + prod);
+
+						if ("benefit-var1".equalsIgnoreCase(prod)) {
+							String msg1 = "";
+							msg1 = msg1 + "<tr>";
+							msg1 = msg1
+									+ new UnifiedComputingBenefits().translate(
+											host, gLink, prod, type,
+											sheet.getSheetName(), session);
+							msg1 = msg1 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg1);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("benefit-var2".equalsIgnoreCase(prod)) {
+							String msg2 = "";
+							msg2 = msg2 + "<tr>";
+							msg2 = msg2
+									+ new ServiceProviderBenefits().translate(
+											host, gLink, prod, type,
+											sheet.getSheetName(), session);
+							msg2 = msg2 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg2);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("benefit-var3".equals(type)) {
+							String msg3 = "";
+							msg3 = msg3 + "<tr>";
+							msg3 = msg3
+									+ new Benefits().translate(host, gLink,
+											prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg3 = msg3 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg3);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var1".equals(type)) {
+							String msg4 = "";
+							msg4 = msg4 + "<tr>";
+							msg4 = msg4
+									+ new ProductLandingVariation1().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg4 = msg4 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg4);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var3".equals(type)) {
+							String msg5 = "";
+							msg5 = msg5 + "<tr>";
+							msg5 = msg5
+									+ new ProductLandingVariation3().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg5 = msg5 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg5);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var9".equals(type)) {
+							String msg6 = "";
+							msg6 = msg6 + "<tr>";
+							msg6 = msg6
+									+ new ProductLandingVariation9().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg6 = msg6 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg6);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var5".equals(type)) {
+							String msg7 = "";
+							msg7 = msg7 + "<tr>";
+							msg7 = msg7
+									+ new ProductLandingVariation5().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg7 = msg7 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg7);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var11".equals(type)) {
+							String msg8 = "";
+							msg8 = msg8 + "<tr>";
+							msg8 = msg8
+									+ new ProductLandingVariation11()
+											.translate(host, gLink, prod, type,
+													cattype,
+													sheet.getSheetName(),
+													session);
+							msg8 = msg8 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg8);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var10".equals(type)) {
+							String msg9 = "";
+							msg9 = msg9 + "<tr>";
+							msg9 = msg9
+									+ new ProductLandingVariation10()
+											.translate(host, gLink, prod, type,
+													cattype,
+													sheet.getSheetName(),
+													session);
+							msg9 = msg9 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg9);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("index-var6".equals(type)) {
+							String msg10 = "";
+							msg10 = msg10 + "<tr>";
+							msg10 = msg10
+									+ new ProductLandingVariation6().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg10 = msg10 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg10);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						}
+					}
+
+					sb.append("</table>");
+
+					java.util.Date date = new java.util.Date();
+					File file = new File(reportspath
+							+ "/OVWMigrationReport_"
+							+ sheetName
+							+ "_"
+							+ new Timestamp(date.getTime()).toString()
+									.replace(":", "-").replace(".", "-")
+							+ ".html");
+					FileWriter fileWriter = new FileWriter(file);
+					BufferedWriter bwr = new BufferedWriter(fileWriter);
+					bwr.write(sb.toString());
+					bwr.flush();
+					bwr.close();
+
+				}
+				workbook.close();
+				session.logout();
+			} else {
+				log.debug("config.properties file is not configured with 'serverurl' or 'aemuser' or 'aempassword' or 'workspace' or 'workbookpath' or 'reportspath'");
+			}
+
 		} catch (Exception e) {
 			log.error("Exception in main of OVWMigration : ", e);
 		}

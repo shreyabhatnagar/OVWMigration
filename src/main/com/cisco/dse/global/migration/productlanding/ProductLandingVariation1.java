@@ -33,7 +33,7 @@ public class ProductLandingVariation1 {
 	
 	static Logger log = Logger.getLogger(ProductLandingVariation1.class);
 
-	public String translate(String loc, String prod, String type, String catType,
+	public String translate(String host, String loc, String prod, String type, String catType,
 			String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
@@ -46,7 +46,7 @@ public class ProductLandingVariation1 {
 		String indexUpperRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-right";
 		String indexLowerLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
 		String indexLowerRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
-		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/index.html";
+		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/index.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		

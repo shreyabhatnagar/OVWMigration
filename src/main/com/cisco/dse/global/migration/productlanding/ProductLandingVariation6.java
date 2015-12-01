@@ -29,7 +29,7 @@ public class ProductLandingVariation6 {
 	StringBuilder sb = new StringBuilder(1024);
 	static Logger log = Logger.getLogger(ProductLandingVariation6.class);
 
-	public String translate(String loc, String prod, String type,
+	public String translate(String host,String loc, String prod, String type,
 			String catType, String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
@@ -42,7 +42,7 @@ public class ProductLandingVariation6 {
 		String layoutOverView = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview";
-		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"
+		String pageUrl = host+"/content/<locale>/"
 				+ catType + "/<prod>/index.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);

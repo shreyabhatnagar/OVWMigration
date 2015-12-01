@@ -53,13 +53,13 @@ public class UnifiedComputingBenefits {
 
 	String benefitLeft = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
 	String benefitRight = "/content/<locale>/products/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
-	String pageUrl = "http://chard.cisco.com:4502/content/<locale>/products/<prod>/benefit.html";	
+		
 	
-	public String translate(String loc, String prod, String type,
+	public String translate(String host,String loc, String prod, String type,
 			String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-
+		String pageUrl = host+"/content/<locale>/products/<prod>/benefit.html";
 		benefitLeft = benefitLeft.replace("<locale>", locale).replace("<prod>", prod);
 		benefitRight = benefitRight.replace("<locale>", locale).replace("<prod>", prod);
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
