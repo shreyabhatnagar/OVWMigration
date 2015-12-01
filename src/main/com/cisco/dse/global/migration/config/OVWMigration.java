@@ -23,161 +23,187 @@ import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation11;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation5;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
-import com.cisco.dse.global.migration.productlanding.ProductLandingVariation11;
-
 
 public class OVWMigration {
-	
-		
+
 	static Repository repository = null;
 	static Session session = null;
 	static Logger log = Logger.getLogger(OVWMigration.class);
+
 	public static void main(String s[]) throws FileNotFoundException,
 			IOException {
-		
-		log.debug("---------------------inside main--------------------------");	
+
+		log.debug("In the main method of OVWMigration");
 		String REPO = "http://chard.cisco.com:4502/crx/server";
 		String WORKSPACE = "crx.default";
-		// OVWMigrator mig=null;
-
-		try {			
-			repository = JcrUtils.getRepository(REPO);			
-			
+		try {
+			repository = JcrUtils.getRepository(REPO);
 			session = repository.login(
 					new SimpleCredentials("admin", "admin".toCharArray()),
 					WORKSPACE);
-		    XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(
-				"c:/test/OVWDEMO.xlsx"));
+			XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(
+					"c:/test/OVWDEMO.xlsx"));
 
 			for (XSSFSheet sheet : workbook) {
-				// int sheetIndex = 0;
-				// XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
-				log.debug("SHEET NAME:::::::::::" + sheet.getSheetName());
+				log.debug("Sheet name : " + sheet.getSheetName());
 				String sheetName = sheet.getSheetName();
-				String msg = "";
-				String msg1="";
-				String msg2="";
-				String msg3="";
-				String msg4="";
-				String msg5="";
-				String msg6="";
-				String msg7="";
-				String msg8="";
-				String msg9="";
-				String msg10="";
+				String msg1 = "";
+				String msg2 = "";
+				String msg3 = "";
+				String msg4 = "";
+				String msg5 = "";
+				String msg6 = "";
+				String msg7 = "";
+				String msg8 = "";
+				String msg9 = "";
+				String msg10 = "";
 				StringBuilder sb = new StringBuilder(1024);
-				
+
+				sb.append("<table widht='500' border='1'>");
+
 				for (Row tempRow : sheet) {
-					
-					String gLink = tempRow.getCell(0)!=null?tempRow.getCell(0).getStringCellValue():"";
-					String prod = tempRow.getCell(1)!=null?tempRow.getCell(1).getStringCellValue():"";
-					String type = tempRow.getCell(2)!=null?tempRow.getCell(2).getStringCellValue():"";
-					String cattype = tempRow.getCell(3)!=null?tempRow.getCell(3).getStringCellValue():"";
-					
-					log.debug("gLink : "+gLink);
-														
-					System.out.println("gLink : "+gLink);
+
+					String gLink = tempRow.getCell(0) != null ? tempRow
+							.getCell(0).getStringCellValue() : "";
+					String prod = tempRow.getCell(1) != null ? tempRow.getCell(
+							1).getStringCellValue() : "";
+					String type = tempRow.getCell(2) != null ? tempRow.getCell(
+							2).getStringCellValue() : "";
+					String cattype = tempRow.getCell(3) != null ? tempRow
+							.getCell(3).getStringCellValue() : "";
+
+					log.debug("gLink : " + gLink);
+					log.debug("prod : " + prod);
+
 					if ("benefit-var1".equalsIgnoreCase(prod)) {
-						msg1 = msg1+"<tr>";
-						msg1 = msg1 + new UnifiedComputingBenefits().translate(gLink, prod, type,
-							sheet.getSheetName(), session);
-						 msg1 = msg1+"</tr>";
+						msg1 = msg1 + "<tr>";
+						msg1 = msg1
+								+ new UnifiedComputingBenefits().translate(
+										gLink, prod, type,
+										sheet.getSheetName(), session);
+						msg1 = msg1 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg1);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
 					} else if ("benefit-var2".equalsIgnoreCase(prod)) {
-						msg2 = msg2+"<tr>";
-						 msg2 = msg2 + new ServiceProviderBenefits().translate(gLink, prod, type,
-							sheet.getSheetName(), session);
-						 msg2 = msg2+"</tr>";
-					} else if("benefit-var3".equals(type)){
+						msg2 = msg2 + "<tr>";
+						msg2 = msg2
+								+ new ServiceProviderBenefits().translate(
+										gLink, prod, type,
+										sheet.getSheetName(), session);
+						msg2 = msg2 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg2);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					} else if ("benefit-var3".equals(type)) {
 						msg3 = msg3 + "<tr>";
-						msg3 = msg3 + new Benefits().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg3 = msg3
+								+ new Benefits().translate(gLink, prod, type,
+										cattype, sheet.getSheetName(), session);
 						msg3 = msg3 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg3);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
 					} else if ("index-var1".equals(type)) {
 						msg4 = msg4 + "<tr>";
-						msg4 = msg4 + new ProductLandingVariation1().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg4 = msg4
+								+ new ProductLandingVariation1().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
 						msg4 = msg4 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg4);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
 					} else if ("index-var3".equals(type)) {
 						msg5 = msg5 + "<tr>";
-						msg5 = msg5 + new ProductLandingVariation3().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg5 = msg5
+								+ new ProductLandingVariation3().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
 						msg5 = msg5 + "</tr>";
-					}else if("index-var9".equals(type)){
-					msg6 = msg6 + "<tr>";
-					msg6 = msg6 + new ProductLandingVariation9().translate(gLink, prod, type,cattype,
-						sheet.getSheetName(), session);
-					msg6 = msg6 + "</tr>";
-				}
-					else if ("index-var5".equals(type)) {
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg5);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					} else if ("index-var9".equals(type)) {
+						msg6 = msg6 + "<tr>";
+						msg6 = msg6
+								+ new ProductLandingVariation9().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
+						msg6 = msg6 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg6);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					} else if ("index-var5".equals(type)) {
 						msg7 = msg7 + "<tr>";
-						msg7 = msg7 + new ProductLandingVariation5().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg7 = msg7
+								+ new ProductLandingVariation5().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
 						msg7 = msg7 + "</tr>";
-					}
-					else if ("index-var11".equals(type)) {
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg7);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					} else if ("index-var11".equals(type)) {
 						msg8 = msg8 + "<tr>";
-						msg8 = msg8 + new ProductLandingVariation11().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg8 = msg8
+								+ new ProductLandingVariation11().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
 						msg8 = msg8 + "</tr>";
-					}
-					else if ("index-var10".equals(type)) {
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg8);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					} else if ("index-var10".equals(type)) {
 						msg9 = msg9 + "<tr>";
-						msg9 = msg9 + new ProductLandingVariation10().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg9 = msg9
+								+ new ProductLandingVariation10().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
 						msg9 = msg9 + "</tr>";
-					}
-					else if ("index-var6".equals(type)) {
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg9);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					} else if ("index-var6".equals(type)) {
 						msg10 = msg10 + "<tr>";
-						msg10 = msg10 + new ProductLandingVariation6().translate(gLink, prod, type,cattype,
-							sheet.getSheetName(), session);
+						msg10 = msg10
+								+ new ProductLandingVariation6().translate(
+										gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
 						msg10 = msg10 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg10);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
 					}
-					/*
-					Cell conceptCell = tempRow.createCell(3);
-					conceptCell.setCellValue(msg);*/
 				}
-				
-				//sb.append("<style>td {width: 400px;} table{widht: 400px;}</style>");
-				
-				
-				sb.append("<table widht='500' border='1'>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg1);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg2);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg3);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg4);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg5);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg6);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg7);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg8);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg9);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr><td colspan='3'>.</td></tr>");
-				sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-				sb.append(msg10);
-				sb.append("<tr><td colspan='3'>.</td></tr>");
+
 				sb.append("</table>");
-				
+
 				java.util.Date date = new java.util.Date();
 				File file = new File("c:/test/OVWMigrationReport_"
 						+ sheetName
@@ -189,17 +215,12 @@ public class OVWMigration {
 				bwr.write(sb.toString());
 				bwr.flush();
 				bwr.close();
-				
+
 			}
-			/*FileOutputStream outFile = new FileOutputStream(new File("c:/test/OVWDEMO.xlsx"));
-			workbook.write(outFile);
-			outFile.close();*/
 			workbook.close();
-			session.logout();		
-			
+			session.logout();
 		} catch (Exception e) {
-			log.error("inside main",e);
-			
+			log.error("Exception in main of OVWMigration : ", e);
 		}
 	}
 }
