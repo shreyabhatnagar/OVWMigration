@@ -1,7 +1,6 @@
 package com.cisco.dse.global.migration.solutionlisting;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -14,11 +13,12 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.cisco.dse.global.migration.config.Constants;
 
 public class SolutionListingVariation11 {
 
@@ -32,7 +32,7 @@ public class SolutionListingVariation11 {
 
 	static Logger log = Logger.getLogger(SolutionListingVariation11.class);
 
-	public String translate(String loc, String prod, String type,
+	public String translate(String host,String loc, String prod, String type,
 			String catType, String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
@@ -45,7 +45,7 @@ public class SolutionListingVariation11 {
 				+ catType
 				+ "/<prod>/solution-listing/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
 
-		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"
+		String pageUrl = host + "/content/<locale>/"
 				+ catType + "/<prod>/solution-listing.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
@@ -57,9 +57,9 @@ public class SolutionListingVariation11 {
 
 		indexMidLeft = indexMidLeft.replace("<locale>", locale).replace(
 				"<prod>", prod);
-				Node indexMidLeftNode = null;
+		Node indexMidLeftNode = null;
 
-			try {
+		try {
 			indexMidLeftNode = session.getNode(indexMidLeft);
 
 			try {
@@ -83,139 +83,109 @@ public class SolutionListingVariation11 {
 									String textPropVal = textProp.outerHtml();
 									textNode.setProperty("text", textPropVal);
 								}else{
-									sb.append("<li>Unable to update text component as h2 tag doesnot exist.</li>");
+									sb.append(Constants.TEXT_DOES_NOT_EXIST);
 								}
-								
+
 							} else {
-								sb.append("<li>Unable to update text component as there are no elements in the class c00-pilot.</li>");
+								sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 							}
 
 						}
 					} else{
-						sb.append("<li>Unable to update text component as its respective node is missing.</li>");
+						sb.append(Constants.TEXT_NODE_NOT_FOUND);
 					}
 				} else {
-					sb.append("<li>Unable to update text component as its respective div is missing. c00-pilot class is missing.</li>");
+					sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 				}
 
 			} catch (Exception e) {
-				sb.append("<li>Unable to update text component of solution listing."
+				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
 						+ e + "</li>");
 			}
 
 			// end set text
-			/*// ---------------------------------------------------------------------------------------------------------------------------------------
+			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start set spotlight component.
 			try {
 				String h2Text = "";
 				String pText = "";
-				String aText = "";
 				Elements spotLightElements = doc.select("div.c11-pilot");
-				
+				Node spotLightComponentNode = null;				
 				if (spotLightElements != null) {
 					if (indexMidLeftNode != null) {
-						int eleSize = spotLightElements.size();
+
 						NodeIterator spoLightNodeIterator = indexMidLeftNode
-								.getNodes("spotlight_large*");
+								.getNodes("spotlight_medium*");
+						int eleSize = spotLightElements.size();
+
 						int nodeSize = (int) spoLightNodeIterator.getSize();
-						if (eleSize == nodeSize) {
-							for (Element ele : spotLightElements) {
-								spoLightNodeIterator.hasNext();
-								Node spotLightComponentNode = (Node) spoLightNodeIterator
-										.next();
+						if (eleSize != nodeSize) {
+							sb.append("<li>"+Constants.EXCEPTION_SPOTLIGHT_COMPONENT+ nodeSize+Constants.SPOTLIGHT_ELEMENT_COUNT+eleSize+"</li>");
 
-								Elements h2TagText = ele.getElementsByTag("h2");
-								if (h2TagText != null) {
-									h2Text = h2TagText.html();
-								} else {
-									sb.append("<li>Spotlight Component Heading element not having any title in it ('h2' is blank)</li>");
-								}
+						}
 
-								Elements descriptionText = ele
-										.getElementsByTag("p");
-								if (descriptionText != null) {
-									pText = descriptionText.html();
-								} else {
-									sb.append("<li>Spotlight Component description element not having any title in it ('p' is blank)</li>");
-								}
+						for (Element ele : spotLightElements) {
+							Element h2TagText = ele.getElementsByTag("h2").first();
+							if (h2TagText != null) {
+								h2Text = h2TagText.text();
+							} else {
+								sb.append(Constants.SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND);
+							}
 
-								Elements anchorText = ele.getElementsByTag("a");
-								if (anchorText != null) {
-									aText = anchorText.text();
-								} else {
-									sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
+							Elements descriptionText = ele.getElementsByTag("p");
+							if (descriptionText != null) {
+								pText = descriptionText.html();
+							} else {
+								sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
+							}
+
+							Element anchorText = ele.getElementsByTag("a").first();;
+							String ahref = "";
+							if (anchorText != null) {
+								ahref = anchorText.attr("href");
+							} else {
+								sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
+							}
+
+							if(spoLightNodeIterator.hasNext()){
+								spotLightComponentNode = (Node) spoLightNodeIterator.next();
+								if(spotLightComponentNode != null){
+									spotLightComponentNode.setProperty("title", h2Text);
+									spotLightComponentNode.setProperty("description", pText);
+									String nodeName = spotLightComponentNode.getName();
+									if(nodeName.contains("v2")){									
+										if(spotLightComponentNode.hasNode("titlelink")){
+											Node spotLightTitleLinkNode = spotLightComponentNode.getNode("titlelink");
+											spotLightTitleLinkNode.setProperty("url", ahref);
+										}else{
+											sb.append(Constants.SPOTLIGHT_TITLELINK_NODE_NOT_FOUND);
+										}
+									}else{
+										spotLightComponentNode.setProperty("title-linkurl", ahref);
+									}
+
+								}else{
+									sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
+
 								}
-								spotLightComponentNode.setProperty("title",
-										h2Text);
-								spotLightComponentNode.setProperty(
-										"description", pText);
-								spotLightComponentNode.setProperty("linktext",
-										aText);
 
 							}
 						}
-
-						if (nodeSize < eleSize) {
-							int nodeCount = 1;
-
-							for (Element ele : spotLightElements) {
-								if (nodeCount <= nodeSize) {
-									spoLightNodeIterator.hasNext();
-									Node spotLightComponentNode = (Node) spoLightNodeIterator
-											.next();
-									Elements h2TagText = ele
-											.getElementsByTag("h2");
-									if (h2TagText != null) {
-										h2Text = h2TagText.html();
-									} else {
-										sb.append("<li>Spotlight Component Heading element not having any title in it ('h2' is blank)</li>");
-									}
-
-									Elements descriptionText = ele
-											.getElementsByTag("p");
-									if (descriptionText != null) {
-										pText = descriptionText.html();
-									} else {
-										sb.append("<li>Spotlight Component description element not having any title in it ('p' is blank)</li>");
-									}
-
-									Elements anchorText = ele
-											.getElementsByTag("a");
-									if (anchorText != null) {
-										aText = anchorText.text();
-									} else {
-										sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
-									}
-									spotLightComponentNode.setProperty("title",
-											h2Text);
-									spotLightComponentNode.setProperty(
-											"description", pText);
-									spotLightComponentNode.setProperty(
-											"linktext", aText);
-									nodeCount++;
-
-								} else {
-									sb.append("<li>Unable to migrate one spotlight component. Count MisMatch.</li>");
-									log.debug("Could not migrate one spotlight large node.");
-								}
-							}
-
-						}
+					}else{
+						sb.append(Constants.SPOTLIGHT_PARENT_NODE_NOT_FOUND);
 					}
 
 				} else {
-					sb.append("<li>Unable to update spotlight component as its respective div is not available.</li>");
-
+					sb.append(Constants.SPOTLIGHT_PARENT_DIV_NOT_FOUND);
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update spotlight component." + e
+				sb.append("<li>" + Constants.EXCEPTION_SPOTLIGHT_COMPONENT + e
 						+ "</li>");
 			}
 			// end set spotlight nodes
-*/			session.save();
-
+			session.save();
 		} catch (Exception e) {
-			sb.append("<li>Exception as URL cannot be connected! </li>");
+			sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			log.debug("Exception as url cannot be connected: "+ e);
 		}
 

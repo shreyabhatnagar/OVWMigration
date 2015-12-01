@@ -31,6 +31,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation5;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
+import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
 
 public class OVWMigration {
@@ -277,6 +278,20 @@ public class OVWMigration {
 
 							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 							sb.append(msg11);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						}
+						else if ("solution-listing-var11".equals(type)) {
+							String msg12 = "";
+							msg12 = msg12 + "<tr>";
+							msg12 = msg12
+									+ new SolutionListingVariation11().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg12 = msg12 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg12);
 							sb.append("<tr><td colspan='3'>.</td></tr>");
 
 						}
