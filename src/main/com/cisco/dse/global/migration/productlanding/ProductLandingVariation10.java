@@ -217,12 +217,18 @@ public class ProductLandingVariation10 {
 					Node textNode1 =indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-left").getNode("text") : indexLeftNode.getNode("text"); 
 					textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
 					if (textNode1 != null) {
-						if (textElements.first().html() != null) {
-							textNode1.setProperty("text", textElements.first().html());
+						if (textElements.isEmpty()) {
+							sb.append("<li>The first text element is not available on the locale page.</li>");
 						}
 						else {
-							sb.append("<li>The first text element is not available on the locale page.</li>");
-						}							
+							if (textElements.first().html() != null) {
+								textNode1.setProperty("text", textElements.first().html());
+							}
+							else {
+								sb.append("<li>The first text element is not available on the locale page.</li>");
+							}
+						}
+													
 					}
 					else {
 						if (textElements.first().html() != null) {
@@ -232,8 +238,13 @@ public class ProductLandingVariation10 {
 					
 					if (textNode2 != null) {
 						Node textChildNode = textNode2.getNode("text");
-						if (textElements.get(1).html() != null) { 
-							textChildNode.setProperty("text", textElements.get(1).html());
+						if (textElements.size() >= 2) { 
+							if (textElements.get(1).html() != null) { 
+								textChildNode.setProperty("text", textElements.get(1).html());
+							}
+							else {
+								sb.append("<li>The second text element is not available on the locale page.</li>");
+							}
 						}
 						else {
 							sb.append("<li>The second text element is not available on the locale page.</li>");
@@ -365,89 +376,20 @@ public class ProductLandingVariation10 {
 					Elements rightRailList = doc.select("div.gd-right").select("div.mlb-pilot").select("div.c00-pilot");
 					
 					if (rightRailList.isEmpty()) {
-
-						Elements h2Elements = null;
-						Elements ulElements = null;
-						Elements pElements = null;
-						Elements rightRailLists_1 = doc.select("div.gd-right").select("div.clb").select("div.n13-pilot");
-						if(rightRailLists_1 != null && !rightRailLists_1.isEmpty()){
-							migrate = false;
-							if(rightRailLists_1.size()==1){
-								Element rightRailList_1 = rightRailLists_1.first();
-								h2Elements = rightRailList_1.getElementsByTag("h2");
-								pElements = rightRailList_1.getElementsByTag("p");
-								ulElements = rightRailList_1.getElementsByTag("ul");
-
-								NodeIterator listNodes = indexRightNode.getNodes("list_*");
-
-								if(listNodes != null){
-
-									for(Element ele : h2Elements){
-										String h2Text = ele.text();
-										listNodes.hasNext();
-										Node listNode = (Node)listNodes.next();
-										listNode.setProperty("title", h2Text);
+						rightRailList = doc.select("div.gd-right").select("div.n13-pilot");
+						if (rightRailList != null) {
+							int eleSize = rightRailList.size();
+							if (eleSize == 1) {
+								Element rightListElem =  rightRailList.first();
+								if (rightListElem != null) {
+									Elements ulElements = rightListElem.getElementsByTag("ul");
+									if (ulElements.size() > 1) {
+										sb.append("<li>The HTML structure for list component in right rail on the locale page is different and hence migration needs to be done manually.</li>");
+										migrate = false;
 									}
-
-									listNodes = indexRightNode.getNodes("list_*");
-									for(Element ele : pElements){
-										String pText = ele.text();
-										if(listNodes.hasNext()){
-											Node listNode = (Node)listNodes.next();
-											if(listNode.hasNode("intro")){
-												Node introNode = listNode.getNode("intro");
-												introNode.setProperty("paragraph_rte", pText);
-											}else{
-
-											}
-										}else{
-											sb.append("<li>No list nodes found.</li>");
-										}
-									}
-
-									listNodes = indexRightNode.getNodes("list_*");
-
-									for(Element ele : ulElements){
-										Elements aElements = ele.getElementsByTag("a");
-
-										List<String> list = new ArrayList<String>();
-										for(Element innerEle : aElements){
-
-											JSONObject obj = new JSONObject();
-											String aText = innerEle.text();
-											String aHref = innerEle.attr("href");
-											obj.put("linktext", aText);
-											obj.put("linkurl", aHref);
-											obj.put("icon", "none");
-											obj.put("size", "");
-											obj.put("description", "");
-											obj.put("openInNewWindow", false);
-											list.add(obj.toString());
-										}
-
-										if(listNodes.hasNext()){
-											Node listNode = (Node)listNodes.next();
-											NodeIterator elementNodes = listNode.getNodes("element_list*");
-											while(elementNodes.hasNext()){
-												Node elementNode = (Node)elementNodes.next();
-												elementNode.setProperty("listitems", list.toArray(new String[list.size()]));
-											}
-										}else{
-											sb.append("<li>No list nodes found.</li>");
-										}
-									}
-								}else{
-									sb.append("<li>No list nodes found.</li>");
 								}
-							}else if(rightRailLists_1.size()>1){
-
-							}else{
-								sb.append("<li>No Right Rail component found.</li>");
 							}
-						}else{
-							sb.append("<li>No Right Rail component found.</li>");
 						}
-
 					}
 					
 					if (migrate) {
@@ -633,44 +575,50 @@ public class ProductLandingVariation10 {
 			selectorBarPanelNode.setProperty("titleurl", titleUrl);
 			if (ele.childNodeSize() >= 2) {
 				log.debug("Child node size is greater than 1.");
-				Element menuEle = ele.child(1);
-				if (menuEle != null) {
-					log.debug("selector component menuEle: "+ menuEle.toString());
-					Element anchor = menuEle.getElementsByTag("a").last();
-					String allLinkText = anchor!=null? anchor.text():"";
-					String allLinkUrl = anchor!=null?anchor.attr("href"):"";
-					selectorBarPanelNode.setProperty("alllinktext", allLinkText);
-					selectorBarPanelNode.setProperty("alllinkurl", allLinkUrl);
-
-					Elements menuUlList = menuEle.getElementsByTag("ul");
-					System.out.println("/////////"+menuUlList.size());
-					for (Element element : menuUlList) {
-						java.util.List<String> list = new ArrayList<String>();
-						Elements menuLiList = element.getElementsByTag("li");
-						System.out.println(menuLiList.size());
-
-						for (Element li : menuLiList) {
-							JSONObject jsonObj = new JSONObject();
-							Elements listItemAnchor = li.getElementsByTag("a");
-							String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
-							String anchorHref = listItemAnchor.attr("href");
-
-							jsonObj.put("linktext", anchorText);
-							jsonObj.put("linkurl", anchorHref);
-							jsonObj.put("size", "");
-							list.add(jsonObj.toString());
-						}
-
-						selectorBarPanelNode.setProperty("panelitems", list.toArray(new String[list.size()]));	
-					}
+				if (ele.select("div.menu").isEmpty()) {
+					log.debug("Menu is not available.");
+					sb.append("<li>Selector bar drop down menu elements does not exist on the locale page.</li>");
 				}
 				else {
-					sb.append("<li>Menu elements does not exist on the locale page.</li>");
-				}
+					log.debug("Menu is available.");
+					Element menuEle = ele.child(1);
+					if (menuEle != null) {
+						log.debug("selector component menuEle: "+ menuEle.toString());
+						Element anchor = menuEle.getElementsByTag("a").last();
+						String allLinkText = anchor!=null? anchor.text():"";
+						String allLinkUrl = anchor!=null?anchor.attr("href"):"";
+						selectorBarPanelNode.setProperty("alllinktext", allLinkText);
+						selectorBarPanelNode.setProperty("alllinkurl", allLinkUrl);
 
+						Elements menuUlList = menuEle.getElementsByTag("ul");
+						System.out.println("/////////"+menuUlList.size());
+						for (Element element : menuUlList) {
+							java.util.List<String> list = new ArrayList<String>();
+							Elements menuLiList = element.getElementsByTag("li");
+							System.out.println(menuLiList.size());
+
+							for (Element li : menuLiList) {
+								JSONObject jsonObj = new JSONObject();
+								Elements listItemAnchor = li.getElementsByTag("a");
+								String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
+								String anchorHref = listItemAnchor.attr("href");
+
+								jsonObj.put("linktext", anchorText);
+								jsonObj.put("linkurl", anchorHref);
+								jsonObj.put("size", "");
+								list.add(jsonObj.toString());
+							}
+
+							selectorBarPanelNode.setProperty("panelitems", list.toArray(new String[list.size()]));	
+						}
+					}
+					else {
+						sb.append("<li>Selector bar drop down menu elements does not exist on the locale page.</li>");
+					}
+				}
 			}
 			else {
-				sb.append("<li>Menu elements does not exist on the locale page.</li>");
+				sb.append("<li>Selector bar drop down menu elements does not exist on the locale page.</li>");
 			}
 						
 		}
@@ -724,7 +672,6 @@ public class ProductLandingVariation10 {
 
 	public void rightRailList (Node listNode, Element rightListEle) {
 		try {
-			// Test code start
 			Element title;
 			Element description;
 			Elements headElements = rightListEle.getElementsByTag("h2");
@@ -737,10 +684,7 @@ public class ProductLandingVariation10 {
 				title = rightListEle.getElementsByTag("h2").first();
 				description = rightListEle.getElementsByTag("p").first();
 			}
-			// Test code end
-//			title = rightListEle.getElementsByTag("h2").first();
 			listNode.setProperty("title", title.text());
-//			description = rightListEle.getElementsByTag("p").first();
 			javax.jcr.Node introNode = listNode.getNode("intro");
 			introNode.setProperty("paragraph_rte", description.text());
 			javax.jcr.Node eleListNode = listNode.getNode("element_list_0");
