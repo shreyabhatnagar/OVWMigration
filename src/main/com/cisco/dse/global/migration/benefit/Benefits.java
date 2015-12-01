@@ -47,7 +47,7 @@ public class Benefits {
 	
 	static Logger log = Logger.getLogger(Benefits.class);
 
-	public String translate(String loc, String prod, String type, String catType,
+	public String translate(String host, String loc, String prod, String type, String catType,
 			String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
@@ -60,7 +60,7 @@ public class Benefits {
 		String benefitLeft = "/content/<locale>/"+catType+"/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-left";
 		String benefitRight = "/content/<locale>/"+catType+"/<prod>/benefit/jcr:content/content_parsys/benefits/layout-benefits/gd12v2/gd12v2-right";
 
-		String pageUrl = "http://chard.cisco.com:4502/content/<locale>/"+catType+"/<prod>/benefit.html";
+		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/benefit.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		
