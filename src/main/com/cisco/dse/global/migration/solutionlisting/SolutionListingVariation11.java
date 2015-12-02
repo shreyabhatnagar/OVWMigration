@@ -11,6 +11,7 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -102,6 +103,29 @@ public class SolutionListingVariation11 {
 				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
 						+ e + "</li>");
 			}
+			
+			try {
+				int count = 0;
+				Elements textParbaseElements = doc.select("div.text, div.parbase");
+				if (textParbaseElements != null) {
+						log.debug("textParbaseElements are: "+(textParbaseElements));
+						for (Element ele : textParbaseElements) {
+							if (ele != null) {
+								Elements textProp = ele.getElementsByTag("h2");
+								log.debug("text property for sub heading!: " + textProp);
+								if(StringUtils.isNotBlank(textProp.toString())){
+									count++;
+								}
+							} 
+						}
+						count = count-1;
+						sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+			}
+				} catch (Exception e) {
+				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
+						+ e + "</li>");
+			}
+
 
 			// end set text
 			// ---------------------------------------------------------------------------------------------------------------------------------------
