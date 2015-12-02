@@ -631,19 +631,39 @@ public class ProductLandingVariation10 {
 		try {
 			Element spotLightTitle = spElement.getElementsByTag("h2").first();
 			Element spotLightDescription = spElement.getElementsByTag("p").first();
-			Element spotLightAnchor = spElement.getElementsByTag("a").first();
-			String linkText = spotLightAnchor.text();
-			String linkUrl = spotLightAnchor.attr("href");
+			Elements spotLightAnchorElements = spElement.getElementsByTag("a");
+			Element spotLightAnchor = spotLightAnchorElements.first();
 			
-			slNode.setProperty("description", spotLightDescription.text());
-			slNode.setProperty("linktext", linkText);
-			javax.jcr.Node ctaNode = slNode.getNode("cta");
-			if (ctaNode != null) {
-				if (linkUrl != null) {
-//					ctaNode.setProperty("linktype", "Url");
-					ctaNode.setProperty("url", linkUrl);
+			
+			if(spotLightDescription.getElementsByTag("a")!=null && !spotLightDescription.getElementsByTag("a").isEmpty()){
+				slNode.setProperty("description", spotLightDescription.html());
+				// start
+				if (spotLightAnchorElements.size() > 1) {
+					spotLightAnchor = spotLightAnchorElements.get(1);
+				}
+				else {
+					spotLightAnchor = null;
+					sb.append("<li>Link is not found on locale page for the spotlight component. This needs to be deleted manually.</li>");
+				}
+				//end
+			}
+			else {
+				slNode.setProperty("description", spotLightDescription.text());
+			}
+			
+			if (spotLightAnchor != null) {
+				String linkText = spotLightAnchor.text();
+				String linkUrl = spotLightAnchor.attr("href");
+				slNode.setProperty("linktext", linkText);
+				javax.jcr.Node ctaNode = slNode.getNode("cta");
+				if (ctaNode != null) {
+					if (linkUrl != null) {
+//						ctaNode.setProperty("linktype", "Url");
+						ctaNode.setProperty("url", linkUrl);
+					}
 				}
 			}
+			
 			if (spotLightTitle != null) {
 				Elements spotLightLink = spotLightTitle.getElementsByTag("a");
 				if (spotLightLink.isEmpty()) {
