@@ -652,6 +652,8 @@ public class ProductLandingVariation1 {
 																		} else {
 																			sb.append("<li>infolinks of sub drawer doesn't exist</li>");
 																		}
+																	}else{
+																		sb.append("<li>Mis Match of subdrawer panel </li>");
 																	}
 																}
 																
