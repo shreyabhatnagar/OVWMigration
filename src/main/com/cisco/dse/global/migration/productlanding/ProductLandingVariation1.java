@@ -558,10 +558,7 @@ public class ProductLandingVariation1 {
 																				if (indItems != null) {
 																					for (Element indItem : indItems) {
 																						JSONObject jsonObj = new JSONObject();
-																						System.out
-																								.println("\t\t Feature Text :::::::::::::::"
-																										+ indItem.text());
-																						jsonObj.put("linktext", indItem.text());
+																						jsonObj.put("linktext", indItem.html());
 																						list1.add( jsonObj.toString());
 																					}
 																				} else {

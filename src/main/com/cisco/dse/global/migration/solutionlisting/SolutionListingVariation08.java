@@ -19,6 +19,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.Constants;
+
 public class SolutionListingVariation08 {
 	Document doc;
 
@@ -84,20 +86,20 @@ public class SolutionListingVariation08 {
 								if (StringUtils.isNotBlank(textProp)) {
 									textNode.setProperty("text", textProp);
 								} else {
-									sb.append("<li>No text Component c00-pilot.</li>");
+									sb.append(Constants.TEXT_DOES_NOT_EXIST);
 								}
 							}
 						}
 					} else {
-						sb.append("<li>Unable to update text component as there are no elements in the class c00-pilot.</li>");
+						sb.append(Constants.TEXT_NODE_NOT_FOUND);
 					}
 				} else {
-					sb.append("<li>Unable to update text component as its respective div is missing. c00-pilot class is missing.</li>");
+					sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 				}
 
 			} catch (Exception e) {
 				log.error("Exception : ", e);
-				sb.append("<li>Unable to update text component.</li>");
+				sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 			}
 
 			// end set text
@@ -130,15 +132,15 @@ public class SolutionListingVariation08 {
 									if (h2TagText != null) {
 										h2Text = h2TagText.html();
 									} else {
-										sb.append("<li>Hero Component Heading element not having any title in it ('h2' is blank)</li>");
+										sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
 									}
 
 									Elements descriptionText = ele
 											.getElementsByTag("p");
 									if (descriptionText != null) {
-										pText = descriptionText.text();
+										pText = descriptionText.first().text();
 									} else {
-										sb.append("<li>Hero Component description element not having any title in it ('p' is blank)</li>");
+										sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
 									}
 
 									Elements anchorText = ele
@@ -147,57 +149,53 @@ public class SolutionListingVariation08 {
 										aText = anchorText.text();
 										aHref = anchorText.attr("href");
 									} else {
-										sb.append("<li>Hero Component anchor tag not having any content in it ('<a>' is blank)</li>");
+										sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 									}
 									if (StringUtils.isNotBlank(h2Text)) {
 										heroPanelNode.setProperty("title",
 												h2Text);
 									} else {
-										sb.append("<li>No Title found for hero component.</li>");
+										sb.append(Constants.HERO_CONTENT_HEADING_IS_BLANK);
 									}
 									if (StringUtils.isNotBlank(pText)) {
 										heroPanelNode.setProperty(
 												"description", pText);
 									} else {
-										sb.append("<li>No descritpion found for hero component.</li>");
+										sb.append(Constants.HERO_CONTENT_DESCRIPTION_IS_BLANK);
 									}
 
 									if (StringUtils.isNotBlank(aText)) {
 										heroPanelNode.setProperty("linktext",
 												aText);
 									} else {
-										sb.append("<li>No link text found for the hero component.</li>");
+										sb.append(Constants.HERO_CONTENT_ANCHOR_TEXT_IS_BLANK);
 									}
 									if (StringUtils.isNotBlank(aHref)) {
 										heroPanelNode.setProperty("linkurl",
 												aHref);
 									} else {
-										sb.append("<li>No href found for the hero component.</li>");
+										sb.append(Constants.HERO_CONTENT_ANCHOR_LINK_IS_BLANK);
 									}
 								} else {
-									sb.append("<li>heropanel' node doesn't exist.</li>");
+									sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 								}
 							}
 						} else {
 							log.debug("Hero component node count mismatch!");
-							sb.append("<li>Hero Component count mis match. Elements on page are: "
-									+ eleSize
-									+ " Node Count is: "
-									+ nodeSize
-									+ "</li>");
+							sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH.replace("<ele>",  Integer.toString(eleSize)).replace("<node>", Integer.toString(nodeSize)));
 						}
 					} else {
 
-						sb.append("<li>Hero Element Node is not found</li>");
+						sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
 					}
 
 				} else {
-					sb.append("<li>Hero Component elements are Not found</li>");
+					sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update hero large component." + e
-						+ "</li>");
+				log.debug("Exception : ",e);
+				sb.append(Constants.EXCEPTOIN_IN_UPDATING_HERO_CONTENT);
 			}
 
 			// end set Hero Large component's title, description, link
@@ -211,7 +209,7 @@ public class SolutionListingVariation08 {
 				if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 					htmlBlobContent = htmlblobElements.html();
 				} else {
-					sb.append("<li>Html blob elements not found</li>");
+					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 				}
 
 				if (indexMidNode.hasNode("htmlblob")) {
@@ -219,14 +217,14 @@ public class SolutionListingVariation08 {
 					if (StringUtils.isNotBlank(htmlBlobContent)) {
 						htmlblobNode.setProperty("html", htmlBlobContent);
 					} else {
-						sb.append("<li>Html blob content is blank.</li>");
+						sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 					}
 				} else {
-					sb.append("<li>'htmlblob' node doesno't exists.</li>");
+					sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 				}
 			} catch (Exception e) {
 				log.error("Exception : ", e);
-				sb.append("<li>Unable to update htmlblob component.</li>");
+				sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 			}
 			// end of set html blob properties
 //-----------------------------------------------------------------------------------------------------
@@ -261,10 +259,10 @@ public class SolutionListingVariation08 {
 										aText = aElement.text();
 										aHref = aElement.attr("href");
 									} else {
-										sb.append("<li>No spotlight component heading element found with anchor.</li>");
+										sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 									}
 								} else {
-									sb.append("<li>Spotlight Component Heading element not having any anchor title in it ('h2' is blank)</li>");
+									sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 								}
 								Elements descriptionText = ele
 										.getElementsByTag("p");
@@ -276,52 +274,51 @@ public class SolutionListingVariation08 {
 								if (descriptionText != null) {
 									pText = descriptionText.text();
 								} else{
-									sb.append("<li>Spotlight Component description element not having any title in it ('p' is blank)</li>");
+									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 								}
 								if (StringUtils.isNotBlank(aText)) {
 									heroPanelNode.setProperty("title", aText);
 								} else {
-									sb.append("<li>No heading text found for the spot light component..</li>");
+									sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
 								}
 								if (StringUtils.isNotBlank(aHref)) {
 									heroPanelNode.setProperty("title-linkurl",
 											aHref);
 								} else {
-									sb.append("<li>No href found for the spot light component..</li>");
+									sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
 								}
 								if (StringUtils.isNotBlank(pText)) {
 									heroPanelNode.setProperty("description",
 											pText);
 								} else {
-									sb.append("<li>No paragraph found for the spot light component.</li>");
+									sb.append(Constants.SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND);
 								}
 							} else {
-								sb.append("<li>No 'spotlight_medium' nodes found.</li>");
+								sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 							}
 						}
 					}
 					if (eleSize != nodeSize) {
 						log.debug("Spotlight component node count mismatch!");
-						sb.append("<li>Spotlight Component count mis match. Elements on page are: "
+						sb.append(Constants.SPOTLIGHT_NODE_COUNT
 								+ eleSize
-								+ " Node Count is: "
+								+ Constants.SPOTLIGHT_ELEMENT_COUNT
 								+ nodeSize
 								+ "</li>");
 					}
 				} else {
-					sb.append("<li>Spotlight Component elements are Not found</li>");
+					sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
 				}
 			} catch (Exception e) {
-				sb.append("<li>Unable to update Spotlight large component." + e
-						+ "</li>");
+				log.error("Exception : ",e);
+				sb.append(Constants.EXCEPTION_SPOTLIGHT_COMPONENT);
 			}
-
 			// end set Spotlight medium component's title, description.
 		}
 
 		catch (Exception e) {
 			log.debug("Exception : ",e);
-			sb.append("<li>Unable to update the content.</li>");
+			sb.append(Constants.EXCEPTION_IN_SOLUTION_LISTING_CONTENT_UPDATE);
 		}
 		session.save();
 		sb.append("</ul></td>");

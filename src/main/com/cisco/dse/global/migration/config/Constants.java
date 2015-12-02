@@ -16,6 +16,11 @@ public class Constants {
 	
 	// HTMLBLOB_ELEMENT_NOT_FOUND
 	public static final String HTMLBLOB_ELEMENT_NOT_FOUND  = "<li> Htmlblob Element is not found on web publisher page.</li>";
+	
+	//HTMLBLOB_NODE_NOT_FOUND
+	public static final String HTMLBLOB_NODE_NOT_FOUND = "<li>Htmlblob node not found.</li>";
+	
+	public static final String EXCEPTION_IN_HTMLBLOB = "<li>Unable to update html blob content.</li>";
 
 	//CHILD_TEXT_ELEMENT_NOT_FOUND
 	public static final String CHILD_TEXT_ELEMENT_NOT_FOUND = "<li>Text Element not found inside parent div class.</li>";
@@ -32,6 +37,9 @@ public class Constants {
 	// SPOTLIGHT_ELEMENT_COUNT
 	public static final String SPOTLIGHT_ELEMENT_COUNT = " and elements on the page size is ";
 	
+	//
+	public static final String SPOTLIGHT_ELEMENT_NOT_FOUND = "<li>Spotlight element not found.</li>";
+	
 	// SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND
 	public static final String SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND = "<li>Spotlight Component Heading element not having any title in it ('h2' is blank)</li>";
 	
@@ -40,6 +48,18 @@ public class Constants {
 	
 	// SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND
 	public static final String SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND = "<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>";
+	
+	//SPOTLIGHT_HEADING_TEXT_NOT_FOUND
+	public static final String SPOTLIGHT_HEADING_TEXT_NOT_FOUND = "<li>Spotlight heading text not found.</li>";
+	
+	//SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND
+	public static final String SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND = "<li>Spotlight description text not found. </li>";
+	
+	//SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND
+	public static final String SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND = "<li>spotlight anchor text not found.</li>";
+	
+	//SPOTLIGHT_ANCHOR_LINK_NOT_FOUND
+	public static final String SPOTLIGHT_ANCHOR_LINK_NOT_FOUND = "<li>spotlight anchor link not found.</li>";
 	
 	// SPOTLIGHT_TITLELINK_NODE_NOT_FOUND
 	public static final String SPOTLIGHT_TITLELINK_NODE_NOT_FOUND = "<li>Spotlight Component's titlelink node not found</li>";
@@ -58,4 +78,40 @@ public class Constants {
 	
 	// URL_CONNECTION_EXCEPTION
 	public static final String URL_CONNECTION_EXCEPTION =  "<li>Exception as URL cannot be connected! </li>";
+	
+	//HERO_CONTENT_HEADING_IS_BLANK
+	public static final String HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS = "<li>Hero content heading element doesn't exists.</li>";
+	
+	//HERO_CONTENT_DESCRIPTION_IS_BLANK
+	public static final String HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS = "<li>Hero content description element doesn't exists.</li>";
+	
+	//HERO_CONTENT_ANCHOR_IS_BLANK
+	public static final String HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS = "<li>Hero content anchor element doesn't exists.</li>";
+	
+	//HERO_CONTENT_HEADING_IS_BLANK
+	public static final String HERO_CONTENT_HEADING_IS_BLANK = "<li>Hero content heading is blank.</li>";
+	
+	//HERO_CONTENT_DESCRIPTION_IS_BLANK
+	public static final String HERO_CONTENT_DESCRIPTION_IS_BLANK = "<li>Hero content description is blank.</li>";
+	
+	//HERO_CONTENT_ANCHOR_IS_BLANK
+	public static final String HERO_CONTENT_ANCHOR_TEXT_IS_BLANK = "<li>Hero content anchor text is blank.</li>";
+	
+	//HERO_CONTENT_ANCHOR_LINK_IS_BLANK
+	public static final String HERO_CONTENT_ANCHOR_LINK_IS_BLANK = "<li>Hero content anchor link/href is blank.</li>";
+	
+	//HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND
+	public static final String HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND = "<li>Hero content panel element not found.</li>";
+	
+	//HERO_CONTENT_COUNT_MISMATCH
+	public static final String HERO_CONTENT_COUNT_MISMATCH = "<li>Hero content count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
+	
+	//HERO_CONTENT_NODE_NOT_FOUND
+	public static final String HERO_CONTENT_NODE_NOT_FOUND = "<li>Hero content node not found.</li>";
+	
+	//EXCEPTOIN_IN_UPDATING_HERO_CONTENT
+	public static final String EXCEPTOIN_IN_UPDATING_HERO_CONTENT = "<li>Unable to update hero content.</li>";
+	
+	public static final String EXCEPTION_IN_SOLUTION_LISTING_CONTENT_UPDATE = "<li>Unable to update the solution listing content.</li>";
+	
 }
