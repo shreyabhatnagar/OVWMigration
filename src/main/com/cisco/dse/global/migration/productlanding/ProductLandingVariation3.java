@@ -360,6 +360,7 @@ public class ProductLandingVariation3 {
 						sb.append("<li>htmlblob content doesn't exist</li>");
 					}
 				}
+				sb.append("<li>drawer component content is extracted from htmlblob element. So showtext and hidetext of drawer component should be migrated manually </li>");
 			} catch (Exception e) {
 				log.debug("<li>Unable to update html blob component."+e+"</li>");
 			}
