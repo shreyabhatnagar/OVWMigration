@@ -11,6 +11,9 @@ public class Constants {
 	// HTMLBLOB_CONTENT_DOES_NOT_EXIST
 	public static final String HTMLBLOB_CONTENT_DOES_NOT_EXIST  = "<li>Htmlblob content doesn't exist </li>";
 	
+	// HTMLBLOB_NODE_DOES_NOT_EXIST
+	public static final String HTMLBLOB_NODE_DOES_NOT_EXIST  = "<li>Htmlblob node doesn't exist. </li>";
+	
 	// HTMLBLOB_ELEMENT_NOT_FOUND
 	public static final String HTMLBLOB_ELEMENT_NOT_FOUND  = "<li> Htmlblob Element is not found on web publisher page.</li>";
 

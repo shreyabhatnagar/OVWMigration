@@ -33,6 +33,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation08;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11;
+import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
 
 public class OVWMigration {
@@ -301,6 +302,19 @@ public class OVWMigration {
 							msg10 = msg10 + "<tr>";
 							msg10 = msg10
 									+ new SolutionListingVariation08().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg10 = msg10 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg10);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+
+						} else if ("solution-listing-var12".equals(type)) {
+							String msg10 = "";
+							msg10 = msg10 + "<tr>";
+							msg10 = msg10
+									+ new SolutionListingVariation12().translate(
 											host, gLink, prod, type, cattype,
 											sheet.getSheetName(), session);
 							msg10 = msg10 + "</tr>";
