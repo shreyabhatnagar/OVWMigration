@@ -832,6 +832,8 @@ public class ProductLandingVariation1 {
 					
 				NodeIterator titleBorderNodes = indexLowerRightNode.getNodes("tile_bordered*");
 				int count = 0;
+				int countOfTileBorderedElements = 0;
+				boolean flag = false;
 				for (Element ele : rightRail) {
 					Elements iconBlock = ele.select("div.icon-block");
 					if (iconBlock != null && iconBlock.size() > 0) {
@@ -850,7 +852,12 @@ public class ProductLandingVariation1 {
 					}
 					String desc = ele.getElementsByTag("p")!=null?ele.getElementsByTag("p").text():"";
 					Elements anchor = ele.getElementsByTag("a");
-
+					
+					String textAfterAnchorTag = ele.ownText();
+					if(StringUtils.isNotBlank(textAfterAnchorTag)){
+						flag = true;
+						countOfTileBorderedElements++;
+					}
 					String anchorText = anchor!=null?anchor.text():"";
 					String anchorHref = anchor!=null?anchor.attr("href"):"";
 										
@@ -873,6 +880,9 @@ public class ProductLandingVariation1 {
 					}else{
 						sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
 					}
+				}
+				if(flag){
+					sb.append("<li>Extra Text found after link on locale page for "+ countOfTileBorderedElements +" TileBordered Component(s) , hence the text cannot be migrated.</li>");
 				}
 				if (count != indexLowerRightNode.getNodes("tile_bordered*").getSize()) {
                     sb.append("<li>Mis-Match in tilebordered Panels count."+count+" is not equal "+indexLowerRightNode.getNodes("tile_bordered*").getSize()+"</li>");

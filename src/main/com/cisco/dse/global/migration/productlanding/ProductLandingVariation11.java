@@ -353,7 +353,7 @@ public class ProductLandingVariation11 {
 						if (listNode != null) {
 								listNode.setProperty("title", indexTitle);
 							} else {
-								sb.append("<li>No list node found in left rail</li>");
+								sb.append("<li>No list node found in right rail</li>");
 							}
 						if(listNode !=null) {
 							if (listNode.hasNode("intro")) {
@@ -483,7 +483,7 @@ public class ProductLandingVariation11 {
 							list.add(obj.toString());
 						}
 					} else {
-						sb.append("<li>right rail with class 'div.s14-pilot' is blank.</li>");
+						sb.append("<li>right rail does not have followus element.</li>");
 					}
 				} else {
 					sb.append("<li>No pilot found on right rail with class 'div.s14-pilot'</li>");

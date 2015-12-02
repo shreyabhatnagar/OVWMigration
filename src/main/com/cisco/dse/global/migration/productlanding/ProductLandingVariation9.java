@@ -12,6 +12,7 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
@@ -485,12 +486,13 @@ public class ProductLandingVariation9 {
 			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start set tilebordered component.
 			try {
-
+				
+				boolean flag = false;
 				String h2Text = "";
 				String pText = "";
 				String aText = "";
 				String aHref = "";
-
+				int count = 0;
 				Elements tileBorderedElements = doc.select("div.c23-pilot");
 				// Node spotLightNode =
 				// indexMidLeftNode.hasNode("spotlight_large*") ?
@@ -542,7 +544,11 @@ public class ProductLandingVariation9 {
 									aText);
 							spotLightComponentNode
 									.setProperty("linkurl", aHref);
-
+							String textAppended = ele.ownText();
+							if(StringUtils.isNotBlank(textAppended)){
+								flag = true;
+								count++;
+							}
 						}
 					} else {
 
@@ -550,6 +556,9 @@ public class ProductLandingVariation9 {
 						log.debug("Could not migrate  tilebordered node. Count mis match");
 					}
 
+				}
+				if(flag){
+					sb.append("<li>Extra Text found after link on locale page for "+ count +" TileBordered Component(s) , hence the text cannot be migrated.</li>");
 				}
 
 			} catch (Exception e) {
