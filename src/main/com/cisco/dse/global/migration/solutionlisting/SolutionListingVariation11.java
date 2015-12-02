@@ -108,11 +108,9 @@ public class SolutionListingVariation11 {
 				int count = 0;
 				Elements textParbaseElements = doc.select("div.text, div.parbase");
 				if (textParbaseElements != null) {
-						log.debug("textParbaseElements are: "+(textParbaseElements));
 						for (Element ele : textParbaseElements) {
 							if (ele != null) {
 								Elements textProp = ele.getElementsByTag("h2");
-								log.debug("text property for sub heading!: " + textProp);
 								if(StringUtils.isNotBlank(textProp.toString())){
 									count++;
 								}
