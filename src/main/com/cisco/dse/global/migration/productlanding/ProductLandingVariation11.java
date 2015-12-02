@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
@@ -422,13 +423,17 @@ public class ProductLandingVariation11 {
 							elementList.hasNext();
 							Node eleNode = (Node) elementList.next();
 							if (eleNode != null) {
-								if (list.size() > 1)
 
+								if(eleNode.hasProperty("listitems")){
+									Property listitems = eleNode
+											.getProperty("listitems");
+									if (!listitems.isMultiple()) {
+										listitems.remove();
+										session.save();
+									}
+								}
 									eleNode.setProperty("listitems", list
 											.toArray(new String[list.size()]));
-								else
-									eleNode.setProperty("listitems",
-											list.get(0));
 								log.debug("Updated listitems at "
 										+ eleNode.getPath());
 							} else {
