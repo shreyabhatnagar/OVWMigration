@@ -1130,7 +1130,7 @@ public class ProductLandingVariation6 {
 								}
 
 							} else {
-								sb.append("<li>right grid element is blank in fourth grid.</li>");
+								sb.append("<li>right most 'mbox' grid is missing.</li>");
 							}
 
 						} else {
