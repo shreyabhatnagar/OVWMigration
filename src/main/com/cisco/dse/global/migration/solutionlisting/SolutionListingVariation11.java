@@ -106,6 +106,7 @@ public class SolutionListingVariation11 {
 			
 			try {
 				int count = 0;
+				boolean paragraphExists = false;
 				Elements textParbaseElements = doc.select("div.text, div.parbase");
 				if (textParbaseElements != null) {
 						for (Element ele : textParbaseElements) {
@@ -116,9 +117,33 @@ public class SolutionListingVariation11 {
 								}
 							} 
 						}
-						count = count-1;
-						sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
-			}
+						if(count == 0){
+							
+							Elements cc00Elements = doc.select("div.cc00-pilot");
+							if (cc00Elements != null) {
+									for (Element ele : cc00Elements) {
+										if (ele != null) {
+											Elements textProp = ele.getElementsByTag("h2");
+											Elements paragraphElem = ele.getElementsByTag("p");
+											if(StringUtils.isNotBlank(textProp.toString())){
+												count++;
+											}
+											if(StringUtils.isNotBlank(paragraphElem.toString())){
+												paragraphExists = true;
+											}
+										} 
+									}
+									count = count-1;
+									sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+									if(paragraphExists){
+										sb.append("<li>Extra description found on locale page.Hence element is not migrated.</li>");
+									}
+						}else{
+								count = count-1;
+								sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+						}
+						}
+				}
 				} catch (Exception e) {
 				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
 						+ e + "</li>");
