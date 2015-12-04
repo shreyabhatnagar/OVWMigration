@@ -301,9 +301,9 @@ public class SolutionListingVariation08 {
 					if (eleSize != nodeSize) {
 						log.debug("Spotlight component node count mismatch!");
 						sb.append(Constants.SPOTLIGHT_NODE_COUNT
-								+ eleSize
-								+ Constants.SPOTLIGHT_ELEMENT_COUNT
 								+ nodeSize
+								+ Constants.SPOTLIGHT_ELEMENT_COUNT
+								+ eleSize
 								+ "</li>");
 					}
 				} else {
