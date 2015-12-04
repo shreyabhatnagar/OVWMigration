@@ -59,6 +59,8 @@ public class SolutionListingVariation08 {
 		indexMid = indexMid.replace("<locale>", locale).replace("<prod>", prod);
 
 		javax.jcr.Node indexMidNode = null;
+		boolean isHero = true;
+		boolean isHtml = true;
 
 		try {
 			indexMidNode = session.getNode(indexMid);
@@ -185,12 +187,13 @@ public class SolutionListingVariation08 {
 							sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH.replace("<ele>",  Integer.toString(eleSize)).replace("<node>", Integer.toString(nodeSize)));
 						}
 					} else {
-
-						sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
+						isHero = false;//No Hero Content Node Found.
+						//sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
 					}
 
 				} else {
-					sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
+					isHero = false;//No Hero Content Node Found.
+					//sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 
 				}
 			} catch (Exception e) {
@@ -209,7 +212,8 @@ public class SolutionListingVariation08 {
 				if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 					htmlBlobContent = htmlblobElements.html();
 				} else {
-					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+					isHtml = false;//No Html node content node found.
+					//sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 				}
 
 				if (indexMidNode.hasNode("htmlblob")) {
@@ -220,8 +224,14 @@ public class SolutionListingVariation08 {
 						sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 					}
 				} else {
-					sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+					isHtml = false;//No Html node content node found.
+					//sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 				}
+				
+				if(!isHero && !isHtml){
+					sb.append(Constants.NO_HERO_OR_HTMLBLOB_NOT_FOUND);
+				}
+				
 			} catch (Exception e) {
 				log.error("Exception : ", e);
 				sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
