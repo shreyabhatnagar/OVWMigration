@@ -153,6 +153,18 @@ public class ProductLandingVariation11 {
 				sb.append("<li>Unable to update hero large component." + e
 						+ "</li>");
 			}
+			
+			
+			try{
+				Elements selectorBarElements = doc.select("div.c58v3-pilot");
+				Element selectorBarElem = selectorBarElements.first();
+				if(selectorBarElem != null){
+					sb.append("<li>Extra selectorbar element found on locale page. Cannot be migrated.</li>");
+				}
+				
+			}catch(Exception e){
+				
+			}
 
 			// end set Hero Large component's title, description, link
 			// text,linkurl.
@@ -443,7 +455,7 @@ public class ProductLandingVariation11 {
 					
 				} 
 				}else {
-					sb.append("<li>List component element is not found.</li>");
+					sb.append("<li>Mismatch in the right rail. List element is not found.</li>");
 				}
 			} catch (Exception e) {
 				sb.append("<li>Unable to update index list component.\n</li>");

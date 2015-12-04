@@ -138,11 +138,11 @@ public class SolutionListingVariation11 {
 									if(paragraphExists){
 										sb.append("<li>Extra description found on locale page.Hence element is not migrated.</li>");
 									}
+						}
 						}else{
-								count = count-1;
-								sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
-						}
-						}
+							count = count-1;
+							sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+					}
 				}
 				} catch (Exception e) {
 				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
@@ -156,6 +156,7 @@ public class SolutionListingVariation11 {
 			try {
 				String h2Text = "";
 				String pText = "";
+				boolean extraAnchorTagExists = false;
 				Elements spotLightElements = doc.select("div.c11-pilot");
 				Node spotLightComponentNode = null;				
 				if (spotLightElements != null) {
@@ -186,12 +187,17 @@ public class SolutionListingVariation11 {
 								sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 							}
 
-							Element anchorText = ele.getElementsByTag("a").first();;
+							Element anchorText = ele.getElementsByTag("a").first();
 							String ahref = "";
 							if (anchorText != null) {
 								ahref = anchorText.attr("href");
 							} else {
 								sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
+							}
+							
+							Elements anchorTag = ele.getElementsByTag("a");
+							if (anchorTag != null) {
+								extraAnchorTagExists = true;
 							}
 
 							if(spoLightNodeIterator.hasNext()){
@@ -217,6 +223,9 @@ public class SolutionListingVariation11 {
 								}
 
 							}
+						}
+						if(extraAnchorTagExists){
+							sb.append("<li>Extra link found in spotlight component on locale page. Hence cannot be migrated.</li>");
 						}
 					}else{
 						sb.append(Constants.SPOTLIGHT_PARENT_NODE_NOT_FOUND);
