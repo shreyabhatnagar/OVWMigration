@@ -133,7 +133,6 @@ public class SolutionListingVariation11 {
 											}
 										} 
 									}
-									count = count-1;
 									sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
 									if(paragraphExists){
 										sb.append("<li>Extra description found on locale page.Hence element is not migrated.</li>");
@@ -197,7 +196,13 @@ public class SolutionListingVariation11 {
 							
 							Elements anchorTag = ele.getElementsByTag("a");
 							if (anchorTag != null) {
-								extraAnchorTagExists = true;
+								for(Element e:anchorTag){
+									Element parElem = e.parent();
+									if(!"h2".equals(parElem.tagName())){
+										extraAnchorTagExists = true;
+									}
+								}
+								
 							}
 
 							if(spoLightNodeIterator.hasNext()){
