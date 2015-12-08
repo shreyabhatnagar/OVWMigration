@@ -20,6 +20,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class SolutionListingVariation08 {
 	Document doc;
@@ -41,7 +42,7 @@ public class SolutionListingVariation08 {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
 		String indexMid = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/solution-listing/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
@@ -57,13 +58,15 @@ public class SolutionListingVariation08 {
 		sb.append("<td><ul>");
 
 		indexMid = indexMid.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		javax.jcr.Node indexMidNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		boolean isHero = true;
 		boolean isHtml = true;
 
 		try {
 			indexMidNode = session.getNode(indexMid);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			log.debug("Path for node:" + indexMidNode.getPath());
 			try {
 				doc = Jsoup.connect(loc).get();
@@ -73,6 +76,14 @@ public class SolutionListingVariation08 {
 
 			title = doc.title();
 
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
 			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start set text component.
 			try {

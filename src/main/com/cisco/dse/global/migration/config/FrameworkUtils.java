@@ -89,25 +89,25 @@ public class FrameworkUtils {
 	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(titleHtmlProperty)) { 
 	    	   	         title =  meta.attr("content"); 
 	    	   	         log.debug("title of document:::  " + title);
-	    	   	      } else {
-	    	   	    	sb.append("<li>meta data title doesn't exist </li>");
-	    	   	      }
+	    	   	      } 
 	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(descriptionHtmlProperty)) { 
 	    	   	    	 description =  meta.attr("content"); 
 	    	   	         log.debug("description of document:::  " + description);
-	    	   	      } else {
-	    	   	    	sb.append("<li>meta data description doesn't exist </li>");
-	    	   	      }
+	    	   	      } 
 	    	   	   } 
     	   		}
     	   		//setting html meta data to as page properties
 	    	   	if (jcrNode != null) {
 	    	   		if (StringUtils.isNotBlank(title)) {
 	    	   			jcrNode.setProperty("jcr:title", title);
-	    	   		}
+	    	   		} else {
+	    	   	    	sb.append("<li>meta data title doesn't exist </li>");
+	    	   	      }
 	    	   		if (StringUtils.isNotBlank(description)) {
 	    	   			jcrNode.setProperty("jcr:description", description);
-	    	   		}
+	    	   		} else {
+	    	   	    	sb.append("<li>meta data description doesn't exist </li>");
+	    	   	      }
 	    	   	} else {
 	    	   		log.debug("jcr node doesn't exist");
 	    	   	}
