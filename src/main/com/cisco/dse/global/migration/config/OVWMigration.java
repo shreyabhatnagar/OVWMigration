@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
+import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation11;
@@ -341,7 +342,20 @@ public class OVWMigration {
 							log.debug("Msg14 value is "+msg14);
 							sb.append(msg14);
 							sb.append("<tr><td colspan='3'>.</td></tr>");
-							}else if ("service-listing-var3".equals(type)) {
+							}else if ("product-listing-var3".equals(type)) {
+						String msg10 = "";
+						msg10 = msg10 + "<tr>";
+						msg10 = msg10
+								+ new ProductListingVariation3().translate(
+										host, gLink, prod, type, cattype,
+										sheet.getSheetName(), session);
+						msg10 = msg10 + "</tr>";
+
+						sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+						sb.append(msg10);
+						sb.append("<tr><td colspan='3'>.</td></tr>");
+
+					}else if ("service-listing-var3".equals(type)) {
 							String msg10 = "";
 							msg10 = msg10 + "<tr>";
 							msg10 = msg10
