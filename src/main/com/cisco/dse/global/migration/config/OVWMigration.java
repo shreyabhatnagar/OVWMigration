@@ -33,6 +33,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
 import com.cisco.dse.global.migration.productlisting.ProductListing4;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
+import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation02;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation03;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation08;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11;
@@ -122,7 +123,7 @@ public class OVWMigration {
 					String sheetName = sheet.getSheetName();
 					StringBuilder sb = new StringBuilder(1024);
 
-					sb.append("<table width='500' border='1'>");
+					sb.append("<table  border='1'>");
 
 					for (Row tempRow : sheet) {
 
@@ -364,6 +365,18 @@ public class OVWMigration {
 
 							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 							sb.append(msg10);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+						}else if ("service-listing-var2".equals(type)) {
+							String msg13 = "";
+							msg13 = msg13 + "<tr>";
+							msg13 = msg13
+									+ new ServiceListingVariation02().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg13 = msg13 + "</tr>";
+
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							sb.append(msg13);
 							sb.append("<tr><td colspan='3'>.</td></tr>");
 						}
 						
