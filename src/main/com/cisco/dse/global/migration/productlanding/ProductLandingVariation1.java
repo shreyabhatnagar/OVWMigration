@@ -23,6 +23,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.FrameworkUtils;
+
 public class ProductLandingVariation1 {
 
 	Document doc;
@@ -42,6 +44,7 @@ public class ProductLandingVariation1 {
 		log.debug("In the translate method, catType is :"+ catType);
 
 		// Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/index/jcr:content";
 		String indexUpperLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-left";
 		String indexUpperRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-right";
 		String indexLowerLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
@@ -49,6 +52,7 @@ public class ProductLandingVariation1 {
 		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/index.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
@@ -64,12 +68,13 @@ public class ProductLandingVariation1 {
 		javax.jcr.Node indexUpperRightNode = null;
 		javax.jcr.Node indexLowerLeftNode = null;
 		javax.jcr.Node indexLowerRightNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			indexUpperLeftNode = session.getNode(indexUpperLeft);
 			indexUpperRightNode = session.getNode(indexUpperRight);
 			indexLowerLeftNode = session.getNode(indexLowerLeft);
 			indexLowerRightNode = session.getNode(indexLowerRight);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -77,6 +82,16 @@ public class ProductLandingVariation1 {
 			}
 
 			title = doc.title();
+			
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
+						
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set primary CTA content.
 			String primaryCTATitle = "";

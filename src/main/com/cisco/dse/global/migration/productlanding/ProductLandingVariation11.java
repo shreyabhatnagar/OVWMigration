@@ -23,6 +23,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.FrameworkUtils;
+
 public class ProductLandingVariation11 {
 
 	Document doc;
@@ -43,7 +45,7 @@ public class ProductLandingVariation11 {
 		BasicConfigurator.configure();
 		log.debug("In the translate method");
 		log.debug("In the translate method, catType is :" + catType);
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/index/jcr:content";
 		String indexLeft = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
@@ -56,6 +58,7 @@ public class ProductLandingVariation11 {
 				+ catType + "/<prod>/index.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		indexLeft = indexLeft.replace("<locale>", locale).replace("<prod>",
 				prod);
 		indexRightRail = indexRightRail.replace("<locale>", locale).replace(
@@ -67,12 +70,12 @@ public class ProductLandingVariation11 {
 
 		javax.jcr.Node indexLeftNode = null;
 		javax.jcr.Node indexRightRailNode = null;
-
+		javax.jcr.Node pageJcrNode = null;
 		try {
 
 			indexLeftNode = session.getNode(indexLeft);
 			indexRightRailNode = session.getNode(indexRightRail);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -80,6 +83,16 @@ public class ProductLandingVariation11 {
 			}
 
 			title = doc.title();
+			
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			
+			
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set hero large component properties.
 
