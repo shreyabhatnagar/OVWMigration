@@ -71,7 +71,11 @@ public class ProductListing4 extends BaseAction{
 			log.debug("Path for node:" + productListingMidNode.getPath());
 			try {
 				doc = Jsoup.connect(loc).get();
+			} catch (Exception e) {
+				getConnection(loc);
+			}
 
+			if(doc != null){
 				// start of text component
 				try{
 					setText(doc, productListingMidNode);
@@ -88,9 +92,7 @@ public class ProductListing4 extends BaseAction{
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 				}
 				// end of HtmlBlob
-
-			} catch (Exception e) {
-				getConnection(loc);
+			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 
@@ -105,7 +107,7 @@ public class ProductListing4 extends BaseAction{
 
 	// Set Text Method
 	public void setText(Document doc, Node productListingMidNode) throws RepositoryException{
-		
+
 		Elements textElements = doc.select("div.c00-pilot");
 		if(textElements == null){
 			sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
@@ -150,7 +152,9 @@ public class ProductListing4 extends BaseAction{
 
 	//Start of setHTMLBlob
 	public void setHTMLBlob(Document doc, Node productListingMidNode) throws RepositoryException{
-		Element htmlblobele = doc.getElementById("n21");
+		Element htmlblobele = doc.select("div.htmlblob").first();
+		Element htmlblobeleID = doc.getElementById("n21");
+		
 		if(htmlblobele != null && !htmlblobele.equals("")){
 			Node blobNode = productListingMidNode.hasNode("htmlblob") ? productListingMidNode.getNode("htmlblob") : null;
 			if(blobNode != null){
@@ -159,12 +163,23 @@ public class ProductListing4 extends BaseAction{
 			{
 				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 			}
-		}else {
+		} else if(htmlblobeleID != null && !htmlblobeleID.equals("")) {
+
+			Node blobNode = productListingMidNode.hasNode("htmlblob") ? productListingMidNode.getNode("htmlblob") : null;
+			if(blobNode != null){
+				blobNode.setProperty("html", htmlblobeleID.outerHtml());
+			}else
+			{
+				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+			}
+		
+		}
+		else {
 			sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 		}
 
 	}
-	
+
 	//End of setHTMLBlob
 }
 
