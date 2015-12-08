@@ -21,6 +21,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class ServiceProviderBenefits {
 
 	Document doc;
@@ -59,14 +61,14 @@ public class ServiceProviderBenefits {
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		String pageUrl = host+"/content/<locale>/solutions/<prod>/benefit.html";
-
+		String pagePropertiesPath = "/content/<locale>/solutions/<prod>/benefit/jcr:content";
 		benefitLeft = benefitLeft.replace("<locale>", locale).replace("<prod>", prod);
 		benefitRight = benefitRight.replace("<locale>", locale).replace("<prod>", prod);
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-		
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		javax.jcr.Node benefitLeftNode = null;
 		javax.jcr.Node benefitRightNode = null;
-		
+		javax.jcr.Node pageJcrNode = null;
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
@@ -76,7 +78,7 @@ public class ServiceProviderBenefits {
 
 			benefitLeftNode = session.getNode(benefitLeft);
 			benefitRightNode = session.getNode(benefitRight);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			
 			try {
 				doc = Jsoup.connect(loc).get();
@@ -92,6 +94,14 @@ public class ServiceProviderBenefits {
 
 			title = doc !=null ? doc.title() : "";
 
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
 			// start set unified computing benifit text properties.
 			try {
 				NodeIterator textNodes  = benefitLeftNode.getNodes("text*");
