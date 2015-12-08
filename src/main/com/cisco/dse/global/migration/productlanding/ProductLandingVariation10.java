@@ -21,6 +21,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.FrameworkUtils;
+
 public class ProductLandingVariation10 {
 
 	/**
@@ -40,13 +42,13 @@ public class ProductLandingVariation10 {
 
 		log.debug("In the translate method");
 		log.debug("In the translate method, catType is :" + catType);
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/index/jcr:content";
 		String indexLeft = "/content/<locale>/"+ catType+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
 		String indexRight = "/content/<locale>/"+ catType+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
 
 		String pageUrl = host + "/content/<locale>/"+ catType + "/<prod>/index.html";
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
@@ -56,15 +58,23 @@ public class ProductLandingVariation10 {
 
 		javax.jcr.Node indexLeftNode = null;
 		javax.jcr.Node indexRightNode = null;
-
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			indexLeftNode = session.getNode(indexLeft);
 			indexRightNode = session.getNode(indexRight);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 				log.debug("Connected to the provided URL");
 
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+				
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+				
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				
 				// start set hero large component properties.			
 				try {
 					log.debug("Start of Hero component");

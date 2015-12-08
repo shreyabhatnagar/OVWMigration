@@ -23,6 +23,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.FrameworkUtils;
+
 public class ProductLandingVariation6 {
 
 	Document doc;
@@ -38,7 +40,7 @@ public class ProductLandingVariation6 {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/index/jcr:content";
 		String layoutOverView = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview";
@@ -46,7 +48,7 @@ public class ProductLandingVariation6 {
 				+ catType + "/<prod>/index.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -58,8 +60,10 @@ public class ProductLandingVariation6 {
 				"<prod>", prod);
 		log.debug("layoutOverView : " + layoutOverView);
 		javax.jcr.Node layoutOverViewNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			layoutOverViewNode = session.getNode(layoutOverView);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -67,6 +71,14 @@ public class ProductLandingVariation6 {
 				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
 			}
 
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start of hero panel section.
 			try {

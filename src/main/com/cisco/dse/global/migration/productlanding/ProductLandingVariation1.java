@@ -23,6 +23,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.FrameworkUtils;
+
 public class ProductLandingVariation1 {
 
 	Document doc;
@@ -42,6 +44,7 @@ public class ProductLandingVariation1 {
 		log.debug("In the translate method, catType is :"+ catType);
 
 		// Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/index/jcr:content";
 		String indexUpperLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-left";
 		String indexUpperRight = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-right";
 		String indexLowerLeft = "/content/<locale>/"+catType+"/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
@@ -49,6 +52,7 @@ public class ProductLandingVariation1 {
 		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/index.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
@@ -64,12 +68,13 @@ public class ProductLandingVariation1 {
 		javax.jcr.Node indexUpperRightNode = null;
 		javax.jcr.Node indexLowerLeftNode = null;
 		javax.jcr.Node indexLowerRightNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			indexUpperLeftNode = session.getNode(indexUpperLeft);
 			indexUpperRightNode = session.getNode(indexUpperRight);
 			indexLowerLeftNode = session.getNode(indexLowerLeft);
 			indexLowerRightNode = session.getNode(indexLowerRight);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -77,6 +82,16 @@ public class ProductLandingVariation1 {
 			}
 
 			title = doc.title();
+			
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
+						
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set primary CTA content.
 			String primaryCTATitle = "";
@@ -417,7 +432,7 @@ public class ProductLandingVariation1 {
 													
 													
 													for (Element drawerPanelLiElement : drawerPanelLiElements) {
-														boolean flag = true;
+														boolean misMatchFlag = true;
 														
 														Elements iconBlock = drawerPanelLiElement.select("div.series");
 														if (iconBlock.size() == 0) {
@@ -429,7 +444,6 @@ public class ProductLandingVariation1 {
 														if (drawerPanelsIterator.hasNext()) {
 															drawersPanelNode = drawerPanelsIterator.nextNode();
 														}
-														
 														Elements seriesElements = drawerPanelLiElement.select("div.series");
 														if (seriesElements != null) {
 															Element seriesElement = seriesElements.first();
@@ -509,9 +523,8 @@ public class ProductLandingVariation1 {
 																
 //																Element subItem = subItems.first();
 																for (Element subItem : subItems) {
-																	if ((clearfixdivs.size() != subDrawerIterator.getSize()) && flag) {
-																		sb.append("<li> Mis Match of subdrawer panel </li>");
-																		flag = false;
+																	if ((clearfixdivs.size() != subDrawerIterator.getSize())) {
+																		misMatchFlag = false;
 																	}
 																	List<String> list1 = new ArrayList<String>();
 																	List<String> list2 = new ArrayList<String>();
@@ -612,7 +625,6 @@ public class ProductLandingVariation1 {
 																				
 																			}
 																		
-//																		if (subItemUlInfoLink != null) {}
 																	
 																	}
 																	if (subdrawerpanel != null) {
@@ -653,57 +665,19 @@ public class ProductLandingVariation1 {
 																			sb.append("<li>infolinks of sub drawer doesn't exist</li>");
 																		}
 																	}else{
-																		sb.append("<li>Mis Match of subdrawer panel </li>");
+																		misMatchFlag = false;
 																	}
 																}
 																
-//																if (subItem != null) {}
 															}
-															/*		Elements subItemUlInfoLinks = ss.select("ul.infolinks");
-															if (subItemUlInfoLinks != null) {}
-															if (subdrawerpanel != null) {
-																log.debug("updating sub drawer*****" + subdrawerpanel.getPath() + "at" + drawersPanelNode.getPath());
-																if (StringUtils.isNotBlank(title)) {
-																	subdrawerpanel
-																	.setProperty("title", title);
-																} else {
-																	sb.append("title of sub drawer doesn't exist");
-																}
-																if (StringUtils.isNotBlank(linkTitleUrl)) {
-																	subdrawerpanel.setProperty("linkurl", linkTitleUrl);
-																} else {
-																	sb.append("link url of sub drawer doesn't exist");
-																	log.debug("linkurl property is not set at " + subdrawerpanel.getPath());
-																}
-																if (list1.size() > 0) {
-																	
-																	if (subdrawerpanel.hasProperty("highlights")) {
-																		Property p = subdrawerpanel.getProperty("highlights");
-																		p.remove();
-																		session.save();
-																	}
-																	subdrawerpanel.setProperty("highlights",
-																			list1.toArray(new String[list1.size()]));
-																} else {
-																	sb.append("highlights of sub drawer are not migrated");
-																}
-																if (list2.size() > 0) {
-																	if (subdrawerpanel.hasProperty("infolinks")) {
-																		Property p = subdrawerpanel.getProperty("infolinks");
-																		p.remove();
-																		session.save();
-																	}
-																	subdrawerpanel.setProperty("infolinks",
-																			list2.toArray(new String[list2.size()]));
-																} else {
-																	sb.append("infolinks of sub drawer are not migrated");
-																}
-															} */
+															
 															
 														}
-														
+														if (!misMatchFlag) {
+															sb.append("<li>Mis Match of subdrawers count in drawer panel</li>");
+														}
 													}
-													//
+													
 													
 												}
 											}

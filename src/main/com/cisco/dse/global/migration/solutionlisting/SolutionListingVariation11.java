@@ -20,6 +20,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class SolutionListingVariation11 {
 
@@ -42,6 +43,7 @@ public class SolutionListingVariation11 {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
 		String indexMidLeft = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/solution-listing/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
@@ -50,7 +52,7 @@ public class SolutionListingVariation11 {
 				+ catType + "/<prod>/solution-listing.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -59,10 +61,10 @@ public class SolutionListingVariation11 {
 		indexMidLeft = indexMidLeft.replace("<locale>", locale).replace(
 				"<prod>", prod);
 		Node indexMidLeftNode = null;
-
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			indexMidLeftNode = session.getNode(indexMidLeft);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -70,6 +72,16 @@ public class SolutionListingVariation11 {
 			}
 
 			title = doc.title();
+			
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
+						
 			// start set text component.
 			try {
 				Elements textElements = doc.select("div.c00v0-alt1-pilot");
@@ -133,16 +145,15 @@ public class SolutionListingVariation11 {
 											}
 										} 
 									}
-									count = count-1;
 									sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
 									if(paragraphExists){
 										sb.append("<li>Extra description found on locale page.Hence element is not migrated.</li>");
 									}
+						}
 						}else{
-								count = count-1;
-								sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
-						}
-						}
+							count = count-1;
+							sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+					}
 				}
 				} catch (Exception e) {
 				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
@@ -156,6 +167,7 @@ public class SolutionListingVariation11 {
 			try {
 				String h2Text = "";
 				String pText = "";
+				boolean extraAnchorTagExists = false;
 				Elements spotLightElements = doc.select("div.c11-pilot");
 				Node spotLightComponentNode = null;				
 				if (spotLightElements != null) {
@@ -186,12 +198,23 @@ public class SolutionListingVariation11 {
 								sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 							}
 
-							Element anchorText = ele.getElementsByTag("a").first();;
+							Element anchorText = ele.getElementsByTag("a").first();
 							String ahref = "";
 							if (anchorText != null) {
 								ahref = anchorText.attr("href");
 							} else {
 								sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
+							}
+							
+							Elements anchorTag = ele.getElementsByTag("a");
+							if (anchorTag != null) {
+								for(Element e:anchorTag){
+									Element parElem = e.parent();
+									if(!"h2".equals(parElem.tagName())){
+										extraAnchorTagExists = true;
+									}
+								}
+								
 							}
 
 							if(spoLightNodeIterator.hasNext()){
@@ -217,6 +240,9 @@ public class SolutionListingVariation11 {
 								}
 
 							}
+						}
+						if(extraAnchorTagExists){
+							sb.append("<li>Extra link found in spotlight component on locale page. Hence cannot be migrated.</li>");
 						}
 					}else{
 						sb.append(Constants.SPOTLIGHT_PARENT_NODE_NOT_FOUND);

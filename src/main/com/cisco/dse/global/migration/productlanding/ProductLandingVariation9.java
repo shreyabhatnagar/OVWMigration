@@ -21,6 +21,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.FrameworkUtils;
+
 public class ProductLandingVariation9 {
 
 	Document doc;
@@ -42,7 +44,7 @@ public class ProductLandingVariation9 {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/index/jcr:content";
 		String indexLeft = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/index/jcr:content/content_parsys/overview/layout-overview/gd12v1/gd12v1-left";
@@ -60,7 +62,7 @@ public class ProductLandingVariation9 {
 				+ catType + "/<prod>/index.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -79,12 +81,13 @@ public class ProductLandingVariation9 {
 		javax.jcr.Node indexRightNode = null;
 		javax.jcr.Node indexMidLeftNode = null;
 		javax.jcr.Node indexRightRailNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			indexLeftNode = session.getNode(indexLeft);
 			indexRightNode = session.getNode(indexRight);
 			indexMidLeftNode = session.getNode(indexMidLeft);
 			indexRightRailNode = session.getNode(indexRightRail);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -92,6 +95,16 @@ public class ProductLandingVariation9 {
 			}
 
 			title = doc.title();
+			
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
+						
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set benefit text content.
 			try {

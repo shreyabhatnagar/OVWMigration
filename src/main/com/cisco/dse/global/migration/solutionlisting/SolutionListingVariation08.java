@@ -20,6 +20,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class SolutionListingVariation08 {
 	Document doc;
@@ -41,7 +42,7 @@ public class SolutionListingVariation08 {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
 		String indexMid = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/solution-listing/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
@@ -57,11 +58,15 @@ public class SolutionListingVariation08 {
 		sb.append("<td><ul>");
 
 		indexMid = indexMid.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		javax.jcr.Node indexMidNode = null;
+		javax.jcr.Node pageJcrNode = null;
+		boolean isHero = true;
+		boolean isHtml = true;
 
 		try {
 			indexMidNode = session.getNode(indexMid);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			log.debug("Path for node:" + indexMidNode.getPath());
 			try {
 				doc = Jsoup.connect(loc).get();
@@ -71,6 +76,14 @@ public class SolutionListingVariation08 {
 
 			title = doc.title();
 
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
 			// ---------------------------------------------------------------------------------------------------------------------------------------
 			// start set text component.
 			try {
@@ -185,12 +198,13 @@ public class SolutionListingVariation08 {
 							sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH.replace("<ele>",  Integer.toString(eleSize)).replace("<node>", Integer.toString(nodeSize)));
 						}
 					} else {
-
-						sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
+						isHero = false;//No Hero Content Node Found.
+						//sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
 					}
 
 				} else {
-					sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
+					isHero = false;//No Hero Content Node Found.
+					//sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 
 				}
 			} catch (Exception e) {
@@ -209,7 +223,8 @@ public class SolutionListingVariation08 {
 				if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 					htmlBlobContent = htmlblobElements.html();
 				} else {
-					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+					isHtml = false;//No Html node content node found.
+					//sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 				}
 
 				if (indexMidNode.hasNode("htmlblob")) {
@@ -220,8 +235,14 @@ public class SolutionListingVariation08 {
 						sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 					}
 				} else {
-					sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+					isHtml = false;//No Html node content node found.
+					//sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 				}
+				
+				if(!isHero && !isHtml){
+					sb.append(Constants.NO_HERO_OR_HTMLBLOB_NOT_FOUND);
+				}
+				
 			} catch (Exception e) {
 				log.error("Exception : ", e);
 				sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -301,9 +322,9 @@ public class SolutionListingVariation08 {
 					if (eleSize != nodeSize) {
 						log.debug("Spotlight component node count mismatch!");
 						sb.append(Constants.SPOTLIGHT_NODE_COUNT
-								+ eleSize
-								+ Constants.SPOTLIGHT_ELEMENT_COUNT
 								+ nodeSize
+								+ Constants.SPOTLIGHT_ELEMENT_COUNT
+								+ eleSize
 								+ "</li>");
 					}
 				} else {

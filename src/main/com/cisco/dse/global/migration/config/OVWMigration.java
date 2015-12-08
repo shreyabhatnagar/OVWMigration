@@ -31,6 +31,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation5;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
+import com.cisco.dse.global.migration.productlisting.ProductListing4;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation03;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation08;
@@ -121,7 +122,7 @@ public class OVWMigration {
 					String sheetName = sheet.getSheetName();
 					StringBuilder sb = new StringBuilder(1024);
 
-					sb.append("<table widht='500' border='1'>");
+					sb.append("<table width='500' border='1'>");
 
 					for (Row tempRow : sheet) {
 
@@ -136,6 +137,7 @@ public class OVWMigration {
 
 						log.debug("gLink : " + gLink);
 						log.debug("prod : " + prod);
+					
 
 						if ("benefit-var1".equalsIgnoreCase(prod)) {
 							String msg1 = "";
@@ -325,7 +327,20 @@ public class OVWMigration {
 							sb.append(msg10);
 							sb.append("<tr><td colspan='3'>.</td></tr>");
 
-						}else if ("service-listing-var3".equals(type)) {
+						} else if ("product-listing-var4".equals(type)) {
+							String msg14 = "";
+							msg14 = msg14 + "<tr>";
+							msg14 = msg14
+									+ new ProductListing4().translate(
+											host, gLink, prod, type, cattype,
+											sheet.getSheetName(), session);
+							msg14 = msg14 + "</tr>";
+			
+							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+							log.debug("Msg14 value is "+msg14);
+							sb.append(msg14);
+							sb.append("<tr><td colspan='3'>.</td></tr>");
+							}else if ("service-listing-var3".equals(type)) {
 							String msg10 = "";
 							msg10 = msg10 + "<tr>";
 							msg10 = msg10
@@ -350,7 +365,6 @@ public class OVWMigration {
 							sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 							sb.append(msg10);
 							sb.append("<tr><td colspan='3'>.</td></tr>");
-
 						}
 						
 					}

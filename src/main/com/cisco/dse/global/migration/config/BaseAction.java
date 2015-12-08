@@ -9,7 +9,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 
 public abstract class BaseAction {
 
-	static Logger log = Logger.getLogger(ProductLandingVariation6.class);
+	static Logger log = Logger.getLogger(BaseAction.class);
 
 	int count = 0;
 

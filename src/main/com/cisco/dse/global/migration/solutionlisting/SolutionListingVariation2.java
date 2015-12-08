@@ -19,6 +19,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class SolutionListingVariation2 {
 
@@ -40,6 +41,7 @@ public class SolutionListingVariation2 {
 		log.debug("In the translate method, catType is :"+ catType);
 
 		// Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
 		String solutionListingParsysPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
 		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/solution-listing.html";
 		
@@ -48,13 +50,15 @@ public class SolutionListingVariation2 {
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 
 		solutionListingParsysPath = solutionListingParsysPath.replace("<locale>", locale).replace("<prod>", prod);
 
 		javax.jcr.Node solutionListingParsysNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			solutionListingParsysNode = session.getNode(solutionListingParsysPath);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 
 			try {
 				doc = Jsoup.connect(loc).get();
@@ -63,6 +67,14 @@ public class SolutionListingVariation2 {
 			}
 
 			title = doc.title();
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set text component content.
 			NodeIterator textNodesIterator = null;
