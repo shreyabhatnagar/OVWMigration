@@ -20,6 +20,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ServiceListingVariation03 {
 
@@ -36,11 +37,11 @@ public class ServiceListingVariation03 {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/service-listing/jcr:content";
 		String pageUrl = host + "/content/<locale>/" + catType
 				+ "/<prod>/service-listing.html";
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -54,10 +55,11 @@ public class ServiceListingVariation03 {
 				"<prod>", prod);
 
 		javax.jcr.Node serviceListingMidnode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 
 			serviceListingMidnode = session.getNode(serviceListing);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -65,6 +67,15 @@ public class ServiceListingVariation03 {
 				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
 			}
 
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
+			
 			// ----------------------------------------------------------------------------------
 			// start of text component properties setting
 

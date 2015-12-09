@@ -22,6 +22,7 @@ import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ServiceListingVariation01 extends BaseAction {
 
@@ -37,6 +38,7 @@ public class ServiceListingVariation01 extends BaseAction {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/service-listing/jcr:content";
 		String midNodeTopPath = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd21v1/gd21v1-mid";
@@ -46,7 +48,7 @@ public class ServiceListingVariation01 extends BaseAction {
 		String pageUrl = host + "/content/<locale>/" + catType
 				+ "/<prod>/service-listing.html";
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -58,10 +60,11 @@ public class ServiceListingVariation01 extends BaseAction {
 				.replace("<prod>", prod);
 		Node midTopNode = null;
 		Node midBottomNode = null;
-
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			midTopNode = session.getNode(midNodeTopPath);
 			midBottomNode = session.getNode(midNodeBottomPath);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			if (midTopNode.hasNode("gd23v1")) {
 				midBottomNode = midTopNode.getNode("gd23v1");
 			} else {
@@ -72,6 +75,14 @@ public class ServiceListingVariation01 extends BaseAction {
 
 			if (doc != null) {
 
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+				
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+				
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				
 				// -----------------------------------------------------------------------------------------------------------------------------------------
 				// start Title text component.
 				try {

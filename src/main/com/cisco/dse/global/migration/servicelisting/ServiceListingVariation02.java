@@ -22,6 +22,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 
 public class ServiceListingVariation02 {
@@ -45,7 +46,7 @@ public class ServiceListingVariation02 {
 
 		// Repo node paths
 
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/service-listing/jcr:content";
 		String serviceListingMid = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd21v1/gd21v1-mid";
 		String serviceListingMidLeft = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd22v2/gd22v2-left";
 		String serviceListingMidRight = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd22v2/gd22v2-right";
@@ -53,7 +54,7 @@ public class ServiceListingVariation02 {
 		String pageUrl = host+"/content/<locale>/"+ catType + "/<prod>/service-listing.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -78,8 +79,19 @@ public class ServiceListingVariation02 {
 		javax.jcr.Node serviceListingMidRightNode = null;
 		serviceListingMidRightNode = session.getNode(serviceListingMidRight);
 
+		javax.jcr.Node pageJcrNode = null;
+		pageJcrNode = session.getNode(pagePropertiesPath);
 		try {
 			doc = Jsoup.connect(loc).get();
+			
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+			
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+			
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+						
 			// start of text component
 			try{
 				setText(doc, serviceListingMidNode);
