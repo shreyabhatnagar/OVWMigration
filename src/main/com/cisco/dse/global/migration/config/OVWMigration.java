@@ -25,6 +25,7 @@ import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
+import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation7;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
@@ -33,7 +34,6 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation5;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
-import com.cisco.dse.global.migration.productlisting.ProductListing4;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation02;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation03;
@@ -334,7 +334,7 @@ public class OVWMigration {
 							String msg14 = "";
 							msg14 = msg14 + "<tr>";
 							msg14 = msg14
-									+ new ProductListing4().translate(
+									+ new ProductListingVariation4().translate(
 											host, gLink, prod, type, cattype,
 											sheet.getSheetName(), session);
 							msg14 = msg14 + "</tr>";

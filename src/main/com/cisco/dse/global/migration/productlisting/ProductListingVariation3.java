@@ -18,9 +18,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 
-public class ProductListingVariation3 {
+public class ProductListingVariation3 extends BaseAction{
 
 	Document doc;
 
@@ -64,75 +65,78 @@ public class ProductListingVariation3 {
 
 			try {
 				doc = Jsoup.connect(loc).get();
+				log.debug("Connected to the provided URL");
 			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
+				doc = getConnection(loc);
 			}
 
-			title = doc.title();
-			// start set text component.
-			try {
-				String h2TagVal = "";
-				String pTagVal = "";
-				Node textNodeOne = null;
-				Node textNodeTwo = null;
-				
-				if(indexMidLeftNode.hasNode("text")){
-					 textNodeOne = indexMidLeftNode.getNode("text");
-				}else{
-					sb.append("<li> Text Node not found</li>");
-					
-				}
-				
-				if(indexMidLeftNode.hasNode("text_0")){
-					 textNodeTwo = indexMidLeftNode.getNode("text_0");
-				}else{
-					sb.append("<li> Text Node not found</li>");
-				}
-				
-				NodeIterator textNodeIterator = indexMidLeftNode.getNodes("text*");
-				int nodeSize = (int) textNodeIterator.getSize();
-				Elements textElements = doc.select("div.c00v1-pilot");
-				if(textElements.isEmpty()){
-					textElements = doc.select("div.c00-pilot");
-				}
-				if(textElements.isEmpty()){
-					textElements = doc.select("div.cc00-pilot");
-				}
-				if(textElements.isEmpty()){
-					textElements = doc.select("div.no-border");
-				}
-				int eleSize = 0;
-				
-				if (textElements != null && !textElements.isEmpty()) {
+			if(doc != null){
+
+				title = doc.title();
+				// start set text component.
+				try {
+					String h2TagVal = "";
+					String pTagVal = "";
+					Node textNodeOne = null;
+					Node textNodeTwo = null;
+
+					if(indexMidLeftNode.hasNode("text")){
+						textNodeOne = indexMidLeftNode.getNode("text");
+					}else{
+						sb.append("<li> Text Node not found</li>");
+
+					}
+
+					if(indexMidLeftNode.hasNode("text_0")){
+						textNodeTwo = indexMidLeftNode.getNode("text_0");
+					}else{
+						sb.append("<li> Text Node not found</li>");
+					}
+
+					NodeIterator textNodeIterator = indexMidLeftNode.getNodes("text*");
+					int nodeSize = (int) textNodeIterator.getSize();
+					Elements textElements = doc.select("div.c00v1-pilot");
+					if(textElements.isEmpty()){
+						textElements = doc.select("div.c00-pilot");
+					}
+					if(textElements.isEmpty()){
+						textElements = doc.select("div.cc00-pilot");
+					}
+					if(textElements.isEmpty()){
+						textElements = doc.select("div.no-border");
+					}
+					int eleSize = 0;
+
+					if (textElements != null && !textElements.isEmpty()) {
 						Elements hElements = textElements.select("h2")!=null?textElements.select("h2"):textElements.select("h1");
 						Element ele = hElements.first();
-							if (ele != null) {
-								Element textProp = ele.getElementsByTag("h1").first()!=null?ele.getElementsByTag("h1").first():ele.getElementsByTag("h2").first();
-								log.debug("text property!: " + textProp);
-								if(textProp != null){
-									eleSize++;
-									h2TagVal = textProp.outerHtml();
-									if(textNodeOne != null){
-										textNodeOne.setProperty("text", h2TagVal);
-									}
-									log.debug("h2TagVal property!: " + h2TagVal);
-									} else {
-										sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
-									}
+						if (ele != null) {
+							Element textProp = ele.getElementsByTag("h1").first()!=null?ele.getElementsByTag("h1").first():ele.getElementsByTag("h2").first();
+							log.debug("text property!: " + textProp);
+							if(textProp != null){
+								eleSize++;
+								h2TagVal = textProp.outerHtml();
+								if(textNodeOne != null){
+									textNodeOne.setProperty("text", h2TagVal);
+								}
+								log.debug("h2TagVal property!: " + h2TagVal);
+							} else {
+								sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 							}
-				} else {
-					sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
-				}
-		
-				Elements pTagElements = doc.select("div.c00v0-pilotno-border");
-				if(pTagElements.isEmpty()){
+						}
+					} else {
+						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+					}
+
+					Elements pTagElements = doc.select("div.c00v0-pilotno-border");
+					if(pTagElements.isEmpty()){
 						pTagElements = doc.select("div.no-border");
-				}
-				if(pTagElements != null && !pTagElements.isEmpty()){
-					
-					Elements pElements = pTagElements.select("p");
-					Element pTag = pElements.first();
-					Element pTagText = pTag.getElementsByTag("p").first();
+					}
+					if(pTagElements != null && !pTagElements.isEmpty()){
+
+						Elements pElements = pTagElements.select("p");
+						Element pTag = pElements.first();
+						Element pTagText = pTag.getElementsByTag("p").first();
 						//log.debug("pTagText property!: " + pTagText);
 						if(pTagText != null){
 							eleSize++;
@@ -140,36 +144,40 @@ public class ProductListingVariation3 {
 							if(textNodeTwo != null){
 								textNodeTwo.setProperty("text", pTagVal);
 							}
-							
+
 						}else if(pTag.parent().hasClass("c00-pilot") || pTag.parent().hasClass("cc00-pilot")){
-								 pTagText = pTag.getElementsByTag("p").first();
-								if(pTagText != null){
-									eleSize++;
-									pTagVal = pTagText.outerHtml();	
-									if(textNodeTwo != null){
-										textNodeTwo.setProperty("text", pTagVal);
-									}
+							pTagText = pTag.getElementsByTag("p").first();
+							if(pTagText != null){
+								eleSize++;
+								pTagVal = pTagText.outerHtml();	
+								if(textNodeTwo != null){
+									textNodeTwo.setProperty("text", pTagVal);
 								}
-							
+							}
+
 						}else{
-							
+
 							sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 						}
-						}else{
-							
-							sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
-						}
-				log.debug("eleSize and nodeSize is!: " + eleSize +" and "+ nodeSize);
-				if(nodeSize != eleSize){
-					sb.append("<li> Node size and elements isze mismatch!</li>");
+					}else{
+
+						sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
+					}
+					log.debug("eleSize and nodeSize is!: " + eleSize +" and "+ nodeSize);
+					if(nodeSize != eleSize){
+						sb.append("<li> Node size and elements isze mismatch!</li>");
+					}
+				} catch (Exception e) {
+					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
+							+ e + "</li>");
 				}
-			} catch (Exception e) {
-				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
-						+ e + "</li>");
+				session.save();
 			}
-			session.save();
+			else {
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			}
 		} catch (Exception e) {
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			sb.append("<li>unable to migrate page "+e+"</li>");
 			log.debug("Exception as url cannot be connected: "+ e);
 		}
 		sb.append("</ul></td>");

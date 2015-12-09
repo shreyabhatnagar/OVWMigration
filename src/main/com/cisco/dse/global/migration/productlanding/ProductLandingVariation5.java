@@ -22,10 +22,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
 
-public class ProductLandingVariation5 {
+public class ProductLandingVariation5 extends BaseAction {
 
 	Document doc;
 	StringBuilder sb = new StringBuilder(1024);
@@ -66,18 +67,19 @@ public class ProductLandingVariation5 {
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
+				log.debug("Connected to the provided URL");
 			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
+				doc = getConnection(loc);
 			}
-			
+
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set page properties.
-			
+
 			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-			
+
 			// end set page properties.
 			// ------------------------------------------------------------------------------------------------------------------------------------------
-						
+
 			if (doc != null) {
 				Elements gd_leftelements = doc.select("div.gd-left");
 				Elements gd_rightElements = doc.select("div.gd-right");
@@ -421,11 +423,11 @@ public class ProductLandingVariation5 {
 												log.debug(aHref
 														+ "is set to the property title at : "
 														+ primary_cta_v2
-																.getPath());
+														.getPath());
 											} else {
 												sb.append("<li>linkurl node doesn't exists under : "
 														+ primary_cta_v2
-																.getPath()
+														.getPath()
 														+ "</li>");
 											}
 										} else {
@@ -449,7 +451,7 @@ public class ProductLandingVariation5 {
 										if (list.size() > 1) {
 											followus.setProperty("links", list
 													.toArray(new String[list
-															.size()]));
+													                    .size()]));
 										}
 
 									} else {
@@ -497,7 +499,7 @@ public class ProductLandingVariation5 {
 												.getNode("text");
 										textNode.setProperty("text",
 												titleElements.get(0)
-														.outerHtml());
+												.outerHtml());
 									} else {
 										sb.append("<li>gd11v1-mid Node doesn't exist with path : "
 												+ gd11v1_mid.getPath()
@@ -530,7 +532,7 @@ public class ProductLandingVariation5 {
 												.getNode("text");
 										textNode.setProperty("text",
 												titleElements.get(1)
-														.outerHtml());
+												.outerHtml());
 									} else {
 										sb.append("<li>gd11v1-mid Node doesn't exist with path : "
 												+ gd11v1_mid.getPath()

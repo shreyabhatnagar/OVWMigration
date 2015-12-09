@@ -18,10 +18,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
 
-public class SolutionListingVariation2 {
+public class SolutionListingVariation2 extends BaseAction{
 
 
 	Document doc;
@@ -29,7 +30,7 @@ public class SolutionListingVariation2 {
 	String title = null;
 
 	StringBuilder sb = new StringBuilder(1024);
-	
+
 	static Logger log = Logger.getLogger(SolutionListingVariation2.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
@@ -44,9 +45,9 @@ public class SolutionListingVariation2 {
 		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
 		String solutionListingParsysPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
 		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/solution-listing.html";
-		
+
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-		
+
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
@@ -63,121 +64,126 @@ public class SolutionListingVariation2 {
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n"+loc+"</li>");
+				doc = getConnection(loc);
 			}
+			if(doc != null){
 
-			title = doc.title();
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start set page properties.
-			
-			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-			
-			// end set page properties.
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start set text component content.
-			NodeIterator textNodesIterator = null;
-			javax.jcr.Node textNode = null;
-			if (solutionListingParsysNode != null && solutionListingParsysNode.hasNodes()) {
-				textNodesIterator = solutionListingParsysNode.getNodes("text*");
-			} else {
-				log.debug("unable to find node to set content/text components are not present");
-			}
-			try {
-				Elements textElements = doc.select("div.c00-pilot, div.cc00-pilot");
-				if (textElements != null) {
-					if (textElements.size() != textNodesIterator.getSize()) {
-						sb.append("<li>Number of nodes("
-								+ textNodesIterator.getSize()
-								+ ") and elements("
-								+ textElements.size()
-								+ ") of text component doesn't match.</li>");
-					}
-					for (Element textElement : textElements) {
-						String text = "";
-						text = textElement.outerHtml();
-						if (textNodesIterator != null && textNodesIterator.hasNext())
-							textNode = textNodesIterator.nextNode();
-						if (textNode != null) {
-							if (StringUtils.isNotBlank(text)) {
-								textNode.setProperty("text", text);
-								System.out.println("Text component is "+text);
-							} else {
-								sb.append(Constants.TEXT_DOES_NOT_EXIST); // Text content is not available on the web publisher page.
+
+				title = doc.title();
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set text component content.
+				NodeIterator textNodesIterator = null;
+				javax.jcr.Node textNode = null;
+				if (solutionListingParsysNode != null && solutionListingParsysNode.hasNodes()) {
+					textNodesIterator = solutionListingParsysNode.getNodes("text*");
+				} else {
+					log.debug("unable to find node to set content/text components are not present");
+				}
+				try {
+					Elements textElements = doc.select("div.c00-pilot, div.cc00-pilot");
+					if (textElements != null) {
+						if (textElements.size() != textNodesIterator.getSize()) {
+							sb.append("<li>Number of nodes("
+									+ textNodesIterator.getSize()
+									+ ") and elements("
+									+ textElements.size()
+									+ ") of text component doesn't match.</li>");
+						}
+						for (Element textElement : textElements) {
+							String text = "";
+							text = textElement.outerHtml();
+							if (textNodesIterator != null && textNodesIterator.hasNext())
+								textNode = textNodesIterator.nextNode();
+							if (textNode != null) {
+								if (StringUtils.isNotBlank(text)) {
+									textNode.setProperty("text", text);
+									System.out.println("Text component is "+text);
+								} else {
+									sb.append(Constants.TEXT_DOES_NOT_EXIST); // Text content is not available on the web publisher page.
+								}
 							}
 						}
+
+					} else {
+						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
-					
-				} else {
-					sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
-				}
-			} catch (Exception e) {
+				} catch (Exception e) {
 					log.debug("<li>Unable to update text component."+e+"</li>");
-			}
-			// end set text component content.
-			// ---------------------------------------------------------------------------------------------------------------------------------------
-			
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start set htmlblob component content.
-			NodeIterator htmlBlobIterator = null;
-			javax.jcr.Node htmlBlobNode = null;
-			if (solutionListingParsysNode != null && solutionListingParsysNode.hasNodes()) {
-				htmlBlobIterator = solutionListingParsysNode.getNodes("htmlblob*");
-			} else {
-				log.debug("unable to find node to set content/htmlblob components are not present");
-			}
-			try {
-				Elements htmlblobElements = doc.select("div.c11-pilot, div.c39");
-				if (htmlblobElements != null) {
-					if (htmlblobElements.size() != htmlBlobIterator.getSize()) {
-						sb.append("<li>Number of nodes("
-								+ htmlBlobIterator.getSize()
-								+ ") and elements("
-								+ htmlblobElements.size()
-								+ ") of html blob component doesn't match.</li>"); 
-					}
-					for (Element htmlblobElement : htmlblobElements) {
-						Element htmlBlobParent = htmlblobElement.parent();
-						if (htmlblobElement.hasClass("c39")) {
-							if (htmlBlobParent.hasClass("cc00-pilot")) {
-								sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
-								continue;
-							}
-						}
-						
-						String htmlblobtext = "";
-						htmlblobtext = htmlblobElement.outerHtml();
-						if (htmlBlobIterator != null && htmlBlobIterator.hasNext())
-							htmlBlobNode = htmlBlobIterator.nextNode();
-						if (htmlBlobNode != null) {
-							if (StringUtils.isNotBlank(htmlblobtext)) {
-								System.out.println("Html blob component is "+htmlblobtext);
-								htmlBlobNode.setProperty("html", htmlblobtext);
-							} else {
-								sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
-							}
-						}
-					}
-					
-				} else {
-					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 				}
-			} catch (Exception e) {
+				// end set text component content.
+				// ---------------------------------------------------------------------------------------------------------------------------------------
+
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set htmlblob component content.
+				NodeIterator htmlBlobIterator = null;
+				javax.jcr.Node htmlBlobNode = null;
+				if (solutionListingParsysNode != null && solutionListingParsysNode.hasNodes()) {
+					htmlBlobIterator = solutionListingParsysNode.getNodes("htmlblob*");
+				} else {
+					log.debug("unable to find node to set content/htmlblob components are not present");
+				}
+				try {
+					Elements htmlblobElements = doc.select("div.c11-pilot, div.c39");
+					if (htmlblobElements != null) {
+						if (htmlblobElements.size() != htmlBlobIterator.getSize()) {
+							sb.append("<li>Number of nodes("
+									+ htmlBlobIterator.getSize()
+									+ ") and elements("
+									+ htmlblobElements.size()
+									+ ") of html blob component doesn't match.</li>"); 
+						}
+						for (Element htmlblobElement : htmlblobElements) {
+							Element htmlBlobParent = htmlblobElement.parent();
+							if (htmlblobElement.hasClass("c39")) {
+								if (htmlBlobParent.hasClass("cc00-pilot")) {
+									sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
+									continue;
+								}
+							}
+
+							String htmlblobtext = "";
+							htmlblobtext = htmlblobElement.outerHtml();
+							if (htmlBlobIterator != null && htmlBlobIterator.hasNext())
+								htmlBlobNode = htmlBlobIterator.nextNode();
+							if (htmlBlobNode != null) {
+								if (StringUtils.isNotBlank(htmlblobtext)) {
+									System.out.println("Html blob component is "+htmlblobtext);
+									htmlBlobNode.setProperty("html", htmlblobtext);
+								} else {
+									sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
+								}
+							}
+						}
+
+					} else {
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+					}
+				} catch (Exception e) {
 					log.debug("<li>Unable to update htmlblob component."+e+"</li>");
+				}
+				// end set htmlblob component content.
+				// ---------------------------------------------------------------------------------------------------------------------------------------
+
+				session.save();
+
 			}
-			// end set htmlblob component content.
-			// ---------------------------------------------------------------------------------------------------------------------------------------
-
-			session.save();
-			
-
+			else {
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			}
 		} catch (Exception e) {
 			log.debug("Exception ", e);
 		}
-		
+
 		sb.append("</ul></td>");
-				
+
 		return sb.toString();
 	}
 

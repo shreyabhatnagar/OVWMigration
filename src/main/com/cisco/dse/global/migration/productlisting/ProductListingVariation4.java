@@ -14,7 +14,6 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.filters.EscapeUnicode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,7 @@ import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
-public class ProductListing4 extends BaseAction{
+public class ProductListingVariation4 extends BaseAction{
 
 	/**
 	 * @param args
@@ -36,7 +35,7 @@ public class ProductListing4 extends BaseAction{
 
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
 
-	static Logger log = Logger.getLogger(ProductListing4.class);
+	static Logger log = Logger.getLogger(ProductListingVariation4.class);
 
 	public String translate(String host, String loc, String prod, String type,
 			String catType, String locale, Session session) throws IOException,
