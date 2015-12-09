@@ -17,9 +17,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 
-public class ProductListingVariation7 {
+public class ProductListingVariation7 extends BaseAction {
 
 	Document doc;
 
@@ -63,40 +64,48 @@ public class ProductListingVariation7 {
 
 			try {
 				doc = Jsoup.connect(loc).get();
+				log.debug("Connected to the provided URL");
 			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
+				doc = getConnection(loc);
 			}
 
-			title = doc.title();
-			// start set text component.
-			try {
-				Node textNodeOne = null;
-				
-				if(indexMidLeftNode.hasNode("text")){
-					 textNodeOne = indexMidLeftNode.getNode("text");
-				}else{
-					sb.append("<li> Text Node not found</li>");
-					
-				}
-				Elements textElements = doc.select("div.gd-right");
-				if (textElements != null && !textElements.isEmpty()) {
-					Element rightGridContent = textElements.first();
-					if(rightGridContent != null){
-						if(textNodeOne !=null){
-							textNodeOne.setProperty("text",rightGridContent.html());
-						}
+			if(doc != null){
+
+
+				title = doc.title();
+				// start set text component.
+				try {
+					Node textNodeOne = null;
+
+					if(indexMidLeftNode.hasNode("text")){
+						textNodeOne = indexMidLeftNode.getNode("text");
+					}else{
+						sb.append("<li> Text Node not found</li>");
+
 					}
-					
-				} else {
-					sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+					Elements textElements = doc.select("div.gd-right");
+					if (textElements != null && !textElements.isEmpty()) {
+						Element rightGridContent = textElements.first();
+						if(rightGridContent != null){
+							if(textNodeOne !=null){
+								textNodeOne.setProperty("text",rightGridContent.html());
+							}
+						}
+
+					} else {
+						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+					}
+				} catch (Exception e) {
+					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
+							+ e + "</li>");
 				}
-			} catch (Exception e) {
-				sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
-						+ e + "</li>");
+				session.save();
 			}
-			session.save();
+			else {
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			}
 		} catch (Exception e) {
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			sb.append("<li>unable to migrate page"+e+"</li>");
 			log.debug("Exception as url cannot be connected: "+ e);
 		}
 		sb.append("</ul></td>");

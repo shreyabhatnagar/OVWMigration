@@ -5,8 +5,6 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
-
 public abstract class BaseAction {
 
 	static Logger log = Logger.getLogger(BaseAction.class);

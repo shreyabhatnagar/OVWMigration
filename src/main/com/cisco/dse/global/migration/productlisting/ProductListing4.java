@@ -67,14 +67,13 @@ public class ProductListing4 extends BaseAction{
 		productListingMid = productListingMid.replace("<locale>", locale).replace("<prod>", prod);
 
 		javax.jcr.Node productListingMidNode = null;
-
-		try {
+		try{
 			productListingMidNode = session.getNode(productListingMid);
 			log.debug("Path for node:" + productListingMidNode.getPath());
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
-				getConnection(loc);
+				doc = getConnection(loc);
 			}
 
 			if(doc != null){
@@ -97,9 +96,8 @@ public class ProductListing4 extends BaseAction{
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
-
-		}catch (Exception e) {
-			sb.append(Constants.UNABLE_TO_UPDATE_PRODUCTLISTING);
+		}catch(Exception e){
+			sb.append("<li>unable to migrate page"+e+"</li>");
 		}
 		sb.append("</ul></td>");
 		session.save();

@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -71,21 +72,25 @@ public class ServiceListingVariation01 extends BaseAction {
 				midBottomNode = midBottomNode.hasNode("gd23v1") ? midBottomNode
 						.getNode("gd23v1") : null;
 			}
-			doc = getConnection(loc);
+			try{
+				doc = Jsoup.connect(loc).get();
+			}
+			catch(Exception e){
+				doc = getConnection(loc);
+			}
 
 			if (doc != null) {
 
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start set page properties.
-				
+
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-				
+
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
-				
+
 				// -----------------------------------------------------------------------------------------------------------------------------------------
 				// start Title text component.
-				try {
 					log.debug("Started migrating title content.");
 					// Start Get Content.
 					Elements titleElements = doc
@@ -196,7 +201,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										if(StringUtils.isEmpty(pdf)){ 
 											Element pdfElement = element.select("nobr").first();
 											if(pdfElement != null){
-											pdf = pdfElement.ownText();
+												pdf = pdfElement.ownText();
 											}
 										}
 										String pdfIcon =null;
@@ -210,8 +215,8 @@ public class ServiceListingVariation01 extends BaseAction {
 												if(b){
 													break;
 												} 
-										}										
-										pdf = pdf.substring(i, pdf.length()-1);
+											}										
+											pdf = pdf.substring(i, pdf.length()-1);
 										}
 										pdf = pdf.replace(")", "");
 										pdf = pdf.trim();										
@@ -254,7 +259,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									if (multiple) {
 										element_list_0.setProperty("listitems",
 												list.toArray(new String[list
-														.size()]));
+												                        .size()]));
 									} else {
 										element_list_0.setProperty("listitems",
 												list.toString());
@@ -309,7 +314,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										pText = pText + pElement.ownText();
 										break;
 									}
-									
+
 								}								
 								if (aElements != null && !aElements.isEmpty()) {
 									JSONObject obj = new JSONObject();
@@ -338,37 +343,37 @@ public class ServiceListingVariation01 extends BaseAction {
 							Node gd23v1_mid_Node = midBottomNode
 									.getNode("gd23v1-mid");
 							if(anchor){
-							if (gd23v1_mid_Node.hasNode("list")) {
-								Node listNode = gd23v1_mid_Node.getNode("list");
-								if (StringUtils.isNotBlank(h2Text)) {
-									listNode.setProperty("title", h2Text);
-								} else {
-									sb.append(Constants.MID_GRID_HEADING_NOT_FOUND);
-								}
-								if (listNode.hasNode("intro")) {
-									Node introNode = listNode.getNode("intro");
-									introNode.setProperty("paragraph_rte",
-											pText);
-								} else {
-									sb.append(Constants.MID_GRID_INTRO_NODE_NOT_FOUND);
-								}
-								if (listNode.hasNode("element_list_0")) {
-									Node element_list_0 = listNode
-											.getNode("element_list_0");
-									int size = list.size();
-									if(size>1) {
-										element_list_0.setProperty("listitems",
-												list.toArray(new String[list
-														.size()]));
+								if (gd23v1_mid_Node.hasNode("list")) {
+									Node listNode = gd23v1_mid_Node.getNode("list");
+									if (StringUtils.isNotBlank(h2Text)) {
+										listNode.setProperty("title", h2Text);
 									} else {
-										element_list_0.setProperty("listitems",list.get(0));
+										sb.append(Constants.MID_GRID_HEADING_NOT_FOUND);
+									}
+									if (listNode.hasNode("intro")) {
+										Node introNode = listNode.getNode("intro");
+										introNode.setProperty("paragraph_rte",
+												pText);
+									} else {
+										sb.append(Constants.MID_GRID_INTRO_NODE_NOT_FOUND);
+									}
+									if (listNode.hasNode("element_list_0")) {
+										Node element_list_0 = listNode
+												.getNode("element_list_0");
+										int size = list.size();
+										if(size>1) {
+											element_list_0.setProperty("listitems",
+													list.toArray(new String[list
+													                        .size()]));
+										} else {
+											element_list_0.setProperty("listitems",list.get(0));
+										}
+									} else {
+										sb.append(Constants.MID_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 									}
 								} else {
-									sb.append(Constants.MID_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
+									sb.append(Constants.MID_GRID_LIST_NODE_NOT_FOUND);
 								}
-							} else {
-								sb.append(Constants.MID_GRID_LIST_NODE_NOT_FOUND);
-							}
 							}
 						} else {
 							sb.append(Constants.MID_GRID_NODE_NOT_FOUND);
@@ -445,8 +450,8 @@ public class ServiceListingVariation01 extends BaseAction {
 								text = gd_left_Element.html();
 								flag = false;
 							}else{
-							sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
-						}
+								sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
+							}
 						}
 						// End get content.
 						// Start set content.
@@ -454,54 +459,54 @@ public class ServiceListingVariation01 extends BaseAction {
 							Node gd23v1_mid_Node = midBottomNode
 									.getNode("gd23v1-right");
 							if(anchor){
-							if (gd23v1_mid_Node.hasNode("list")) {
-								Node listNode = gd23v1_mid_Node.getNode("list");
-								if (StringUtils.isNotBlank(h2Text)) {
-									listNode.setProperty("title", h2Text);
-								} else {
-									sb.append(Constants.RIGHT_GRID_HEADING_NOT_FOUND);
-								}
-								if (listNode.hasNode("intro")) {
-									Node introNode = listNode.getNode("intro");
-									introNode.setProperty("paragraph_rte",
-											pText);
-								} else {
-									sb.append(Constants.RIGHT_GRID_INTRO_NODE_NOT_FOUND);
-								}
-								if (listNode.hasNode("element_list_0")) {
-									Node element_list_0 = listNode
-											.getNode("element_list_0");
-									int size = list.size();
-									 if(size>1){
-										element_list_0.setProperty("listitems",
-												list.toArray(new String[list
-														.size()]));
+								if (gd23v1_mid_Node.hasNode("list")) {
+									Node listNode = gd23v1_mid_Node.getNode("list");
+									if (StringUtils.isNotBlank(h2Text)) {
+										listNode.setProperty("title", h2Text);
 									} else {
-										element_list_0.setProperty(
-												"listitems",
-												list.get(0));
+										sb.append(Constants.RIGHT_GRID_HEADING_NOT_FOUND);
 									}
-								} else {
-									sb.append(Constants.RIGHT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
-								}
-							} else {
-								try {
-									if (gd23v1_mid_Node.hasNode("htmlblob")) {
-										Node htmlBlob = gd23v1_mid_Node
-												.getNode("htmlblob");
-										if(flag){
-										text = gd_mid_Elements.html();
+									if (listNode.hasNode("intro")) {
+										Node introNode = listNode.getNode("intro");
+										introNode.setProperty("paragraph_rte",
+												pText);
+									} else {
+										sb.append(Constants.RIGHT_GRID_INTRO_NODE_NOT_FOUND);
+									}
+									if (listNode.hasNode("element_list_0")) {
+										Node element_list_0 = listNode
+												.getNode("element_list_0");
+										int size = list.size();
+										if(size>1){
+											element_list_0.setProperty("listitems",
+													list.toArray(new String[list
+													                        .size()]));
+										} else {
+											element_list_0.setProperty(
+													"listitems",
+													list.get(0));
 										}
-										htmlBlob.setProperty(
-												"html",text);
 									} else {
-										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST);
+										sb.append(Constants.RIGHT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 									}
-								} catch (Exception e) {
-									log.error("Exception : ", e);
-									sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
+								} else {
+									try {
+										if (gd23v1_mid_Node.hasNode("htmlblob")) {
+											Node htmlBlob = gd23v1_mid_Node
+													.getNode("htmlblob");
+											if(flag){
+												text = gd_mid_Elements.html();
+											}
+											htmlBlob.setProperty(
+													"html",text);
+										} else {
+											sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST);
+										}
+									} catch (Exception e) {
+										log.error("Exception : ", e);
+										sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
+									}
 								}
-							}
 							}
 						} else {
 							sb.append(Constants.RIGHT_GRID_NODE_NOT_FOUND);
@@ -514,13 +519,13 @@ public class ServiceListingVariation01 extends BaseAction {
 
 					// end gd-right component.
 					// ------------------------------------------------------------------------------------------------------------------------------------------
-				} catch (Exception e) {
-					sb.append(Constants.URL_CONNECTION_EXCEPTION);
-				}
+			}
+			else{
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 			session.save();
 		} catch (Exception e) {
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			sb.append("<li>Unable to migrate"+e+"</li>");
 			log.debug("Exception as url cannot be connected: " + e);
 		}
 

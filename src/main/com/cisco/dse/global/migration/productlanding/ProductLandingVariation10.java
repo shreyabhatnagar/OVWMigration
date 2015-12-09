@@ -21,9 +21,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.BaseAction;
+import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
 
-public class ProductLandingVariation10 {
+public class ProductLandingVariation10 extends BaseAction {
 
 	/**
 	 * @param args
@@ -66,7 +68,11 @@ public class ProductLandingVariation10 {
 			try {
 				doc = Jsoup.connect(loc).get();
 				log.debug("Connected to the provided URL");
-
+			} catch (Exception e) {
+				doc = getConnection(loc);
+			}
+			
+			if(doc != null){
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start set page properties.
 				
@@ -541,8 +547,8 @@ public class ProductLandingVariation10 {
 
 				// end of follow us component
 
-			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
+			} else {
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 
 		} catch (Exception e) {

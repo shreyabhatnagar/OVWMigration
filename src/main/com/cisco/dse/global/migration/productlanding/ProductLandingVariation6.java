@@ -23,9 +23,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.cisco.dse.global.migration.config.BaseAction;
+import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
 
-public class ProductLandingVariation6 {
+public class ProductLandingVariation6 extends BaseAction {
 
 	Document doc;
 	StringBuilder sb = new StringBuilder(1024);
@@ -66,23 +68,22 @@ public class ProductLandingVariation6 {
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
+				log.debug("Connected to the provided URL");
 			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
+				doc = getConnection(loc);
 			}
 
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set page properties.
-			
+
 			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-			
+
 			// end set page properties.
 			// ------------------------------------------------------------------------------------------------------------------------------------------
-						
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start of hero panel section.
-			try {
-				if (doc != null) {
+			if (doc != null) {
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start of hero panel section.
+				try {
 					Elements frameElements = null;
 					Elements heropanelElements = doc.select("div.c50-pilot");
 					if (heropanelElements != null) {
@@ -147,9 +148,9 @@ public class ProductLandingVariation6 {
 														String h2 = h2element
 																.text();
 														heropanelNode
-																.setProperty(
-																		"title",
-																		h2);
+														.setProperty(
+																"title",
+																h2);
 													} else {
 														sb.append("<li>No heading foundin hero panel.</li>");
 													}
@@ -165,9 +166,9 @@ public class ProductLandingVariation6 {
 														String p = pElement
 																.text();
 														heropanelNode
-																.setProperty(
-																		"description",
-																		p);
+														.setProperty(
+																"description",
+																p);
 													} else {
 														sb.append("<li>No description found in hero panel.</li>");
 													}
@@ -185,13 +186,13 @@ public class ProductLandingVariation6 {
 														String ahref = aElement
 																.attr("href");
 														heropanelNode
-																.setProperty(
-																		"linktext",
-																		aText);
+														.setProperty(
+																"linktext",
+																aText);
 														heropanelNode
-																.setProperty(
-																		"linkurl",
-																		ahref);
+														.setProperty(
+																"linkurl",
+																ahref);
 													} else {
 														sb.append("<li>No anchor link found in hero panel.</li>");
 													}
@@ -234,19 +235,15 @@ public class ProductLandingVariation6 {
 					} else {
 						sb.append("<li>Content path doesn't exist in WEM</li>");
 					}
-				} else {
-					sb.append("<li>Cannot connect to the Web publisher page.</li>");
+				} catch (Exception e) {
+					log.error("Exception : ", e);
+					sb.append("<li>Unable to update Hero panel component.</li>");
 				}
-			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Unable to update Hero panel component.</li>");
-			}
 
-			// end of hero panel.
-			// ---------------------------------------------------------------------------------------------------------------------------------------
-			// start of primary CTA section.
-			try {
-				if (doc != null) {
+				// end of hero panel.
+				// ---------------------------------------------------------------------------------------------------------------------------------------
+				// start of primary CTA section.
+				try {
 					String h3Text = "";
 					String pText = "";
 					String aText = "";
@@ -422,7 +419,7 @@ public class ProductLandingVariation6 {
 									if (list.size() > 1) {
 										followus.setProperty("links",
 												list.toArray(new String[list
-														.size()]));
+												                        .size()]));
 									}
 
 								} else {
@@ -442,19 +439,15 @@ public class ProductLandingVariation6 {
 						sb.append("<li>Node doesn't exist with path : "
 								+ layoutOverView + "</li>");
 					}
-				} else {
-					sb.append("<li>Unable to connect to web publisher url.</li>");
+				} catch (Exception e) {
+					sb.append("<li>Unable to update benefits list component.\n</li>");
+					log.error("Exceptoin : ", e);
 				}
-			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits list component.\n</li>");
-				log.error("Exceptoin : ", e);
-			}
-			// end of primary CTA Section.
+				// end of primary CTA Section.
 
-			// --------------------------------------------------------------------------------------------------------------------------
-			// start of Grid one.
-			try {
-				if (doc != null) {
+				// --------------------------------------------------------------------------------------------------------------------------
+				// start of Grid one.
+				try {
 					Elements bdr_1 = null;
 					Elements gd12v2_pilots = doc.select("div.gd12v2-pilot");
 					if (gd12v2_pilots != null) {
@@ -548,17 +541,14 @@ public class ProductLandingVariation6 {
 						sb.append("<li>Node doesn't exist with path : "
 								+ layoutOverView + "</li>");
 					}
-				} else {
+				} catch (Exception e) {
+					log.error("Exception : ", e);
+					sb.append("<li>Unable to update grid component.\n</li>");
 				}
-			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Unable to update grid component.\n</li>");
-			}
-			// End of Grid.
-			// -----------------------------------------------------------------------------------------------------
-			// Start of the grid one elements.
-			try {
-				if (doc != null) {
+				// End of Grid.
+				// -----------------------------------------------------------------------------------------------------
+				// Start of the grid one elements.
+				try {
 					NodeIterator gd14v1_Iterator = null;
 					if (layoutOverViewNode != null) {
 						if (layoutOverViewNode.hasNode("gd14v1")) {
@@ -663,9 +653,9 @@ public class ProductLandingVariation6 {
 													if (StringUtils
 															.isNotBlank(paragraph)) {
 														introNode
-																.setProperty(
-																		"paragraph_rte",
-																		paragraph);
+														.setProperty(
+																"paragraph_rte",
+																paragraph);
 													} else {
 														sb.append("<li>no paragraph found in the grid.</li>");
 													}
@@ -694,10 +684,10 @@ public class ProductLandingVariation6 {
 													}
 													if (list.size() > 0) {
 														element_list
-																.setProperty(
-																		"listitems",
-																		list.toArray(new String[list
-																				.size()]));
+														.setProperty(
+																"listitems",
+																list.toArray(new String[list
+																                        .size()]));
 													} else {
 														sb.append("<li>No list elements found.</li>");
 													}
@@ -722,18 +712,14 @@ public class ProductLandingVariation6 {
 					} else {
 						sb.append("<li>left grid not found in the first section.</li>");
 					}
-				} else {
-					sb.append("<li>Unable to connect to Web publisher url.</li>");
+				} catch (Exception e) {
+					log.error("Exception : ", e);
+					sb.append("<li>Unable to update grid component." + e + "</li>");
 				}
-			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Unable to update grid component." + e + "</li>");
-			}
-			// End of grid one elements.
-			// -------------------------------------------------------------------------------------
-			// Start of grid two elements.
-			try {
-				if (doc != null) {
+				// End of grid one elements.
+				// -------------------------------------------------------------------------------------
+				// Start of grid two elements.
+				try {
 					NodeIterator gd14v1_Iterator = null;
 					if (layoutOverViewNode != null) {
 						if (layoutOverViewNode.hasNode("gd14v1_0")) {
@@ -821,24 +807,18 @@ public class ProductLandingVariation6 {
 						sb.append("<li>Node doesn't exist with path : "
 								+ layoutOverView + "</li>");
 					}
-
-				} else {
-					sb.append("<li>Unable to connect to web publisher url.</li>");
+				} catch (Exception e) {
+					log.error("Exception : ", e);
+					sb.append("<li>Unable to update grid two component.\n</li>");
 				}
+				// End of grid two elements.
 
-			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Unable to update grid two component.\n</li>");
-			}
-			// End of grid two elements.
-
-			// Start of grid three.
-			try {
-				String h2Text = "";
-				String pText = "";
-				String aText = "";
-				String aHref = "";
-				if (doc != null) {
+				// Start of grid three.
+				try {
+					String h2Text = "";
+					String pText = "";
+					String aText = "";
+					String aHref = "";
 					Elements c11v5_alt1_pilot = doc
 							.select("div.c11v5-alt1-pilot");
 					if (c11v5_alt1_pilot != null) {
@@ -887,82 +867,76 @@ public class ProductLandingVariation6 {
 					} else {
 						sb.append("<li>No spotlight content found.</li>");
 					}
-				} else {
-					sb.append("<li>Unable to connect to web publisher url.</li>");
-				}
-
-				NodeIterator gd14v1_Iterator = null;
-				if (layoutOverViewNode != null) {
-					if (layoutOverViewNode.hasNode("gd11v1_1")) {
-						Node gd14v1 = layoutOverViewNode.getNode("gd11v1_1");
-						if (gd14v1.hasNode("gd11v1-mid")) {
-							Node gd11v1_mid = gd14v1.getNode("gd11v1-mid");
-							if (gd11v1_mid.hasNode("spotlight_large_v2")) {
-								Node spotlight_large_v2 = gd11v1_mid
-										.getNode("spotlight_large_v2");
-								if (StringUtils.isNotBlank(h2Text)) {
-									spotlight_large_v2.setProperty("title",
-											h2Text);
-								} else {
-									sb.append("<li>No heading found in spotlight.</li>");
-								}
-								if (StringUtils.isNotBlank(pText)) {
-									spotlight_large_v2.setProperty(
-											"description", pText);
-								} else {
-									sb.append("<li>No description found in spotlight.</li>");
-								}
-								if (StringUtils.isNotBlank(aText)) {
-									spotlight_large_v2.setProperty("linktext",
-											aText);
-								} else {
-									sb.append("<li>No anchor text found in spotlight.</li>");
-								}
-								if (spotlight_large_v2.hasNode("cta")) {
-									Node ctaNode = spotlight_large_v2
-											.getNode("cta");
-									if (StringUtils.isNotBlank(aHref)) {
-										ctaNode.setProperty("url", aHref);
+					NodeIterator gd14v1_Iterator = null;
+					if (layoutOverViewNode != null) {
+						if (layoutOverViewNode.hasNode("gd11v1_1")) {
+							Node gd14v1 = layoutOverViewNode.getNode("gd11v1_1");
+							if (gd14v1.hasNode("gd11v1-mid")) {
+								Node gd11v1_mid = gd14v1.getNode("gd11v1-mid");
+								if (gd11v1_mid.hasNode("spotlight_large_v2")) {
+									Node spotlight_large_v2 = gd11v1_mid
+											.getNode("spotlight_large_v2");
+									if (StringUtils.isNotBlank(h2Text)) {
+										spotlight_large_v2.setProperty("title",
+												h2Text);
 									} else {
-										sb.append("<li>href link is blank.</li>");
+										sb.append("<li>No heading found in spotlight.</li>");
+									}
+									if (StringUtils.isNotBlank(pText)) {
+										spotlight_large_v2.setProperty(
+												"description", pText);
+									} else {
+										sb.append("<li>No description found in spotlight.</li>");
+									}
+									if (StringUtils.isNotBlank(aText)) {
+										spotlight_large_v2.setProperty("linktext",
+												aText);
+									} else {
+										sb.append("<li>No anchor text found in spotlight.</li>");
+									}
+									if (spotlight_large_v2.hasNode("cta")) {
+										Node ctaNode = spotlight_large_v2
+												.getNode("cta");
+										if (StringUtils.isNotBlank(aHref)) {
+											ctaNode.setProperty("url", aHref);
+										} else {
+											sb.append("<li>href link is blank.</li>");
+										}
+									} else {
+										sb.append("<li>'cta' Node doesn't exist.</li>");
 									}
 								} else {
-									sb.append("<li>'cta' Node doesn't exist.</li>");
+									sb.append("<li>'spotlight_large_v2' Node doesn't exist.</li>");
 								}
-							} else {
-								sb.append("<li>'spotlight_large_v2' Node doesn't exist.</li>");
-							}
 
-						} else {
-							sb.append("<li>'gd11v1-mid' Node doesn't exist.</li>");
+							} else {
+								sb.append("<li>'gd11v1-mid' Node doesn't exist.</li>");
+							}
 						}
 					}
+
+				} catch (Exception e) {
+					log.error("Exception : ", e);
+					sb.append("<li>Unable to update grid two component.\n</li>");
 				}
+				// End of grid three.
+				// -----------------------------------------------------------------------------
+				// Start of grid four.
 
-			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Unable to update grid two component.\n</li>");
-			}
-			// End of grid three.
-			// -----------------------------------------------------------------------------
-			// Start of grid four.
+				try {
+					NodeIterator gd14v1_Iterator = null;
+					if (layoutOverViewNode != null) {
+						if (layoutOverViewNode.hasNode("gd14v1_1")) {
+							Node gd14v1 = layoutOverViewNode.getNode("gd14v1_1");
+							gd14v1_Iterator = gd14v1.getNodes("gd14v1-*");
+						} else {
+							sb.append("<li>'gd14v1' Node doesn't exists.</li>");
+						}
 
-			try {
-				NodeIterator gd14v1_Iterator = null;
-				if (layoutOverViewNode != null) {
-					if (layoutOverViewNode.hasNode("gd14v1_1")) {
-						Node gd14v1 = layoutOverViewNode.getNode("gd14v1_1");
-						gd14v1_Iterator = gd14v1.getNodes("gd14v1-*");
 					} else {
-						sb.append("<li>'gd14v1' Node doesn't exists.</li>");
+						sb.append("<li>Node doesn't exist with path : "
+								+ layoutOverView + "</li>");
 					}
-
-				} else {
-					sb.append("<li>Node doesn't exist with path : "
-							+ layoutOverView + "</li>");
-				}
-
-				if (doc != null) {
 					Elements gd14v1_pilots = doc.select("div.gd14v1-pilot");
 					if (gd14v1_pilots != null) {
 						Elements c23v2_pilots = gd14v1_pilots
@@ -1152,20 +1126,20 @@ public class ProductLandingVariation6 {
 					} else {
 						sb.append("<li>Grid Four title border section not found. </li>");
 					}
-				} else {
-					sb.append("<li>doc object is blank.</li>");
-				}
 			} catch (Exception e) {
 				log.error("Exception : ", e);
 				sb.append("<li>Unable to update grid two component.\n</li>");
 			}
 			// End of grid four.
-			session.save();
-		} catch (Exception e) {
-			log.error("Exception : ", e);
-			sb.append("<li>Exception " + e + "</li>");
+		}else{
+			sb.append(Constants.URL_CONNECTION_EXCEPTION);
 		}
-		sb.append("</ul></td>");
-		return sb.toString();
+		session.save();
+	} catch (Exception e) {
+		log.error("Exception : ", e);
+		sb.append("<li>Exception " + e + "</li>");
 	}
+	sb.append("</ul></td>");
+	return sb.toString();
+}
 }
