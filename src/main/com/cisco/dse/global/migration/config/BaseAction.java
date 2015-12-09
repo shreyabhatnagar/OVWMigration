@@ -13,21 +13,29 @@ public abstract class BaseAction {
 
 	protected Document getConnection(String loc) {
 		Document doc = null;
-		try {
-			log.debug("in the getConnection method.");
-			Connection connection = Jsoup.connect(loc);
-			if (connection != null) {
-				doc = connection.get();
-			} else if (count < 10) {
-				count++;
-				log.debug("Trying to reconnect count : " + count);
-				getConnection(loc);
+		try {			
+			log.debug("Inside the getConnection method.");
+			Connection connection = null;
+			for (int retry=0; retry<10; retry++) {
+				log.debug("Trying to establish connection. Connection retry count is : "+retry);
+				connection = Jsoup.connect(loc);
+				if (connection != null) {
+					try {
+						log.debug("Connection established!!!");
+						doc = connection.get();
+						break;
+					}
+					catch (Exception e) {
+						log.error("Exception : ",e);
+						log.debug("As document is not retrieved due to above exception, connection retry loop will continue.");
+					}
+				}
+				Thread.sleep(3000);
 			}
-		} catch (Exception e) {
+		}catch (Exception e) {
 			log.error("Exception : ", e);
 		}
 
 		return doc;
 	}
-
 }
