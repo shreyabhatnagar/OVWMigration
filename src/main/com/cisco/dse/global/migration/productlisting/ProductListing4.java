@@ -1,6 +1,7 @@
 package com.cisco.dse.global.migration.productlisting;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -13,6 +14,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.filters.EscapeUnicode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -71,7 +73,11 @@ public class ProductListing4 extends BaseAction{
 			log.debug("Path for node:" + productListingMidNode.getPath());
 			try {
 				doc = Jsoup.connect(loc).get();
+			} catch (Exception e) {
+				getConnection(loc);
+			}
 
+			if(doc != null){
 				// start of text component
 				try{
 					setText(doc, productListingMidNode);
@@ -88,9 +94,7 @@ public class ProductListing4 extends BaseAction{
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 				}
 				// end of HtmlBlob
-
-			} catch (Exception e) {
-				getConnection(loc);
+			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 
@@ -105,7 +109,7 @@ public class ProductListing4 extends BaseAction{
 
 	// Set Text Method
 	public void setText(Document doc, Node productListingMidNode) throws RepositoryException{
-		
+
 		Elements textElements = doc.select("div.c00-pilot");
 		if(textElements == null){
 			sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
@@ -149,8 +153,10 @@ public class ProductListing4 extends BaseAction{
 	//End of Text Method
 
 	//Start of setHTMLBlob
-	public void setHTMLBlob(Document doc, Node productListingMidNode) throws RepositoryException{
-		Element htmlblobele = doc.getElementById("n21");
+	public void setHTMLBlob(Document doc, Node productListingMidNode) throws RepositoryException, UnsupportedEncodingException{
+		Element htmlblobele = doc.select("div.htmlblob").first();
+		Element htmlblobeleID = doc.getElementById("n21");
+
 		if(htmlblobele != null && !htmlblobele.equals("")){
 			Node blobNode = productListingMidNode.hasNode("htmlblob") ? productListingMidNode.getNode("htmlblob") : null;
 			if(blobNode != null){
@@ -159,12 +165,27 @@ public class ProductListing4 extends BaseAction{
 			{
 				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 			}
-		}else {
+		} else if(htmlblobeleID != null && !htmlblobeleID.equals("")) {
+			Node blobNode = productListingMidNode.hasNode("htmlblob") ? productListingMidNode.getNode("htmlblob") : null;
+			if(blobNode != null){
+				String htmlblobeleIDappend = "<link rel='stylesheet' type='text/css' href='https://www.cisco.com/assets/pilot/overrides/n21_sprite.css'>"+
+						"<style type='text/css'>"+
+						".n21-images { background-image: url('www.cisco.com/assets/swa/img/pcr/uc_sprite.jpg'); }"+
+						"</style>";
+				blobNode.setProperty("html",htmlblobeleIDappend+htmlblobeleID.outerHtml());
+				sb.append("<li>Show and Hide text need to be migrated manually</li>");
+			}else
+			{
+				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+			}
+
+		}
+		else {
 			sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 		}
 
 	}
-	
+
 	//End of setHTMLBlob
 }
 
