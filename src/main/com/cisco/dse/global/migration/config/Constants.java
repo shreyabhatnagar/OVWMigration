@@ -132,6 +132,42 @@ public class Constants {
 
 	//LEFT_GRID_ANCHOR_ELEMENTS_NOT_FOUND
 	public static final String LEFT_GRID_ANCHOR_ELEMENTS_NOT_FOUND = "<li>Left grid anchor elements not found.</li>";
+	
+	//LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND
+	public static final String LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND = "<li>Element_list node is not found for left grid node</li>";
+
+	//LEFT_GRID_LIST_NODE_NOT_FOUND
+	public static final String LEFT_GRID_LIST_NODE_NOT_FOUND = "<li>List node is not found for left grid node.</li>";
+	
+	//LEFT_GRID_NODE_NOT_FOUND
+	public static final String LEFT_GRID_NODE_NOT_FOUND = "<li>Node for left grid is not found.</li>";
+
+	//UNABLE_TO_MIGRATE_LEFT_GRID
+	public static final String UNABLE_TO_MIGRATE_LEFT_GRID = "<li>Unable to migrate left grid.</li>";
+	
+	//MID_GRID_ELEMENT_NOT_FOUND
+	public static final String MID_GRID_ELEMENT_NOT_FOUND = "<li>Mid grid element not found.</li>";
+
+	//MID_GRID_HEADING_NOT_FOUND
+	public static final String MID_GRID_HEADING_NOT_FOUND = "<li>Mid grid heading not found.</li>";
+
+	//MID_GRID_ANCHOR_ELEMENTS_NOT_FOUND
+	public static final String MID_GRID_ANCHOR_ELEMENTS_NOT_FOUND = "<li>Mid grid anchor elements not found.</li>";
+
+	//MID_GRID_INTRO_NODE_NOT_FOUND
+	public static final String MID_GRID_INTRO_NODE_NOT_FOUND = "<li>Intro node is not found for mid grid node</li>";
+
+	//MID_GRID_ELEMENT_LIST_NODE_NOT_FOUND
+	public static final String MID_GRID_ELEMENT_LIST_NODE_NOT_FOUND = "<li>Element_list node is not found for mid grid node</li>";
+
+	//MID_GRID_LIST_NODE_NOT_FOUND
+	public static final String MID_GRID_LIST_NODE_NOT_FOUND = "<li>List node is not found for mid grid node.</li>";
+
+	//MID_GRID_NODE_NOT_FOUND
+	public static final String MID_GRID_NODE_NOT_FOUND = "<li>Node for mid grid is not found.</li>";
+
+	//UNABLE_TO_MIGRATE_MID_GRID
+	public static final String UNABLE_TO_MIGRATE_MID_GRID = "<li>Unable to migrate mid grid.</li>";
 
 	//
 	public static final String NO_HERO_OR_HTMLBLOB_NOT_FOUND = "<li>Hero Carousel or Html Blob not found.</li>";
@@ -144,5 +180,26 @@ public class Constants {
 
 	// TEXT_ELEMENT_COUNT
 	public static final String TEXT_ELEMENT_COUNT = " and text elements on the page size is ";
+
+	//RIGHT_GRID_ELEMENT_NOT_FOUND
+	public static final String RIGHT_GRID_ELEMENT_NOT_FOUND = "<li>Right grid element not found.</li>";
+		
+	//RIGHT_GRID_HEADING_NOT_FOUND
+	public static final String RIGHT_GRID_HEADING_NOT_FOUND = "<li>Right grid heading not found.</li>";
+
+	//RIGHT_GRID_ANCHOR_ELEMENTS_NOT_FOUND
+	public static final String RIGHT_GRID_ANCHOR_ELEMENTS_NOT_FOUND = "<li>Right grid anchor elements not found.</li>";
+
+	//RIGHT_GRID_INTRO_NODE_NOT_FOUND
+	public static final String RIGHT_GRID_INTRO_NODE_NOT_FOUND = "<li>Intro node is not found for right grid node</li>";
+
+	//RIGHT_GRID_ELEMENT_LIST_NODE_NOT_FOUND
+	public static final String RIGHT_GRID_ELEMENT_LIST_NODE_NOT_FOUND = "<li>Element_list node is not found for right grid node</li>";
+
+	//UNABLE_TO_MIGRATE_RIGHT_GRID
+	public static final String UNABLE_TO_MIGRATE_RIGHT_GRID = "<li>Unable to migrate mid grid.</li>";
+
+	//RIGHT_GRID_NODE_NOT_FOUND
+	public static final String RIGHT_GRID_NODE_NOT_FOUND = "<li>Node for mid grid is not found.</li>";
 
 }

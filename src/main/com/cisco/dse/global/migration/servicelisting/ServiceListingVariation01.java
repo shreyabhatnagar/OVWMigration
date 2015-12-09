@@ -181,7 +181,13 @@ public class ServiceListingVariation01 extends BaseAction {
 										Elements aElements = element.getElementsByTag("a");
 										String aText = aElements.text();
 										String aHref = aElements.attr("href");
-										String pdf = element.ownText();									
+										String pdf = element.ownText();
+										if(StringUtils.isEmpty(pdf)){ 
+											Element pdfElement = element.select("nobr").first();
+											if(pdfElement != null){
+											pdf = pdfElement.ownText();
+											}
+										}
 										String pdfIcon =null;
 										if(pdf.length()>0){											
 											if(pdf.toLowerCase().contains("pdf"))
@@ -207,13 +213,13 @@ public class ServiceListingVariation01 extends BaseAction {
 										list.add(obj.toString());
 									}
 								} else {
-									sb.append("<li>LEFT_GRID_HEADING_NOT_FOUND</li>");
+									sb.append(Constants.LEFT_GRID_HEADING_NOT_FOUND);
 								}
 							} else {
-								sb.append("<li>LEFT_GRID_HEADING_NOT_FOUND</li>");
+								sb.append(Constants.LEFT_GRID_HEADING_NOT_FOUND);
 							}
 						} else {
-							sb.append("<li>LEFT_GRID_ELEMENT_NOT_FOUND</li>");
+							sb.append(Constants.LEFT_GRID_ELEMENT_NOT_FOUND);
 						}
 						// End get content.
 						// Start set content.
@@ -226,7 +232,7 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (StringUtils.isNotBlank(h2Text)) {
 									listNode.setProperty("title", h2Text);
 								} else {
-									sb.append("<li>LEFT_GRID_HEADING_NOT_FOUND</li>");
+									sb.append(Constants.LEFT_GRID_HEADING_NOT_FOUND);
 								}
 								if (listNode.hasNode("element_list_0")) {
 									Node element_list_0 = listNode
@@ -243,18 +249,18 @@ public class ServiceListingVariation01 extends BaseAction {
 												list.toString());
 									}
 								} else {
-									sb.append("<li>LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND</li>");
+									sb.append(Constants.LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 								}
 							} else {
-								sb.append("<li>LEFT_GRID_LIST_NODE_NOT_FOUND</li>");
+								sb.append(Constants.LEFT_GRID_LIST_NODE_NOT_FOUND);
 							}
 						} else {
-							sb.append("<li>LEFT_GRID_NODE_NOT_FOUND</li>");
+							sb.append(Constants.LEFT_GRID_NODE_NOT_FOUND);
 						}
 						// End set content.
 					} catch (Exception e) {
 						log.error("Exception : ", e);
-						sb.append("<li>UNABLE_TO_MIGRATE_LEFT_GRID</li>");
+						sb.append(Constants.UNABLE_TO_MIGRATE_LEFT_GRID);
 					}
 					// end gd-left component.
 					// ----------------------------------------------------------------------------------------------------------------------------------------
@@ -262,6 +268,7 @@ public class ServiceListingVariation01 extends BaseAction {
 					try {
 						String h2Text = "";
 						String pText = "";
+						boolean anchor = true;
 						List<String> list = new ArrayList<String>();
 						Elements gd_mid_Elements = doc.select("div.gd23-pilot")
 								.select("div.gd-mid");
@@ -274,16 +281,12 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (h2Element != null) {
 									h2Text = h2Element.text();
 								} else {
-									sb.append("<li>RIGHT_GRID_HEADING_NOT_FOUND</li>");
+									sb.append(Constants.MID_GRID_HEADING_NOT_FOUND);
 								}
 								Elements pElements = gd_mid_Elements
 										.select("p");
 								Elements aElements = gd_mid_Elements
 										.select("a");
-								log.debug("P elements of mid grid are:"
-										+ pElements);
-								log.debug("a elements of mid grid are:"
-										+ aElements);
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
@@ -308,40 +311,40 @@ public class ServiceListingVariation01 extends BaseAction {
 									obj.put("description", "");
 									obj.put("openInNewWindow", false);
 									list.add(obj.toString());
-									log.debug(list);
 								} else {
-									sb.append("<li>MID_GRID_ANCHOR_ELEMENTS_NOT_FOUND</li>");
+									anchor = false;
+									sb.append(Constants.MID_GRID_ANCHOR_ELEMENTS_NOT_FOUND);
 								}
 							} else {
-								sb.append("<li>MID_GRID_HEADING_NOT_FOUND</li>");
+								sb.append(Constants.MID_GRID_HEADING_NOT_FOUND);
 							}
 						} else {
-							sb.append("<li>MID_GRID_ELEMENT_NOT_FOUND</li>");
+							sb.append(Constants.MID_GRID_ELEMENT_NOT_FOUND);
 						}
 						// End get content.
 						// Start set content.
 						if (midBottomNode.hasNode("gd23v1-mid")) {
 							Node gd23v1_mid_Node = midBottomNode
 									.getNode("gd23v1-mid");
+							if(anchor){
 							if (gd23v1_mid_Node.hasNode("list")) {
 								Node listNode = gd23v1_mid_Node.getNode("list");
 								if (StringUtils.isNotBlank(h2Text)) {
 									listNode.setProperty("title", h2Text);
 								} else {
-									sb.append("<li>MID_GRID_HEADING_NOT_FOUND</li>");
+									sb.append(Constants.MID_GRID_HEADING_NOT_FOUND);
 								}
 								if (listNode.hasNode("intro")) {
 									Node introNode = listNode.getNode("intro");
 									introNode.setProperty("paragraph_rte",
 											pText);
 								} else {
-									sb.append("<li>MID_GRID_INTRO_NODE_NOT_FOUND</li>");
+									sb.append(Constants.MID_GRID_INTRO_NODE_NOT_FOUND);
 								}
 								if (listNode.hasNode("element_list_0")) {
 									Node element_list_0 = listNode
 											.getNode("element_list_0");
 									int size = list.size();
-									log.debug("Size of list is"+size);
 									if(size>1) {
 										element_list_0.setProperty("listitems",
 												list.toArray(new String[list
@@ -350,18 +353,19 @@ public class ServiceListingVariation01 extends BaseAction {
 										element_list_0.setProperty("listitems",list.get(0));
 									}
 								} else {
-									sb.append("<li>MID_GRID_ELEMENT_LIST_NODE_NOT_FOUND</li>");
+									sb.append(Constants.MID_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 								}
 							} else {
-								sb.append("<li>MID_GRID_LIST_NODE_NOT_FOUND</li>");
+								sb.append(Constants.MID_GRID_LIST_NODE_NOT_FOUND);
+							}
 							}
 						} else {
-							sb.append("<li>MID_GRID_NODE_NOT_FOUND</li>");
+							sb.append(Constants.MID_GRID_NODE_NOT_FOUND);
 						}
 						// End set content.
 					} catch (Exception e) {
 						log.error("Exception : ", e);
-						sb.append("<li>UNABLE_TO_MIGRATE_MID_GRID</li>");
+						sb.append(Constants.UNABLE_TO_MIGRATE_MID_GRID);
 					}
 
 					// end gd-mid component.
@@ -371,6 +375,9 @@ public class ServiceListingVariation01 extends BaseAction {
 					try {
 						String h2Text = "";
 						String pText = "";
+						String text = "";
+						boolean anchor = true;
+						boolean flag = true;
 						List<String> list = new ArrayList<String>();
 						Elements gd_mid_Elements = doc.select("div.gd23-pilot")
 								.select("div.gd-right");
@@ -383,17 +390,13 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (h2Element != null) {
 									h2Text = h2Element.text();
 								} else {
-									sb.append("<li>RIGHT_GRID_HEADING_NOT_FOUND</li>");
+									sb.append(Constants.RIGHT_GRID_HEADING_NOT_FOUND);
 								}
 								Elements pElements = gd_mid_Elements
 										.select("p");
 								Elements aElements = gd_mid_Elements
 										.select("a");
-								log.debug("P elements of right grid are:"
-										+ pElements);
-								log.debug("a elements of right grid are:"
-										+ aElements);
-								//pText = pElements.first().text();
+								pText = pElements.first().text();
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
@@ -417,34 +420,42 @@ public class ServiceListingVariation01 extends BaseAction {
 									obj.put("description", "");
 									obj.put("openInNewWindow", false);
 									list.add(obj.toString());
-									log.debug(list);
 								} else {
-									sb.append("<li>RIGHT_GRID_ANCHOR_ELEMENTS_NOT_FOUND</li>");
+									anchor = false;
+									sb.append(Constants.RIGHT_GRID_ANCHOR_ELEMENTS_NOT_FOUND);
 								}
 							} else {
-								sb.append("<li>RIGHT_GRID_HEADING_NOT_FOUND</li>");
+								sb.append(Constants.RIGHT_GRID_HEADING_NOT_FOUND);
 							}
 						} else {
-							sb.append("<li>RIGHT_GRID_ELEMENT_NOT_FOUND</li>");
+							Elements gd_left_Elements = doc.select("div.gd23-pilot").select("div.gd-left");
+							if(gd_left_Elements.size() == 2){
+								Element gd_left_Element = gd_left_Elements.last();
+								text = gd_left_Element.html();
+								flag = false;
+							}else{
+							sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
+						}
 						}
 						// End get content.
 						// Start set content.
 						if (midBottomNode.hasNode("gd23v1-right")) {
 							Node gd23v1_mid_Node = midBottomNode
 									.getNode("gd23v1-right");
+							if(anchor){
 							if (gd23v1_mid_Node.hasNode("list")) {
 								Node listNode = gd23v1_mid_Node.getNode("list");
 								if (StringUtils.isNotBlank(h2Text)) {
 									listNode.setProperty("title", h2Text);
 								} else {
-									sb.append("<li>RIGHT_GRID_HEADING_NOT_FOUND</li>");
+									sb.append(Constants.RIGHT_GRID_HEADING_NOT_FOUND);
 								}
 								if (listNode.hasNode("intro")) {
 									Node introNode = listNode.getNode("intro");
 									introNode.setProperty("paragraph_rte",
 											pText);
 								} else {
-									sb.append("<li>RIGHT_GRID_INTRO_NODE_NOT_FOUND</li>");
+									sb.append(Constants.RIGHT_GRID_INTRO_NODE_NOT_FOUND);
 								}
 								if (listNode.hasNode("element_list_0")) {
 									Node element_list_0 = listNode
@@ -460,32 +471,34 @@ public class ServiceListingVariation01 extends BaseAction {
 												list.get(0));
 									}
 								} else {
-									sb.append("<li>RIGHT_GRID_ELEMENT_LIST_NODE_NOT_FOUND</li>");
+									sb.append(Constants.RIGHT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 								}
 							} else {
 								try {
 									if (gd23v1_mid_Node.hasNode("htmlblob")) {
 										Node htmlBlob = gd23v1_mid_Node
 												.getNode("htmlblob");
-										String text = gd_mid_Elements.html();
-										log.debug("html blob content"+text);
+										if(flag){
+										text = gd_mid_Elements.html();
+										}
 										htmlBlob.setProperty(
 												"html",text);
 									} else {
-										sb.append("<li>HTMLBLOB_NODE_DOES_NOT_EXIST</li>");
+										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST);
 									}
 								} catch (Exception e) {
 									log.error("Exception : ", e);
-									sb.append("<li>UNABLE_TO_MIGRATE_RIGHT_GRID</li>");
+									sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
 								}
 							}
+							}
 						} else {
-							sb.append("<li>RIGHT_GRID_NODE_NOT_FOUND</li>");
+							sb.append(Constants.RIGHT_GRID_NODE_NOT_FOUND);
 						}
 						// End set content.
 					} catch (Exception e) {
 						log.error("Exception : ", e);
-						sb.append("<li>UNABLE_TO_MIGRATE_RIGHT_GRID</li>");
+						sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
 					}
 
 					// end gd-right component.
