@@ -108,7 +108,7 @@ public class ProductLandingVariation11 extends BaseAction {
 					String aHref = "";
 
 					Elements heroElements = doc.select("div.c50-pilot");
-					heroElements = heroElements.select("div.c50-text");
+					heroElements = heroElements.select("div.frame");
 					Node heroNode = indexLeftNode.hasNode("hero_large") ? indexLeftNode
 							.getNode("hero_large") : null;
 
@@ -147,7 +147,24 @@ public class ProductLandingVariation11 extends BaseAction {
 										} else {
 											sb.append("<li>Hero Component anchor tag not having any content in it ('<a>' is blank)</li>");
 										}
-
+										// start image
+										String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+										log.debug("heroImage " + heroImage + "\n");
+										heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+										log.debug("heroImage " + heroImage + "\n");
+										if (heroPanelNode != null) {
+											if (heroPanelNode.hasNode("image")) {
+												Node imageNode = heroPanelNode.getNode("image");
+												if (StringUtils.isNotBlank(heroImage)) {
+													imageNode.setProperty("fileReference" , heroImage);
+												} else {
+													sb.append("<li>hero image doesn't exist</li>");
+												}
+											} else {
+												sb.append("<li>hero image node doesn't exist</li>");
+											}
+										}
+										// end image
 										heroPanelNode.setProperty("title", h2Text);
 										heroPanelNode.setProperty("description", pText);
 										heroPanelNode.setProperty("linktext", aText);

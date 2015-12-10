@@ -278,6 +278,24 @@ public class ProductLandingVariation3 extends BaseAction{
 									} else {
 										log.debug("<li>Hero Panel link url element not found </li>");
 									}
+									// start image
+									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+									log.debug("heroImage " + heroImage + "\n");
+									heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+									log.debug("heroImage " + heroImage + "\n");
+									if (heroPanelNode != null) {
+										if (heroPanelNode.hasNode("image")) {
+											Node imageNode = heroPanelNode.getNode("image");
+											if (StringUtils.isNotBlank(heroImage)) {
+												imageNode.setProperty("fileReference" , heroImage);
+											} else {
+												sb.append("<li>hero image doesn't exist</li>");
+											}
+										} else {
+											sb.append("<li>hero image node doesn't exist</li>");
+										}
+									}
+									// end image
 									log.debug("heroPanelTitle " + heroPanelTitle + "\n");
 									log.debug("heroPanelDescription " + heroPanelDescription + "\n");
 									log.debug("heroPanelLinkText " + heroPanelLinkText + "\n");
