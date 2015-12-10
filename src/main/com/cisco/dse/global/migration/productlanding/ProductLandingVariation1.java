@@ -445,7 +445,6 @@ public class ProductLandingVariation1 extends BaseAction {
 														log.debug("SERIES SIZE0");
 														continue;
 													}
-													log.debug("SERIES SIZE NOTTTTTTTTTTTTT 0");
 													count = count + 1;
 													if (drawerPanelsIterator.hasNext()) {
 														drawersPanelNode = drawerPanelsIterator.nextNode();
@@ -523,15 +522,10 @@ public class ProductLandingVariation1 extends BaseAction {
 														String title = "";
 														String linkTitleUrl = "";
 
-														/*	if (subDrawerIterator.hasNext()) {
-																subdrawerpanel = subDrawerIterator.nextNode();
-															} */
 														Elements subItems = ss.select("div.prodinfo");
-														Elements subItemUlInfoLinks = ss.select("ul.infolinks");
 
 														if (subItems != null) {
 
-															//																Element subItem = subItems.first();
 															for (Element subItem : subItems) {
 																if ((clearfixdivs.size() != subDrawerIterator.getSize())) {
 																	misMatchFlag = false;
@@ -641,7 +635,6 @@ public class ProductLandingVariation1 extends BaseAction {
 
 																}
 																if (subdrawerpanel != null) {
-																	log.debug("updating sub drawer*****" + subdrawerpanel.getPath() + "at" + drawersPanelNode.getPath());
 																	if (StringUtils.isNotBlank(title)) {
 																		subdrawerpanel
 																		.setProperty("title", title);
@@ -694,8 +687,6 @@ public class ProductLandingVariation1 extends BaseAction {
 
 											}
 										}
-										log.debug("countttttttt" + count);
-										log.debug("iterator size" + drawerPanelsIterator.getSize());
 										if (count != drawerPanelsIterator.getSize())
 											sb.append("<li>Mis-Match in drawer panels count</li>");
 
@@ -737,17 +728,12 @@ public class ProductLandingVariation1 extends BaseAction {
 								if (htmlblobElement.hasClass("c47-pilot")) {
 									continue;
 								}
-								log.debug("found icon/poly elentsssssssssssssssssssss");
 								if (htmlblobElement != null) {
-									log.debug("htmlblobElement)))))))))))))))))");
 									Elements ulElements = htmlblobElement.getElementsByTag("ul");
 									if (ulElements.size() > 0) {
-										log.debug("ul is there in icon block so cinsidering**************");
 										html = htmlblobElement.outerHtml();
 									}
-								} else {
-									log.debug("<li>htmlblob/icon-block Element section not found</li>");
-								}
+								} 
 							}
 						} else {
 							sb.append("<li>htmlblob component not found on publisher page </li>");
@@ -757,13 +743,9 @@ public class ProductLandingVariation1 extends BaseAction {
 						if (iconBlockElements != null) {
 							//Element htmlblobElement = iconBlockElements.first();
 							for (Element htmlblobElement : iconBlockElements) {
-								log.debug("found icon/poly elentsssssssssssssssssssss");
 								if (htmlblobElement != null) {
-									log.debug("htmlblobElement)))))))))))))))))");
-									log.debug("ul is there in icon block so cinsidering**************");
 									html = htmlblobElement.outerHtml();
 									if (htmlblobElement.getElementsByTag("ul").size() > 0) {
-										log.debug("Nothing to add");
 									}
 									else {
 										Element iconBlockParent = htmlblobElement.parent();
@@ -771,7 +753,6 @@ public class ProductLandingVariation1 extends BaseAction {
 											Elements anchorTagEle = iconBlockParent.getElementsByTag("a");
 											if (anchorTagEle != null) {
 												for (Element aTagElement : anchorTagEle) {
-													log.debug("Anchor tag wala info ---"+anchorTagEle.outerHtml());
 													html = html + aTagElement.outerHtml();
 													html = html + "<br>";
 												}
@@ -784,9 +765,7 @@ public class ProductLandingVariation1 extends BaseAction {
 									log.debug("<li>htmlblob/icon-block Element section not found</li>");
 								}
 							}
-						} else {
-							sb.append("<li>htmlblob component not found on publisher page </li>");
-						}
+						} 
 					}
 					//				Elements iconBlockElements = doc.select("div.icon-block, div.poly");
 
