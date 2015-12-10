@@ -279,6 +279,10 @@ public class ProductLandingVariation1 extends BaseAction {
 									} else {
 										log.debug("<li>Hero Panel link url element not found </li>");
 									}
+									// start image
+									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+									log.debug("heroImage " + heroImage + "\n");
+									// end image
 									log.debug("heroPanelTitle " + heroPanelTitle + "\n");
 									log.debug("heroPanelDescription " + heroPanelDescription + "\n");
 									log.debug("heroPanelLinkText " + heroPanelLinkText + "\n");
@@ -479,6 +483,10 @@ public class ProductLandingVariation1 extends BaseAction {
 															} else {
 																log.debug("<li>drawer panel para element not found</li>");
 															}
+															// start image																													
+															String drawerImage = FrameworkUtils.extractImagePath(seriesElement, sb);
+															log.debug("drawerImage " + drawerImage + "\n");
+															// end image
 															if (drawersPanelNode != null) {
 																log.debug("panelTitle " + panelTitle + "\n");
 																log.debug("linkUrl " + linkUrl + "\n");
@@ -562,7 +570,10 @@ public class ProductLandingVariation1 extends BaseAction {
 																	} else {
 																		log.debug("<li>sub series title Elements section not found</li>");
 																	}
-
+																	// start image
+																	String subDrawerImage = FrameworkUtils.extractImagePath(subItem, sb);
+																	log.debug("subDrawerImage " + subDrawerImage + "\n");
+																	// end image
 																	Elements indDetailsElements = subItem.select("ul.details");
 
 																	if (indDetailsElements != null) {

@@ -256,6 +256,10 @@ public class ProductLandingVariation11 extends BaseAction {
 								} else {
 									sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
 								}
+								// start image
+								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+								log.debug("spotLightImage " + spotLightImage + "\n");
+								// end image
 								spotLightComponentNode.setProperty("title", h2Text);
 								spotLightComponentNode.setProperty("description",
 										pText);

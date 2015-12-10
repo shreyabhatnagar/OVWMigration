@@ -187,4 +187,29 @@ public class FrameworkUtils {
 		return null;
 	}
     
+	/**
+     * extract image path.
+     * @param element 
+     * 		 the Element
+     * @param sb
+     *       the StringBuilder
+     */
+    public static String extractImagePath(Element element, StringBuilder sb) {
+    	String imagePath = "";
+    	if (element != null) {
+	    	Elements imageElements = element.getElementsByTag("img");
+			if (imageElements != null) {
+				Element imageElement = imageElements.first();
+				if (imageElement != null) {
+					imagePath =imageElement.attr("src");
+				} else {
+					sb.append("<li>image doesn't exist </li>");
+				}
+			} else {
+				sb.append("<li>image doesn't exist </li>");
+			}
+    	}
+		log.debug("imagePath " + imagePath + "\n");
+		return imagePath;
+    }
    }
