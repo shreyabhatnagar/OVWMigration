@@ -856,7 +856,7 @@ public class ProductLandingVariation1 extends BaseAction {
 										log.debug("<li>Content miss match for "+"</li>");
 									}
 								}else{
-									sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
+									log.debug("<li>one of title_bordered node doesn't exist in node structure.</li>");
 								}
 							}
 							if(flag){

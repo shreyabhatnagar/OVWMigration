@@ -19,6 +19,7 @@ import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ProductListingVariation7 extends BaseAction {
 
@@ -41,6 +42,7 @@ public class ProductListingVariation7 extends BaseAction {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content";
 		String midGridNodePath = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/product-listing/jcr:content/content_parsys/products/layout-products/gd21v1/gd21v1-mid";
@@ -49,7 +51,7 @@ public class ProductListingVariation7 extends BaseAction {
 				+ catType + "/<prod>/product-listing.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -58,10 +60,10 @@ public class ProductListingVariation7 extends BaseAction {
 		midGridNodePath = midGridNodePath.replace("<locale>", locale).replace(
 				"<prod>", prod);
 		Node indexMidLeftNode = null;
-
+		javax.jcr.Node pageJcrNode = null;
 		try {
 			indexMidLeftNode = session.getNode(midGridNodePath);
-
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 				log.debug("Connected to the provided URL");
@@ -73,6 +75,16 @@ public class ProductListingVariation7 extends BaseAction {
 
 
 				title = doc.title();
+				
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+
+				
 				// start set text component.
 				try {
 					Node textNodeOne = null;

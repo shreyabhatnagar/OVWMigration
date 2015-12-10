@@ -421,7 +421,7 @@ public class ProductLandingVariation3 extends BaseAction{
 								if (titleBorderNodes.hasNext()) {
 									rightRailNode = (Node)titleBorderNodes.next();
 								} else {
-									sb.append("<li>all tile_boredered components are migrated</li>");
+									log.debug("<li>all tile_boredered components are migrated</li>");
 								}		
 
 
@@ -436,7 +436,7 @@ public class ProductLandingVariation3 extends BaseAction{
 										log.debug("<li>Content miss match for "+ele.className()+"</li>");
 									}
 								}else{
-									sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
+									log.debug("<li>one of title_bordered node doesn't exist in node structure.</li>");
 								}
 							}
 						}else{

@@ -21,6 +21,7 @@ import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class ProductListingVariation4 extends BaseAction{
 
 	/**
@@ -46,7 +47,7 @@ public class ProductListingVariation4 extends BaseAction{
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content";
 		String productListingMid = "/content/<locale>/"
 				+ catType
 				+ "/<prod>/product-listing/jcr:content/content_parsys/products/layout-products/gd21v1/gd21v1-mid";
@@ -56,7 +57,7 @@ public class ProductListingVariation4 extends BaseAction{
 				+ "/<prod>/product-listing.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
@@ -66,8 +67,10 @@ public class ProductListingVariation4 extends BaseAction{
 		productListingMid = productListingMid.replace("<locale>", locale).replace("<prod>", prod);
 
 		javax.jcr.Node productListingMidNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try{
 			productListingMidNode = session.getNode(productListingMid);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			log.debug("Path for node:" + productListingMidNode.getPath());
 			try {
 				doc = Jsoup.connect(loc).get();
@@ -76,6 +79,15 @@ public class ProductListingVariation4 extends BaseAction{
 			}
 
 			if(doc != null){
+				
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				
 				// start of text component
 				try{
 					setText(doc, productListingMidNode);
