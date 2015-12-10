@@ -98,6 +98,7 @@ public class ProductLandingVariation5 extends BaseAction {
 						String pText = "";
 						String aText = "";
 						String aHref = "";
+						String heroImage = "";
 						String parbaseContent = "";
 						Elements gridLeftElements = doc.select("div.gd-left");
 						if (gridLeftElements != null) {
@@ -173,7 +174,23 @@ public class ProductLandingVariation5 extends BaseAction {
 							} else {
 								sb.append("<li>No parbse text found.('div.text parbase section' element not found in 'div.gd-left')</li>");
 							}
-
+							// start image
+							Elements imageElements = gridLeftElements
+									.select("div.c50-image");
+							if (imageElements != null) {
+								Element imageElement = imageElements.first();
+								if (imageElement != null) {
+									heroImage = FrameworkUtils.extractImagePath(imageElement, sb);
+									log.debug("heroImage " + heroImage + "\n");
+									heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+									log.debug("heroImage " + heroImage + "\n");
+								} else {
+									sb.append("<li>hero image doesn't exist</li>");
+								}
+							} else {
+								sb.append("<li>hero image doesn't exist</li>");
+							}
+							// end image
 						} else {
 							sb.append("<li>Hero panel not found. ('div.gd-left' class not found in the document)</li>");
 						}
@@ -219,6 +236,20 @@ public class ProductLandingVariation5 extends BaseAction {
 											} else {
 												sb.append("<li>p a href ulr is blank in hero panel.</li>");
 											}
+											// start image
+											if (heroPanelNode != null) {
+												if (heroPanelNode.hasNode("image")) {
+													Node imageNode = heroPanelNode.getNode("image");
+													if (StringUtils.isNotBlank(heroImage)) {
+														imageNode.setProperty("fileReference" , heroImage);
+													} else {
+														sb.append("<li>hero image doesn't exist</li>");
+													}
+												} else {
+													sb.append("<li>hero image node doesn't exist</li>");
+												}
+											}
+											// end image
 										} else {
 											sb.append("<li>Node with name 'heropanel*' doesn't exist under "
 													+ hero_large.getPath()

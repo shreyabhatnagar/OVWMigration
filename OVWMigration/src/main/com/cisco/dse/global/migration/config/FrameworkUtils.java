@@ -142,15 +142,15 @@ public class FrameworkUtils {
 		if (StringUtils.isNotBlank(path)) {
 			if (path.indexOf("/content/en/us") == -1
 					&& path.indexOf("/content/dam") == -1
-					|| path.indexOf("/c/en/us") == -1
-					|| path.indexOf("/c/dam") == -1) {
+					&& path.indexOf("/c/en/us") == -1
+					&& path.indexOf("/c/dam") == -1) {
 				if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
 					log.debug("Adding domain to the image path.");
 					path = "http://www.cisco.com" + path;
 				}
 				newImagePath = setContentToDAM(path, locale);
 			} else {
-				return path;
+				return "";
 			}
 		} else {
 			log.debug("image path is blank.");

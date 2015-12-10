@@ -199,6 +199,24 @@ public class ProductLandingVariation6 extends BaseAction {
 												} else {
 													sb.append("<li>No anchor link found in hero panel.</li>");
 												}
+												// start image
+												String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+												log.debug("heroImage " + heroImage + "\n");
+												heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+												log.debug("heroImage " + heroImage + "\n");
+												if (heropanelNode != null) {
+													if (heropanelNode.hasNode("image")) {
+														Node imageNode = heropanelNode.getNode("image");
+														if (StringUtils.isNotBlank(heroImage)) {
+															imageNode.setProperty("fileReference" , heroImage);
+														} else {
+															sb.append("<li>hero image doesn't exist</li>");
+														}
+													} else {
+														sb.append("<li>hero image node doesn't exist</li>");
+													}
+												}
+												// end image
 											}
 										} else {
 											sb.append("<li>Hero panel nodes("
@@ -771,6 +789,12 @@ public class ProductLandingVariation6 extends BaseAction {
 								} else {
 									sb.append("<li>No anchors found in grid two.</li>");
 								}
+								// start image
+								String spotLightImage = FrameworkUtils.extractImagePath(slp_Element, sb);
+								log.debug("spotLightImage " + spotLightImage + "\n");
+								spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
+								log.debug("spotLightImage " + spotLightImage + "\n");
+								// end image
 								if (gd14v1_Iterator.hasNext()) {
 									Node gd14v1_Node = (Node) gd14v1_Iterator
 											.next();
@@ -795,6 +819,18 @@ public class ProductLandingVariation6 extends BaseAction {
 										} else {
 											sb.append("<li>No anchor tag found in the grid two.</li>");
 										}
+										if (tile_slp_small != null) {
+											if (tile_slp_small.hasNode("image")) {
+												Node imageNode = tile_slp_small.getNode("image");
+												if (StringUtils.isNotBlank(spotLightImage)) {
+													imageNode.setProperty("fileReference" , spotLightImage);
+												} else {
+													sb.append("<li>hero image doesn't exist</li>");
+												}
+											} else {
+												sb.append("<li>hero image node doesn't exist</li>");
+											}
+										}
 									} else {
 										sb.append("<li>'tile_slp_small' Node doesn't exist.</li>");
 									}
@@ -818,6 +854,7 @@ public class ProductLandingVariation6 extends BaseAction {
 					String h2Text = "";
 					String pText = "";
 					String aText = "";
+					String spotLightImage = "";
 					String aHref = "";
 					Elements c11v5_alt1_pilot = doc
 							.select("div.c11v5-alt1-pilot");
@@ -861,6 +898,12 @@ public class ProductLandingVariation6 extends BaseAction {
 							} else {
 								sb.append("<li>No Anchor found in spotlight block.</li>");
 							}
+							// start image
+							spotLightImage = FrameworkUtils.extractImagePath(spotLightContent, sb);
+							log.debug("spotLightImage " + spotLightImage + "\n");
+							spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
+							log.debug("spotLightImage " + spotLightImage + "\n");
+							// end image
 						} else {
 							sb.append("<li>spotLight content is blank.</li>");
 						}
@@ -904,6 +947,18 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 									} else {
 										sb.append("<li>'cta' Node doesn't exist.</li>");
+									}
+									if (spotlight_large_v2 != null) {
+										if (spotlight_large_v2.hasNode("image")) {
+											Node imageNode = spotlight_large_v2.getNode("image");
+											if (StringUtils.isNotBlank(spotLightImage)) {
+												imageNode.setProperty("fileReference" , spotLightImage);
+											} else {
+												sb.append("<li>hero image doesn't exist</li>");
+											}
+										} else {
+											sb.append("<li>hero image node doesn't exist</li>");
+										}
 									}
 								} else {
 									sb.append("<li>'spotlight_large_v2' Node doesn't exist.</li>");
