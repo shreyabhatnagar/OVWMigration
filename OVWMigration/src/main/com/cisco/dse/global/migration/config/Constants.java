@@ -237,6 +237,15 @@ public class Constants {
 
 	//MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT
 	public static final String MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT = "<li>Mis Match of subdrawers count in drawer panel</li>";
+	
+	//DRAWER_PANEL_TITLE_NOT_FOUND
+	public static final String DRAWER_PANEL_TITLE_NOT_FOUND = "<li>title of drawer panel doesn't exist</li>";
+	
+	//DRAWER_PANEL_LINK_TITLE_NOT_FOUND
+	public static final String DRAWER_PANEL_LINK_TITLE_NOT_FOUND = "<li>link of the title of drawer panel doesn't exist</li>";
+
+	//DRAWER_PANEL_DESC_NOT_FOUND
+	public static final String DRAWER_PANEL_DESC_NOT_FOUND = "<li>description of drawer panel doesn't exist</li>";
 
 	//INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND
 	public static final String INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND = "<li>infolinks of sub drawer doesn't exist</li>";
@@ -244,6 +253,9 @@ public class Constants {
 	//HIGHLIGHTS_OF_SUB_DRAWER_NOT_FOUND
 	public static final String HIGHLIGHTS_OF_SUB_DRAWER_NOT_FOUND = "<li>highlights of sub drawer doesn't exist</li>";
 
+	//TITLE_SUB_DRAWER_NOT_FOUND
+	public static final String TITLE_SUB_DRAWER_NOT_FOUND ="<li>title of sub drawer doesn't exist</li>";
+	
 	//LINK_URL_OF_SUB_DRAWER_NOT_FOUND
 	public static final String LINK_URL_OF_SUB_DRAWER_NOT_FOUND = "<li>link url of sub drawer doesn't exist</li>";
 
@@ -255,5 +267,6 @@ public class Constants {
 
 	//DETAILS_ELEMEMT_NOT_FOUND
 	public static final String DETAILS_ELEMEMT_NOT_FOUND = "<li>details Element not found</li>";
+	
 
 }
