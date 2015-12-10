@@ -10,6 +10,9 @@ public class Constants {
 
 	//TEXT_HAEDING_NOT_FOUND
 	public static final String TEXT_HAEDING_NOT_FOUND = "<li>Text heading not found.</li>";	
+	
+	//TEXT_DESCRIPTION_NOT_FOUND
+	public static final String TEXT_DESCRIPTION_NOT_FOUND = "<li>Text description is not found</li>";
 
 	// HTMLBLOB_CONTENT_DOES_NOT_EXIST
 	public static final String HTMLBLOB_CONTENT_DOES_NOT_EXIST  = "<li>Htmlblob content doesn't exist </li>";
@@ -201,5 +204,56 @@ public class Constants {
 
 	//RIGHT_GRID_NODE_NOT_FOUND
 	public static final String RIGHT_GRID_NODE_NOT_FOUND = "<li>Node for mid grid is not found.</li>";
+
+	//DRAWER_CONTAINER_TITLE_ELEMENT_NOT_FOUND
+	public static final String DRAWER_CONTAINER_TITLE_ELEMENT_NOT_FOUND = "<li>DrawerContainer Title Element not found</li>";
+
+	//DRAWER_CONTAINER_NODE_NOT_FOUND
+	public static final String DRAWER_CONTAINER_NODE_NOT_FOUND = "<li>Drawer container node not found</li>";
+
+	//SHOW_HIDE_LINKS_NOT_FOUND
+	public static final String SHOW_HIDE_LINKS_NOT_FOUND = "<li>showtext and hidetext links doesn't exist</li>";
+
+	//DRAWER_PANEL_TITLE_ELEMENT_NOT_FOUND
+	public static final String DRAWER_PANEL_TITLE_ELEMENT_NOT_FOUND = "<li>drawer panel title element not found</li>";
+
+	//DRAWER_PANEL_DESCRIPTION_ELEMENT_NOT_FOUND
+	public static final String DRAWER_PANEL_DESCRIPTION_ELEMENT_NOT_FOUND = "<li>drawer panel description element not found</li>";
+
+	//SUB_DRAWER_TITLE_LINK_NOT_FOUND
+	public static final String SUB_DRAWER_TITLE_ELEMENT_LINK_NOT_FOUND = "<li>sub drawer title element link not found</li>";
+
+	//SUB_DRAWER_TITLE_ELEMENT_NOT_FOUND
+	public static final String SUB_DRAWER_TITLE_ELEMENT_NOT_FOUND = "<li>sub drawer title Element not found</li>";
+
+	//UNABLE_TO_MIGRATE_DRAWER_COMPONENT
+	public static final String UNABLE_TO_MIGRATE_DRAWER_COMPONENT = "<li>Unable to migarte drawers_container component</li>";
+
+	//DRAWER_PANEL_ELEMENTS_NOT_FOUND
+	public static final String DRAWER_PANEL_ELEMENTS_NOT_FOUND = "<li>drawer panel elements not found</li>";
+
+	//MIS_MATCH_IN_DRAWER_PANEL_COUNT
+	public static final String MIS_MATCH_IN_DRAWER_PANEL_COUNT = "<li>Mis-Match in drawer panels count</li>";
+
+	//MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT
+	public static final String MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT = "<li>Mis Match of subdrawers count in drawer panel</li>";
+
+	//INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND
+	public static final String INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND = "<li>infolinks of sub drawer doesn't exist</li>";
+
+	//HIGHLIGHTS_OF_SUB_DRAWER_NOT_FOUND
+	public static final String HIGHLIGHTS_OF_SUB_DRAWER_NOT_FOUND = "<li>highlights of sub drawer doesn't exist</li>";
+
+	//LINK_URL_OF_SUB_DRAWER_NOT_FOUND
+	public static final String LINK_URL_OF_SUB_DRAWER_NOT_FOUND = "<li>link url of sub drawer doesn't exist</li>";
+
+	//INFO_LINK_ANCHOR_ELEMENT_NOT_FOUND
+	public static final String INFO_LINK_ANCHOR_ELEMENT_NOT_FOUND = "<li>info links anchor element not found</li>";
+	
+	//LI_ELEMENTS_IN_DETAILS_ELEMENT_NOT_FOUND
+	public static final String LI_ELEMENTS_IN_DETAILS_ELEMENT_NOT_FOUND = "<li>li elements in details Element not found</li>";
+
+	//DETAILS_ELEMEMT_NOT_FOUND
+	public static final String DETAILS_ELEMEMT_NOT_FOUND = "<li>details Element not found</li>";
 
 }
