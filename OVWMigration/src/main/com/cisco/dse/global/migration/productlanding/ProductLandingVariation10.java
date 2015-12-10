@@ -104,7 +104,7 @@ public class ProductLandingVariation10 extends BaseAction {
 									Node heroPanelNode;
 									if (heroPanelNodeIterator.hasNext()) {
 										heroPanelNode = (Node)heroPanelNodeIterator.next();
-										heroPanelTranslate(heroPanelNode, ele);
+										heroPanelTranslate(heroPanelNode, ele, locale);
 									}
 									else {
 										log.debug("Next node not found");								
@@ -116,7 +116,7 @@ public class ProductLandingVariation10 extends BaseAction {
 									Node heroPanelNode;
 									if (heroPanelNodeIterator.hasNext()) {
 										heroPanelNode = (Node)heroPanelNodeIterator.next();
-										heroPanelTranslate(heroPanelNode, ele);		
+										heroPanelTranslate(heroPanelNode, ele, locale);		
 									}
 									else {
 										log.debug("Next node not found");
@@ -130,7 +130,7 @@ public class ProductLandingVariation10 extends BaseAction {
 									Node heroPanelNode;
 									if (heroPanelNodeIterator.hasNext()) {
 										heroPanelNode = (Node)heroPanelNodeIterator.next();
-										heroPanelTranslate(heroPanelNode, ele);		
+										heroPanelTranslate(heroPanelNode, ele, locale);		
 									}
 									else {
 										log.debug("Next node not found");								
@@ -336,7 +336,7 @@ public class ProductLandingVariation10 extends BaseAction {
 									Node slNode;
 									if (slNodeIterator.hasNext()) {
 										slNode = (Node)slNodeIterator.next();
-										spotLightTranslate(slNode, spElement);
+										spotLightTranslate(slNode, spElement, locale);
 									}
 									else {
 										log.debug("Next node not found");								
@@ -349,7 +349,7 @@ public class ProductLandingVariation10 extends BaseAction {
 									Node slNode;
 									if (slNodeIterator.hasNext()) {
 										slNode = (Node)slNodeIterator.next();
-										spotLightTranslate(slNode, spElement);
+										spotLightTranslate(slNode, spElement, locale);
 									}
 									else {
 										log.debug("Next node not found");
@@ -364,7 +364,7 @@ public class ProductLandingVariation10 extends BaseAction {
 									Node slNode;
 									if (slNodeIterator.hasNext()) {
 										slNode = (Node)slNodeIterator.next();
-										spotLightTranslate(slNode, spElement);
+										spotLightTranslate(slNode, spElement, locale);
 									}
 									else {
 										log.debug("Next node not found");
@@ -561,7 +561,7 @@ public class ProductLandingVariation10 extends BaseAction {
 	}
 
 
-	public void heroPanelTranslate(Node heroPanelNode, Element ele) {
+	public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale) {
 
 		try {			
 			String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").text():"";
@@ -571,6 +571,25 @@ public class ProductLandingVariation10 extends BaseAction {
 			String anchorText = anchor!=null?anchor.text():"";
 			String anchorHref = anchor.attr("href");
 
+			// start image
+			String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+			log.debug("heroImage " + heroImage + "\n");
+			heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+			log.debug("heroImage " + heroImage + "\n");
+			if (heroPanelNode != null) {
+				if (heroPanelNode.hasNode("image")) {
+					Node imageNode = heroPanelNode.getNode("image");
+					if (StringUtils.isNotBlank(heroImage)) {
+						imageNode.setProperty("fileReference" , heroImage);
+					} else {
+						sb.append("<li>hero image doesn't exist</li>");
+					}
+				} else {
+					sb.append("<li>hero image node doesn't exist</li>");
+				}
+			}
+			// end image
+			
 			heroPanelNode.setProperty("title", title);
 			heroPanelNode.setProperty("description", desc);
 			heroPanelNode.setProperty("linktext", anchorText);
@@ -643,13 +662,31 @@ public class ProductLandingVariation10 extends BaseAction {
 		}
 	}
 
-	public void spotLightTranslate (Node slNode, Element spElement) {
+	public void spotLightTranslate (Node slNode, Element spElement, String locale) {
 		try {
 			Element spotLightTitle = spElement.getElementsByTag("h2").first();
 			Element spotLightDescription = spElement.getElementsByTag("p").first();
 			Elements spotLightAnchorElements = spElement.getElementsByTag("a");
 			Element spotLightAnchor = spotLightAnchorElements.first();
 			
+			// start image
+			String spotLightImage = FrameworkUtils.extractImagePath(spElement, sb);
+			log.debug("spotLightImage " + spotLightImage + "\n");
+			spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
+			log.debug("spotLightImage " + spotLightImage + "\n");
+			if (slNode != null) {
+				if (slNode.hasNode("image")) {
+					Node spotLightImageNode = slNode.getNode("image");
+					if (StringUtils.isNotBlank(spotLightImage)) {
+						spotLightImageNode.setProperty("fileReference" , spotLightImage);
+					} else {
+						sb.append("<li>spotlight image doesn't exist</li>");
+					}
+				} else {
+					sb.append("<li>spotlight image node doesn't exist</li>");
+				}
+			}
+			// end image
 			
 			if(spotLightDescription.getElementsByTag("a")!=null && !spotLightDescription.getElementsByTag("a").isEmpty()){
 				slNode.setProperty("description", spotLightDescription.html());
