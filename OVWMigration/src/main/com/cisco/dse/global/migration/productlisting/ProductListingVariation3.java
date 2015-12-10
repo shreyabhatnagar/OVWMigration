@@ -174,10 +174,7 @@ public class ProductListingVariation3 extends BaseAction{
 
 						sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 					}
-					log.debug("eleSize and nodeSize is!: " + eleSize +" and "+ nodeSize);
-					if(nodeSize != eleSize){
-						sb.append("<li> Node size and elements size mismatch! Node size is "+nodeSize+" and elements size is "+eleSize+"</li>");
-					}
+					
 				} catch (Exception e) {
 					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
 							+ e + "</li>");
