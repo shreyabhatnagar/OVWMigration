@@ -25,6 +25,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -135,8 +136,9 @@ public class FrameworkUtils {
        
     }
 
-	public static String migrateDAMContent(String path) {
+	public static String migrateDAMContent(String path, String locale) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
+		String newImagePath = "";
 		if (StringUtils.isNotBlank(path)) {
 			if (path.indexOf("/content/en/us") == -1
 					&& path.indexOf("/content/dam") == -1
@@ -146,7 +148,7 @@ public class FrameworkUtils {
 					log.debug("Adding domain to the image path.");
 					path = "http://www.cisco.com" + path;
 				}
-				String status = setContentToDAM(path);
+				newImagePath = setContentToDAM(path, locale);
 			} else {
 				return path;
 			}
@@ -154,16 +156,16 @@ public class FrameworkUtils {
 			log.debug("image path is blank.");
 		}
 
-		return null;
+		return newImagePath;
 	}
-    
-	public static String setContentToDAM(String path) {
+
+	public static String setContentToDAM(String path, String locale) {
 		log.debug("In the setContentToDAM to migrate : " + path);
 
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(
 				"http://chard.cisco.com:4502/bin/services/DAMMigration?imgPath="
-						+ path);
+						+ path+"&locale="+locale);
 		Credentials defaultcreds = new UsernamePasswordCredentials("admin",
 				"admin");
 		AuthScope authscope = new AuthScope("chard.cisco.com", 4502,
@@ -179,7 +181,27 @@ public class FrameworkUtils {
 				log.debug("HTTP Method failed: " + method.getStatusLine());
 			}
 			byte[] responseBody = method.getResponseBody();
-			log.debug(new String(responseBody));
+			String responseObj = new String(responseBody);
+			log.debug("josn object from service respones.");
+			log.debug(responseObj);
+			JSONObject resObj = new JSONObject(responseObj);
+			String newImagePath = "";
+			String error = "";
+			if (resObj.has("newImagePath")) {
+				newImagePath = (String) resObj.get("newImagePath");
+				log.debug("Updated dam Image path : " + newImagePath);
+			} else {
+				log.debug("No 'newImagePath' found in service response.");
+			}
+			if (resObj.has("error")) {
+				error = (String) resObj.get("error");
+				if (StringUtils.isNotBlank(newImagePath)) {
+					log.debug("Error in updating dam path : " + error);
+				}
+			} else {
+				log.debug("No 'error' found in service response.");
+			}
+			return newImagePath;
 
 		} catch (Exception e) {
 			log.error("Exception : ", e);
