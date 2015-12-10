@@ -259,7 +259,7 @@ public class ProductLandingVariation11 extends BaseAction {
 								// start image
 								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
 								log.debug("spotLightImage " + spotLightImage + "\n");
-								spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage);
+								spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
 								log.debug("spotLightImage " + spotLightImage + "\n");
 								if (spotLightComponentNode != null) {
 									if (spotLightComponentNode.hasNode("image")) {

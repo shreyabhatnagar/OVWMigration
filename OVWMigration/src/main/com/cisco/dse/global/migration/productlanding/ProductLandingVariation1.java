@@ -282,7 +282,7 @@ public class ProductLandingVariation1 extends BaseAction {
 									// start image
 									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage " + heroImage + "\n");
-									heroImage = FrameworkUtils.migrateDAMContent(heroImage);
+									heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
 									log.debug("heroImage " + heroImage + "\n");
 									if (heroPanelNode != null) {
 										if (heroPanelNode.hasNode("image")) {
@@ -498,7 +498,7 @@ public class ProductLandingVariation1 extends BaseAction {
 															// start image																													
 															String drawerImage = FrameworkUtils.extractImagePath(seriesElement, sb);
 															log.debug("drawerImage " + drawerImage + "\n");
-															drawerImage = FrameworkUtils.migrateDAMContent(drawerImage);
+															drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, locale);
 															log.debug("drawerImage " + drawerImage + "\n");
 															if (drawersPanelNode != null) {
 																if (drawersPanelNode.hasNode("drawers-image")) {
@@ -594,7 +594,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																	// start image
 																	String subDrawerImage = FrameworkUtils.extractImagePath(subItem, sb);
 																	log.debug("subDrawerImage " + subDrawerImage + "\n");
-																	subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage);
+																	subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, locale);
 																	log.debug("subDrawerImage " + subDrawerImage + "\n");
 																	if (subdrawerpanel != null) {
 																		if (subdrawerpanel.hasNode("subdrawers-image")) {
