@@ -127,8 +127,9 @@ public class SolutionListingVariation08 extends BaseAction {
 					String aText = "";
 					String aHref = "";
 
-					Elements heroElements = doc.select("div.c50-pilot");
-					heroElements = heroElements.select("div.c50-text");
+					Elements heroElements = doc.select("div.frame");
+					//heroElements = heroElements.select("div.c50-text");
+					//Elements heroImageElements = doc.select("div.c50-image");
 					Node heroNode = indexMidNode.hasNode("hero_large") ? indexMidNode
 							.getNode("hero_large") : null;
 							if (heroElements != null && !heroElements.isEmpty()) {
@@ -142,6 +143,26 @@ public class SolutionListingVariation08 extends BaseAction {
 											if (heroPanelNodeIterator.hasNext()) {
 												Node heroPanelNode = (Node) heroPanelNodeIterator
 														.next();
+												// start image
+												
+												String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+												log.debug("heroImage " + heroImage + "\n");
+												heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+												log.debug("heroImage " + heroImage + "\n");
+												if (heroPanelNode != null) {
+													if (heroPanelNode.hasNode("image")) {
+														Node imageNode = heroPanelNode.getNode("image");
+														if (StringUtils.isNotBlank(heroImage)) {
+															imageNode.setProperty("fileReference" , heroImage);
+														} else {
+															sb.append("<li>hero image doesn't exist</li>");
+														}
+													} else {
+														sb.append("<li>hero image node doesn't exist</li>");
+													}
+												}
+												
+												// end image
 												Elements h2TagText = ele
 														.getElementsByTag("h2");
 												if (h2TagText != null) {
@@ -195,7 +216,7 @@ public class SolutionListingVariation08 extends BaseAction {
 												sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 											}
 										}
-									} else {
+										} else {
 										log.debug("Hero component node count mismatch!");
 										sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH.replace("<ele>",  Integer.toString(eleSize)).replace("<node>", Integer.toString(nodeSize)));
 									}
@@ -299,6 +320,22 @@ public class SolutionListingVariation08 extends BaseAction {
 									} else{
 										sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 									}
+									// start image
+									String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+									log.debug("spotLightImage " + spotLightImage + "\n");
+									spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage,locale);
+									log.debug("spotLightImage " + spotLightImage + "\n");
+									if (heroPanelNode.hasNode("image")) {
+										Node spotLightImageNode = heroPanelNode.getNode("image");
+										if (StringUtils.isNotBlank(spotLightImage)) {
+											spotLightImageNode.setProperty("fileReference" , spotLightImage);
+										} else {
+											sb.append("<li>spotlight image doesn't exist</li>");
+										}
+									} else {
+										sb.append("<li>spotlight image node doesn't exist</li>");
+									}
+									// end image
 									if (StringUtils.isNotBlank(aText)) {
 										heroPanelNode.setProperty("title", aText);
 									} else {
