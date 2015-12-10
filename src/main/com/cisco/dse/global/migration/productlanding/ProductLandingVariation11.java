@@ -374,44 +374,6 @@ public class ProductLandingVariation11 extends BaseAction {
 							Elements listDescription = indexListItem.select(
 									"div.intro").select("p");
 
-							javax.jcr.Node listNode = null;
-
-
-							if(listNodeIterator.hasNext()){
-								listNode = (Node) listNodeIterator.next();
-								log.debug("path of list node: "+ listNode.getPath());
-							}
-							if (listNode != null) {
-								listNode.setProperty("title", indexTitle);
-							} else {
-								sb.append("<li>No list node found in right rail</li>");
-							}
-							if(listNode !=null) {
-								if (listNode.hasNode("intro")) {
-									Node introNode = listNode.getNode("intro");
-									String descProperty = "";
-									if (listDescription != null) {
-										descProperty = listDescription.html();
-										introNode.setProperty("paragraph_rte",
-												descProperty.trim());
-										log.debug("Updated descriptions at "
-												+ introNode.getPath());
-
-									} else {
-										sb.append("<li>Paragraph description is not migrated as it has no content.</li>");
-									}
-								}
-							}
-							NodeIterator elementList = listNode
-									.getNodes("element_list*");
-
-							if (elementList.getSize() != indexUlList.size()) {
-								sb.append("<li>Mis-Match in Resource list Panels count/content."
-										+ indexUlList.size()
-										+ "not equal to "
-										+ elementList.getSize() + "</li>");
-							}
-
 							for (Element ele : indexUlList) {
 								java.util.List<String> list = new ArrayList<String>();
 								Elements indexLiList = ele.getElementsByTag("li");
@@ -450,28 +412,65 @@ public class ProductLandingVariation11 extends BaseAction {
 								}
 								log.debug("div class 'div.n13-pilot' not found in dom  list ::"
 										+ list.toString());
-								elementList.hasNext();
-								Node eleNode = (Node) elementList.next();
-								if (eleNode != null) {
 
-									if(eleNode.hasProperty("listitems")){
-										Property listitems = eleNode
-												.getProperty("listitems");
-										if (!listitems.isMultiple()) {
-											listitems.remove();
-											session.save();
+									Node listNode = null;
+									NodeIterator elementList = null;
+
+									if(listNodeIterator.hasNext()){
+									listNode = (Node) listNodeIterator.next();
+									log.debug("path of list node: "+ listNode.getPath());
+								
+								if (listNode != null) {
+									listNode.setProperty("title", indexTitle);
+									if (listNode.hasNode("intro")) {
+										Node introNode = listNode.getNode("intro");
+										String descProperty = "";
+										if (listDescription != null) {
+											descProperty = listDescription.html();
+											introNode.setProperty("paragraph_rte",
+													descProperty.trim());
+											log.debug("Updated descriptions at "
+													+ introNode.getPath());
+
+										} else {
+											sb.append("<li>Paragraph description is not migrated as it has no content.</li>");
 										}
 									}
-									eleNode.setProperty("listitems", list
-											.toArray(new String[list.size()]));
-									log.debug("Updated listitems at "
-											+ eleNode.getPath());
-								} else {
-									sb.append("<li>element_list node doesn't exists</li>");
+								
+								elementList = listNode.getNodes("element_list*");
+								if(elementList !=null && elementList.hasNext()){
+									Node eleNode = (Node) elementList.next();
+									if (eleNode != null) {
+
+										if(eleNode.hasProperty("listitems")){
+											Property listitems = eleNode
+													.getProperty("listitems");
+											if (!listitems.isMultiple()) {
+												listitems.remove();
+												session.save();
+											}
+										}
+										eleNode.setProperty("listitems", list
+												.toArray(new String[list.size()]));
+										log.debug("Updated listitems at "
+												+ eleNode.getPath());
+									}
+									} else {
+										sb.append("<li>element_list node doesn't exists</li>");
+									}
+								
+								} if (elementList !=null && elementList.getSize() != indexUlList.size()) {
+									sb.append("<li>Mis-Match in Resource list Panels count/content."
+											+ indexUlList.size()
+											+ "not equal to "
+											+ elementList.getSize() + "</li>");
+								
 								}
+									}
 							}
 
-						} 
+						}
+						
 					}else {
 						sb.append("<li>Mismatch in the right rail. List element is not found.</li>");
 					}
