@@ -14,6 +14,15 @@ import java.util.Properties;
 
 import javax.jcr.Session;
 
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
@@ -89,11 +98,11 @@ public class FrameworkUtils {
 	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(titleHtmlProperty)) { 
 	    	   	         title =  meta.attr("content"); 
 	    	   	         log.debug("title of document:::  " + title);
-	    	   	      } 
+	    	   	      }
 	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(descriptionHtmlProperty)) { 
 	    	   	    	 description =  meta.attr("content"); 
 	    	   	         log.debug("description of document:::  " + description);
-	    	   	      } 
+	    	   	      }
 	    	   	   } 
     	   		}
     	   		//setting html meta data to as page properties
@@ -126,4 +135,56 @@ public class FrameworkUtils {
        
     }
 
+	public static String migrateDAMContent(String path) {
+		log.debug("In the migrateDAMContent to migrate : " + path);
+		if (StringUtils.isNotBlank(path)) {
+			if (path.indexOf("/content/en/us") == -1
+					&& path.indexOf("/content/dam") == -1
+					|| path.indexOf("/c/en/us") == -1
+					|| path.indexOf("/c/dam") == -1) {
+				if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
+					log.debug("Adding domain to the image path.");
+					path = "http://www.cisco.com" + path;
+				}
+				String status = setContentToDAM(path);
+			} else {
+				return path;
+			}
+		} else {
+			log.debug("image path is blank.");
+		}
+
+		return null;
+	}
+    
+	public static String setContentToDAM(String path) {
+		log.debug("In the setContentToDAM to migrate : " + path);
+
+		HttpClient client = new HttpClient();
+		HttpMethod method = new GetMethod(
+				"http://chard.cisco.com:4502/bin/services/DAMMigration?imgPath="
+						+ path);
+		Credentials defaultcreds = new UsernamePasswordCredentials("admin",
+				"admin");
+		AuthScope authscope = new AuthScope("chard.cisco.com", 4502,
+				AuthScope.ANY_REALM);
+		client.getState().setCredentials(authscope, defaultcreds);
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+				new DefaultHttpMethodRetryHandler(3, false));
+
+		try {
+			int statusCode = client.executeMethod(method);
+
+			if (statusCode != HttpStatus.SC_OK) {
+				log.debug("HTTP Method failed: " + method.getStatusLine());
+			}
+			byte[] responseBody = method.getResponseBody();
+			log.debug(new String(responseBody));
+
+		} catch (Exception e) {
+			log.error("Exception : ", e);
+		}
+		return null;
+	}
+    
    }
