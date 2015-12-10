@@ -259,6 +259,20 @@ public class ProductLandingVariation11 extends BaseAction {
 								// start image
 								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
 								log.debug("spotLightImage " + spotLightImage + "\n");
+								spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage);
+								log.debug("spotLightImage " + spotLightImage + "\n");
+								if (spotLightComponentNode != null) {
+									if (spotLightComponentNode.hasNode("image")) {
+										Node spotLightImageNode = spotLightComponentNode.getNode("image");
+										if (StringUtils.isNotBlank(spotLightImage)) {
+											spotLightImageNode.setProperty("fileReference" , spotLightImage);
+										} else {
+											sb.append("<li>spotlight image doesn't exist</li>");
+										}
+									} else {
+										sb.append("<li>spotlight image node doesn't exist</li>");
+									}
+								}
 								// end image
 								spotLightComponentNode.setProperty("title", h2Text);
 								spotLightComponentNode.setProperty("description",

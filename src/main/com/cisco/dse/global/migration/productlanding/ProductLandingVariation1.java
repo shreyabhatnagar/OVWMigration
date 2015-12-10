@@ -282,6 +282,20 @@ public class ProductLandingVariation1 extends BaseAction {
 									// start image
 									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage " + heroImage + "\n");
+									heroImage = FrameworkUtils.migrateDAMContent(heroImage);
+									log.debug("heroImage " + heroImage + "\n");
+									if (heroPanelNode != null) {
+										if (heroPanelNode.hasNode("image")) {
+											Node imageNode = heroPanelNode.getNode("image");
+											if (StringUtils.isNotBlank(heroImage)) {
+												imageNode.setProperty("fileReference" , heroImage);
+											} else {
+												sb.append("<li>hero image doesn't exist</li>");
+											}
+										} else {
+											sb.append("<li>hero image node doesn't exist</li>");
+										}
+									}
 									// end image
 									log.debug("heroPanelTitle " + heroPanelTitle + "\n");
 									log.debug("heroPanelDescription " + heroPanelDescription + "\n");
@@ -309,8 +323,7 @@ public class ProductLandingVariation1 extends BaseAction {
 											heroPanelNode.setProperty("linkurl", heroPanellinkUrl);
 										} else {
 											sb.append("<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>");
-										}
-
+										}										
 									}
 								}
 							} else {
@@ -485,6 +498,20 @@ public class ProductLandingVariation1 extends BaseAction {
 															// start image																													
 															String drawerImage = FrameworkUtils.extractImagePath(seriesElement, sb);
 															log.debug("drawerImage " + drawerImage + "\n");
+															drawerImage = FrameworkUtils.migrateDAMContent(drawerImage);
+															log.debug("drawerImage " + drawerImage + "\n");
+															if (drawersPanelNode != null) {
+																if (drawersPanelNode.hasNode("drawers-image")) {
+																	Node drawersImageNode = drawersPanelNode.getNode("drawers-image");
+																	if (StringUtils.isNotBlank(drawerImage)) {
+																		drawersImageNode.setProperty("fileReference" , drawerImage);
+																	} else {
+																		sb.append("<li>drawer image doesn't exist</li>");
+																	}
+																} else {
+																	sb.append("<li>drawer image node doesn't exist</li>");
+																}
+															}
 															// end image
 															if (drawersPanelNode != null) {
 																log.debug("panelTitle " + panelTitle + "\n");
@@ -567,6 +594,20 @@ public class ProductLandingVariation1 extends BaseAction {
 																	// start image
 																	String subDrawerImage = FrameworkUtils.extractImagePath(subItem, sb);
 																	log.debug("subDrawerImage " + subDrawerImage + "\n");
+																	subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage);
+																	log.debug("subDrawerImage " + subDrawerImage + "\n");
+																	if (subdrawerpanel != null) {
+																		if (subdrawerpanel.hasNode("subdrawers-image")) {
+																			Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
+																			if (StringUtils.isNotBlank(subDrawerImage)) {
+																				subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
+																			} else {
+																				sb.append("<li>subdrawer image doesn't exist</li>");
+																			}
+																		} else {
+																			sb.append("<li>subdrawer image node doesn't exist</li>");
+																		}
+																	}
 																	// end image
 																	Elements indDetailsElements = subItem.select("ul.details");
 
