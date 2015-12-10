@@ -1,3 +1,8 @@
+/* 
+ * S.No		Name			Description of change
+ * 1		Vidya			Added the Java file to handle the migration of service listing variation 1 page(s).
+ * 
+ * */
 package com.cisco.dse.global.migration.servicelisting;
 
 import java.io.IOException;
@@ -34,7 +39,6 @@ public class ServiceListingVariation01 extends BaseAction {
 			String catType, String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-		BasicConfigurator.configure();
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
@@ -121,8 +125,6 @@ public class ServiceListingVariation01 extends BaseAction {
 							if (StringUtils.isNotBlank(h1Text)) {
 								textNode.setProperty("text", h1Text);
 								log.debug("Title migration is done.");
-							} else {
-								sb.append(Constants.TEXT_DOES_NOT_EXIST);
 							}
 						} else {
 							sb.append(Constants.TEXT_NODE_NOT_FOUND);
@@ -156,8 +158,6 @@ public class ServiceListingVariation01 extends BaseAction {
 								htmlBlobNode.setProperty("html",
 										htmlBlobContent.toString());
 								log.debug("HtmlBlob Content migrated is done.");
-							} else {
-								sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 							}
 						} else {
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -205,9 +205,9 @@ public class ServiceListingVariation01 extends BaseAction {
 												pdfIcon = "pdf";
 											int i=0;
 											for(;i<pdf.length();i++){
-												char c = pdf.charAt(i);												
-												boolean b = Character.isDigit(c);
-												if(b){
+												char character = pdf.charAt(i);												
+												boolean isDigit = Character.isDigit(character);
+												if(isDigit){
 													break;
 												} 
 										}										
@@ -242,8 +242,6 @@ public class ServiceListingVariation01 extends BaseAction {
 										.getNode("list");
 								if (StringUtils.isNotBlank(h2Text)) {
 									listNode.setProperty("title", h2Text);
-								} else {
-									sb.append(Constants.LEFT_GRID_HEADING_NOT_FOUND);
 								}
 								if (listNode.hasNode("element_list_0")) {
 									Node element_list_0 = listNode
@@ -297,8 +295,8 @@ public class ServiceListingVariation01 extends BaseAction {
 								}
 								Elements pElements = gd_mid_Elements
 										.select("p");
-								Elements aElements = gd_mid_Elements
-										.select("a");
+								Element aElements = gd_mid_Elements
+										.select("a").first();
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
@@ -317,7 +315,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									}
 									
 								}								
-								if (aElements != null && !aElements.isEmpty()) {
+								if (aElements != null) {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									String aHref = aElements.attr("href");
@@ -411,8 +409,8 @@ public class ServiceListingVariation01 extends BaseAction {
 								}
 								Elements pElements = gd_mid_Elements
 										.select("p");
-								Elements aElements = gd_mid_Elements
-										.select("a");
+								Element aElements = gd_mid_Elements
+										.select("a").first();
 								pText = pElements.first().text();
 								int count = 0;
 								for (Element pElement : pElements) {
@@ -426,7 +424,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										break;
 									}
 								}	
-								if (aElements != null && !aElements.isEmpty()) {
+								if (aElements != null) {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									String aHref = aElements.attr("href");
@@ -464,8 +462,6 @@ public class ServiceListingVariation01 extends BaseAction {
 								Node listNode = gd23v1_mid_Node.getNode("list");
 								if (StringUtils.isNotBlank(h2Text)) {
 									listNode.setProperty("title", h2Text);
-								} else {
-									sb.append(Constants.RIGHT_GRID_HEADING_NOT_FOUND);
 								}
 								if (listNode.hasNode("intro")) {
 									Node introNode = listNode.getNode("intro");
@@ -523,6 +519,9 @@ public class ServiceListingVariation01 extends BaseAction {
 				} catch (Exception e) {
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);
 				}
+			}
+			else{
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 			session.save();
 		} catch (Exception e) {

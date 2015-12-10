@@ -1,3 +1,8 @@
+/* 
+ * S.No		Name			Description of change
+ * 1		vidya			Added the Java file to handle the migration of service listing variation 3 page.
+ * 
+ * */
 package com.cisco.dse.global.migration.servicelisting;
 
 import java.io.IOException;
@@ -33,7 +38,6 @@ public class ServiceListingVariation03 extends BaseAction {
 			String catType, String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-		BasicConfigurator.configure();
 		log.debug("In the translate method of ServiceListingVariation03");
 		log.debug("In the translate method, catType is :" + catType);
 
@@ -61,11 +65,7 @@ public class ServiceListingVariation03 extends BaseAction {
 
 			serviceListingMidnode = session.getNode(serviceListing);
 			pageJcrNode = session.getNode(pagePropertiesPath);
-			try {
-				doc = Jsoup.connect(loc).get();
-			} catch (Exception e) {
 				doc = getConnection(loc);
-			}
 
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set page properties.
@@ -101,8 +101,7 @@ public class ServiceListingVariation03 extends BaseAction {
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT + e
-							+ "</li>");
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
 				// end of text component properties setting
 				// ---------------------------------------------------------------------------------------------------------------------------------------
@@ -118,7 +117,7 @@ public class ServiceListingVariation03 extends BaseAction {
 						if (serviceListingMidnode != null) {
 
 							int eleSize = spotLightElements.size();
-
+							if(serviceListingMidnode.hasNodes()){
 							NodeIterator spoLightNodeIterator = serviceListingMidnode
 									.getNodes("spotlight_medium*");
 
@@ -133,7 +132,7 @@ public class ServiceListingVariation03 extends BaseAction {
 							}
 							// Copy of content
 							for (Element ele : spotLightElements) {
-								spoLightNodeIterator.hasNext();
+								if(spoLightNodeIterator.hasNext()){
 								Node spotLightComponentNode = (Node) spoLightNodeIterator
 										.next();
 
@@ -150,7 +149,24 @@ public class ServiceListingVariation03 extends BaseAction {
 								} else {
 									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 								}
-
+								// start image
+								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+								log.debug("spotLightImage " + spotLightImage + "\n");
+								spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
+								log.debug("spotLightImage " + spotLightImage + "\n");
+								if (spotLightComponentNode != null) {
+									if (spotLightComponentNode.hasNode("image")) {
+										Node spotLightImageNode = spotLightComponentNode.getNode("image");
+										if (StringUtils.isNotBlank(spotLightImage)) {
+											spotLightImageNode.setProperty("fileReference" , spotLightImage);
+										} else {
+											sb.append("<li>spotlight image doesn't exist</li>");
+										}
+									} else {
+										sb.append("<li>spotlight image node doesn't exist</li>");
+									}
+								}
+								// end image
 								Elements anchorText = ele.getElementsByTag("a");
 								if (anchorText != null) {
 									aText = anchorText.text();
@@ -160,32 +176,27 @@ public class ServiceListingVariation03 extends BaseAction {
 								}
 								if (!StringUtils.isEmpty(h2Text)) {
 									spotLightComponentNode.setProperty("title",h2Text);
-								} else {
-									sb.append(Constants.SPOTLIGHT_HEADING_TEXT_NOT_FOUND);
 								}
 								if (!StringUtils.isEmpty(pText)) {
 									spotLightComponentNode.setProperty(
 											"description", pText);
-								} else {
-									sb.append(Constants.SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND);
-								}
+								} 
 								if (!StringUtils.isEmpty(aText)) {
 									spotLightComponentNode.setProperty("linktext",aText);
-								} else {
-									sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
-								}
+								} 
 								if (!StringUtils.isEmpty(aHref)) {
 									spotLightComponentNode.setProperty("linkurl",aHref);
-								} else {
-									sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
-								}
+								} 
 
 							}
-
+							}
 						} else {
 							sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 						}
-
+						} else {
+							sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
+						}
+							
 					} else {
 						sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
 

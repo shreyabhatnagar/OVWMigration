@@ -13,6 +13,7 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
@@ -119,14 +120,14 @@ public class ServiceListingVariation02 extends BaseAction {
 									if(spEleSize == spNodeSize){
 										for(Element ele : spotLightEle){
 											Node spotLightComponentNode = (Node) spotLightNodes.next();
-											setSpotlight(ele ,spotLightComponentNode);
+											setSpotlight(ele ,spotLightComponentNode,locale);
 										}
 									} 
 									else if(spEleSize > spNodeSize){
 										for(Element ele : spotLightEle){
 											if(spotLightNodes.hasNext()){
 												Node spotLightComponentNode = (Node) spotLightNodes.next();
-												setSpotlight(ele ,spotLightComponentNode);
+												setSpotlight(ele ,spotLightComponentNode,locale);
 											}
 										}
 										sb.append(Constants.SPOTLIGHT_NODE_COUNT+spNodeSize+Constants.SPOTLIGHT_ELEMENT_COUNT+spEleSize+"</li>");
@@ -134,7 +135,7 @@ public class ServiceListingVariation02 extends BaseAction {
 									else if(spEleSize < spNodeSize){
 										for(Element ele : spotLightEle){
 											Node spotLightComponentNode = (Node) spotLightNodes.next();
-											setSpotlight(ele ,spotLightComponentNode);
+											setSpotlight(ele ,spotLightComponentNode,locale);
 										}
 										sb.append(Constants.SPOTLIGHT_ELEMENT_COUNT+spEleSize+Constants.SPOTLIGHT_NODE_COUNT+spNodeSize+"</li>");
 									}
@@ -369,7 +370,7 @@ public class ServiceListingVariation02 extends BaseAction {
 		//end setList
 
 		// This method to set content for spotlight
-		public void setSpotlight(Element ele, Node spotLightComponentNode) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+		public void setSpotlight(Element ele, Node spotLightComponentNode,String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 			String title = "";
 			String pText = "";
 			String aText = "";
@@ -392,7 +393,24 @@ public class ServiceListingVariation02 extends BaseAction {
 			} else {
 				sb.append("<li>Spotlight Component not having any title.</li>");
 			}
-
+			// start image
+			String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+			log.debug("spotLightImage " + spotLightImage + "\n");
+			spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
+			log.debug("spotLightImage " + spotLightImage + "\n");
+			if (spotLightComponentNode != null) {
+				if (spotLightComponentNode.hasNode("image")) {
+					Node spotLightImageNode = spotLightComponentNode.getNode("image");
+					if (StringUtils.isNotBlank(spotLightImage)) {
+						spotLightImageNode.setProperty("fileReference" , spotLightImage);
+					} else {
+						sb.append("<li>spotlight image doesn't exist</li>");
+					}
+				} else {
+					sb.append("<li>spotlight image node doesn't exist</li>");
+				}
+			}
+			// end image
 			Elements descriptionText = ele.getElementsByTag("p");
 			String ulText = ele.getElementsByTag("ul").outerHtml();
 
