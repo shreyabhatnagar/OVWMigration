@@ -111,8 +111,7 @@ public class ServiceListingVariation02 extends BaseAction {
 					Elements spotLightEle = doc.select("div.c11-pilot");
 					if(spotLightEle != null && !spotLightEle.isEmpty()){
 						int spEleSize = spotLightEle.size();
-						NodeIterator spotLightNodes = serviceListingMidNode.hasNode("spotlight_large")?serviceListingMidNode
-								.getNodes("spotlight_large*"):null;
+						NodeIterator spotLightNodes = serviceListingMidNode.hasNodes()?serviceListingMidNode.getNodes("spotlight_large*"):null;
 								if(spotLightNodes != null){
 									int spNodeSize = (int)spotLightNodes.getSize();
 
@@ -308,7 +307,7 @@ public class ServiceListingVariation02 extends BaseAction {
 				sb.append(Constants.NO_H2_ELEMENT_IN_LIST);
 			}
 
-			NodeIterator h3Nodes = listNode.hasNode("element_subtitle")?listNode.getNodes("element_subtitle*"):null;
+			NodeIterator h3Nodes = listNode.hasNodes()?listNode.getNodes("element_subtitle*"):null;
 			if(!h3Ele.isEmpty()){
 				for(Element h3 : h3Ele){
 					if(h3Nodes.hasNext()){
@@ -320,7 +319,7 @@ public class ServiceListingVariation02 extends BaseAction {
 				sb.append(Constants.NO_H3_ELEMENT_IN_LIST);
 			}
 
-			NodeIterator ulNodes = listNode.hasNode("element_list")?listNode.getNodes("element_list*"):null;
+			NodeIterator ulNodes = listNode.hasNodes()?listNode.getNodes("element_list*"):null;
 			for(Element ul : ulEle){
 				if(ulNodes.hasNext()){
 					Elements aEle = ul.getElementsByTag("a");
