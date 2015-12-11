@@ -256,9 +256,11 @@ public class FrameworkUtils {
 					imageOldPath = imageElement.attr("src");
 				} 
 			}
-			log.debug("************ old path and new paths are : ************"+ imageOldPath +" and "+imagePath);
-			outeHtmlText = htmlBlobElement.outerHtml().replace(imageOldPath, imagePath);
-    	}
+			log.debug("old path and new path : "+ imageOldPath +" and "+imagePath);
+			if(StringUtils.isNotBlank(imagePath)){
+				outeHtmlText = htmlBlobElement.outerHtml().replace(imageOldPath, imagePath);
+			}
+			}
     	return outeHtmlText;
     }
    }
