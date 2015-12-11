@@ -573,12 +573,13 @@ public class ProductLandingVariation10 extends BaseAction {
 
 			// start image
 			String heroImage = FrameworkUtils.extractImagePath(ele, sb);
-			log.debug("heroImage " + heroImage + "\n");
-			heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
-			log.debug("heroImage " + heroImage + "\n");
+			log.debug("heroImage before migration : " + heroImage + "\n");
 			if (heroPanelNode != null) {
 				if (heroPanelNode.hasNode("image")) {
 					Node imageNode = heroPanelNode.getNode("image");
+					String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
+					heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+					log.debug("heroImage after migration : " + heroImage + "\n");
 					if (StringUtils.isNotBlank(heroImage)) {
 						imageNode.setProperty("fileReference" , heroImage);
 					} else {
@@ -672,11 +673,12 @@ public class ProductLandingVariation10 extends BaseAction {
 			// start image
 			String spotLightImage = FrameworkUtils.extractImagePath(spElement, sb);
 			log.debug("spotLightImage " + spotLightImage + "\n");
-			spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
-			log.debug("spotLightImage " + spotLightImage + "\n");
 			if (slNode != null) {
 				if (slNode.hasNode("image")) {
 					Node spotLightImageNode = slNode.getNode("image");
+					String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+					spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+					log.debug("spotLightImage " + spotLightImage + "\n");
 					if (StringUtils.isNotBlank(spotLightImage)) {
 						spotLightImageNode.setProperty("fileReference" , spotLightImage);
 					} else {

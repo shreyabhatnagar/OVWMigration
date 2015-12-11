@@ -182,8 +182,6 @@ public class ProductLandingVariation5 extends BaseAction {
 								if (imageElement != null) {
 									heroImage = FrameworkUtils.extractImagePath(imageElement, sb);
 									log.debug("heroImage " + heroImage + "\n");
-									heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
-									log.debug("heroImage " + heroImage + "\n");
 								} else {
 									sb.append("<li>hero image doesn't exist</li>");
 								}
@@ -240,6 +238,9 @@ public class ProductLandingVariation5 extends BaseAction {
 											if (heroPanelNode != null) {
 												if (heroPanelNode.hasNode("image")) {
 													Node imageNode = heroPanelNode.getNode("image");
+													String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
+													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+													log.debug("heroImage " + heroImage + "\n");
 													if (StringUtils.isNotBlank(heroImage)) {
 														imageNode.setProperty("fileReference" , heroImage);
 													} else {

@@ -221,17 +221,18 @@ public class ProductLandingVariation9 extends BaseAction{
 
 										// start image
 										String heroImage = FrameworkUtils.extractImagePath(ele, sb);
-										log.debug("heroImage " + heroImage + "\n");
-										heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
-										log.debug("heroImage " + heroImage + "\n");
+										log.debug("heroImage before migration : " + heroImage + "\n");
 										if (heroPanelNode != null) {
 											if (heroPanelNode.hasNode("image")) {
 												Node imageNode = heroPanelNode.getNode("image");
-												if (StringUtils.isNotBlank(heroImage)) {
-													imageNode.setProperty("fileReference" , heroImage);
-												} else {
-													sb.append("<li>hero image doesn't exist</li>");
-												}
+												String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
+													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+													log.debug("heroImage after migration : " + heroImage + "\n");
+													if (StringUtils.isNotBlank(heroImage)) {
+														imageNode.setProperty("fileReference", heroImage);
+													} else {
+														sb.append("<li>hero image doesn't exist</li>");
+													}
 											} else {
 												sb.append("<li>hero image node doesn't exist</li>");
 											}
@@ -456,12 +457,13 @@ public class ProductLandingVariation9 extends BaseAction{
 									
 									// start image
 									String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
-									log.debug("spotLightImage " + spotLightImage + "\n");
-									spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
-									log.debug("spotLightImage " + spotLightImage + "\n");
+									log.debug("spotLightImage befor migration : " + spotLightImage + "\n");
 									if (spotLightComponentNode != null) {
 										if (spotLightComponentNode.hasNode("image")) {
 											Node spotLightImageNode = spotLightComponentNode.getNode("image");
+											String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												spotLightImageNode.setProperty("fileReference" , spotLightImage);
 											} else {
@@ -514,6 +516,28 @@ public class ProductLandingVariation9 extends BaseAction{
 										} else {
 											sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
 										}
+										
+										
+										// start image
+										String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+										log.debug("spotLightImage befor migration : " + spotLightImage + "\n");
+										if (spotLightComponentNode != null) {
+											if (spotLightComponentNode.hasNode("image")) {
+												Node spotLightImageNode = spotLightComponentNode.getNode("image");
+												String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+												log.debug("spotLightImage after migration : " + spotLightImage + "\n");
+												if (StringUtils.isNotBlank(spotLightImage)) {
+													spotLightImageNode.setProperty("fileReference" , spotLightImage);
+												} else {
+													sb.append("<li>spotlight image doesn't exist</li>");
+												}
+											} else {
+												sb.append("<li>spotlight image node doesn't exist</li>");
+											}
+										}
+										// end image
+										
 										spotLightComponentNode.setProperty("title",
 												h2Text);
 										spotLightComponentNode.setProperty(

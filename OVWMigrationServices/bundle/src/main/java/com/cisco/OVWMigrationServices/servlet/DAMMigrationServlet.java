@@ -44,23 +44,26 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 		JSONObject jsonObj = new JSONObject();
 		PrintWriter printWritter = response.getWriter();
 		String errorMsg = "";
+		ResourceResolver resourceResolver = null;
+		InputStream is = null;
 		try {
 			String newImagePath = "";
 			String imgPath = request.getParameter("imgPath");
-			String locale = request.getParameter("locale");
+			String imgRef = request.getParameter("imgRef");
+			
 			URL url = new URL(imgPath);
 			String path = url.getPath();
-			String imageName = path.substring(path.lastIndexOf("/") + 1,
-					path.length());
-			String imagePath = path.substring(0, path.lastIndexOf("/"));
-			InputStream is = url.openStream();
-			ResourceResolver resourceResolver = resolverFactory
+			//String imageName = path.substring(path.lastIndexOf("/") + 1, path.length());
+			//String imagePath = path.substring(0, path.lastIndexOf("/"));
+			is = url.openStream();
+			resourceResolver = resolverFactory
 					.getAdministrativeResourceResolver(null);
 
 			AssetManager assetMgr = resourceResolver
 					.adaptTo(AssetManager.class);
-			String newFile = "/content/dam/global/"+ locale + imagePath + "/" + imageName;
-			Asset imageAsset = assetMgr.createAsset(newFile, is, "image/jpeg",
+			//String newFile = "/content/dam/global/"+ locale + imagePath + "/" + imageName;
+			
+			Asset imageAsset = assetMgr.createAsset(imgRef, is, "image/jpeg",
 					true);
 			if (imageAsset != null) {
 				newImagePath = imageAsset.getPath();
@@ -68,6 +71,13 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 			jsonObj.put("newImagePath", newImagePath);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
+		}finally{
+			if(resourceResolver != null){
+				resourceResolver.close();
+			}
+			if(is != null){
+				is.close();
+			}
 		}
 		try{
 			jsonObj.put("error", errorMsg);
@@ -81,5 +91,4 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 			SlingHttpServletResponse response) throws IOException {
 		doPost(request, response);
 	}
-
 }

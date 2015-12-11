@@ -9,6 +9,7 @@ package com.cisco.dse.global.migration.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -136,9 +137,12 @@ public class FrameworkUtils {
        
     }
 
-	public static String migrateDAMContent(String path, String locale) {
+	public static String migrateDAMContent(String path, String imgRef, String locale) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
+		log.debug("Image path from the WEM node : "+imgRef);
 		String newImagePath = "";
+		
+		try{
 		if (StringUtils.isNotBlank(path)) {
 			if (path.indexOf("/content/en/us") == -1
 					&& path.indexOf("/content/dam") == -1
@@ -148,24 +152,38 @@ public class FrameworkUtils {
 					log.debug("Adding domain to the image path.");
 					path = "http://www.cisco.com" + path;
 				}
-				newImagePath = setContentToDAM(path, locale);
+				if (StringUtils.isNotBlank(imgRef)) {
+					imgRef = imgRef.replace("/assets", "/global/" + locale);
+					imgRef = imgRef.replace("/en/us", "/global/" + locale);
+				}else{
+					URL url = new URL(path);
+					String imagePath = url.getPath();
+					if(imagePath.indexOf("/web")!= -1){
+						imagePath = imagePath.replace("/web", "/content/dam/global/"+locale);
+					}else{
+						imagePath = "/content/dam/global/"+locale + imagePath;
+					}
+				}
+				newImagePath = setContentToDAM(path, imgRef);
 			} else {
 				return "";
 			}
 		} else {
 			log.debug("image path is blank.");
 		}
-
+	}catch(Exception e){
+		log.error("Exception : ",e);
+	}
 		return newImagePath;
 	}
 
-	public static String setContentToDAM(String path, String locale) {
+	public static String setContentToDAM(String path, String imgPath) {
 		log.debug("In the setContentToDAM to migrate : " + path);
 
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(
 				"http://chard.cisco.com:4502/bin/services/DAMMigration?imgPath="
-						+ path+"&locale="+locale);
+						+ path+"&imgRef="+imgPath);
 		Credentials defaultcreds = new UsernamePasswordCredentials("admin",
 				"admin");
 		AuthScope authscope = new AuthScope("chard.cisco.com", 4502,
