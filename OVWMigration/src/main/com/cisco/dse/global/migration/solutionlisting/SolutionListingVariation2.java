@@ -150,7 +150,7 @@ public class SolutionListingVariation2 extends BaseAction{
 							}
 
 							String htmlblobtext = "";
-							htmlblobtext = htmlblobElement.outerHtml();
+							htmlblobtext  = FrameworkUtils.extractHtmlBlobImageContent(htmlblobElement, locale, sb);
 							if (htmlBlobIterator != null && htmlBlobIterator.hasNext())
 								htmlBlobNode = htmlBlobIterator.nextNode();
 							if (htmlBlobNode != null) {

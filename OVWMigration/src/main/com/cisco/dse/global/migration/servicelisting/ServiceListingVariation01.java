@@ -136,6 +136,7 @@ public class ServiceListingVariation01 extends BaseAction {
 					// ---------------------------------------------------------------------------------------------------------------------------------------
 					// start htmlblob component.
 					try {
+						String outerHtmlText = "";
 						log.debug("Started migrating HtmlBlob content.");
 						// Start get content.
 						StringBuilder htmlBlobContent = new StringBuilder();
@@ -144,7 +145,8 @@ public class ServiceListingVariation01 extends BaseAction {
 						if (htmlBlobElements != null
 								&& !htmlBlobElements.isEmpty()) {
 							for (Element ele : htmlBlobElements) {
-								htmlBlobContent.append(ele.outerHtml());
+								outerHtmlText = FrameworkUtils.extractHtmlBlobImageContent(ele, locale, sb);
+								htmlBlobContent.append(outerHtmlText);
 							}
 						} else {
 							sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
