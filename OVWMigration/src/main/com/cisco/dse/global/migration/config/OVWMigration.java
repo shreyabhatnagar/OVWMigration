@@ -422,6 +422,19 @@ public class OVWMigration {
 															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
+														else if ("product-listing-var5".equals(type)) {
+															String msg15 = "";
+															msg15 = msg15 + "<tr>";
+															msg15 = msg15
+																	+ new ProductListingVariation6().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg15 = msg15 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg15);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
 					}
 
 					sb.append("</table>");
