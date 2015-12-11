@@ -1,4 +1,11 @@
 package com.cisco.dse.global.migration.productlisting;
+
+/* 
+ * S.No		Name			Description of change
+ * 1		Anudeep			Added the Java file to handle the migration of product listing variation 6 with 3urls.
+ * 
+ * */
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +36,6 @@ public class ProductListingVariation6 extends BaseAction {
 
 	Document doc;
 
-	String title = null;
-
 	StringBuilder sb = new StringBuilder(1024);
 
 	static Logger log = Logger.getLogger(ProductListingVariation6.class);
@@ -41,22 +46,23 @@ public class ProductListingVariation6 extends BaseAction {
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
 		// Repo node paths
-		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content/";
-		String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/product-listing.html";
-
-		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
-		String productListMid=pagePropertiesPath+"content_parsys/products/layout-products/gd21v1/gd21v1-mid";
-
-		log.debug("Path is "+productListMid);
-		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
-		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
-		sb.append("<td><ul>");
-
-		productListMid = productListMid.replace("<locale>", locale).replace("<prod>", prod);
-		javax.jcr.Node productListMidNode = null;
-		javax.jcr.Node pageJcrNode = null;
 		try {
+			String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content/";
+			String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/product-listing.html";
+
+			pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+			pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
+			String productListMid=pagePropertiesPath+"content_parsys/products/layout-products/gd21v1/gd21v1-mid";
+
+			log.debug("Path is "+productListMid);
+			sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
+			sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
+			sb.append("<td><ul>");
+
+			productListMid = productListMid.replace("<locale>", locale).replace("<prod>", prod);
+			javax.jcr.Node productListMidNode = null;
+			javax.jcr.Node pageJcrNode = null;
+
 			productListMidNode = session.getNode(productListMid);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
@@ -82,7 +88,7 @@ public class ProductListingVariation6 extends BaseAction {
 					}
 					Node titleNode = productListMidNode.hasNode("text")?productListMidNode.getNode("text"):null;
 					if(titleNode==null){
-						titleNode = productListMidNode.getNode("text_0");
+						titleNode = productListMidNode.hasNode("text_0")?productListMidNode.getNode("text_0"):null;
 					}
 					if(titleNode != null){
 						titleNode.setProperty("text", title.outerHtml());
@@ -106,8 +112,8 @@ public class ProductListingVariation6 extends BaseAction {
 					if (drawersContainerIterator.hasNext()) {
 						Node drawersContainerNode = drawersContainerIterator.nextNode();
 						try{ 
-						String includeheaderValue = drawersContainerNode.getProperty("includeheader").getValue().getString();
-						log.debug("Include Header Value : "+includeheaderValue);
+							String includeheaderValue = drawersContainerNode.getProperty("includeheader").getValue().getString();
+							log.debug("Include Header Value : "+includeheaderValue);
 							if(includeheaderValue.equals("true")){
 								sb.append(Constants.TITLE_ABOVE_DRAWERS_NOT_FOUND);
 							}
@@ -206,8 +212,8 @@ public class ProductListingVariation6 extends BaseAction {
 											}
 
 											// selecting sub drawer elements from document
-											NodeIterator subDrawerIterator = drawersPanelNode.getNode("parsys-drawers")
-													.getNodes("subdrawer_product*");
+											NodeIterator subDrawerIterator = drawersPanelNode.hasNode("parsys-drawers")?drawersPanelNode.getNode("parsys-drawers")
+													.getNodes("subdrawer_product*"):null;
 											javax.jcr.Node subdrawerpanel = null;
 											Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
 											Elements clearfixdivs = drawerPanelLiElement.select("li.clearfix");
@@ -228,7 +234,7 @@ public class ProductListingVariation6 extends BaseAction {
 														}
 														List<String> list1 = new ArrayList<String>();
 														List<String> list2 = new ArrayList<String>();
-														
+
 														if (subItem != null) {
 															Elements siTitles = subItem.getElementsByTag("h4");
 															if (siTitles != null) {
