@@ -96,6 +96,15 @@ public class ProductListingVariation6 extends BaseAction {
 					NodeIterator drawersContainerIterator = productListMidNode.hasNode("drawers_container")?productListMidNode.getNodes("drawers_container"):productListMidNode.getNodes("drawers_container_0");
 					if (drawersContainerIterator.hasNext()) {
 						Node drawersContainerNode = drawersContainerIterator.nextNode();
+						try{ 
+						String includeheaderValue = drawersContainerNode.getProperty("includeheader").getValue().getString();
+						log.debug("Include Header Value : "+includeheaderValue);
+							if(includeheaderValue.equals("true")){
+								sb.append(Constants.TITLE_ABOVE_DRAWERS_NOT_FOUND);
+							}
+						}catch(Exception e){
+							log.debug("No INCLUDEHEADER PROPERTY found.");
+						}
 						Elements hTextElements = doc.getElementsByAttribute(
 								"data-config-hidetext");
 						if (hTextElements != null && hTextElements.size() > 0) {
@@ -285,6 +294,10 @@ public class ProductListingVariation6 extends BaseAction {
 																		}
 																	} else {
 																		log.debug("<li>info links anchor element section not found</li>");
+																	}
+																	String liOwn = si.ownText();
+																	if(liOwn!=null && !liOwn.equals("")){
+																		linkText = linkText+" "+liOwn;
 																	}
 																	if (StringUtils.isNotBlank(linkText)) {
 																		jsonObj.put("linktext", linkText);

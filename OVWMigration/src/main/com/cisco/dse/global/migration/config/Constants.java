@@ -41,7 +41,7 @@ public class Constants {
 	public static final String SPOTLIGHT_NODE_COUNT = "<li>Spotlight Component node count is ";
 
 	// SPOTLIGHT_ELEMENT_COUNT
-	public static final String SPOTLIGHT_ELEMENT_COUNT = " and Spotlight elements count on the page is ";
+	public static final String SPOTLIGHT_ELEMENT_COUNT = " and Spotlight elements on the page size is ";
 
 	//
 	public static final String SPOTLIGHT_ELEMENT_NOT_FOUND = "<li>Spotlight element not found.</li>";
@@ -80,7 +80,7 @@ public class Constants {
 	public static final String SPOTLIGHT_PARENT_DIV_NOT_FOUND = "<li>Unable to update spotlight component as its respective div is not available.</li>";
 
 	// EXCEPTION_SPOTLIGHT_COMPONENT
-	public static final String EXCEPTION_SPOTLIGHT_COMPONENT = "Unable to update spotlight component as spotlight nodes are ";
+	public static final String EXCEPTION_SPOTLIGHT_COMPONENT = "Unable to update spotlight component as ";
 
 	// URL_CONNECTION_EXCEPTION
 	public static final String URL_CONNECTION_EXCEPTION =  "<li>Exception as URL cannot be connected! </li>";
@@ -267,6 +267,10 @@ public class Constants {
 
 	//DETAILS_ELEMEMT_NOT_FOUND
 	public static final String DETAILS_ELEMEMT_NOT_FOUND = "<li>details Element not found</li>";
+	
+	
+	//TITLE_ABOVE_DRAWERS_NOT_FOUND
+		public static final String TITLE_ABOVE_DRAWERS_NOT_FOUND = "<li>Title above the drawer component is not available on the locale page.</li>";
 	
 
 }
