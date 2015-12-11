@@ -23,7 +23,6 @@ import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.BaseAction;
-import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ProductListingVariation6 extends BaseAction {
 
@@ -52,8 +51,7 @@ public class ProductListingVariation6 extends BaseAction {
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
-		javax.jcr.Node pageJcrNode = null;
-		pageJcrNode = session.getNode(pagePropertiesPath);
+
 		productListMid = productListMid.replace("<locale>", locale).replace("<prod>", prod);
 		javax.jcr.Node productListMidNode = null;
 
@@ -64,13 +62,6 @@ public class ProductListingVariation6 extends BaseAction {
 			} catch (Exception e) {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start set page properties.
-
-			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-
-			// end set page properties.
-			// ------------------------------------------------------------------------------------------------------------------------------------------
 
 			//start of title text
 			try{
@@ -211,6 +202,7 @@ public class ProductListingVariation6 extends BaseAction {
 											javax.jcr.Node subdrawerpanel = null;
 											Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
 											Elements clearfixdivs = drawerPanelLiElement.select("li.clearfix");
+											String previousTitle = null;
 											for (Element ss : subDrawerColl) {
 												String title = "";
 												String linkTitleUrl = "";
@@ -219,7 +211,6 @@ public class ProductListingVariation6 extends BaseAction {
 																subdrawerpanel = subDrawerIterator.nextNode();
 															} */
 												Elements subItems = ss.select("div.prodinfo");
-												Elements subItemUlInfoLinks = ss.select("ul.infolinks");
 
 												if (subItems != null) {
 													for (Element subItem : subItems) {
@@ -228,9 +219,7 @@ public class ProductListingVariation6 extends BaseAction {
 														}
 														List<String> list1 = new ArrayList<String>();
 														List<String> list2 = new ArrayList<String>();
-														if (subDrawerIterator.hasNext()) {
-															subdrawerpanel = subDrawerIterator.nextNode();
-														}
+														
 														if (subItem != null) {
 															Elements siTitles = subItem.getElementsByTag("h4");
 															if (siTitles != null) {
@@ -242,6 +231,9 @@ public class ProductListingVariation6 extends BaseAction {
 																		if (siATitle != null) {
 																			title = siATitle.text();
 																			linkTitleUrl = siATitle.attr("href");
+																			if (title.equals(previousTitle)) {
+																				continue;
+																			}
 																		} else {
 																			log.debug("<li>sub series title Element anchor not found</li>");
 																		}
@@ -321,6 +313,9 @@ public class ProductListingVariation6 extends BaseAction {
 
 
 														}
+														if (subDrawerIterator.hasNext()) {
+															subdrawerpanel = subDrawerIterator.nextNode();
+														}
 														if (subdrawerpanel != null) {
 															if (StringUtils.isNotBlank(title)) {
 																subdrawerpanel
@@ -363,6 +358,7 @@ public class ProductListingVariation6 extends BaseAction {
 													}
 
 												}
+												previousTitle = title;
 											}
 											if (!misMatchFlag) {
 												sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT);
