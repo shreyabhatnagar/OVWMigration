@@ -234,4 +234,31 @@ public class FrameworkUtils {
 		log.debug("imagePath " + imagePath + "\n");
 		return imagePath;
     }
+    
+    /**
+     * extract image path.
+     * @param htmlElement 
+     * 		 the Element
+     * @param sb
+     *       the StringBuilder
+     */
+    public static String extractHtmlBlobImageContent(Element htmlBlobElement, String locale, StringBuilder sb) {
+    	String outeHtmlText = "";
+    	String imagePath = "";
+    	String imageOldPath = "";
+    	if (htmlBlobElement != null) {
+    		imagePath = extractImagePath(htmlBlobElement, sb);
+    		imagePath = migrateDAMContent(imagePath, locale);
+    		Elements imageElements = htmlBlobElement.getElementsByTag("img");
+			if (imageElements != null) {
+				Element imageElement = imageElements.first();
+				if (imageElement != null) {
+					imageOldPath = imageElement.attr("src");
+				} 
+			}
+			log.debug("************ old path and new paths are : ************"+ imageOldPath +" and "+imagePath);
+			outeHtmlText = htmlBlobElement.outerHtml().replace(imageOldPath, imagePath);
+    	}
+    	return outeHtmlText;
+    }
    }
