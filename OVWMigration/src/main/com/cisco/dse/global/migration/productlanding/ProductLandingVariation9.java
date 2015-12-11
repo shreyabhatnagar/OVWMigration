@@ -175,7 +175,7 @@ public class ProductLandingVariation9 extends BaseAction{
 					String aHref = "";
 
 					Elements heroElements = doc.select("div.c50-pilot");
-					heroElements = heroElements.select("div.c50-text");
+					heroElements = heroElements.select("div.frame");
 					Node heroNode = indexRightNode.hasNode("hero_large") ? indexRightNode
 							.getNode("hero_large") : null;
 
@@ -219,6 +219,25 @@ public class ProductLandingVariation9 extends BaseAction{
 											sb.append("<li>Hero Component anchor tag not having any content in it ('<a>' is blank)</li>");
 										}
 
+										// start image
+										String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+										log.debug("heroImage " + heroImage + "\n");
+										heroImage = FrameworkUtils.migrateDAMContent(heroImage, locale);
+										log.debug("heroImage " + heroImage + "\n");
+										if (heroPanelNode != null) {
+											if (heroPanelNode.hasNode("image")) {
+												Node imageNode = heroPanelNode.getNode("image");
+												if (StringUtils.isNotBlank(heroImage)) {
+													imageNode.setProperty("fileReference" , heroImage);
+												} else {
+													sb.append("<li>hero image doesn't exist</li>");
+												}
+											} else {
+												sb.append("<li>hero image node doesn't exist</li>");
+											}
+										}
+										// end image
+										
 										heroPanelNode.setProperty("title", h2Text);
 										heroPanelNode.setProperty("description", pText);
 										heroPanelNode.setProperty("linktext", aText);
@@ -434,6 +453,26 @@ public class ProductLandingVariation9 extends BaseAction{
 									} else {
 										sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
 									}
+									
+									// start image
+									String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+									log.debug("spotLightImage " + spotLightImage + "\n");
+									spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
+									log.debug("spotLightImage " + spotLightImage + "\n");
+									if (spotLightComponentNode != null) {
+										if (spotLightComponentNode.hasNode("image")) {
+											Node spotLightImageNode = spotLightComponentNode.getNode("image");
+											if (StringUtils.isNotBlank(spotLightImage)) {
+												spotLightImageNode.setProperty("fileReference" , spotLightImage);
+											} else {
+												sb.append("<li>spotlight image doesn't exist</li>");
+											}
+										} else {
+											sb.append("<li>spotlight image node doesn't exist</li>");
+										}
+									}
+									// end image
+									
 									spotLightComponentNode.setProperty("title",
 											h2Text);
 									spotLightComponentNode.setProperty(
