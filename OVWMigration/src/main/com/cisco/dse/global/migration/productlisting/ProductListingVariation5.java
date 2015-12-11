@@ -1,3 +1,8 @@
+/* 
+ * S.No		Name			Description of change
+ * 1		vidya				Added the Java file to handle the migration of product listing variation 5 page.
+ * 
+ * */
 package com.cisco.dse.global.migration.productlisting;
 
 import java.io.IOException;
@@ -23,6 +28,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ProductListingVariation5 {
 	
@@ -42,12 +48,13 @@ public class ProductListingVariation5 {
 		log.debug("In the translate method, catType is :"+ catType);
 		
 		//Repo node paths
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content";
 		String topNodePath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content/content_parsys/products/layout-products/gd21v1/gd21v1-mid";
 		String bottomNodePath = "/content/<locale>/"+catType+"/<prod>/product-listing/jcr:content/content_parsys/products/layout-products/gd21v1_0/gd21v1-mid";
         String pageUrl = host + "/content/<locale>/"+catType+"/<prod>/product-listing.html";
 		
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-		
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
@@ -59,12 +66,12 @@ public class ProductListingVariation5 {
 
 		javax.jcr.Node topNode = null;
 		javax.jcr.Node bottomNode = null;
-		
+		javax.jcr.Node pageJcrNode = null;
 		
 		try {
 			topNode = session.getNode(topNodePath);
 			bottomNode = session.getNode(bottomNodePath);
-		
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
 			} catch (Exception e) {
@@ -72,7 +79,13 @@ public class ProductListingVariation5 {
 			}
 
 			title = doc.title();
-	// ------------------------------------------------------------------------------------------------------------------------------------------
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set text component.
 						try {
 							String h2Text="";

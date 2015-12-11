@@ -23,6 +23,7 @@ import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.BaseAction;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ProductListingVariation6 extends BaseAction {
 
@@ -51,7 +52,8 @@ public class ProductListingVariation6 extends BaseAction {
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
-
+		javax.jcr.Node pageJcrNode = null;
+		pageJcrNode = session.getNode(pagePropertiesPath);
 		productListMid = productListMid.replace("<locale>", locale).replace("<prod>", prod);
 		javax.jcr.Node productListMidNode = null;
 
@@ -62,6 +64,13 @@ public class ProductListingVariation6 extends BaseAction {
 			} catch (Exception e) {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
+			// ------------------------------------------------------------------------------------------------------------------------------------------
+			// start set page properties.
+
+			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+			// end set page properties.
+			// ------------------------------------------------------------------------------------------------------------------------------------------
 
 			//start of title text
 			try{
