@@ -15,7 +15,6 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -39,7 +38,6 @@ public class ProductListingVariation5 {
 			String locale, Session session) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-		BasicConfigurator.configure();
 		log.debug("In the translate method");
 		log.debug("In the translate method, catType is :"+ catType);
 		
@@ -208,7 +206,6 @@ public class ProductListingVariation5 {
 																	if (seriesElements != null) {
 																		Element seriesElement = seriesElements.first();
 																		String panelTitle = "";
-																		String linkUrl = "";
 																		String panelDescription = "";
 																		if (seriesElement != null) {
 																			Elements panelTitleElements = seriesElement.getElementsByTag("h3");
@@ -256,12 +253,7 @@ public class ProductListingVariation5 {
 																		
 																		String title = "";
 																		String linkTitleUrl = "";
-																		
-																	/*	if (subDrawerIterator.hasNext()) {
-																			subdrawerpanel = subDrawerIterator.nextNode();
-																		} */
 																		Elements subItems = ss.select("div.prodinfo");
-																		Elements subItemUlInfoLinks = ss.select("ul.infolinks");
 																		
 																		if (subItems != null) {
 																			
