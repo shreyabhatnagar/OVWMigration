@@ -1,5 +1,11 @@
 package com.cisco.dse.global.migration.servicelisting;
 
+/* 
+ * S.No		Name			Description of change
+ * 1		Anudeep			Added the Java file to handle the migration of service listing variation 2 page.
+ * 
+ * */
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +36,6 @@ import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class ServiceListingVariation02 extends BaseAction {
 	Document doc;
 
-	String title = null;
-
 	StringBuilder sb = new StringBuilder(1024);
 
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
@@ -47,49 +51,44 @@ public class ServiceListingVariation02 extends BaseAction {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
-		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/service-listing/jcr:content";
-		String serviceListingMid = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd21v1/gd21v1-mid";
-		String serviceListingMidLeft = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd22v2/gd22v2-left";
-		String serviceListingMidRight = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd22v2/gd22v2-right";
-
-		String pageUrl = host+"/content/<locale>/"+ catType + "/<prod>/service-listing.html";
-
-		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
-		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
-		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
-				+ "</td>");
-		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
-		sb.append("<td><ul>");
-
-
-
-		serviceListingMid = serviceListingMid.replace("<locale>", locale).replace(
-				"<prod>", prod);
-		serviceListingMidLeft = serviceListingMidLeft.replace("<locale>", locale).replace(
-				"<prod>", prod);
-		serviceListingMidRight = serviceListingMidRight.replace("<locale>", locale).replace(
-				"<prod>", prod);
-
-
-		javax.jcr.Node serviceListingMidNode = null;
-		serviceListingMidNode = session.getNode(serviceListingMid);
-
-		javax.jcr.Node serviceListingMidLeftNode = null;
-		serviceListingMidLeftNode = session.getNode(serviceListingMidLeft);
-
-		javax.jcr.Node serviceListingMidRightNode = null;
-		serviceListingMidRightNode = session.getNode(serviceListingMidRight);
-
-		javax.jcr.Node pageJcrNode = null;
-		pageJcrNode = session.getNode(pagePropertiesPath);
 		try {
-			try{
-				doc = Jsoup.connect(loc).get();
-			}
-			catch(Exception e){
-				doc = getConnection(loc);
-			}
+			String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/service-listing/jcr:content";
+			String serviceListingMid = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd21v1/gd21v1-mid";
+			String serviceListingMidLeft = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd22v2/gd22v2-left";
+			String serviceListingMidRight = "/content/<locale>/"+ catType+ "/<prod>/service-listing/jcr:content/content_parsys/services/layout-services/gd22v2/gd22v2-right";
+
+			String pageUrl = host+"/content/<locale>/"+ catType + "/<prod>/service-listing.html";
+
+			pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+			pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
+			sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
+					+ "</td>");
+			sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
+			sb.append("<td><ul>");
+
+
+
+			serviceListingMid = serviceListingMid.replace("<locale>", locale).replace(
+					"<prod>", prod);
+			serviceListingMidLeft = serviceListingMidLeft.replace("<locale>", locale).replace(
+					"<prod>", prod);
+			serviceListingMidRight = serviceListingMidRight.replace("<locale>", locale).replace(
+					"<prod>", prod);
+
+
+			javax.jcr.Node serviceListingMidNode = null;
+			serviceListingMidNode = session.getNode(serviceListingMid);
+
+			javax.jcr.Node serviceListingMidLeftNode = null;
+			serviceListingMidLeftNode = session.getNode(serviceListingMidLeft);
+
+			javax.jcr.Node serviceListingMidRightNode = null;
+			serviceListingMidRightNode = session.getNode(serviceListingMidRight);
+
+			javax.jcr.Node pageJcrNode = null;
+			pageJcrNode = session.getNode(pagePropertiesPath);
+
+			doc = Jsoup.connect(loc).get();
 
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set page properties.
@@ -112,7 +111,7 @@ public class ServiceListingVariation02 extends BaseAction {
 					Elements spotLightEle = doc.select("div.c11-pilot");
 					if(spotLightEle != null && !spotLightEle.isEmpty()){
 						int spEleSize = spotLightEle.size();
-						NodeIterator spotLightNodes = serviceListingMidNode.hasNodes()?serviceListingMidNode
+						NodeIterator spotLightNodes = serviceListingMidNode.hasNode("spotlight_large")?serviceListingMidNode
 								.getNodes("spotlight_large*"):null;
 								if(spotLightNodes != null){
 									int spNodeSize = (int)spotLightNodes.getSize();
@@ -149,7 +148,7 @@ public class ServiceListingVariation02 extends BaseAction {
 					}
 				}catch(Exception e){
 					log.error(e);
-					sb.append("<li>Unable to Update Spotlight.</li>");
+					sb.append(Constants.UNABLE_TO_UPDATE_SPOTLIGHT);
 				}
 				// End of spotlight component
 
@@ -174,7 +173,7 @@ public class ServiceListingVariation02 extends BaseAction {
 										Node listNode = (Node)listNodeIterator.next();
 										setList(ele , listNode);
 									}else{
-										sb.append("<li>MisMatch in list components. Additional Elements found in Locale Page. Locale page has (" +listEleSize+") Elements and Available nodes are ("+listNodeSize+") </li>");
+										sb.append(Constants.MISMATCH_IN_LIST_ELEMENT+listEleSize+") "+ Constants.LIST_NODES_COUNT+listNodeSize+") </li>");
 									}
 								}
 
@@ -185,15 +184,15 @@ public class ServiceListingVariation02 extends BaseAction {
 								}
 
 							}else{
-								sb.append("<li>MisMatch in list components. Additional Nodes found. Locale page has (" +listEleSize+") Elements and Available nodes are ("+listNodeSize+") </li>");						
+								sb.append(Constants.MISMATCH_IN_LIST_NODES+listEleSize+Constants.LIST_NODES_COUNT+listNodeSize+") </li>");						
 							}
 						}else{
-							sb.append("<li>No List Elements Found.</li>");	
+							sb.append(Constants.NO_LIST_NODES_FOUND);	
 						}
 					}
 				}catch(Exception e){
 					log.error(e);
-					sb.append("<li>Unable to update List.</li>");	
+					sb.append(Constants.UNABLE_TO_UPDATE_LIST);	
 				}
 				// End of List Component
 				//start of follow us
@@ -206,7 +205,7 @@ public class ServiceListingVariation02 extends BaseAction {
 							if(!followUsTitle.equals("")&& followUsTitle.hasText()){
 								followUsNode.setProperty("title",followUsTitle.text());
 							}else{
-								sb.append("<li>No Title found for FollowUs.</li>");	
+								sb.append(Constants.FOLLOWUS_TITLE_NOT_FOUND);	
 							}
 
 							Elements ulEle = followUsEle.getElementsByTag("ul");
@@ -226,218 +225,218 @@ public class ServiceListingVariation02 extends BaseAction {
 							}
 
 						}else{
-							sb.append("<li>FollowUs Node not Found.</li>");
+							sb.append(Constants.FOLLOWUS_NODE_NOT_FOUND);
 						}
 					}else{
-						sb.append("<li>FollowUs Element not Found in locale page.</li>");
+						sb.append(Constants.FOLLOWUS_ELEMENT_NOT_FOUND);
 					}
 				}catch(Exception e){
 					log.error(e);
-					sb.append("<li>Unable to update followus.</li>");
+					sb.append(Constants.UNABLE_TO_UPDATE_FOLLOWUS);
 				}
 				//end of follow us
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);	
-				}
-			} catch (Exception e) {
-				sb.append("<li>Cannot Connect to given URL. \n" + loc + "</li>");
 			}
-			sb.append("</ul></td>");
-			session.save();
-			return sb.toString();
+		} catch (Exception e) {
+			sb.append(Constants.URL_CONNECTION_EXCEPTION);
 		}
+		sb.append("</ul></td>");
+		session.save();
+		return sb.toString();
+	}
 
-		//This method is for text component 
-		public void setText(Document doc, Node serviceListingMidNode)throws RepositoryException{
-			Elements textElements = doc.select("div.c00-pilot");
-			if(textElements.isEmpty()){
-				sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+	//This method is for text component 
+	public void setText(Document doc, Node serviceListingMidNode)throws RepositoryException{
+		Elements textElements = doc.select("div.c00-pilot");
+		if(textElements.isEmpty()){
+			sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+		}
+		else{
+			int eleSize = textElements.size();
+			NodeIterator textNodeIterator = serviceListingMidNode.hasNode("text")? serviceListingMidNode.getNodes("text"):null;
+			if(textNodeIterator != null){
+				int nodeSize = (int)textNodeIterator.getSize();
+				if(eleSize == nodeSize){
+					for(Element ele : textElements){
+						if(textNodeIterator.hasNext()){
+							Node textNode = (Node)textNodeIterator.next();
+							textNode.setProperty("text", ele.html());	
+						}
+					}
+				}
+				else if(nodeSize < eleSize){
+					for(Element ele : textElements){
+						if(textNodeIterator.hasNext()){
+							Node textNode = (Node)textNodeIterator.next();
+							textNode.setProperty("text", ele.html());
+						}
+						else{
+							sb.append(Constants.EXTRA_TEXT_ELEMENT_FOUND);
+						}
+					}
+				}
+				else if(nodeSize > eleSize){
+					for(Element ele : textElements){
+						if(textNodeIterator.hasNext()){
+							Node textNode = (Node)textNodeIterator.next();
+							textNode.setProperty("text", ele.html());							
+						}
+					}
+					sb.append(Constants.EXTRA_TEXT_NODE_FOUND);
+				}
 			}
 			else{
-				int eleSize = textElements.size();
-				NodeIterator textNodeIterator = serviceListingMidNode.hasNode("text")? serviceListingMidNode.getNodes("text"):null;
-				if(textNodeIterator != null){
-					int nodeSize = (int)textNodeIterator.getSize();
-					if(eleSize == nodeSize){
-						for(Element ele : textElements){
-							if(textNodeIterator.hasNext()){
-								Node textNode = (Node)textNodeIterator.next();
-								textNode.setProperty("text", ele.html());	
-							}
-						}
-					}
-					else if(nodeSize < eleSize){
-						for(Element ele : textElements){
-							if(textNodeIterator.hasNext()){
-								Node textNode = (Node)textNodeIterator.next();
-								textNode.setProperty("text", ele.html());
-							}
-							else{
-								sb.append("<li>Found extra text element in locale page</li>");
-							}
-						}
-					}
-					else if(nodeSize > eleSize){
-						for(Element ele : textElements){
-							if(textNodeIterator.hasNext()){
-								Node textNode = (Node)textNodeIterator.next();
-								textNode.setProperty("text", ele.html());							
-							}
-						}
-						sb.append("<li>Extra text node exist</li>");
-					}
-				}
-				else{
-					sb.append("<li>No text Node found.</li>");
-				}
+				sb.append(Constants.TEXT_NODE_NOT_FOUND);
 			}
 		}
+	}
 
-		//start setList
-		void setList(Element ele , Node listNode){
-			try{
-				Elements h2Ele = ele.getElementsByTag("h2");
-				Elements h3Ele = ele.getElementsByTag("h3");
-				Elements ulEle = ele.getElementsByTag("ul");
+	//start setList
+	void setList(Element ele , Node listNode){
+		try{
+			Elements h2Ele = ele.getElementsByTag("h2");
+			Elements h3Ele = ele.getElementsByTag("h3");
+			Elements ulEle = ele.getElementsByTag("ul");
 
-				if(!h2Ele.isEmpty()){
-					for(Element h2 : h2Ele){
-						log.debug("h2 of list");
-						listNode.setProperty("title", h2.text());
-					}
-				}else{
-					sb.append("<li>No h2 elements in list.</li>");
+			if(!h2Ele.isEmpty()){
+				for(Element h2 : h2Ele){
+					log.debug("h2 of list");
+					listNode.setProperty("title", h2.text());
 				}
+			}else{
+				sb.append(Constants.NO_H2_ELEMENT_IN_LIST);
+			}
 
-				NodeIterator h3Nodes = listNode.getNodes("element_subtitle*");
-				if(!h3Ele.isEmpty()){
-					for(Element h3 : h3Ele){
-						if(h3Nodes.hasNext()){
-							Node h3Node = (Node)h3Nodes.next();
-							h3Node.setProperty("subtitle",h3.text());
-						}
+			NodeIterator h3Nodes = listNode.hasNode("element_subtitle")?listNode.getNodes("element_subtitle*"):null;
+			if(!h3Ele.isEmpty()){
+				for(Element h3 : h3Ele){
+					if(h3Nodes.hasNext()){
+						Node h3Node = (Node)h3Nodes.next();
+						h3Node.setProperty("subtitle",h3.text());
 					}
-				}else{
-					sb.append("<li>No h3 elements in list.</li>");
 				}
+			}else{
+				sb.append(Constants.NO_H3_ELEMENT_IN_LIST);
+			}
 
-				NodeIterator ulNodes = listNode.getNodes("element_list*");
-				for(Element ul : ulEle){
-					if(ulNodes.hasNext()){
-						Elements aEle = ul.getElementsByTag("a");
-						Node eleList = (Node)ulNodes.next();
-						List<String> list = new ArrayList<String>();
-						String nodeName = eleList.getName();
-						for(Element a : aEle){
-							JSONObject obj = new JSONObject();
-							String linkText = a.text();
-							obj.put("linktext", linkText);
-							obj.put("linkurl",a.attr("href"));
-							obj.put("icon","none");
-							obj.put("size","");
-							obj.put("description","");
-							obj.put("openInNewWindow",true);
-							/*	if(nodeName.equals("element_list_1")){
+			NodeIterator ulNodes = listNode.hasNode("element_list")?listNode.getNodes("element_list*"):null;
+			for(Element ul : ulEle){
+				if(ulNodes.hasNext()){
+					Elements aEle = ul.getElementsByTag("a");
+					Node eleList = (Node)ulNodes.next();
+					List<String> list = new ArrayList<String>();
+					String nodeName = eleList.getName();
+					for(Element a : aEle){
+						JSONObject obj = new JSONObject();
+						String linkText = a.text();
+						obj.put("linktext", linkText);
+						obj.put("linkurl",a.attr("href"));
+						obj.put("icon","none");
+						obj.put("size","");
+						obj.put("description","");
+						obj.put("openInNewWindow",true);
+						/*	if(nodeName.equals("element_list_1")){
 							log.debug("element_list_1");
 							obj.put("openInNewWindow",false);
 						}else{
 							log.debug("element_list_0/2");
 							obj.put("openInNewWindow",true);
 						} */
-							list.add(obj.toString());
-						}
-						try{
-							//	eleList.setProperty("listitems", list.toArray(new String[list.size()]));
-							if (nodeName.equals("element_list_0")) {
-								eleList.setProperty("listitems", list.toArray(new String[list.size()]));
-							}
-							else {
-								eleList.setProperty("listitems", list.get(0));
-							} 
-
-						}catch(Exception e){
-							log.debug("setProperty"+e);
-						}
-					}else{
-						sb.append("<li>No List node(s) found.</li>");
+						list.add(obj.toString());
 					}
-				}
+					try{
+						//	eleList.setProperty("listitems", list.toArray(new String[list.size()]));
+						if (nodeName.equals("element_list_0")) {
+							eleList.setProperty("listitems", list.toArray(new String[list.size()]));
+						}
+						else {
+							eleList.setProperty("listitems", list.get(0));
+						} 
 
-			}catch(Exception e){
-				sb.append("<li>Unable to update List Component...</li>");
-			}
-		}
-		//end setList
-
-		// This method to set content for spotlight
-		public void setSpotlight(Element ele, Node spotLightComponentNode,String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
-			String title = "";
-			String pText = "";
-			String aText = "";
-			Element h2Ele = ele.getElementsByTag("h2").first();
-			if (h2Ele != null) {
-				title = h2Ele.text();
-				String tLink = h2Ele.getElementsByTag("a").attr("href");
-				spotLightComponentNode.setProperty("title",title);
-				Node titLink = spotLightComponentNode.getNode("titlelink");
-				if(tLink!=null && !tLink.equals("")){
-					if(titLink!=null){
-						titLink.setProperty("url", tLink);	
-					}else{
-						sb.append("<li>Title link node not available</li>");
+					}catch(Exception e){
+						log.debug("setProperty"+e);
 					}
 				}else{
-					sb.append("<li>Title does not have link in local page.</li>");
-				}
-
-			} else {
-				sb.append("<li>Spotlight Component not having any title.</li>");
-			}
-			// start image
-			String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
-			log.debug("spotLightImage " + spotLightImage + "\n");
-			
-			if (spotLightComponentNode != null) {
-				if (spotLightComponentNode.hasNode("image")) {
-					Node spotLightImageNode = spotLightComponentNode.getNode("image");
-					String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-					spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference,  locale);
-					log.debug("spotLightImage " + spotLightImage + "\n");
-					if (StringUtils.isNotBlank(spotLightImage)) {
-						spotLightImageNode.setProperty("fileReference" , spotLightImage);
-					} else {
-						sb.append("<li>spotlight image doesn't exist</li>");
-					}
-				} else {
-					sb.append("<li>spotlight image node doesn't exist</li>");
+					sb.append(Constants.NO_LIST_NODE_FOUND);
 				}
 			}
-			// end image
-			Elements descriptionText = ele.getElementsByTag("p");
-			String ulText = ele.getElementsByTag("ul").outerHtml();
 
-			if(!ulText.equals("") && ulText!=null){
-				String pTagText = descriptionText.text();
-				spotLightComponentNode.setProperty("description", pTagText+ulText);
-			}
-			else if (descriptionText != null && !descriptionText.isEmpty()) {
-				pText = descriptionText.html();
-				spotLightComponentNode.setProperty("description", pText);
-			}else{
-				sb.append("<li>Spotlight Component not having any description.</li>");
-			}
-
-			Elements spotLightAnchor = ele.select("a.cta");
-			if (spotLightAnchor != null && !spotLightAnchor.isEmpty()) {
-				aText = spotLightAnchor.text();
-				String linkUrl = spotLightAnchor.attr("href");
-				spotLightComponentNode.setProperty("linktext", aText);
-				javax.jcr.Node ctaNode = spotLightComponentNode.getNode("cta");
-				if (ctaNode != null && linkUrl != null) {
-					ctaNode.setProperty("url", linkUrl);
-				}
-			} else {
-				sb.append("No cta link available in locale page.</li>");
-			}
+		}catch(Exception e){
+			sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 		}
 	}
+	//end setList
+
+	// This method to set content for spotlight
+	public void setSpotlight(Element ele, Node spotLightComponentNode,String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+		String title = "";
+		String pText = "";
+		String aText = "";
+		Element h2Ele = ele.getElementsByTag("h2").first();
+		if (h2Ele != null) {
+			title = h2Ele.text();
+			String tLink = h2Ele.getElementsByTag("a").attr("href");
+			spotLightComponentNode.setProperty("title",title);
+			Node titLink = spotLightComponentNode.hasNode("titlelink")?spotLightComponentNode.getNode("titlelink"):null;
+			if(tLink!=null && !tLink.equals("")){
+				if(titLink!=null){
+					titLink.setProperty("url", tLink);	
+				}else{
+					sb.append(Constants.TITLE_LINK_NODE_NOT_AVAILABLE);
+				}
+			}else{
+				sb.append(Constants.TITLE_DONOT_HAVE_LINK);
+			}
+
+		} else {
+			sb.append(Constants.SPOTLIGHT_HEADING_TEXT_NOT_FOUND);
+		}
+		// start image
+		String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+		log.debug("spotLightImage " + spotLightImage + "\n");
+
+		if (spotLightComponentNode != null) {
+			if (spotLightComponentNode.hasNode("image")) {
+				Node spotLightImageNode = spotLightComponentNode.hasNode("image")?spotLightComponentNode.getNode("image"):null;
+				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference,  locale);
+				log.debug("spotLightImage " + spotLightImage + "\n");
+				if (StringUtils.isNotBlank(spotLightImage)) {
+					spotLightImageNode.setProperty("fileReference" , spotLightImage);
+				} else {
+					sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+				}
+			} else {
+				sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
+			}
+		}
+		// end image
+		Elements descriptionText = ele.getElementsByTag("p");
+		String ulText = ele.getElementsByTag("ul").outerHtml();
+
+		if(!ulText.equals("") && ulText!=null){
+			String pTagText = descriptionText.text();
+			spotLightComponentNode.setProperty("description", pTagText+ulText);
+		}
+		else if (descriptionText != null && !descriptionText.isEmpty()) {
+			pText = descriptionText.html();
+			spotLightComponentNode.setProperty("description", pText);
+		}else{
+			sb.append(Constants.SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND);
+		}
+
+		Elements spotLightAnchor = ele.select("a.cta");
+		if (spotLightAnchor != null && !spotLightAnchor.isEmpty()) {
+			aText = spotLightAnchor.text();
+			String linkUrl = spotLightAnchor.attr("href");
+			spotLightComponentNode.setProperty("linktext", aText);
+			javax.jcr.Node ctaNode = spotLightComponentNode.hasNode("cta")?spotLightComponentNode.getNode("cta"):null;
+			if (ctaNode != null && linkUrl != null) {
+				ctaNode.setProperty("url", linkUrl);
+			}
+		} else {
+			sb.append(Constants.CTA_NOT_AVAILABLE);
+		}
+	}
+}
