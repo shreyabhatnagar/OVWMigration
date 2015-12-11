@@ -245,7 +245,10 @@ public class SolutionListingVariation08 extends BaseAction {
 					Elements htmlblobElements = doc.select("div.c50-pilot");
 					String htmlBlobContent = "";
 					if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
-						htmlBlobContent = htmlblobElements.html();
+						for(Element ele: htmlblobElements){
+							log.debug("html blob content: "+ ele);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
+						}
 					} else {
 						isHtml = false;//No Html node content node found.
 						//sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);

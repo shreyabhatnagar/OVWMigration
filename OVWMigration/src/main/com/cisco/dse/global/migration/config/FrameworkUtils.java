@@ -260,13 +260,13 @@ public class FrameworkUtils {
      * @param sb
      *       the StringBuilder
      */
-    public static String extractHtmlBlobContent(Element htmlBlobElement, String locale, StringBuilder sb) {
+    public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
     	String outeHtmlText = "";
     	String imagePath = "";
     	String imageOldPath = "";
     	if (htmlBlobElement != null) {
     		imagePath = extractImagePath(htmlBlobElement, sb);
-    		imagePath = migrateDAMContent(imagePath, locale);
+    		imagePath = migrateDAMContent(imagePath, fileReference, locale);
     		Elements imageElements = htmlBlobElement.getElementsByTag("img");
 			if (imageElements != null) {
 				Element imageElement = imageElements.first();

@@ -775,7 +775,7 @@ public class ProductLandingVariation1 extends BaseAction {
 								if (htmlblobElement != null) {
 									Elements ulElements = htmlblobElement.getElementsByTag("ul");
 									if (ulElements.size() > 0) {
-										html = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, locale, sb);
+										html = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb);
 									}
 								} 
 							}

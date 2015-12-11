@@ -145,7 +145,7 @@ public class ServiceListingVariation01 extends BaseAction {
 						if (htmlBlobElements != null
 								&& !htmlBlobElements.isEmpty()) {
 							for (Element ele : htmlBlobElements) {
-								outerHtmlText = FrameworkUtils.extractHtmlBlobContent(ele, locale, sb);
+								outerHtmlText = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
 								htmlBlobContent.append(outerHtmlText);
 							}
 						} else {

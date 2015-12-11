@@ -152,11 +152,13 @@ public class ServiceListingVariation03 extends BaseAction {
 								// start image
 								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
 								log.debug("spotLightImage " + spotLightImage + "\n");
-								spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, locale);
-								log.debug("spotLightImage " + spotLightImage + "\n");
+								
 								if (spotLightComponentNode != null) {
 									if (spotLightComponentNode.hasNode("image")) {
 										Node spotLightImageNode = spotLightComponentNode.getNode("image");
+										String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage,fileReference, locale);
+										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
 										} else {
