@@ -159,9 +159,9 @@ public class FrameworkUtils {
 					URL url = new URL(path);
 					String imagePath = url.getPath();
 					if(imagePath.indexOf("/web")!= -1){
-						imagePath = imagePath.replace("/web", "/content/dam/global/"+locale);
+						imgRef = imagePath.replace("/web", "/content/dam/global/"+locale);
 					}else{
-						imagePath = "/content/dam/global/"+locale + imagePath;
+						imgRef = "/content/dam/global/"+locale + imagePath;
 					}
 				}
 				newImagePath = setContentToDAM(path, imgRef);
