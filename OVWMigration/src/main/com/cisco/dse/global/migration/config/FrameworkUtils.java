@@ -242,7 +242,7 @@ public class FrameworkUtils {
      * @param sb
      *       the StringBuilder
      */
-    public static String extractHtmlBlobImageContent(Element htmlBlobElement, String locale, StringBuilder sb) {
+    public static String extractHtmlBlobContent(Element htmlBlobElement, String locale, StringBuilder sb) {
     	String outeHtmlText = "";
     	String imagePath = "";
     	String imageOldPath = "";
