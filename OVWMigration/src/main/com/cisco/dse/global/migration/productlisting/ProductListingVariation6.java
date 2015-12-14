@@ -111,15 +111,17 @@ public class ProductListingVariation6 extends BaseAction {
 					NodeIterator drawersContainerIterator = productListMidNode.hasNode("drawers_container")?productListMidNode.getNodes("drawers_container"):productListMidNode.getNodes("drawers_container_0");
 					if (drawersContainerIterator.hasNext()) {
 						Node drawersContainerNode = drawersContainerIterator.nextNode();
-						try{ 
-							String includeheaderValue = drawersContainerNode.getProperty("includeheader").getValue().getString();
+						 
+							 Property includeheaderProp = drawersContainerNode.hasProperty("includeheader")?drawersContainerNode.getProperty("includeheader"):null;
+							 if(includeheaderProp!=null){
+							 String includeheaderValue = includeheaderProp.getValue().getString();
 							log.debug("Include Header Value : "+includeheaderValue);
 							if(includeheaderValue.equals("true")){
 								sb.append(Constants.TITLE_ABOVE_DRAWERS_NOT_FOUND);
 							}
-						}catch(Exception e){
-							log.debug("No INCLUDEHEADER PROPERTY found.");
-						}
+							 }else{
+								 log.debug("NO IncludeHeader value found.");
+							 }
 						Elements hTextElements = doc.getElementsByAttribute(
 								"data-config-hidetext");
 						if (hTextElements != null && hTextElements.size() > 0) {
