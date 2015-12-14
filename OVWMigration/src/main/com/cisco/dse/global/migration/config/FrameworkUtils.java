@@ -107,6 +107,13 @@ public class FrameworkUtils {
 	    	   	      }
 	    	   	   } 
     	   		}
+    	   		
+	    	   	// start check title of the page
+ 	   			String pageTitle = doc.title();
+ 	   			log.debug("pageTitle::::::: " + pageTitle);
+ 	   			log.debug("title::::::: " + title);   	   			
+	 	   		// end check title of the page
+ 	   			
     	   		//setting html meta data to as page properties
 	    	   	if (jcrNode != null) {
 	    	   		if (StringUtils.isNotBlank(title)) {
@@ -119,6 +126,17 @@ public class FrameworkUtils {
 	    	   		} else {
 	    	   	    	sb.append("<li>meta data description doesn't exist </li>");
 	    	   	      }
+	    	   		if (StringUtils.isNotBlank(pageTitle)) {
+ 	    	   			pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
+ 	    	   			String jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
+ 	    	   			log.debug("JCR Title in chard is "+jcrTitle);
+ 	    	   			if (!pageTitle.trim().equalsIgnoreCase(jcrTitle)) {
+ 	    	   				log.debug("Page title and JCR title are not the same.");
+ 	    	   				jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
+ 	    	   			}
+     	   			} else {
+     	   				sb.append("<li>custom head title not set </li>");
+     	   			}
 	    	   	} else {
 	    	   		log.debug("jcr node doesn't exist");
 	    	   	}
@@ -137,43 +155,47 @@ public class FrameworkUtils {
        
     }
 
-	public static String migrateDAMContent(String path, String imgRef, String locale) {
+	public static String migrateDAMContent(String path, String imgRef,
+			String locale) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
-		log.debug("Image path from the WEM node : "+imgRef);
+		log.debug("Image path from the WEM node : " + imgRef);
 		String newImagePath = "";
-		
-		try{
-		if (StringUtils.isNotBlank(path)) {
-			if (path.indexOf("/content/en/us") == -1
-					&& path.indexOf("/content/dam") == -1
-					&& path.indexOf("/c/en/us") == -1
-					&& path.indexOf("/c/dam") == -1) {
-				if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
-					log.debug("Adding domain to the image path.");
-					path = "http://www.cisco.com" + path;
-				}
-				if (StringUtils.isNotBlank(imgRef)) {
-					imgRef = imgRef.replace("/assets", "/global/" + locale);
-					imgRef = imgRef.replace("/en/us", "/global/" + locale);
-				}else{
-					URL url = new URL(path);
-					String imagePath = url.getPath();
-					if(imagePath.indexOf("/web")!= -1){
-						imgRef = imagePath.replace("/web", "/content/dam/global/"+locale);
-					}else{
-						imgRef = "/content/dam/global/"+locale + imagePath;
+
+		try {
+			if (StringUtils.isNotBlank(path)) {
+				if (path.indexOf("/content/en/us") == -1
+						&& path.indexOf("/content/dam") == -1
+						&& path.indexOf("/c/en/us") == -1
+						&& path.indexOf("/c/dam") == -1) {
+					if (path.indexOf("http:") == -1
+							&& path.indexOf("https:") == -1) {
+						log.debug("Adding domain to the image path.");
+						path = "http://www.cisco.com" + path;
 					}
+					if (StringUtils.isNotBlank(imgRef)) {
+						imgRef = imgRef.replace("/assets", "/global/" + locale);
+						imgRef = imgRef.replace("/en/us", "/global/" + locale);
+					} else {
+						URL url = new URL(path);
+						String imagePath = url.getPath();
+						if (imagePath.indexOf("/web") != -1) {
+							imgRef = imagePath.replace("/web", "/content/dam/global/" + locale);
+						} else {
+							imgRef = "/content/dam/global/" + locale + imagePath;
+						}
+					}
+					newImagePath = setContentToDAM(path, imgRef);
+				} else if (!path.equalsIgnoreCase(imgRef)) {
+					return path;
+				} else {
+					return "";
 				}
-				newImagePath = setContentToDAM(path, imgRef);
 			} else {
-				return "";
+				log.debug("image path is blank.");
 			}
-		} else {
-			log.debug("image path is blank.");
+		} catch (Exception e) {
+			log.error("Exception : ", e);
 		}
-	}catch(Exception e){
-		log.error("Exception : ",e);
-	}
 		return newImagePath;
 	}
 

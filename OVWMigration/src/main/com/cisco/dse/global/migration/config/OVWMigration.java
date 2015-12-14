@@ -26,6 +26,7 @@ import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
+import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation6;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation7;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
@@ -39,6 +40,7 @@ import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation02;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation03;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation08;
+import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation09;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
@@ -427,7 +429,7 @@ public class OVWMigration {
 															String msg15 = "";
 															msg15 = msg15 + "<tr>";
 															msg15 = msg15
-																	+ new ProductListingVariation6().translate(
+																	+ new ProductListingVariation5().translate(
 																			host, gLink, prod, type, cattype,
 																			sheet.getSheetName(), session);
 															msg15 = msg15 + "</tr>";
@@ -448,6 +450,20 @@ public class OVWMigration {
 															sb.append(msg19);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
+														else if ("solutions-listing-var9".equals(type)) {
+															String msg15 = "";
+															msg15 = msg15 + "<tr>";
+															msg15 = msg15
+																	+ new SolutionListingVariation09().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg15 = msg15 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg15);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+
 					}
 
 					sb.append("</table>");
