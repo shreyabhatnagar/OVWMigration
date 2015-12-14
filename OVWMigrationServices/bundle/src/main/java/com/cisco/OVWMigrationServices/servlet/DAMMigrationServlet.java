@@ -51,6 +51,15 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 			String imgPath = request.getParameter("imgPath");
 			String imgRef = request.getParameter("imgRef");
 			
+			
+			String extension = imgPath.substring(imgPath.lastIndexOf(".")+1, imgPath.length());
+			
+			if(extension.length()>=4 || extension.lastIndexOf("?")!=-1){
+				if(extension.lastIndexOf("?")!=-1){
+					extension = extension.substring(0, extension.lastIndexOf("?"));
+				}
+			}
+			
 			URL url = new URL(imgPath);
 			String path = url.getPath();
 			//String imageName = path.substring(path.lastIndexOf("/") + 1, path.length());
@@ -61,10 +70,14 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 
 			AssetManager assetMgr = resourceResolver
 					.adaptTo(AssetManager.class);
-			//String newFile = "/content/dam/global/"+ locale + imagePath + "/" + imageName;
-			
-			Asset imageAsset = assetMgr.createAsset(imgRef, is, "image/jpeg",
-					true);
+
+			Asset imageAsset = null;
+			if (extension.equalsIgnoreCase("pdf")) {
+				imageAsset = assetMgr.createAsset(imgRef, is, "application/pdf", true);
+			} else {
+				imageAsset = assetMgr.createAsset(imgRef, is, "image/jpeg",
+						true);
+			}
 			if (imageAsset != null) {
 				newImagePath = imageAsset.getPath();
 			}

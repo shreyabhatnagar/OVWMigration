@@ -155,43 +155,47 @@ public class FrameworkUtils {
        
     }
 
-	public static String migrateDAMContent(String path, String imgRef, String locale) {
+	public static String migrateDAMContent(String path, String imgRef,
+			String locale) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
-		log.debug("Image path from the WEM node : "+imgRef);
+		log.debug("Image path from the WEM node : " + imgRef);
 		String newImagePath = "";
-		
-		try{
-		if (StringUtils.isNotBlank(path)) {
-			if (path.indexOf("/content/en/us") == -1
-					&& path.indexOf("/content/dam") == -1
-					&& path.indexOf("/c/en/us") == -1
-					&& path.indexOf("/c/dam") == -1) {
-				if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
-					log.debug("Adding domain to the image path.");
-					path = "http://www.cisco.com" + path;
-				}
-				if (StringUtils.isNotBlank(imgRef)) {
-					imgRef = imgRef.replace("/assets", "/global/" + locale);
-					imgRef = imgRef.replace("/en/us", "/global/" + locale);
-				}else{
-					URL url = new URL(path);
-					String imagePath = url.getPath();
-					if(imagePath.indexOf("/web")!= -1){
-						imgRef = imagePath.replace("/web", "/content/dam/global/"+locale);
-					}else{
-						imgRef = "/content/dam/global/"+locale + imagePath;
+
+		try {
+			if (StringUtils.isNotBlank(path)) {
+				if (path.indexOf("/content/en/us") == -1
+						&& path.indexOf("/content/dam") == -1
+						&& path.indexOf("/c/en/us") == -1
+						&& path.indexOf("/c/dam") == -1) {
+					if (path.indexOf("http:") == -1
+							&& path.indexOf("https:") == -1) {
+						log.debug("Adding domain to the image path.");
+						path = "http://www.cisco.com" + path;
 					}
+					if (StringUtils.isNotBlank(imgRef)) {
+						imgRef = imgRef.replace("/assets", "/global/" + locale);
+						imgRef = imgRef.replace("/en/us", "/global/" + locale);
+					} else {
+						URL url = new URL(path);
+						String imagePath = url.getPath();
+						if (imagePath.indexOf("/web") != -1) {
+							imgRef = imagePath.replace("/web", "/content/dam/global/" + locale);
+						} else {
+							imgRef = "/content/dam/global/" + locale + imagePath;
+						}
+					}
+					newImagePath = setContentToDAM(path, imgRef);
+				} else if (!path.equalsIgnoreCase(imgRef)) {
+					return path;
+				} else {
+					return "";
 				}
-				newImagePath = setContentToDAM(path, imgRef);
 			} else {
-				return "";
+				log.debug("image path is blank.");
 			}
-		} else {
-			log.debug("image path is blank.");
+		} catch (Exception e) {
+			log.error("Exception : ", e);
 		}
-	}catch(Exception e){
-		log.error("Exception : ",e);
-	}
 		return newImagePath;
 	}
 
