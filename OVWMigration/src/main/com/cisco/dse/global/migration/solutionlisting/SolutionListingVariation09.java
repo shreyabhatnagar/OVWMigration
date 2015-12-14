@@ -1,6 +1,6 @@
 /* 
- * S.No		Name			Description of change
- * 1	    vidya		Added the Java file to handle the migration of solution listing variation 9 page.
+ * S.No		Name	Date		Description of change
+ * 1	    vidya	14-Dec-15   	     Added the Java file to handle the migration of solution listing variation 9 page.
  * 
  * */
 package com.cisco.dse.global.migration.solutionlisting;
