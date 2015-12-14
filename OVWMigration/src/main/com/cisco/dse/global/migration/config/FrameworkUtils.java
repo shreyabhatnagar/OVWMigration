@@ -107,6 +107,13 @@ public class FrameworkUtils {
 	    	   	      }
 	    	   	   } 
     	   		}
+    	   		
+	    	   	// start check title of the page
+ 	   			String pageTitle = doc.title();
+ 	   			log.debug("pageTitle::::::: " + pageTitle);
+ 	   			log.debug("title::::::: " + title);   	   			
+	 	   		// end check title of the page
+ 	   			
     	   		//setting html meta data to as page properties
 	    	   	if (jcrNode != null) {
 	    	   		if (StringUtils.isNotBlank(title)) {
@@ -119,6 +126,17 @@ public class FrameworkUtils {
 	    	   		} else {
 	    	   	    	sb.append("<li>meta data description doesn't exist </li>");
 	    	   	      }
+	    	   		if (StringUtils.isNotBlank(pageTitle)) {
+ 	    	   			pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
+ 	    	   			String jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
+ 	    	   			log.debug("JCR Title in chard is "+jcrTitle);
+ 	    	   			if (!pageTitle.trim().equalsIgnoreCase(jcrTitle)) {
+ 	    	   				log.debug("Page title and JCR title are not the same.");
+ 	    	   				jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
+ 	    	   			}
+     	   			} else {
+     	   				sb.append("<li>custom head title not set </li>");
+     	   			}
 	    	   	} else {
 	    	   		log.debug("jcr node doesn't exist");
 	    	   	}
