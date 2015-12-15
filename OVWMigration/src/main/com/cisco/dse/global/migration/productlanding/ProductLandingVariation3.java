@@ -278,6 +278,8 @@ public class ProductLandingVariation3 extends BaseAction{
 									} else {
 										log.debug("<li>Hero Panel link url element not found </li>");
 									}
+									if (heroPanelIterator != null && heroPanelIterator.hasNext())
+										heroPanelNode = heroPanelIterator.nextNode();
 									// start image
 									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage before migration : " + heroImage + "\n");
@@ -289,8 +291,6 @@ public class ProductLandingVariation3 extends BaseAction{
 											log.debug("heroImage after migration : " + heroImage + "\n");
 											if (StringUtils.isNotBlank(heroImage)) {
 												imageNode.setProperty("fileReference" , heroImage);
-											} else {
-												sb.append("<li>hero image doesn't exist</li>");
 											}
 										} else {
 											sb.append("<li>hero image node doesn't exist</li>");
@@ -301,8 +301,7 @@ public class ProductLandingVariation3 extends BaseAction{
 									log.debug("heroPanelDescription " + heroPanelDescription + "\n");
 									log.debug("heroPanelLinkText " + heroPanelLinkText + "\n");
 									log.debug("heroPanellinkUrl " + heroPanellinkUrl + "\n");
-									if (heroPanelIterator != null && heroPanelIterator.hasNext())
-										heroPanelNode = heroPanelIterator.nextNode();
+									
 									if (heroPanelNode != null) {
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);

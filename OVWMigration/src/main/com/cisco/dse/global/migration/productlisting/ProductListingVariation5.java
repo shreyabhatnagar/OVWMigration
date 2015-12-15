@@ -235,6 +235,23 @@ public class ProductListingVariation5 {
 																			} else {
 																				sb.append(Constants.DRAWER_PANEL_DESCRIPTION_ELEMENT_NOT_FOUND);
 																			}
+																			// start image																													
+																			String drawerImage = FrameworkUtils.extractImagePath(seriesElement, sb);
+																			log.debug("drawerImage " + drawerImage + "\n");
+																			if (drawersPanelNode != null) {
+																				if (drawersPanelNode.hasNode("drawers-image")) {
+																					Node drawersImageNode = drawersPanelNode.getNode("drawers-image");
+																					String fileReference = drawersImageNode.hasProperty("fileReference")?drawersImageNode.getProperty("fileReference").getString():"";
+																					drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale);
+																					log.debug("drawerImage " + drawerImage + "\n");
+																					if (StringUtils.isNotBlank(drawerImage)) {
+																						drawersImageNode.setProperty("fileReference" , drawerImage);
+																					}
+																				} else {
+																					sb.append("<li>drawer image node doesn't exist</li>");
+																				}
+																			}
+																			// end image
 																			if (drawersPanelNode != null) {
 																				log.debug("panelTitle " + panelTitle + "\n");
 																				//log.debug("linkUrl " + linkUrl + "\n");
@@ -309,7 +326,23 @@ public class ProductListingVariation5 {
 																					} else {
 																						sb.append(Constants.SUB_DRAWER_TITLE_ELEMENT_NOT_FOUND);
 																					}
-																					
+																					// start image
+																					String subDrawerImage = FrameworkUtils.extractImagePath(subItem, sb);
+																					log.debug("subDrawerImage before migration : " + subDrawerImage + "\n");
+																					if (subdrawerpanel != null) {
+																						if (subdrawerpanel.hasNode("subdrawers-image")) {
+																							Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
+																							String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
+																							subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale);
+																							log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
+																							if (StringUtils.isNotBlank(subDrawerImage)) {
+																								subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
+																							}
+																						} else {
+																							sb.append("<li>subdrawer image node doesn't exist</li>");
+																						}
+																					}
+																					// end image
 																					Elements indDetailsElements = subItem.select("ul.details");
 																					
 																					if (indDetailsElements != null) {

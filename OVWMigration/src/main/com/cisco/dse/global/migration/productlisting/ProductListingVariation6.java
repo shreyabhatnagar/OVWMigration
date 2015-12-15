@@ -193,6 +193,23 @@ public class ProductListingVariation6 extends BaseAction {
 													} else {
 														log.debug("<li>drawer panel para element not found</li>");
 													}
+													// start image																													
+													String drawerImage = FrameworkUtils.extractImagePath(seriesElement, sb);
+													log.debug("drawerImage " + drawerImage + "\n");
+													if (drawersPanelNode != null) {
+														if (drawersPanelNode.hasNode("drawers-image")) {
+															Node drawersImageNode = drawersPanelNode.getNode("drawers-image");
+															String fileReference = drawersImageNode.hasProperty("fileReference")?drawersImageNode.getProperty("fileReference").getString():"";
+															drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale);
+															log.debug("drawerImage " + drawerImage + "\n");
+															if (StringUtils.isNotBlank(drawerImage)) {
+																drawersImageNode.setProperty("fileReference" , drawerImage);
+															}
+														} else {
+															sb.append("<li>drawer image node doesn't exist</li>");
+														}
+													}
+													// end image
 													if (drawersPanelNode != null) {
 														if (StringUtils.isNotBlank(panelTitle)) {
 															drawersPanelNode.setProperty("title", panelTitle);
@@ -223,6 +240,7 @@ public class ProductListingVariation6 extends BaseAction {
 											for (Element ss : subDrawerColl) {
 												String title = "";
 												String linkTitleUrl = "";
+												String subDrawerImage = "";
 
 												/*	if (subDrawerIterator.hasNext()) {
 																subdrawerpanel = subDrawerIterator.nextNode();
@@ -269,7 +287,10 @@ public class ProductListingVariation6 extends BaseAction {
 															} else {
 																log.debug("<li>sub series title Elements section not found</li>");
 															}
-
+															// start image
+															subDrawerImage = FrameworkUtils.extractImagePath(subItem, sb);
+															log.debug("subDrawerImage before migration : " + subDrawerImage + "\n");
+															// end image
 															Elements indDetailsElements = subItem.select("ul.details");
 
 															if (indDetailsElements != null) {
@@ -346,6 +367,19 @@ public class ProductListingVariation6 extends BaseAction {
 																sb.append(Constants.LINK_URL_OF_SUB_DRAWER_NOT_FOUND);
 																log.debug("linkurl property is not set at " + subdrawerpanel.getPath());
 															}
+															// start image
+															if (StringUtils.isNotBlank(subDrawerImage) && subdrawerpanel.hasNode("subdrawers-image")) {
+																Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
+																String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
+																subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale);
+																log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
+																if (StringUtils.isNotBlank(subDrawerImage)) {
+																	subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
+																}
+															} else {
+																sb.append("<li>subdrawer image node doesn't exist</li>");
+															}
+															// end image
 															if (list1.size() > 0) {
 
 																if (subdrawerpanel.hasProperty("highlights")) {

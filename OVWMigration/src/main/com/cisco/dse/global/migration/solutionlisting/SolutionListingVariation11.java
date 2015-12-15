@@ -236,8 +236,6 @@ public class SolutionListingVariation11 extends BaseAction {
 											log.debug("spotLightImage " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												spotLightImageNode.setProperty("fileReference" , spotLightImage);
-											} else {
-												sb.append("<li>spotlight image doesn't exist</li>");
 											}
 										} else {
 											sb.append("<li>spotlight image node doesn't exist</li>");

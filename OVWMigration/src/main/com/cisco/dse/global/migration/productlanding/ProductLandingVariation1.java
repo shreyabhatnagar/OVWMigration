@@ -282,21 +282,6 @@ public class ProductLandingVariation1 extends BaseAction {
 									// start image
 									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage " + heroImage + "\n");
-									if (heroPanelNode != null) {
-										if (heroPanelNode.hasNode("image")) {
-											Node imageNode = heroPanelNode.getNode("image");
-											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-											heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
-											log.debug("heroImage " + heroImage + "\n");
-											if (StringUtils.isNotBlank(heroImage)) {
-												imageNode.setProperty("fileReference" , heroImage);
-											} else {
-												sb.append("<li>hero image doesn't exist</li>");
-											}
-										} else {
-											sb.append("<li>hero image node doesn't exist</li>");
-										}
-									}
 									// end image
 									log.debug("heroPanelTitle " + heroPanelTitle + "\n");
 									log.debug("heroPanelDescription " + heroPanelDescription + "\n");
@@ -324,7 +309,18 @@ public class ProductLandingVariation1 extends BaseAction {
 											heroPanelNode.setProperty("linkurl", heroPanellinkUrl);
 										} else {
 											sb.append("<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>");
-										}										
+										}
+										if (heroPanelNode.hasNode("image")) {
+											Node imageNode = heroPanelNode.getNode("image");
+											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
+											heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+											log.debug("heroImage " + heroImage + "\n");
+											if (StringUtils.isNotBlank(heroImage)) {
+												imageNode.setProperty("fileReference" , heroImage);
+											}
+										} else {
+											sb.append("<li>hero image node doesn't exist</li>");
+										}
 									}
 								}
 							} else {
@@ -507,8 +503,6 @@ public class ProductLandingVariation1 extends BaseAction {
 																	log.debug("drawerImage " + drawerImage + "\n");
 																	if (StringUtils.isNotBlank(drawerImage)) {
 																		drawersImageNode.setProperty("fileReference" , drawerImage);
-																	} else {
-																		sb.append("<li>drawer image doesn't exist</li>");
 																	}
 																} else {
 																	sb.append("<li>drawer image node doesn't exist</li>");
@@ -604,8 +598,6 @@ public class ProductLandingVariation1 extends BaseAction {
 																			log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
 																			if (StringUtils.isNotBlank(subDrawerImage)) {
 																				subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
-																			} else {
-																				sb.append("<li>subdrawer image doesn't exist</li>");
 																			}
 																		} else {
 																			sb.append("<li>subdrawer image node doesn't exist</li>");
