@@ -21,6 +21,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.cisco.dse.global.migration.architecture.ArchitectureVariation04;
 import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
@@ -442,6 +443,19 @@ public class OVWMigration {
 															msg15 = msg15 + "<tr>";
 															msg15 = msg15
 																	+ new SolutionListingVariation09().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg15 = msg15 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg15);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														else if ("architechture-var4".equals(type)) {
+															String msg15 = "";
+															msg15 = msg15 + "<tr>";
+															msg15 = msg15
+																	+ new ArchitectureVariation04().translate(
 																			host, gLink, prod, type, cattype,
 																			sheet.getSheetName(), session);
 															msg15 = msg15 + "</tr>";
