@@ -173,8 +173,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									Node heroPanelNode = (Node) heroPanelNodeIterator
 											.next();
 									// start image
-									String heroImage = FrameworkUtils
-											.extractImagePath(ele, sb);
+									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage " + heroImage + "\n");
 									if (heroPanelNode != null) {
 										if (heroPanelNode.hasNode("image")) {
@@ -185,9 +184,7 @@ public class ProductLandingVariation12 extends BaseAction {
 													.getProperty(
 															"fileReference")
 													.getString() : "";
-											heroImage = FrameworkUtils
-													.migrateDAMContent(
-															heroImage,
+											heroImage = FrameworkUtils.migrateDAMContent(heroImage,
 															fileReference,
 															locale);
 											log.debug("heroImage " + heroImage
@@ -588,12 +585,11 @@ public class ProductLandingVariation12 extends BaseAction {
 				// end set spotlight nodes
 
 				// start set ENTERPRISE NETWORK INDEX list.
-				try {
-					if(!primaryCtaExists){
+				if(!primaryCtaExists){
+					try {
+					
 						boolean listElemExists = false;
 					
-					NodeIterator listNodeIterator = indexRightNode
-							.getNodes("list*");
 					//Elements rightGridElem = doc.select("div.gd12v2-right");
 					Elements indexlistElem = doc.select("div.n13-pilot");
 					Element rightRailPilotElement = indexlistElem.first();
@@ -607,9 +603,9 @@ public class ProductLandingVariation12 extends BaseAction {
 
 							Elements listDescription = rightRailPilotElement.select(
 									"div.intro").select("p");
-
+							List<String> list = new ArrayList<String>();
 							for (Element ele : indexUlList) {
-								java.util.List<String> list = new ArrayList<String>();
+								
 								Elements indexLiList = ele
 										.getElementsByTag("li");
 
@@ -647,22 +643,26 @@ public class ProductLandingVariation12 extends BaseAction {
 										jsonObj.put("openInNewWindow", true);
 									}
 									list.add(jsonObj.toString());
-
+									log.debug("div class 'div.n13-pilot' ul content ::"
+											+ list.toString());
 								}
-								log.debug("div class 'div.n13-pilot' ul content ::"
-										+ list.toString());
+							}
+								
 
-								Node listNode = null;
+								//Node listNode = null;
 								NodeIterator elementList = null;
-
-								if (listNodeIterator.hasNext()) {
-									listNode = (Node) listNodeIterator.next();
-									log.debug("path of list node: "
+								Node listNode = indexRightNode.hasNode("list")?
+										indexRightNode.getNode("list"):null;
+									log.debug("path of list node in right index node: "
 											+ listNode.getPath());
 
 									if (listNode != null) {
-										listNode.setProperty("title",
+										if(StringUtils.isNotBlank(indexTitle)){
+											listNode.setProperty("title",								
 												indexTitle);
+										}else{
+											sb.append("<li>List Title  is not migrated as it has no content.</li>");
+										}
 										if (listNode.hasNode("intro")) {
 											Node introNode = listNode
 													.getNode("intro");
@@ -677,10 +677,10 @@ public class ProductLandingVariation12 extends BaseAction {
 														+ introNode.getPath());
 
 											} else {
-												sb.append("<li>Paragraph description is not migrated as it has no content.</li>");
+												sb.append("<li>List Paragraph description is not migrated as it has no content.</li>");
 											}
 										}
-
+										if(!list.isEmpty()){
 										elementList = listNode
 												.getNodes("element_list*");
 										if (elementList != null
@@ -698,41 +698,34 @@ public class ProductLandingVariation12 extends BaseAction {
 														session.save();
 													}
 												}
-												eleNode.setProperty(
+												
+													eleNode.setProperty(
 														"listitems",
 														list.toArray(new String[list
 																.size()]));
-												log.debug("Updated listitems at "
-														+ eleNode.getPath());
+												log.debug("Updated listitems at "+ eleNode.getPath());
+												}else{
+													sb.append("<li>element_list node doesn't exists</li>");
+												}
+														
 											}
 										} else {
-											sb.append("<li>element_list node doesn't exists</li>");
+											sb.append("<li>List items are not migrated as they have no content.</li>");
+											
 										}
 
 									}
-									if (elementList != null
-											&& elementList.getSize() != indexUlList
-													.size()) {
-										sb.append("<li>Mis-Match in Resource list Panels count/content."
-												+ indexUlList.size()
-												+ "not equal to "
-												+ elementList.getSize()
-												+ "</li>");
-
-									}
-								}
-						}
-
 					} else {
 						sb.append("<li>Mismatch in the right rail. List element is not found.</li>");
 					}
-					}
+					
 				} catch (Exception e) {
 					sb.append("<li>Unable to update index list component.\n</li>");
 					log.error("Exception : ", e);
 				}
+				}
 				
-				if(primaryCtaExists){
+				if(!primaryCtaExists){
 					try {
 				
 					String html = "";
@@ -785,15 +778,13 @@ public class ProductLandingVariation12 extends BaseAction {
 					NodeIterator listNodeIterator = indexRightRailNode
 							.getNodes("list*");
 					Elements indexlistElem = doc.select("div.n13-pilot");
-					int eleSize = indexlistElem.size();
-					int listNodeSize = (int) listNodeIterator.getSize();
+				//	int eleSize = indexlistElem.size();
+					//int listNodeSize = (int) listNodeIterator.getSize();
 					//Element rightRailPilotElement = indexlistElem.first();
-					if(eleSize != listNodeSize){
-						sb.append("<li> List node size ( "+ listNodeSize+" ) and element size ( "+eleSize+" ) mis match. ");
-					}
+					
 					if (!indexlistElem.isEmpty()) {
 						for (Element indexListItem : indexlistElem) {
-							if(!indexlistElem.hasClass("compact")){
+							if(!indexListItem.hasClass("compact")){
 							String indexTitle = indexListItem.getElementsByTag(
 									"h2").first().html();
 
@@ -903,16 +894,6 @@ public class ProductLandingVariation12 extends BaseAction {
 										} else {
 											sb.append("<li>element_list node doesn't exists</li>");
 										}
-
-									}
-									if (elementList != null
-											&& elementList.getSize() != indexUlList
-													.size()) {
-										sb.append("<li>Mis-Match in Resource list Panels count/content."
-												+ indexUlList.size()
-												+ "not equal to "
-												+ elementList.getSize()
-												+ "</li>");
 
 									}
 								}
