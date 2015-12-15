@@ -170,6 +170,9 @@ public class Constants {
 
 	//MID_GRID_LIST_NODE_NOT_FOUND
 	public static final String MID_GRID_LIST_NODE_NOT_FOUND = "<li>List node is not found for mid grid node.</li>";
+	
+	//LIST_NOT_FOUND_IN_RIGHT_RAIL
+		public static final String LIST_NOT_FOUND_IN_RIGHT_RAIL = "<li>List element is not found for right rail.</li>";
 
 	//MID_GRID_NODE_NOT_FOUND
 	public static final String MID_GRID_NODE_NOT_FOUND = "<li>Node for mid grid is not found.</li>";

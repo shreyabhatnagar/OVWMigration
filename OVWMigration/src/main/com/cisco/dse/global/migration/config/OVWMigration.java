@@ -30,9 +30,11 @@ import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation6;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation7;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation08;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation11;
+import com.cisco.dse.global.migration.productlanding.ProductLandingVariation12;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation3;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation5;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
@@ -45,6 +47,7 @@ import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation09
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
+import com.cisco.dse.global.migration.technology.TechnologyVariation2;
 
 public class OVWMigration {
 
@@ -280,7 +283,39 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("solution-listing-var2".equals(type)) {
+														} else if ("index-var08".equals(type)) {
+																String msg8 = "";
+																msg8 = msg8 + "<tr>";
+																msg8 = msg8
+																		+ new ProductLandingVariation08()
+																.translate(host, gLink, prod, type,
+																		cattype,
+																		sheet.getSheetName(),
+																		session);
+																msg8 = msg8 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg8);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+
+															
+														} else if ("index-var12".equals(type)) {
+															String msg8 = "";
+															msg8 = msg8 + "<tr>";
+															msg8 = msg8
+																	+ new ProductLandingVariation12()
+															.translate(host, gLink, prod, type,
+																	cattype,
+																	sheet.getSheetName(),
+																	session);
+															msg8 = msg8 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg8);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+
+														
+													}else if ("solution-listing-var2".equals(type)) {
 															String msg11 = "";
 															msg11 = msg11 + "<tr>";
 															msg11 = msg11
@@ -436,6 +471,18 @@ public class OVWMigration {
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg15);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}else if ("technology-var6".equals(type)) {
+															String msg19 = "";
+															msg19 = msg19 + "<tr>";
+															msg19 = msg19
+																	+ new TechnologyVariation2().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg19 = msg19 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg19);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
 														else if ("solutions-listing-var9".equals(type)) {
