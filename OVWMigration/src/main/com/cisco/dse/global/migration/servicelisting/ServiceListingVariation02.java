@@ -403,8 +403,6 @@ public class ServiceListingVariation02 extends BaseAction {
 				log.debug("spotLightImage " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
-				} else {
-					sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 				}
 			} else {
 				sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
