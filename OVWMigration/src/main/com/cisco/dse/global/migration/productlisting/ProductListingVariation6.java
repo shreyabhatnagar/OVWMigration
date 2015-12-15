@@ -204,8 +204,6 @@ public class ProductListingVariation6 extends BaseAction {
 															log.debug("drawerImage " + drawerImage + "\n");
 															if (StringUtils.isNotBlank(drawerImage)) {
 																drawersImageNode.setProperty("fileReference" , drawerImage);
-															} else {
-																sb.append("<li>drawer image doesn't exist</li>");
 															}
 														} else {
 															sb.append("<li>drawer image node doesn't exist</li>");
@@ -377,8 +375,6 @@ public class ProductListingVariation6 extends BaseAction {
 																log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
 																if (StringUtils.isNotBlank(subDrawerImage)) {
 																	subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
-																} else {
-																	sb.append("<li>subdrawer image doesn't exist</li>");
 																}
 															} else {
 																sb.append("<li>subdrawer image node doesn't exist</li>");
