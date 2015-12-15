@@ -282,7 +282,7 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var08".equals(type)) {
+														} else if ("index-var8".equals(type)) {
 																String msg8 = "";
 																msg8 = msg8 + "<tr>";
 																msg8 = msg8
