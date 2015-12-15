@@ -1,4 +1,4 @@
-package com.cisco.dse.global.migration.architecture;
+package com.cisco.dse.global.migration.collaborationarchitechture;
 
 import java.io.IOException;
 import java.util.ArrayList;

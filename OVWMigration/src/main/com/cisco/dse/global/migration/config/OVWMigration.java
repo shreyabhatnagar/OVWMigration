@@ -21,7 +21,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.cisco.dse.global.migration.architecture.ArchitectureVariation04;
 import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
@@ -502,7 +501,7 @@ public class OVWMigration {
 															String msg15 = "";
 															msg15 = msg15 + "<tr>";
 															msg15 = msg15
-																	+ new ArchitectureVariation04().translate(
+																	+ new com.cisco.dse.global.migration.collaborationarchitechture.ArchitectureVariation04().translate(
 																			host, gLink, prod, type, cattype,
 																			sheet.getSheetName(), session);
 															msg15 = msg15 + "</tr>";
