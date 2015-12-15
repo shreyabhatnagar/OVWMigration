@@ -65,7 +65,6 @@ public class FrameworkUtils {
     public static void setPageProperties(javax.jcr.Node jcrNode, Document doc, Session session, StringBuilder sb) {
        System.out.println("inside setPageProperties");
       
-    	   String title = "";
     	   String description = "";
     	   Properties metaProp = new Properties();
    		   InputStream metaInput = null;
@@ -87,9 +86,7 @@ public class FrameworkUtils {
     				System.out.println("Key : " + key + ", Value : " + value);
     			}
     			//getting html page property of meta data from properties file
-    			String titleHtmlProperty = StringUtils.isNotBlank(metaProp
-    					.getProperty("jcr:title")) ? metaProp
-    					.getProperty("jcr:title") : "";
+    			
 				String descriptionHtmlProperty = StringUtils.isNotBlank(metaProp
     					.getProperty("jcr:description")) ? metaProp
     					.getProperty("jcr:description") : "";
@@ -97,10 +94,6 @@ public class FrameworkUtils {
     	   		Elements metas = doc.getElementsByTag("meta"); 
     	   		if (metas != null) {
 	    	   	   for (Element meta : metas) { 
-	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(titleHtmlProperty)) { 
-	    	   	         title =  meta.attr("content"); 
-	    	   	         log.debug("title of document:::  " + title);
-	    	   	      }
 	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(descriptionHtmlProperty)) { 
 	    	   	    	 description =  meta.attr("content"); 
 	    	   	         log.debug("description of document:::  " + description);
@@ -111,29 +104,30 @@ public class FrameworkUtils {
 	    	   	// start check title of the page
  	   			String pageTitle = doc.title();
  	   			log.debug("pageTitle::::::: " + pageTitle);
- 	   			log.debug("title::::::: " + title);   	   			
 	 	   		// end check title of the page
  	   			
     	   		//setting html meta data to as page properties
 	    	   	if (jcrNode != null) {
-	    	   		if (StringUtils.isNotBlank(title)) {
-	    	   			jcrNode.setProperty("jcr:title", title);
-	    	   		} else {
-	    	   	    	sb.append("<li>meta data title doesn't exist </li>");
-	    	   	      }
+	    	   		
 	    	   		if (StringUtils.isNotBlank(description)) {
 	    	   			jcrNode.setProperty("jcr:description", description);
 	    	   		} else {
 	    	   	    	sb.append("<li>meta data description doesn't exist </li>");
-	    	   	      }
+	    	   	    }
 	    	   		if (StringUtils.isNotBlank(pageTitle)) {
  	    	   			pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
- 	    	   			String jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
+ 	    	   			String jcrTitle = "";
+ 	    	   			if (jcrNode.hasProperty("jcr:title")) {
+ 	    	   				jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
+ 	    	   			}
+ 	    	   			 
  	    	   			log.debug("JCR Title in chard is "+jcrTitle);
- 	    	   			if (!pageTitle.trim().equalsIgnoreCase(jcrTitle)) {
+ 	    	   			if (StringUtils.isNotBlank(pageTitle) && (!pageTitle.trim().equalsIgnoreCase(jcrTitle))) {
  	    	   				log.debug("Page title and JCR title are not the same.");
  	    	   				jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
- 	    	   			}
+ 	    	   			} else {
+ 		    	   	    	sb.append("<li>custom head title not set </li>");
+ 		    	   	    }
      	   			} else {
      	   				sb.append("<li>custom head title not set </li>");
      	   			}
