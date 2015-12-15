@@ -243,8 +243,6 @@ public class ProductLandingVariation5 extends BaseAction {
 													log.debug("heroImage " + heroImage + "\n");
 													if (StringUtils.isNotBlank(heroImage)) {
 														imageNode.setProperty("fileReference" , heroImage);
-													} else {
-														sb.append("<li>hero image doesn't exist</li>");
 													}
 												} else {
 													sb.append("<li>hero image node doesn't exist</li>");

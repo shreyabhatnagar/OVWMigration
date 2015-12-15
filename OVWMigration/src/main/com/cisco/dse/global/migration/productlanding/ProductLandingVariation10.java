@@ -582,8 +582,6 @@ public class ProductLandingVariation10 extends BaseAction {
 					log.debug("heroImage after migration : " + heroImage + "\n");
 					if (StringUtils.isNotBlank(heroImage)) {
 						imageNode.setProperty("fileReference" , heroImage);
-					} else {
-						sb.append("<li>hero image doesn't exist</li>");
 					}
 				} else {
 					sb.append("<li>hero image node doesn't exist</li>");
@@ -681,8 +679,6 @@ public class ProductLandingVariation10 extends BaseAction {
 					log.debug("spotLightImage " + spotLightImage + "\n");
 					if (StringUtils.isNotBlank(spotLightImage)) {
 						spotLightImageNode.setProperty("fileReference" , spotLightImage);
-					} else {
-						sb.append("<li>spotlight image doesn't exist</li>");
 					}
 				} else {
 					sb.append("<li>spotlight image node doesn't exist</li>");
