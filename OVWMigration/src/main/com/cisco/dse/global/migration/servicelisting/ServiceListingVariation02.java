@@ -87,17 +87,18 @@ public class ServiceListingVariation02 extends BaseAction {
 
 			javax.jcr.Node pageJcrNode = null;
 			pageJcrNode = session.getNode(pagePropertiesPath);
-
+			try{
 			doc = Jsoup.connect(loc).get();
-
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start set page properties.
-
-			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-
-			// end set page properties.
-			// ------------------------------------------------------------------------------------------------------------------------------------------
 			if(doc != null){
+				
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				
 				// start of text component
 				try{
 					setText(doc, serviceListingMidNode);
@@ -237,6 +238,11 @@ public class ServiceListingVariation02 extends BaseAction {
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);	
 			}
+			}catch(Exception e){
+				log.error(e);
+			}
+
+
 		} catch (Exception e) {
 			sb.append(Constants.URL_CONNECTION_EXCEPTION);
 		}
