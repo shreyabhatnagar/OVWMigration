@@ -163,15 +163,6 @@ public class ProductListingVariation5 {
 												if (hTextElements != null && hTextElements.size() > 0) {
 													Element hText = hTextElements.first();
 													if (hText != null) {
-														System.out
-														.println("Hide TEXT:::::::::" + hText == null ? "NULL"
-																: "NOT NULL"
-																		+ hText.attr("data-config-hidetext"));
-					
-														System.out
-																.println("Show TEXT:::::::::" + hText == null ? "NULL"
-																		: "NOT NULL"
-																				+ hText.attr("data-config-showtext"));
 														drawersContainerNode.setProperty("closetext",
 																hText.attr("data-config-hidetext"));
 														drawersContainerNode.setProperty("opentext",
@@ -367,10 +358,6 @@ public class ProductListingVariation5 {
 																							
 																							for (Element si : subItemInfoLinks) {
 																								JSONObject jsonObj = new JSONObject();
-																								System.out
-																										.println("\t\t FeatureSubInfoLinks Text :::::::::::::::"
-																												+ si.text());
-																								
 																								String linkText = "";
 																								String linkTextUrl = "";
 																								Elements linkTextElements = si.getElementsByTag("a");
@@ -392,10 +379,7 @@ public class ProductListingVariation5 {
 																									jsonObj.put("linkurl", linkTextUrl);
 																								}
 																								list2.add(jsonObj.toString());
-																								System.out
-																								.println("\t\t FeatureSubInfoLinks json Text :::::::::::::::"
-																										+ jsonObj.toString());
-																							}
+																								}
 																							log.debug("list2.size()" + list2.size());
 																							
 																						}
