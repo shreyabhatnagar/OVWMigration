@@ -333,4 +333,7 @@ public class Constants {
 	
 	//CTA_NOT_AVAILABLE
 	public static final String CTA_NOT_AVAILABLE = "<li>No cta link available in spotlight on locale page.</li>";
+	
+	//MISMATCH_OF_LIST_IN_RIGHT_RAIL
+	public static final String MISMATCH_OF_LIST_IN_RIGHT_RAIL = "Mis-match of list components in right rail. Additional Elements found in Locale Page. Locale page has ( ";
 }
