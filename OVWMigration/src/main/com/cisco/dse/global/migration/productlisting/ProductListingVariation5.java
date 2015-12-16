@@ -1,6 +1,6 @@
 /* 
- * S.No		Name			Description of change
- * 1		vidya				Added the Java file to handle the migration of product listing variation 5 page.
+ * S.No		Name	Date			Description of change
+ * 1		vidya	13-Dec-15		Added the Java file to handle the migration of product listing variation 5 page.
  * 
  * */
 package com.cisco.dse.global.migration.productlisting;
@@ -33,8 +33,6 @@ import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class ProductListingVariation5 {
 	
 	Document doc;
-
-	String title = null;
 
 	StringBuilder sb = new StringBuilder(1024);
 	
@@ -77,8 +75,7 @@ public class ProductListingVariation5 {
 			} catch (Exception e) {
 				sb.append("<li>Cannot Connect to given URL. \n"+loc+"</li>");
 			}
-
-			title = doc.title();
+			if(doc != null){
 			// ------------------------------------------------------------------------------------------------------------------------------------------
 			// start set page properties.
 
@@ -192,8 +189,6 @@ public class ProductListingVariation5 {
 													Elements drawersPanelElements = doc.select("div.n21");
 													
 													if (drawersPanelElements != null) {
-														//Element drawersPanelElement = drawersPanelElements.first();
-														// start new code
 														int count = 0;
 														for (Element drawersPanelElement : drawersPanelElements) {
 															Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
@@ -254,7 +249,6 @@ public class ProductListingVariation5 {
 																			// end image
 																			if (drawersPanelNode != null) {
 																				log.debug("panelTitle " + panelTitle + "\n");
-																				//log.debug("linkUrl " + linkUrl + "\n");
 																				log.debug("panelDescription " + panelDescription + "\n");
 																				if (StringUtils.isNotBlank(panelTitle)) {
 																					drawersPanelNode.setProperty("title", panelTitle);
@@ -287,7 +281,6 @@ public class ProductListingVariation5 {
 																		
 																		if (subItems != null) {
 																			
-//																			Element subItem = subItems.first();
 																			for (Element subItem : subItems) {
 																				if ((clearfixdivs.size() != subDrawerIterator.getSize())) {
 																					misMatchFlag = false;
@@ -366,7 +359,7 @@ public class ProductListingVariation5 {
 																						sb.append(Constants.DETAILS_ELEMEMT_NOT_FOUND);
 																					}
 
-																					Element subItemUlInfoLink = subItem.siblingElements().first(); //subItemUlInfoLinks.first();
+																					Element subItemUlInfoLink = subItem.siblingElements().first(); 
 																					log.debug("Info Links Elements -----------"+subItemUlInfoLink);	
 																					log.debug("--------------------------------");
 																					if (subItemUlInfoLink != null) {
@@ -468,7 +461,6 @@ public class ProductListingVariation5 {
 														if (count != drawerPanelsIterator.getSize())
 															sb.append(Constants.MIS_MATCH_IN_DRAWER_PANEL_COUNT);
 														
-														//end new code
 													
 												} else {
 													sb.append(Constants.DRAWER_PANEL_ELEMENTS_NOT_FOUND);
@@ -490,7 +482,7 @@ public class ProductListingVariation5 {
 
 						// end set drawers_container component content.
 						// --------------------------------------------------------------------------------------------------------------------------
-
+					}
 					session.save();
 					} catch (Exception e) {
 						sb.append(Constants.URL_CONNECTION_EXCEPTION);
