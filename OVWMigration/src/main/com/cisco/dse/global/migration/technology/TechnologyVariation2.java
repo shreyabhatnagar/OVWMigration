@@ -121,7 +121,7 @@ public class TechnologyVariation2 extends BaseAction {
 								}
 								else{
 									tile = tileEle.last();
-									sb.append(Constants.MISMATCH_IN_LIST_ELEMENT+tileSize+Constants.LIST_NODES_COUNT+" (1).");
+									sb.append(Constants.MISMATCH_OF_LIST_IN_RIGHT_RAIL+tileSize+Constants.LIST_NODES_COUNT+" (1).");
 								}
 								String title = tile.getElementsByTag("h3").text();
 								listNode.setProperty("title",title);
