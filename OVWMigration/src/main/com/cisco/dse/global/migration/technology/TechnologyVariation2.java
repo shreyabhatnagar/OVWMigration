@@ -87,7 +87,9 @@ public class TechnologyVariation2 extends BaseAction {
 							Element listEle = doc.select("div.gd-left").select("div.nn13-pilot").first();
 							String h1Tag = textEle.getElementsByTag("h1").first().outerHtml();
 							String textDesc = FrameworkUtils.extractHtmlBlobContent(textEle, "",locale, sb); //2
+							log.debug(textDesc);
 							textDesc = textDesc.replaceFirst(h1Tag,"");
+							log.debug(textDesc);
 							String listTitle = listEle.getElementsByTag("h2").first().outerHtml();
 							String listDesc = listEle.getElementsByTag("ul").addClass("no-bullets").outerHtml();
 							if(listDesc!=null){
@@ -153,6 +155,14 @@ public class TechnologyVariation2 extends BaseAction {
 						log.debug("Exception ", e);
 					}
 					//end of list in right rail
+					
+					// ------------------------------------------------------------------------------------------------------------------------------------------
+					// start set page properties.
+
+					FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+					// end set page properties.
+					// ------------------------------------------------------------------------------------------------------------------------------------------
 				}else{
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);	
 				}
@@ -160,15 +170,6 @@ public class TechnologyVariation2 extends BaseAction {
 				log.error(e);
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-			// start set page properties.
-
-			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-
-			// end set page properties.
-			// ------------------------------------------------------------------------------------------------------------------------------------------
-
-			//start of text
 
 		} catch (Exception e) {
 			log.debug("Exception ", e);
