@@ -68,235 +68,238 @@ public class ProductLandingVariation10 extends BaseAction {
 			try {
 				doc = Jsoup.connect(loc).get();
 				log.debug("Connected to the provided URL");
-			} catch (Exception e) {
-				doc = getConnection(loc);
-			}
-			
-			if(doc != null){
-				// ------------------------------------------------------------------------------------------------------------------------------------------
-				// start set page properties.
 				
-				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-				
-				// end set page properties.
-				// ------------------------------------------------------------------------------------------------------------------------------------------
-				
-				// start set hero large component properties.			
-				try {
-					log.debug("Start of Hero component");
-					Elements heroElements = doc.select("div.frame");				
-					Node heroNode = indexLeftNode.hasNode("hero_large") ? indexLeftNode.getNode("hero_large") : null;
+				if(doc != null){
+					// ------------------------------------------------------------------------------------------------------------------------------------------
+					// start set page properties.
+					
+					FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+					
+					// end set page properties.
+					// ------------------------------------------------------------------------------------------------------------------------------------------
+					
+					// start set hero large component properties.			
+					try {
+						log.debug("Start of Hero component");
+						Elements heroElements = doc.select("div.frame");				
+						Node heroNode = indexLeftNode.hasNode("hero_large") ? indexLeftNode.getNode("hero_large") : null;
 
-					if (heroNode != null) {
-						log.debug("hero node found: "+ heroNode.getPath());
-						if (heroElements.isEmpty()) {
-							log.debug("No hero element found with div class name frame.");
-							sb.append("<li>Hero component with class name 'frame' does not exist on locale page.</li>");
+						if (heroNode != null) {
+							log.debug("hero node found: "+ heroNode.getPath());
+							if (heroElements.isEmpty()) {
+								log.debug("No hero element found with div class name frame.");
+								sb.append("<li>Hero component with class name 'frame' does not exist on locale page.</li>");
+							}
+							else {
+								int eleSize = heroElements.size();
+								log.debug("hero node element size: "+ eleSize);
+								NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
+								int nodeSize = (int)heroPanelNodeIterator.getSize();
+								log.debug("hero node nodeSize : "+ nodeSize);
+								if(eleSize == nodeSize){
+									for(Element ele : heroElements){
+										Node heroPanelNode;
+										if (heroPanelNodeIterator.hasNext()) {
+											heroPanelNode = (Node)heroPanelNodeIterator.next();
+											heroPanelTranslate(heroPanelNode, ele, locale);
+										}
+										else {
+											log.debug("Next node not found");								
+										}
+									}
+								}
+								else if(nodeSize < eleSize){
+									for(Element ele : heroElements){
+										Node heroPanelNode;
+										if (heroPanelNodeIterator.hasNext()) {
+											heroPanelNode = (Node)heroPanelNodeIterator.next();
+											heroPanelTranslate(heroPanelNode, ele, locale);		
+										}
+										else {
+											log.debug("Next node not found");
+											sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+											break;
+										}
+									}										
+								}
+								else if (nodeSize > eleSize) {
+									for(Element ele : heroElements){
+										Node heroPanelNode;
+										if (heroPanelNodeIterator.hasNext()) {
+											heroPanelNode = (Node)heroPanelNodeIterator.next();
+											heroPanelTranslate(heroPanelNode, ele, locale);		
+										}
+										else {
+											log.debug("Next node not found");								
+										}
+									}
+									sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+								}
+							}
 						}
 						else {
-							int eleSize = heroElements.size();
-							log.debug("hero node element size: "+ eleSize);
-							NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
-							int nodeSize = (int)heroPanelNodeIterator.getSize();
-							log.debug("hero node nodeSize : "+ nodeSize);
-							if(eleSize == nodeSize){
-								for(Element ele : heroElements){
-									Node heroPanelNode;
-									if (heroPanelNodeIterator.hasNext()) {
-										heroPanelNode = (Node)heroPanelNodeIterator.next();
-										heroPanelTranslate(heroPanelNode, ele, locale);
-									}
-									else {
-										log.debug("Next node not found");								
-									}
-								}
-							}
-							else if(nodeSize < eleSize){
-								for(Element ele : heroElements){
-									Node heroPanelNode;
-									if (heroPanelNodeIterator.hasNext()) {
-										heroPanelNode = (Node)heroPanelNodeIterator.next();
-										heroPanelTranslate(heroPanelNode, ele, locale);		
-									}
-									else {
-										log.debug("Next node not found");
-										sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-										break;
-									}
-								}										
-							}
-							else if (nodeSize > eleSize) {
-								for(Element ele : heroElements){
-									Node heroPanelNode;
-									if (heroPanelNodeIterator.hasNext()) {
-										heroPanelNode = (Node)heroPanelNodeIterator.next();
-										heroPanelTranslate(heroPanelNode, ele, locale);		
-									}
-									else {
-										log.debug("Next node not found");								
-									}
-								}
-								sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-							}
+							log.debug("No hero node found at "+indexLeftNode);
+							sb.append("<li>Node for hero large component does not exist.</li>");
 						}
-					}
-					else {
-						log.debug("No hero node found at "+indexLeftNode);
-						sb.append("<li>Node for hero large component does not exist.</li>");
-					}
-					log.debug("End of Hero component");
+						log.debug("End of Hero component");
 
-				} catch (Exception e) {
-					sb.append("<li>Unable to update hero large component." + e
-							+ "</li>");
-				}		
+					} catch (Exception e) {
+						sb.append("<li>Unable to update hero large component." + e
+								+ "</li>");
+					}		
 
-				// end set Hero Large component properties.
+					// end set Hero Large component properties.
 
-				// start set selectorbar large component properties.				
-				try {
-					Elements selectorBarLargeElements;
-					selectorBarLargeElements = doc.select("div.selectorbarpanel");
-					if (selectorBarLargeElements.size() == 0) {
-						selectorBarLargeElements = doc.select("div.c58-pilot").select("div.left,div.mid,div.right"); //("div.selectorbarpanel");
-					}
+					// start set selectorbar large component properties.				
+					try {
+						Elements selectorBarLargeElements;
+						selectorBarLargeElements = doc.select("div.selectorbarpanel");
+						if (selectorBarLargeElements.size() == 0) {
+							selectorBarLargeElements = doc.select("div.c58-pilot").select("div.left,div.mid,div.right"); //("div.selectorbarpanel");
+						}
 
-					Node selectorBarNode = indexLeftNode.hasNode("selectorbarlarge_0") ? indexLeftNode.getNode("selectorbarlarge_0") : null;
+						Node selectorBarNode = indexLeftNode.hasNode("selectorbarlarge_0") ? indexLeftNode.getNode("selectorbarlarge_0") : null;
 
-					if (selectorBarNode != null) {
-						if (selectorBarLargeElements.isEmpty()) {
-							log.debug("No selector bar element found with div class name selectorbarpanel.");
-							sb.append("<li>Selector bar component with class name 'selectorbarpanel' does not exist on locale page.</li>");
+						if (selectorBarNode != null) {
+							if (selectorBarLargeElements.isEmpty()) {
+								log.debug("No selector bar element found with div class name selectorbarpanel.");
+								sb.append("<li>Selector bar component with class name 'selectorbarpanel' does not exist on locale page.</li>");
+							}
+							else {
+								log.debug("selector bar node component found at : "+ indexLeftNode.getPath());
+								int eleSize = selectorBarLargeElements.size();
+								log.debug("selector component element size: "+ eleSize);
+								NodeIterator selectorBarPanel = selectorBarNode.getNodes("selectorbarpanel*");
+								int nodeSize = (int)selectorBarPanel.getSize();
+								log.debug("selector component nodeSize : "+ nodeSize);
+								if(eleSize == nodeSize){
+
+									for(Element ele : selectorBarLargeElements){
+										Node selectorBarPanelNode;
+										if (selectorBarPanel.hasNext()) {
+											selectorBarPanelNode = (Node)selectorBarPanel.next();
+											selectorBarTranslate(selectorBarPanelNode, ele);
+										}
+										else {
+											log.debug("Next node not found");								
+										}
+									}
+								}
+								else if(eleSize > nodeSize){
+									for(Element ele : selectorBarLargeElements){
+										Node selectorBarPanelNode;
+										if (selectorBarPanel.hasNext()) {
+											selectorBarPanelNode = (Node)selectorBarPanel.next();
+											selectorBarTranslate(selectorBarPanelNode, ele);
+										}
+										else {
+											log.debug("Next node not found");
+											sb.append("<li>Mismatch in the count of selector bar panel. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+											break;
+										}
+									}
+
+								}
+								else if(eleSize < nodeSize){
+									for(Element ele : selectorBarLargeElements){
+										Node selectorBarPanelNode;
+										if (selectorBarPanel.hasNext()) {
+											selectorBarPanelNode = (Node)selectorBarPanel.next();
+											selectorBarTranslate(selectorBarPanelNode, ele);
+										}
+									}
+									sb.append("<li>Mismatch in the count of selector bar panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");						
+								}
+							}
 						}
 						else {
-							log.debug("selector bar node component found at : "+ indexLeftNode.getPath());
-							int eleSize = selectorBarLargeElements.size();
-							log.debug("selector component element size: "+ eleSize);
-							NodeIterator selectorBarPanel = selectorBarNode.getNodes("selectorbarpanel*");
-							int nodeSize = (int)selectorBarPanel.getSize();
-							log.debug("selector component nodeSize : "+ nodeSize);
-							if(eleSize == nodeSize){
-
-								for(Element ele : selectorBarLargeElements){
-									Node selectorBarPanelNode;
-									if (selectorBarPanel.hasNext()) {
-										selectorBarPanelNode = (Node)selectorBarPanel.next();
-										selectorBarTranslate(selectorBarPanelNode, ele);
-									}
-									else {
-										log.debug("Next node not found");								
-									}
-								}
-							}
-							else if(eleSize > nodeSize){
-								for(Element ele : selectorBarLargeElements){
-									Node selectorBarPanelNode;
-									if (selectorBarPanel.hasNext()) {
-										selectorBarPanelNode = (Node)selectorBarPanel.next();
-										selectorBarTranslate(selectorBarPanelNode, ele);
-									}
-									else {
-										log.debug("Next node not found");
-										sb.append("<li>Mismatch in the count of selector bar panel. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-										break;
-									}
-								}
-
-							}
-							else if(eleSize < nodeSize){
-								for(Element ele : selectorBarLargeElements){
-									Node selectorBarPanelNode;
-									if (selectorBarPanel.hasNext()) {
-										selectorBarPanelNode = (Node)selectorBarPanel.next();
-										selectorBarTranslate(selectorBarPanelNode, ele);
-									}
-								}
-								sb.append("<li>Mismatch in the count of selector bar panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");						
-							}
+							log.debug("No selector bar node found at "+indexLeftNode);
+							sb.append("<li>Node for selector bar component does not exist.</li>");
 						}
-					}
-					else {
-						log.debug("No selector bar node found at "+indexLeftNode);
-						sb.append("<li>Node for selector bar component does not exist.</li>");
-					}
-				} catch (Exception e) {
-					sb.append("<li>Unable to update Selecotr bar large component." + e
-							+ "</li>");
-				}		
+					} catch (Exception e) {
+						sb.append("<li>Unable to update Selecotr bar large component." + e
+								+ "</li>");
+					}		
 
-				// end set Selector bar.
+					// end set Selector bar.
 
-				// start of text component
-				Node textNode2 = null;
-				try {
-					Elements textElements = doc.select("div.gd-left").select("div.c00-pilot");
-					Node textNode1 =indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-left").getNode("text") : indexLeftNode.getNode("text"); 
-					textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
-					if (textNode1 != null) {
-						if (textElements.isEmpty()) {
-							sb.append("<li>The first text element is not available on the locale page.</li>");
+					// start of text component
+					Node textNode2 = null;
+					try {
+						Elements textElements = doc.select("div.gd-left").select("div.c00-pilot");
+						Node textNode1 =indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-left").getNode("text") : indexLeftNode.getNode("text"); 
+						textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
+						if (textNode1 != null) {
+							if (textElements.isEmpty()) {
+								sb.append("<li>The first text element is not available on the locale page.</li>");
+							}
+							else {
+								if (textElements.first().html() != null) {
+									textNode1.setProperty("text", textElements.first().html());
+								}
+								else {
+									sb.append("<li>The first text element is not available on the locale page.</li>");
+								}
+							}
+														
 						}
 						else {
 							if (textElements.first().html() != null) {
-								textNode1.setProperty("text", textElements.first().html());
-							}
-							else {
-								sb.append("<li>The first text element is not available on the locale page.</li>");
+								sb.append("<li>The first text node is not available on the locale page.</li>");
 							}
 						}
-													
-					}
-					else {
-						if (textElements.first().html() != null) {
-							sb.append("<li>The first text node is not available on the locale page.</li>");
-						}
-					}
-					
-					if (textNode2 != null) {
-						Node textChildNode = textNode2.getNode("text");
-						if (textElements.size() >= 2) { 
-							if (textElements.get(1).html() != null) { 
-								textChildNode.setProperty("text", textElements.get(1).html());
+						
+						if (textNode2 != null) {
+							Node textChildNode = textNode2.getNode("text");
+							if (textElements.size() >= 2) { 
+								if (textElements.get(1).html() != null) { 
+									textChildNode.setProperty("text", textElements.get(1).html());
+								}
+								else {
+									sb.append("<li>The second text element is not available on the locale page.</li>");
+								}
 							}
 							else {
 								sb.append("<li>The second text element is not available on the locale page.</li>");
 							}
+													
 						}
 						else {
-							sb.append("<li>The second text element is not available on the locale page.</li>");
-						}
-												
-					}
-					else {
-						if (textElements.size() >= 2) {
-							if (textElements.get(1).html() != null) {
-								sb.append("<li>The second text node is not available on the locale page.</li>");
+							if (textElements.size() >= 2) {
+								if (textElements.get(1).html() != null) {
+									sb.append("<li>The second text node is not available on the locale page.</li>");
+								}
 							}
 						}
+
+					} catch (Exception e) {
+						log.error("Exception "+e);
+						sb.append("<li>Unable to update text components.</li>");
 					}
+					// end of text component
 
-				} catch (Exception e) {
-					log.error("Exception "+e);
-					sb.append("<li>Unable to update text components.</li>");
-				}
-				// end of text component
-
-				// Start of button
-				try {
-					Element a00v1CqElement = doc.select("div.a00v1-cq").first();
-					if (textNode2 != null) {
-						Node buttonNode = textNode2.getNode("a00v1_cq");
-						if (buttonNode != null) {
-							if (a00v1CqElement != null) {
-								Elements cqAnchor = a00v1CqElement.getElementsByTag("a");
-								String anchorText = cqAnchor != null ? cqAnchor.text() : "";
-								String anchorHref = cqAnchor.attr("href");
-								buttonNode.setProperty("linkText", anchorText);
-								buttonNode.setProperty("linkUrl", anchorHref);
+					// Start of button
+					try {
+						Element a00v1CqElement = doc.select("div.a00v1-cq").first();
+						if (textNode2 != null) {
+							Node buttonNode = textNode2.getNode("a00v1_cq");
+							if (buttonNode != null) {
+								if (a00v1CqElement != null) {
+									Elements cqAnchor = a00v1CqElement.getElementsByTag("a");
+									String anchorText = cqAnchor != null ? cqAnchor.text() : "";
+									String anchorHref = cqAnchor.attr("href");
+									buttonNode.setProperty("linkText", anchorText);
+									buttonNode.setProperty("linkUrl", anchorHref);
+								}
+								else {
+									sb.append("<li>Button is not available on the locale page.</li>");
+									log.debug("This button does not exist.");
+								}
 							}
 							else {
-								sb.append("<li>Button is not available on the locale page.</li>");
-								log.debug("This button does not exist.");
+								if (a00v1CqElement != null) {
+									sb.append("<li>Additional button is available on the locale page.</li>");
+								}
 							}
 						}
 						else {
@@ -304,251 +307,248 @@ public class ProductLandingVariation10 extends BaseAction {
 								sb.append("<li>Additional button is available on the locale page.</li>");
 							}
 						}
+					}catch (Exception e) {
+						sb.append("<li>Unable to update button component." + e + "</li>");
 					}
-					else {
-						if (a00v1CqElement != null) {
-							sb.append("<li>Additional button is available on the locale page.</li>");
-						}
-					}
-				}catch (Exception e) {
-					sb.append("<li>Unable to update button component." + e + "</li>");
-				}
-				//End of button
+					//End of button
 
-				// start set spotlight component.
-				try {
-					Elements spotLightElements = doc.select("div.c11-pilot");
+					// start set spotlight component.
+					try {
+						Elements spotLightElements = doc.select("div.c11-pilot");
 
-					if (indexLeftNode != null) {
-						log.debug("Spotlight node found: "+ indexLeftNode.getPath());
-						if (spotLightElements.isEmpty()) {
-							log.debug("No spot light element found with div class name c11-pilot.");
-							sb.append("<li>Spot light component with class name 'c11-pilot' does not exist on locale page.</li>");
+						if (indexLeftNode != null) {
+							log.debug("Spotlight node found: "+ indexLeftNode.getPath());
+							if (spotLightElements.isEmpty()) {
+								log.debug("No spot light element found with div class name c11-pilot.");
+								sb.append("<li>Spot light component with class name 'c11-pilot' does not exist on locale page.</li>");
+							}
+							else {
+								int eleSize = spotLightElements.size();
+								log.debug("Spotlight node element size: "+ eleSize);
+								NodeIterator slNodeIterator = indexLeftNode.getNodes("spotlight_large_v2*");
+								int nodeSize = (int)slNodeIterator.getSize();
+								log.debug("Spotlight node nodeSize : "+ nodeSize);
+								if(eleSize == nodeSize){
+									for (Element spElement : spotLightElements) {
+										Node slNode;
+										if (slNodeIterator.hasNext()) {
+											slNode = (Node)slNodeIterator.next();
+											spotLightTranslate(slNode, spElement, locale);
+										}
+										else {
+											log.debug("Next node not found");								
+										}
+
+									}
+								}
+								else if (nodeSize < eleSize) {
+									for (Element spElement : spotLightElements) {
+										Node slNode;
+										if (slNodeIterator.hasNext()) {
+											slNode = (Node)slNodeIterator.next();
+											spotLightTranslate(slNode, spElement, locale);
+										}
+										else {
+											log.debug("Next node not found");
+											sb.append("<li>Mismatch in the count of spot light panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+											break;								
+										}
+									}
+
+								}
+								else if (nodeSize > eleSize) {
+									for (Element spElement : spotLightElements) {
+										Node slNode;
+										if (slNodeIterator.hasNext()) {
+											slNode = (Node)slNodeIterator.next();
+											spotLightTranslate(slNode, spElement, locale);
+										}
+										else {
+											log.debug("Next node not found");
+										}
+									}
+									sb.append("<li>Mismatch in the count of spot light panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+								}
+							}
+
 						}
 						else {
-							int eleSize = spotLightElements.size();
-							log.debug("Spotlight node element size: "+ eleSize);
-							NodeIterator slNodeIterator = indexLeftNode.getNodes("spotlight_large_v2*");
-							int nodeSize = (int)slNodeIterator.getSize();
-							log.debug("Spotlight node nodeSize : "+ nodeSize);
-							if(eleSize == nodeSize){
-								for (Element spElement : spotLightElements) {
-									Node slNode;
-									if (slNodeIterator.hasNext()) {
-										slNode = (Node)slNodeIterator.next();
-										spotLightTranslate(slNode, spElement, locale);
-									}
-									else {
-										log.debug("Next node not found");								
-									}
-
-								}
-							}
-							else if (nodeSize < eleSize) {
-								for (Element spElement : spotLightElements) {
-									Node slNode;
-									if (slNodeIterator.hasNext()) {
-										slNode = (Node)slNodeIterator.next();
-										spotLightTranslate(slNode, spElement, locale);
-									}
-									else {
-										log.debug("Next node not found");
-										sb.append("<li>Mismatch in the count of spot light panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-										break;								
-									}
-								}
-
-							}
-							else if (nodeSize > eleSize) {
-								for (Element spElement : spotLightElements) {
-									Node slNode;
-									if (slNodeIterator.hasNext()) {
-										slNode = (Node)slNodeIterator.next();
-										spotLightTranslate(slNode, spElement, locale);
-									}
-									else {
-										log.debug("Next node not found");
-									}
-								}
-								sb.append("<li>Mismatch in the count of spot light panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-							}
-						}
-
-					}
-					else {
-						log.debug("No spot light node found at "+indexLeftNode);
-						sb.append("<li>Node for spot light component does not exist.</li>");	
-					}
-				}
-				catch (Exception e) {
-					sb.append("<li>Unable to update Spot light component.</li>");
-					log.error("Exception : "+e);
-				} 
-				//end set spotlight properties.
-
-				//start right rail properties
-				try {
-					boolean migrate = true;
-					Elements rightRailList = doc.select("div.gd-right").select("div.mlb-pilot").select("div.c00-pilot");
-					
-					if (rightRailList.isEmpty()) {
-						rightRailList = doc.select("div.gd-right").select("div.n13-pilot");
-						if (rightRailList != null) {
-							int eleSize = rightRailList.size();
-							if (eleSize == 1) {
-								Element rightListElem =  rightRailList.first();
-								if (rightListElem != null) {
-									Elements ulElements = rightListElem.getElementsByTag("ul");
-									if (ulElements.size() > 1) {
-										sb.append("<li>The HTML structure for list component in right rail on the locale page is different and hence migration needs to be done manually.</li>");
-										migrate = false;
-									}
-								}
-							}
+							log.debug("No spot light node found at "+indexLeftNode);
+							sb.append("<li>Node for spot light component does not exist.</li>");	
 						}
 					}
-					
-					if (migrate) {
+					catch (Exception e) {
+						sb.append("<li>Unable to update Spot light component.</li>");
+						log.error("Exception : "+e);
+					} 
+					//end set spotlight properties.
+
+					//start right rail properties
+					try {
+						boolean migrate = true;
+						Elements rightRailList = doc.select("div.gd-right").select("div.mlb-pilot").select("div.c00-pilot");
+						
 						if (rightRailList.isEmpty()) {
-							log.debug("No right rail elements found with div class name c00-pilot or n13-pilot.");
-							sb.append("<li>Right rail component with class name 'c00-pilot' or 'n13-pilot' does not exist on locale page.</li>");
-						}
-						else {
-							int eleSize = rightRailList.size();
-							NodeIterator listIterator = indexRightNode.getNodes("list*");
-							int nodeSize = (int)listIterator.getSize();
-
-							if(eleSize == nodeSize){
-								for (Element rightListEle : rightRailList) {
-									Node listNode;
-									if (listIterator.hasNext()) {
-										listNode = (Node)listIterator.next();
-										rightRailList(listNode, rightListEle);
-									}
-									else {
-										log.debug("Next node not found");								
-									}
-
-								}
-							}
-							else if (eleSize > nodeSize) {
-								for (Element rightListEle : rightRailList) {
-									Node listNode;
-									if (listIterator.hasNext()) {
-										listNode = (Node)listIterator.next();
-										rightRailList(listNode, rightListEle);						}
-									else {
-										log.debug("Next node not found");
-										sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-										break;								
-									}
-
-								}
-							}
-							else if (eleSize < nodeSize) {
-								for (Element rightListEle : rightRailList) {
-									Node listNode;
-									if (listIterator.hasNext()) {
-										listNode = (Node)listIterator.next();
-										rightRailList(listNode, rightListEle);						}
-									else {
-										log.debug("Next node not found");
+							rightRailList = doc.select("div.gd-right").select("div.n13-pilot");
+							if (rightRailList != null) {
+								int eleSize = rightRailList.size();
+								if (eleSize == 1) {
+									Element rightListElem =  rightRailList.first();
+									if (rightListElem != null) {
+										Elements ulElements = rightListElem.getElementsByTag("ul");
+										if (ulElements.size() > 1) {
+											sb.append("<li>The HTML structure for list component in right rail on the locale page is different and hence migration needs to be done manually.</li>");
+											migrate = false;
+										}
 									}
 								}
-								sb.append("<li>Mismatch in the count of list panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 							}
 						}
+						
+						if (migrate) {
+							if (rightRailList.isEmpty()) {
+								log.debug("No right rail elements found with div class name c00-pilot or n13-pilot.");
+								sb.append("<li>Right rail component with class name 'c00-pilot' or 'n13-pilot' does not exist on locale page.</li>");
+							}
+							else {
+								int eleSize = rightRailList.size();
+								NodeIterator listIterator = indexRightNode.getNodes("list*");
+								int nodeSize = (int)listIterator.getSize();
+
+								if(eleSize == nodeSize){
+									for (Element rightListEle : rightRailList) {
+										Node listNode;
+										if (listIterator.hasNext()) {
+											listNode = (Node)listIterator.next();
+											rightRailList(listNode, rightListEle);
+										}
+										else {
+											log.debug("Next node not found");								
+										}
+
+									}
+								}
+								else if (eleSize > nodeSize) {
+									for (Element rightListEle : rightRailList) {
+										Node listNode;
+										if (listIterator.hasNext()) {
+											listNode = (Node)listIterator.next();
+											rightRailList(listNode, rightListEle);						}
+										else {
+											log.debug("Next node not found");
+											sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+											break;								
+										}
+
+									}
+								}
+								else if (eleSize < nodeSize) {
+									for (Element rightListEle : rightRailList) {
+										Node listNode;
+										if (listIterator.hasNext()) {
+											listNode = (Node)listIterator.next();
+											rightRailList(listNode, rightListEle);						}
+										else {
+											log.debug("Next node not found");
+										}
+									}
+									sb.append("<li>Mismatch in the count of list panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+								}
+							}
+						}
+						
+					} catch (Exception e) {
+						sb.append("<li>Unable to update benefits tile_bordered component.</li>");
+						log.error("Exception : ",e);
 					}
-					
-				} catch (Exception e) {
-					sb.append("<li>Unable to update benefits tile_bordered component.</li>");
-					log.error("Exception : ",e);
-				}
-				//end set index list.
+					//end set index list.
 
-				// start of follow us component
-				try {
-					String h2Content = "";
-					boolean followUsEle = true;
-					boolean followUsNode = true;
-					List<String> list = new ArrayList<String>();
-					Elements rightRailPilotElements = doc.select("div.gd-right").select("div.s14-pilot");
-					if (rightRailPilotElements != null) {
-						Element rightRailPilotElement = rightRailPilotElements.first();
-						if (rightRailPilotElement != null) {
-							Elements h2Elements = rightRailPilotElement.getElementsByTag("h2");
-							if (h2Elements != null) {
-								Element h2Element = h2Elements.first();
-								h2Content = h2Element.text();
-							} else {
-								sb.append("<li>h2 of right rail with class 'div.s14-pilot' is blank.</li>");
-							}
-							Elements liElements = rightRailPilotElement.getElementsByTag("li");
-							for (Element ele : liElements) {
-								JSONObject obj = new JSONObject();
-								String icon = ele.attr("class");
-								obj.put("icon", icon);
-								Elements aElements = ele.getElementsByTag("a");
-								if (aElements != null) {
-									Element aElement = aElements.first();
-									String title = aElement.attr("title");
-									String href = aElement.attr("href");
-									obj.put("linktext", title);
-									obj.put("linkurl", href);
+					// start of follow us component
+					try {
+						String h2Content = "";
+						boolean followUsEle = true;
+						boolean followUsNode = true;
+						List<String> list = new ArrayList<String>();
+						Elements rightRailPilotElements = doc.select("div.gd-right").select("div.s14-pilot");
+						if (rightRailPilotElements != null) {
+							Element rightRailPilotElement = rightRailPilotElements.first();
+							if (rightRailPilotElement != null) {
+								Elements h2Elements = rightRailPilotElement.getElementsByTag("h2");
+								if (h2Elements != null) {
+									Element h2Element = h2Elements.first();
+									h2Content = h2Element.text();
 								} else {
-									sb.append("<li>No anchor tag found in the right rail social links</li>");
+									sb.append("<li>h2 of right rail with class 'div.s14-pilot' is blank.</li>");
 								}
-								list.add(obj.toString());
+								Elements liElements = rightRailPilotElement.getElementsByTag("li");
+								for (Element ele : liElements) {
+									JSONObject obj = new JSONObject();
+									String icon = ele.attr("class");
+									obj.put("icon", icon);
+									Elements aElements = ele.getElementsByTag("a");
+									if (aElements != null) {
+										Element aElement = aElements.first();
+										String title = aElement.attr("title");
+										String href = aElement.attr("href");
+										obj.put("linktext", title);
+										obj.put("linkurl", href);
+									} else {
+										sb.append("<li>No anchor tag found in the right rail social links</li>");
+									}
+									list.add(obj.toString());
+								}
+							} else {
+								followUsEle = false; 
 							}
 						} else {
 							followUsEle = false; 
 						}
-					} else {
-						followUsEle = false; 
-					}
 
-					if (indexRightNode.hasNode("followus")) {
-						Node followus = indexRightNode.getNode("followus");
-						if (StringUtils.isNotBlank(h2Content)) {
-							followus.setProperty("title", h2Content);
-						} 
+						if (indexRightNode.hasNode("followus")) {
+							Node followus = indexRightNode.getNode("followus");
+							if (StringUtils.isNotBlank(h2Content)) {
+								followus.setProperty("title", h2Content);
+							} 
 
-						if (list.size() > 1) {
-							followus.setProperty("links", list.toArray(new String[list.size()]));
+							if (list.size() > 1) {
+								followus.setProperty("links", list.toArray(new String[list.size()]));
+							}
+
+						} else {
+							followUsNode = false;
 						}
 
-					} else {
-						followUsNode = false;
-					}
-
-					if (followUsEle) {
-						if (followUsNode) {
-							log.debug("Follow us element and node are available.");
-						}
-						else {
-							sb.append("<li>Additional follow us element found in right rail on the locale page.</li>");
-						}
-					}
-					else {
-						if (followUsNode) {
-							sb.append("<li>No follow us element found in right rail on the locale page.</li>");
-
+						if (followUsEle) {
+							if (followUsNode) {
+								log.debug("Follow us element and node are available.");
+							}
+							else {
+								sb.append("<li>Additional follow us element found in right rail on the locale page.</li>");
+							}
 						}
 						else {
-							log.debug("Follow us element and node are not available.");
-						} 
+							if (followUsNode) {
+								sb.append("<li>No follow us element found in right rail on the locale page.</li>");
+
+							}
+							else {
+								log.debug("Follow us element and node are not available.");
+							} 
+						}
+
+					}
+					catch (Exception e) {
+						sb.append("<li>Unable to update follow us component.</li>");
+						log.error("Exception : ",e);
 					}
 
-				}
-				catch (Exception e) {
-					sb.append("<li>Unable to update follow us component.</li>");
-					log.error("Exception : ",e);
-				}
+					// end of follow us component
 
-				// end of follow us component
-
-			} else {
-				sb.append(Constants.URL_CONNECTION_EXCEPTION);
+				} else {
+					sb.append(Constants.URL_CONNECTION_EXCEPTION);
+				}
+			} catch (Exception e) {
+				doc = getConnection(loc);
 			}
 
 		} catch (Exception e) {
