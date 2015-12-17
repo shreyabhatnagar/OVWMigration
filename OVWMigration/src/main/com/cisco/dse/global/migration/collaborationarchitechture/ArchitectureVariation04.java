@@ -1,3 +1,8 @@
+/* 
+ * S.No		Name	Date		Description of change
+ * 1		Vidya			Added the Java file to handle the migration of service listing variation 1 page(s).
+ * 
+ * */
 package com.cisco.dse.global.migration.collaborationarchitechture;
 
 import java.io.IOException;
@@ -37,9 +42,10 @@ public class ArchitectureVariation04 extends BaseAction {
 		log.debug("In the translate method, catType is :" + catType);
 
 		// Repo node paths
-
+		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/architecture/jcr:content";
 		String pageUrl = host + "/content/<locale>/" + catType
 				+ "/<prod>/architecture.html";
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
@@ -59,28 +65,36 @@ public class ArchitectureVariation04 extends BaseAction {
 				locale).replace("<prod>", prod);
 		javax.jcr.Node architectureLeftNode = null;
 		javax.jcr.Node architectureRightNode = null;
+		javax.jcr.Node pageJcrNode = null;
 		try {
 
 			architectureLeftNode = session.getNode(architectureLeftPath);
 			architectureRightNode = session.getNode(architectureRightPath);
+			pageJcrNode = session.getNode(pagePropertiesPath);
 			doc = getConnection(loc);
 
 			if (doc != null) {
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+				
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+				
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
 				Elements allListElements = doc.select("div.gd-left").select(
-						"n13-pilot");
-				log.debug(allListElements.size());
+						"div.n13-pilot");
 				if (allListElements.size() == 1) {
 					// start of text component and first list properties setting
 					try {
 						String textProp = "";
 						String listIntroText = "";
-						String aText = "";
-						String linkurl = "";
-						String description = "";
 						StringBuilder textContent = new StringBuilder();
 						List<String> list = new ArrayList<String>();
 						Elements divElements = doc.select("div.gd22v2-left")
 								.select("div.c00-pilot,div.c100-dm");
+						if(divElements.size()==1){
+							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+						}
 						if (divElements != null) {
 							Element h2Element = divElements.select("h2")
 									.first();
@@ -90,34 +104,23 @@ public class ArchitectureVariation04 extends BaseAction {
 								textContent.append(pElement);
 								textProp = textContent.toString();
 							} else {
-								sb.append("<li>Text Elements not exists</li>");
+								sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 							}
-							log.debug("text Prop" + textProp);
 							Element listInroElement = divElements.select("p")
 									.last();
 							if (listInroElement != null) {
 								listIntroText = listInroElement.html();
 							} else {
-								sb.append("<li>List Paragraph not found</li>");
+								sb.append(Constants.LIST_PARAGRAPH_ELEMENT_NOT_FOUND);
 							}
 							Elements aElements = divElements.select("li");
-							log.debug("a elements:" + aElements);
 							for (Element ele : aElements) {
 								JSONObject obj = new JSONObject();
-								Elements aEle = ele.getElementsByTag("a");
-								if (aEle == null) {
-									aText = ele.text();
-								} else {
-									aText = aEle.text();
-									linkurl = aEle.attr("href");
-									description = ele.ownText();
-								}
-								// String aHref = ele.attr("href");
-								obj.put("linktext", aText);
-								obj.put("linkurl", linkurl);
+								obj.put("linktext", ele.html());
+								obj.put("linkurl", "");
 								obj.put("icon", "none");
 								obj.put("size", "");
-								obj.put("description", description);
+								obj.put("description", "");
 								obj.put("openInNewWindow", false);
 								list.add(obj.toString());
 							}
@@ -139,7 +142,7 @@ public class ArchitectureVariation04 extends BaseAction {
 								introNode.setProperty("paragraph_rte",
 										listIntroText);
 							} else {
-								sb.append("<li>List Intro node not found</li>");
+								sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
 							}
 							if (listNode.hasNode("element_list_0")) {
 								Node element_list_0 = listNode
@@ -155,10 +158,10 @@ public class ArchitectureVariation04 extends BaseAction {
 											list.get(0));
 								}
 							} else {
-								sb.append("<li>Element_list node not found for list node</li>");
+								sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
 							}
 						} else {
-							sb.append("<li>List Node not found</li>");
+							sb.append(Constants.LIST_NODE_NOT_FOUND);
 						}
 
 					} catch (Exception e) {
@@ -212,7 +215,6 @@ public class ArchitectureVariation04 extends BaseAction {
 										.getNodes("list*");
 								Node listNode = null;
 								for (int loop = 0; loop < headerList.size(); loop++) {
-									log.debug("for loop run:" + loop);
 									if (loop < 2) {
 										listNode = (Node) listNodeIterator
 												.next();
@@ -229,14 +231,13 @@ public class ArchitectureVariation04 extends BaseAction {
 										String h2Text = "";
 										String pText = "";
 										List<String> list = new ArrayList<String>();
-										log.debug(listNode);
 										h2Text = headerList.get(loop);
 										pText = paraList.get(loop);
 										if (h2Text != null) {
 											listNode.setProperty("title",
 													h2Text);
 										} else {
-											sb.append("<li>Title element of list component not found</li>");
+											sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
 										}
 										if (listNode.hasNode("intro")) {
 											Node introNode = listNode
@@ -245,10 +246,10 @@ public class ArchitectureVariation04 extends BaseAction {
 												introNode.setProperty(
 														"paragraph_rte", pText);
 											} else {
-												sb.append("<li>Intro paragraph element of list component not found</li>");
+												sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
 											}
 										} else {
-											sb.append("<li>List Intro node not found</li>");
+											sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
 										}
 										Elements liElements = ulList.get(loop)
 												.select("li");
@@ -281,20 +282,18 @@ public class ArchitectureVariation04 extends BaseAction {
 														list.toString());
 											}
 										} else {
-											sb.append("<li>Element_list node not found for list node</li>");
+											sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
 										}
 									} else {
-										sb.append("<li>List Node is not exists</li>");
+										sb.append(Constants.LIST_NODE_NOT_FOUND);
 									}
 								}
-							} else {
-								sb.append("<li>gd22v2 node not exists</li>");
 							}
 						} else {
-							sb.append("<li>Middle section list elements not found</li>");
+							sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
 						}
 					} catch (Exception e) {
-						sb.append("<li>Unable to migrate middle list conetent</li>");
+						sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 					}
 					// end of middle content migration
 					// -----------------------------------------------------------------------------------------------------------------------------
@@ -303,98 +302,13 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of last list in left section
-					try {
-						String h2Text = "";
-						String text = "";
-						// boolean anchor = true;
-						List<String> list = new ArrayList<String>();
-						Element listElements = doc.select("div.gd-left")
-								.select("div.n13-dm,div.n13-pilot").last();
-						log.debug("list elements:" + listElements);
-						if (listElements != null) {
-							Elements h2Elements = listElements
-									.select("h2.bdr-1");
-							if (h2Elements != null && !h2Elements.isEmpty()) {
-								Element h2Element = h2Elements.first();
-								if (h2Element != null) {
-									h2Text = h2Element.text();
-								} else {
-									sb.append("<li>No heading element for last list section in left part</li>");
-								}
-								Elements aElements = listElements.select("li");
-								for (Element ele : aElements) {
-									JSONObject obj = new JSONObject();
-									Elements aEle = ele.getElementsByTag("a");
-									String pdf = ele.ownText();
-									String pdfIcon = null;
-									if (pdf.length() > 0) {
-										if (pdf.toLowerCase().contains("pdf"))
-											pdfIcon = "pdf";
-										int i = 0;
-										for (; i < pdf.length(); i++) {
-											char character = pdf.charAt(i);
-											boolean isDigit = Character
-													.isDigit(character);
-											if (isDigit) {
-												break;
-											}
-										}
-										pdf = pdf
-												.substring(i, pdf.length() - 1);
-									}
-									// pdf = pdf.replace(")", "");
-									pdf = pdf.trim();
-									String aText = aEle.text();
-									String aHref = aEle.attr("href");
-									obj.put("linktext", aText);
-									obj.put("linkurl", aHref);
-									obj.put("icon", pdfIcon);
-									obj.put("size", pdf);
-									obj.put("description", text);
-									obj.put("openInNewWindow", false);
-									list.add(obj.toString());
-								}
-							} else {
-								sb.append("<li>No heading element for last list section in left part</li>");
-							}
-						} else {
-							sb.append("<li>Last list section in left part doesn't found</li>");
-						}
-						// End get content.
-						// Start set content.
-						if (architectureLeftNode.hasNode("list")) {
-							Node listNode = architectureLeftNode
-									.getNode("list");
-							if (StringUtils.isNotBlank(h2Text)) {
-								listNode.setProperty("title", h2Text);
-							}
-							if (listNode.hasNode("element_list_0")) {
-								Node element_list_0 = listNode
-										.getNode("element_list_0");
-								int size = list.size();
-								if (size > 1) {
-									element_list_0
-											.setProperty("listitems", list
-													.toArray(new String[list
-															.size()]));
-								} else {
-									element_list_0.setProperty("listitems",
-											list.get(0));
-								}
-							} else {
-								sb.append("<li>Element_list node of list node not found</li>");
-							}
-						} else {
-							sb.append("<li>List node not found</li>");
-						}
-						// End set content.
-					} catch (Exception e) {
-						log.error("Exception : ", e);
-						sb.append("<li>Unable to migrate last list</li>");
-					}
-
+					handleResourcesSection(architectureLeftNode);
 					// end of last list in left section
 					// --------------------------------------------------------------------------------------------------------------------------------------
+					// start of right side list component migration
+					handleRightListSection(architectureRightNode);
+					// end of right side list component migration
+					//---------------------------------------------------------------------------------------------------------------------------------------
 					// start tile section
 					handleTileSection(architectureRightNode);
 					// end of tile section
@@ -406,22 +320,22 @@ public class ArchitectureVariation04 extends BaseAction {
 						Elements textElements = doc
 								.select("div.c00-pilot,div.c100-dm");
 						if (textElements != null) {
+							NodeIterator textNodeIterator = architectureLeftNode
+									.getNodes("text*");
 							for (Element ele : textElements) {
-								if (architectureLeftNode.hasNode("text")) {
-									NodeIterator textNodeIterator = architectureLeftNode
-											.getNodes("text*");
+								if (architectureLeftNode.hasNodes()) {
 									if (textNodeIterator.hasNext()) {
 										Node textNode = (Node) textNodeIterator
 												.next();
-										textProp = ele.text();
+										textProp = ele.html();
 										textNode.setProperty("text", textProp);
 									}
 								} else {
-									sb.append("<li>Text Node not found</li>");
+									sb.append(Constants.TEXT_NODE_NOT_FOUND);
 								}
 							}
 						} else {
-							sb.append("<li>Text Elements not found</li>");
+							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
 					} catch (Exception e) {
 						sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
@@ -432,17 +346,14 @@ public class ArchitectureVariation04 extends BaseAction {
 					try {
 						int count = 1;
 						String aText = "";
-						String pdf = "";
-						String pdfIcon = "";
-						String linkurl = "";
-						String description = "";
 						Node listNode = null;
-						for (Element ele : allListElements) {
 							NodeIterator insideListIterator = architectureLeftNode
 									.getNode("gd22v2").getNode("gd22v2-left")
 									.getNodes("list*");
 							NodeIterator outsideListIterator = architectureLeftNode
 									.getNodes("list*");
+						for (Element ele : allListElements) {
+							if(count == 6) break;
 							if (count == 2 || count == 3) {
 								listNode = (Node) insideListIterator.next();
 							} else {
@@ -455,13 +366,16 @@ public class ArchitectureVariation04 extends BaseAction {
 								Elements h2Elements = ele.select("h3,h2");
 								if (h2Elements != null) {
 									h2Text = h2Elements.text();
+									if(StringUtils.isEmpty(h2Text)){
+										h2Text = " ";
+									}
 									listNode.setProperty("title", h2Text);
 								} else {
-									sb.append("<li>Title element of list component not found</li>");
+									sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
 								}
 								Elements pElements = ele.select("p");
 								if (pElements != null) {
-									pText = pElements.text();
+									pText = pElements.html();
 									if (listNode.hasNode("intro")) {
 										Node introNode = listNode
 												.getNode("intro");
@@ -470,48 +384,27 @@ public class ArchitectureVariation04 extends BaseAction {
 													"paragraph_rte", pText);
 										}
 									} else {
-										sb.append("<li>List Intro node not found</li>");
+										sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
 									}
 								} else {
-									sb.append("<li>Intro paragraph element of list component not found</li>");
+									sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
 								}
 								Elements liElements = ele.select("li");
 								for (Element liEle : liElements) {
-									if (liEle.ownText() != null) {
-										description = liEle.ownText();
-									}
+									String linkurl = "";
 									JSONObject obj = new JSONObject();
-									Element aElements = liElements.select("a")
-											.first();
+									Element aElements = liEle.select("a").first();
 									if (aElements != null) {
 										aText = aElements.html();
 										linkurl = aElements.attr("href");
-										pdf = aElements.ownText();
-										if (pdf.length() > 0) {
-											if (pdf.toLowerCase().contains(
-													"pdf"))
-												pdfIcon = "pdf";
-											int i = 0;
-											for (; i < pdf.length(); i++) {
-												char character = pdf.charAt(i);
-												boolean isDigit = Character
-														.isDigit(character);
-												if (isDigit) {
-													break;
-												}
-											}
-											pdf = pdf.substring(i,
-													pdf.length() - 1);
-										}
-										pdf = pdf.trim();
 									} else {
 										aText = liEle.html();
 									}
 									obj.put("linktext", aText);
 									obj.put("linkurl", linkurl);
-									obj.put("icon", pdfIcon);
-									obj.put("size", pdf);
-									obj.put("description", description);
+									obj.put("icon", "");
+									obj.put("size","");
+									obj.put("description", "");
 									obj.put("openInNewWindow", false);
 									list.add(obj.toString());
 								}
@@ -530,18 +423,21 @@ public class ArchitectureVariation04 extends BaseAction {
 												list.toString());
 									}
 								} else {
-									sb.append("<li>Element_list node not found for list node</li>");
+									sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
 								}
-							} else {
-								sb.append("<li>List Node is not exists</li>");
 							}
 							count++;
 						}
 					} catch (Exception e) {
-						sb.append("<li>Cannot migrate list components.</li>");
+						log.debug("Exception :"+e);
+						sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 					}
 					// end of migrating list components
 					// -------------------------------------------------------------------------------------------------------------------------
+					// start of last list in left section
+					handleResourcesSection(architectureLeftNode);
+					// end of last list in left section
+					//-------------------------------------------------------------------------------------------------------------------------
 					// start tile section
 					handleTileSection(architectureRightNode);
 
@@ -552,74 +448,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of right side list component migration
-					try {
-						String h2Text = "";
-						List<String> list = new ArrayList<String>();
-						Element listElements = doc.select("div.gd-right")
-								.select("div.n13-dm,div.n13-pilot").first();
-						log.debug("list elements:" + listElements);
-						if (listElements != null) {
-							Elements h2Elements = listElements
-									.select("h2.bdr-1");
-							if (h2Elements != null && !h2Elements.isEmpty()) {
-								Element h2Element = h2Elements.first();
-								if (h2Element != null) {
-									h2Text = h2Element.text();
-								} else {
-									sb.append("<li>No heading element for last list section in left part</li>");
-								}
-								Elements aElements = listElements.select("li");
-								for (Element ele : aElements) {
-									JSONObject obj = new JSONObject();
-									Elements aEle = ele.getElementsByTag("a");
-									String aText = aEle.text();
-									String aHref = aEle.attr("href");
-									obj.put("linktext", aText);
-									obj.put("linkurl", aHref);
-									obj.put("icon", "");
-									obj.put("size", "");
-									obj.put("description", "");
-									obj.put("openInNewWindow", false);
-									list.add(obj.toString());
-								}
-							} else {
-								sb.append("<li>No heading element for last list section in left part</li>");
-							}
-						} else {
-							sb.append("<li>Last list section in left part doesn't found</li>");
-						}
-						// End get content.
-						// Start set content.
-						if (architectureRightNode.hasNode("list")) {
-							Node listNode = architectureRightNode
-									.getNode("list");
-							if (StringUtils.isNotBlank(h2Text)) {
-								listNode.setProperty("title", h2Text);
-							}
-							if (listNode.hasNode("element_list_0")) {
-								Node element_list_0 = listNode
-										.getNode("element_list_0");
-								int size = list.size();
-								if (size > 1) {
-									element_list_0
-											.setProperty("listitems", list
-													.toArray(new String[list
-															.size()]));
-								} else {
-									element_list_0.setProperty("listitems",
-											list.get(0));
-								}
-							} else {
-								sb.append("<li>Element_list node of list node not found</li>");
-							}
-						} else {
-							sb.append("<li>List node not found</li>");
-						}
-						// End set content.
-					} catch (Exception e) {
-						log.error("Exception : ", e);
-						sb.append("<li>Unable to migrate last list</li>");
-					}
+					handleRightListSection(architectureRightNode);
 					// end of right side list component migration
 				}
 				session.save();
@@ -650,20 +479,18 @@ public class ArchitectureVariation04 extends BaseAction {
 							String textProp = ele.html();
 							textProp = FrameworkUtils.extractHtmlBlobContent(
 									ele, "", locale, sb);
-							log.debug("html property!: " + textProp);
 							htmlNode.setProperty("html", textProp);
-						} else {
-							sb.append("<li>Unable to update htmlblob as there are no elements</li>");
-						}
-
+						} 
 					}
+				}else{
+					sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 				}
 			} else {
-				sb.append("<li>Unable to update htmlblob as its respective div is missing</li>");
+				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 			}
 
 		} catch (Exception e) {
-			sb.append("<li>Unable to update htmlblob.</li>");
+			sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 		}
 
 		// end of htmlblob content
@@ -673,7 +500,6 @@ public class ArchitectureVariation04 extends BaseAction {
 	public void handleTileSection(Node architectureRightNode) {
 		// start of tile bordered section
 		try {
-			boolean flag = false;
 			String h2Text = "";
 			String pText = "";
 			String aText = "";
@@ -687,10 +513,8 @@ public class ArchitectureVariation04 extends BaseAction {
 					NodeIterator tileBorderedNodeIterator = architectureRightNode
 							.getNodes("tile_bordered*");
 					int nodeSize = (int) tileBorderedNodeIterator.getSize();
-					log.debug("Ele size:" + eleSize);
-					log.debug("Node size:" + nodeSize);
 					if (eleSize != nodeSize) {
-						sb.append("<li>Could not migrate  tilebordered node. Count mis match</li>");
+						sb.append(Constants.MIS_MATCH_OF_TILE_BORDERED_COMPONENTS);
 						log.debug("Could not migrate  tilebordered node. Count mis match");
 					}
 					for (Element ele : tileBorderedElements) {
@@ -701,7 +525,7 @@ public class ArchitectureVariation04 extends BaseAction {
 							if (h2TagText != null) {
 								h2Text = h2TagText.html();
 							} else {
-								sb.append("<li>TileBordered Component Heading element not having any title in it ('h2' is blank)</li>");
+								sb.append(Constants.TILE_BORDERED_TITLE_ELEMENT_NOT_FOUND);
 							}
 
 							Elements descriptionText = ele
@@ -709,7 +533,7 @@ public class ArchitectureVariation04 extends BaseAction {
 							if (descriptionText != null) {
 								pText = descriptionText.html();
 							} else {
-								sb.append("<li>TileBordered Component description element not having any title in it ('p' is blank)</li>");
+								sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
 							}
 
 							Elements anchorText = ele.getElementsByTag("a");
@@ -717,17 +541,11 @@ public class ArchitectureVariation04 extends BaseAction {
 								aText = anchorText.text();
 								aHref = anchorText.attr("href");
 							} else {
-								sb.append("<li>TileBordered Component anchor tag not having any content in it ('<a>' is blank)</li>");
+								sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
 							}
 							String textAppended = ele.ownText();
 							if (StringUtils.isNotBlank(textAppended)) {
-								flag = true;
 								count++;
-							}
-							if (flag) {
-								sb.append("<li>Extra Text found after link on locale page for "
-										+ count
-										+ " TileBordered Component(s) , hence the text cannot be migrated.</li>");
 							}
 							tileNode.setProperty("title", h2Text);
 							tileNode.setProperty("description", pText);
@@ -737,16 +555,180 @@ public class ArchitectureVariation04 extends BaseAction {
 					}
 
 				} else {
-					sb.append("<li>Tile bordered nodes are not found.</li>");
+					sb.append(Constants.TILE_BORDERED_NODES_NOT_FOUND);
 				}
 			} else {
-				sb.append("<li>Tile bordered elements are not found.</li>");
+				sb.append(Constants.TILE_BORDERED_ELEMENTS_NOT_FOUND);
 			}
 
 		} catch (Exception e) {
-			sb.append("<li>Unable to update tile bordered component.</li>");
+			sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 			log.debug("Exception :" + e);
 		}
 		// end of tile bordered section
+	}
+	public void handleRightListSection(Node architectureRightNode) {
+		try {
+			String h2Text = "";
+			boolean anchor = true;
+			List<String> list = new ArrayList<String>();
+			Element listElements = doc.select("div.gd-right")
+					.select("div.n13-dm,div.n13-pilot").first();
+			if (listElements != null) {
+				Elements h2Elements = listElements
+						.select("h2.bdr-1");
+				if (h2Elements != null && !h2Elements.isEmpty()) {
+					Element h2Element = h2Elements.first();
+					if (h2Element != null) {
+						h2Text = h2Element.text();
+					} else {
+						sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
+					}
+					Elements aElements = listElements.select("li");
+					for (Element ele : aElements) {
+						JSONObject obj = new JSONObject();
+						Elements aEle = ele.getElementsByTag("a");
+						String aText = aEle.text();
+						String aHref = aEle.attr("href");
+						obj.put("linktext", aText);
+						obj.put("linkurl", aHref);
+						obj.put("icon", "");
+						obj.put("size", "");
+						obj.put("description", "");
+						obj.put("openInNewWindow", false);
+						list.add(obj.toString());
+					}
+				} else {
+					sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
+				}
+			} else {
+				anchor = false;
+				sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
+			}
+			// End get content.
+			// Start set content.
+			if (architectureRightNode.hasNode("list")) {
+				Node listNode = architectureRightNode
+						.getNode("list");
+				if (StringUtils.isNotBlank(h2Text)) {
+					listNode.setProperty("title", h2Text);
+				}
+				if(anchor){
+				if (listNode.hasNode("element_list_0")) {
+					Node element_list_0 = listNode
+							.getNode("element_list_0");
+					int size = list.size();
+					if (size > 1) {
+						element_list_0
+								.setProperty("listitems", list
+										.toArray(new String[list
+												.size()]));
+					} else if(size >0){
+						element_list_0.setProperty("listitems",
+								list.get(0));
+					}
+				} else {
+					sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
+				}
+				}
+			} else {
+				sb.append(Constants.LIST_NODE_NOT_FOUND);
+			}
+			// End set content.
+		} catch (Exception e) {
+			log.error("Exception : ", e);
+			sb.append(Constants.UNABLE_TO_UPDATE_LIST);
+		}
+		
+	}
+	public void handleResourcesSection(Node architectureLeftNode){
+	try {
+		String h2Text = "";
+		String text = "";
+		// boolean anchor = true;
+		List<String> list = new ArrayList<String>();
+		Element listElements = doc.select("div.gd-left")
+				.select("div.n13-dm,div.n13-pilot").last();
+		if (listElements != null) {
+			Elements h2Elements = listElements
+					.select("h2.bdr-1");
+			if (h2Elements != null && !h2Elements.isEmpty()) {
+				Element h2Element = h2Elements.first();
+				if (h2Element != null) {
+					h2Text = h2Element.text();
+				} else {
+					sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
+				}
+				Elements aElements = listElements.select("li");
+				for (Element ele : aElements) {
+					JSONObject obj = new JSONObject();
+					Elements aEle = ele.getElementsByTag("a");
+					String pdf = ele.ownText();
+					String pdfIcon = null;
+					if (pdf.length() > 0) {
+						if (pdf.toLowerCase().contains("pdf"))
+							pdfIcon = "pdf";
+						int i = 0;
+						for (; i < pdf.length(); i++) {
+							char character = pdf.charAt(i);
+							boolean isDigit = Character
+									.isDigit(character);
+							if (isDigit) {
+								break;
+							}
+						}
+						pdf = pdf
+								.substring(i, pdf.length() - 1);
+					}
+					// pdf = pdf.replace(")", "");
+					pdf = pdf.trim();
+					String aText = aEle.text();
+					String aHref = aEle.attr("href");
+					obj.put("linktext", aText);
+					obj.put("linkurl", aHref);
+					obj.put("icon", pdfIcon);
+					obj.put("size", pdf);
+					obj.put("description", text);
+					obj.put("openInNewWindow", false);
+					list.add(obj.toString());
+				}
+			} else {
+				sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
+			}
+		} else {
+			sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
+		}
+		// End get content.
+		// Start set content.
+		if (architectureLeftNode.hasNode("list")) {
+			Node listNode = architectureLeftNode
+					.getNode("list");
+			if (StringUtils.isNotBlank(h2Text)) {
+				listNode.setProperty("title", h2Text);
+			}
+			if (listNode.hasNode("element_list_0")) {
+				Node element_list_0 = listNode
+						.getNode("element_list_0");
+				int size = list.size();
+				if (size > 1) {
+					element_list_0
+							.setProperty("listitems", list
+									.toArray(new String[list
+											.size()]));
+				} else {
+					element_list_0.setProperty("listitems",
+							list.get(0));
+				}
+			} else {
+				sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
+			}
+		} else {
+			sb.append(Constants.LIST_NODE_NOT_FOUND);
+		}
+		// End set content.
+	} catch (Exception e) {
+		log.error("Exception : ", e);
+		sb.append(Constants.UNABLE_TO_UPDATE_LIST);
+	}
 	}
 }
