@@ -378,4 +378,16 @@ public class Constants {
 
 	//UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS
 	public static final Object UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS = "<li>Unable to update tile bordered component.</li>";
+
+	// SPOTLIGHT_CTA_NODE_NOT_FOUND
+	public static final String SPOTLIGHT_CTA_NODE_NOT_FOUND = "<li>Spotlight Component link Node not found</li>";
+	
+	//URL_NODE_NOT_FOUND_FOR_TILE_IN_RIGHT_RAIL
+	public static final String URL_NODE_NOT_FOUND_FOR_TILE_IN_RIGHT_RAIL = "<li>Link node(href) not found for tile in right rail.</li>";
+	
+	//MISMATCH_OF_TILES_IN_RIGHT_RAIL
+	public static final String MISMATCH_OF_TILES_IN_RIGHT_RAIL = "Mis-match of tile components in right rail. Additional Elements found in Locale Page. Locale page has ( ";
+		
+	//MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL
+	public static final String MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL = "Mis-match of tile components in right rail. Additional nodes found. Locale page has ( ";
 }
