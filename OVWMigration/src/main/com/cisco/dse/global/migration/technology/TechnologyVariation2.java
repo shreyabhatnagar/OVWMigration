@@ -3,6 +3,7 @@ package com.cisco.dse.global.migration.technology;
 /* S.No			Name		Date		Description of change
  * 1			Anudeep		14-Dec-15	Added the Java file to handle the migration of technology variation 2 with 1url.
  * 2			Anudeep		15-Dec-15	Added dam image migration code at  line 89.
+ * 3			Anudeep		17-Dec-15	Fixed code for ru_ru locale
  * 
  * */
 
@@ -87,9 +88,10 @@ public class TechnologyVariation2 extends BaseAction {
 							Element listEle = doc.select("div.gd-left").select("div.nn13-pilot").first();
 							String h1Tag = textEle.getElementsByTag("h1").first().outerHtml();
 							String textDesc = FrameworkUtils.extractHtmlBlobContent(textEle, "",locale, sb); //2
-							log.debug(textDesc);
+							if(textDesc.equals("")){ //3
+								textDesc = textEle.outerHtml();
+							} //3
 							textDesc = textDesc.replaceFirst(h1Tag,"");
-							log.debug(textDesc);
 							String listTitle = listEle.getElementsByTag("h2").first().outerHtml();
 							String listDesc = listEle.getElementsByTag("ul").addClass("no-bullets").outerHtml();
 							if(listDesc!=null){
@@ -163,6 +165,8 @@ public class TechnologyVariation2 extends BaseAction {
 
 					// end set page properties.
 					// ------------------------------------------------------------------------------------------------------------------------------------------
+					
+				
 				}else{
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);	
 				}
