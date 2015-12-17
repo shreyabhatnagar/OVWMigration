@@ -514,8 +514,17 @@ public class ProductLandingVariation08 extends BaseAction {
 							Node spotLightComponentNode = (Node) tileBorderedNodeIterator
 									.next();
 
-							Elements h2TagText = ele.getElementsByTag("h2");
-							if (h2TagText != null) {
+							
+							
+							Elements h2TagText = null;
+							boolean h3TagExists = false;
+							h2TagText = ele.getElementsByTag("h2");
+							if(ele.getElementsByTag("h2").isEmpty()){
+								h3TagExists = true;
+								h2TagText = ele.getElementsByTag("h3");
+							}
+							log.debug("h2TagText: "+ h2TagText);
+							if (!h2TagText.isEmpty()) {
 								h2Text = h2TagText.html();
 							} else {
 								sb.append("<li>TileBordered Component Heading element not having any title in it ('h2' is blank)</li>");
@@ -523,18 +532,26 @@ public class ProductLandingVariation08 extends BaseAction {
 
 							Elements descriptionText = ele
 									.getElementsByTag("p");
-							if (descriptionText != null) {
+							if (!descriptionText.isEmpty()) {
 								pText = descriptionText.html();
 							} else {
 								sb.append("<li>TileBordered Component description element not having any title in it ('p' is blank)</li>");
 							}
-
+							
 							Elements anchorText = ele.getElementsByTag("a");
-							if (anchorText != null) {
+							if(h3TagExists){
+								Element anchor = anchorText.first();
+									aText = anchor.text();
+									aHref = anchor.attr("href");
+									sb.append("<li>TileBordered Component has extra link, which cannot be migrated.</li>");
+							}
+							else{
+							if (!anchorText.isEmpty()) {
 								aText = anchorText.text();
 								aHref = anchorText.attr("href");
 							} else {
 								sb.append("<li>TileBordered Component anchor tag not having any content in it ('<a>' is blank)</li>");
+							}
 							}
 
 							spotLightComponentNode.setProperty("title", h2Text);
@@ -564,11 +581,148 @@ public class ProductLandingVariation08 extends BaseAction {
 
 				// start set ENTERPRISE NETWORK INDEX list.
 				try {
+					
+					boolean listItemFound = false;
 					NodeIterator listNodeIterator = indexRightRailNode
 							.getNodes("list*");
 					Elements indexlistElem = doc.select("div.n13-pilot");
+					if(indexlistElem.isEmpty()){
+						//After text and 1st list section
+						
+						Element listElements = doc.select("div.c00v0-pilot").last();
+						if (listElements != null) {
+							listItemFound =  true;
+							int childrenSize = listElements.children().size(); 						
+							log.debug("Children size is "+childrenSize);
+							List<String> headerList = new ArrayList<String>();
+							List<String> paraList = new ArrayList<String>();
+							List<Element> ulList = new ArrayList<Element>();
+							String paraContent = "";
+							String previousHeader = "";
+							
+							for (int count =0; count < childrenSize; count++) {
+								System.out.println("Element at "+count);
+								System.out.println("------------------");
+								System.out.println(listElements.child(count));
+								
+								Element child = listElements.child(count);
+								if (child != null) {
+									System.out.println(child.tagName());
+									if ("h2".equalsIgnoreCase(child.tagName())) {
+										headerList.add(child.text());
+										if (!paraContent.isEmpty()) {
+											//Report content comes here
+											System.out.println("The last paragraph element under heading '"+ previousHeader +"' is not migrated from locale page.");
+											paraContent = "";
+										}
+										previousHeader = child.html();
+									}
+									else if ("p".equalsIgnoreCase(child.tagName())) {
+										paraContent = paraContent + child.outerHtml();
+									}
+									else if ("ul".equalsIgnoreCase(child.tagName())) {
+										paraList.add(paraContent);
+										paraContent = "";
+										ulList.add(child);
+									}
+								}
+							}
+							
+							for (int loop = 0; loop < headerList.size(); loop++) {
+								System.out.println("Header content for loop "+loop);
+								System.out.println(headerList.get(loop));
+								Node listNode = null;
+								NodeIterator elementList = null;
+
+								if (listNodeIterator.hasNext()) {
+									listNode = (Node) listNodeIterator.next();
+									log.debug("path of list node: "
+											+ listNode.getPath());
+									if(listNode != null){
+										listNode.setProperty("title", headerList.get(loop));
+									}
+								}
+								java.util.List<String> list = new ArrayList<String>();
+								System.out.println(paraList.get(loop));
+								System.out.println(ulList.get(loop));
+								Elements ulItems = ulList.get(loop).select("li");
+								for(Element li : ulItems){
+
+									
+										JSONObject jsonObj = new JSONObject();
+										Elements listItemAnchor = li
+												.getElementsByTag("a");
+										Elements listItemSpan = li
+												.getElementsByTag("span");
+
+										String anchorText = listItemAnchor != null ? listItemAnchor
+												.text() : "";
+										String anchorHref = listItemAnchor
+												.attr("href");
+										String anchorTarget = listItemAnchor
+												.attr("target");
+										String listIcon = listItemSpan
+												.attr("class");
+										// String icon = li.ownText();
+
+										jsonObj.put("linktext", anchorText);
+										jsonObj.put("linkurl", anchorHref);
+										jsonObj.put("icon", listIcon);
+										jsonObj.put("size", "");// Need to get the
+																// size
+										// from the list element
+										// text.
+										jsonObj.put("description", "");// Need to
+																		// get
+										// the
+										// description
+										// from the list
+										// element text.
+										if (StringUtils.isNotBlank(anchorTarget)) {
+											jsonObj.put("openInNewWindow", true);
+										}
+										list.add(jsonObj.toString());
+
+								
+									log.debug("div class 'div.n13-pilot' ul content ::"
+											+ list.toString());
+								}
+								elementList = listNode
+										.getNodes("element_list*");
+								if (elementList != null
+										&& elementList.hasNext()) {
+									Node eleNode = (Node) elementList
+											.next();
+									if (eleNode != null) {
+
+										if (eleNode
+												.hasProperty("listitems")) {
+											Property listitems = eleNode
+													.getProperty("listitems");
+											if (!listitems.isMultiple()) {
+												listitems.remove();
+												session.save();
+											}
+										}
+										eleNode.setProperty(
+												"listitems",
+												list.toArray(new String[list
+														.size()]));
+										log.debug("Updated listitems at "
+												+ eleNode.getPath());
+									}
+								} else {
+									sb.append("<li>element_list node doesn't exists</li>");
+								}
+								System.out.println("-------------------------------------------------------------------------------------");
+							}
+
+
+					}	}
 					Element rightRailPilotElement = indexlistElem.first();
-					if (rightRailPilotElement != null) {
+					if(listItemFound){
+						if (rightRailPilotElement != null ) {
+					
 						for (Element indexListItem : indexlistElem) {
 							String indexTitle = indexListItem.getElementsByTag(
 									"h2").text();
@@ -696,9 +850,10 @@ public class ProductLandingVariation08 extends BaseAction {
 
 						}
 
-					} else {
+					}else {
 						sb.append("<li>Mismatch in the right rail. List element is not found.</li>");
 					}
+						}
 				} catch (Exception e) {
 					sb.append("<li>Unable to update index list component.\n</li>");
 					log.error("Exception : ", e);

@@ -676,6 +676,7 @@ public class ProductLandingVariation12 extends BaseAction {
 												sb.append("<li>List Paragraph description is not migrated as it has no content.</li>");
 											}
 										}
+										//As Ja_jp has commented content in its right node list, this check has been done.
 										if(!list.isEmpty()){
 										elementList = listNode
 												.getNodes("element_list*");
@@ -706,7 +707,7 @@ public class ProductLandingVariation12 extends BaseAction {
 														
 											}
 										} else {
-											sb.append("<li>List items are not migrated as they have no content.</li>");
+											sb.append("<li>List items are not migrated as they have no content(Content is commented).</li>");
 											
 										}
 
