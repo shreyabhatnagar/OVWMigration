@@ -775,13 +775,18 @@ public class ProductLandingVariation12 extends BaseAction {
 					NodeIterator listNodeIterator = indexRightRailNode
 							.getNodes("list*");
 					Elements indexlistElem = doc.select("div.n13-pilot");
-				//	int eleSize = indexlistElem.size();
-					//int listNodeSize = (int) listNodeIterator.getSize();
+					int eleSize = 0;
+				    int listNodeSize = (int) listNodeIterator.getSize();
+				    Elements childElements = null;
+				    
 					//Element rightRailPilotElement = indexlistElem.first();
 					
 					if (!indexlistElem.isEmpty()) {
 						for (Element indexListItem : indexlistElem) {
 							if(!indexListItem.hasClass("compact")){
+								childElements = indexListItem.getElementsByTag(
+										"h2");
+								
 							String indexTitle = indexListItem.getElementsByTag(
 									"h2").first().html();
 
@@ -897,6 +902,16 @@ public class ProductLandingVariation12 extends BaseAction {
 							}
 
 						}
+							eleSize = childElements.size();
+
+						}
+						if (eleSize > 1 && eleSize != listNodeSize) {
+
+							sb.append("<li>Could not migrate  List Component. Count mis match as Element Count is "
+									+ eleSize
+									+ " and node count is "
+									+ listNodeSize + " </li>");
+							log.debug("Could not migrate  tilebordered node. Count mis match");
 
 						}
 						} else {
