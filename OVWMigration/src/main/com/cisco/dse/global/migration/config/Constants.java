@@ -390,4 +390,15 @@ public class Constants {
 		
 	//MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL
 	public static final String MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL = "Mis-match of tile components in right rail. Additional nodes found. Locale page has ( ";
+	
+	// LINK_IS_DISABLED_IN_RIGHT_RAIL
+	public static final String LINK_IS_DISABLED_IN_RIGHT_RAIL = "<li>Link is been disabled since the link trigger value is none</li>";
+
+	// RIGHT_RAIL_COUNT
+	public static final String RIGHT_RAIL_NODE_COUNT = "<li>Right rail Component node count is ";
+
+	// TEXT_ELEMENT_COUNT
+	public static final String RIGHT_RAIL_ELEMENT_COUNT = " and Right rail elements on the page size is ";
+
+
 }
