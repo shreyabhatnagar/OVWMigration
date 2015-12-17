@@ -141,12 +141,8 @@ public class ProductListingVariation5 {
 											Element drawerComponentHeaderTitleElement = drawerComponentHeaderTitleElements.first();
 											if (drawerComponentHeaderTitleElement != null) {
 												drawerComponentHeaderTitle = drawerComponentHeaderTitleElement.text();
-											} else {
-												sb.append(Constants.DRAWER_CONTAINER_TITLE_ELEMENT_NOT_FOUND);
-											}
-										} else {
-											sb.append(Constants.DRAWER_CONTAINER_TITLE_ELEMENT_NOT_FOUND);
-										}
+											} 
+										} 
 										if (bottomNode.hasNodes()) {
 											NodeIterator drawersContainerIterator = bottomNode.getNodes("drawers_container*");
 											
@@ -179,7 +175,7 @@ public class ProductListingVariation5 {
 													javax.jcr.Node drawersPanelNode = null;
 													Elements drawersPanelElements = doc.select("div.n21");
 													
-													if (drawersPanelElements != null) {
+													if (!drawersPanelElements.isEmpty()) {
 														int count = 0;
 														for (Element drawersPanelElement : drawersPanelElements) {
 															Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");

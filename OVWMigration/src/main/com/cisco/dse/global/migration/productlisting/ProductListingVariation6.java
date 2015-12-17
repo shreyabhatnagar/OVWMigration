@@ -256,12 +256,13 @@ public class ProductListingVariation6 extends BaseAction {
 																			Elements siTitles = subItem.getElementsByTag("h4");
 																			if (siTitles != null) {
 																				Element siTitle = siTitles.first();
+																				String ownText = siTitle.ownText();
 																				if (siTitle != null) {
 																					Elements siATitles = siTitle.getElementsByTag("a");
 																					if (siATitles != null) {
 																						Element siATitle = siATitles.first();
 																						if (siATitle != null) {
-																							title = siATitle.text();
+																							title = siATitle.text() +" "+ownText;
 																							linkTitleUrl = siATitle.attr("href");
 																							if (title.equals(previousTitle)) {
 																								continue;
@@ -297,8 +298,9 @@ public class ProductListingVariation6 extends BaseAction {
 																							.getElementsByTag("li");
 																					if (indItems != null) {
 																						for (Element indItem : indItems) {
+																							String ownText = indItem.ownText();
 																							JSONObject jsonObj = new JSONObject();
-																							jsonObj.put("linktext", indItem.html());
+																							jsonObj.put("linktext", indItem.html()+" "+ownText);
 																							list1.add( jsonObj.toString());
 																						}
 																					} else {
