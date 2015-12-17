@@ -133,7 +133,7 @@ public class OVWMigration {
 					String sheetName = sheet.getSheetName();
 					StringBuilder sb = new StringBuilder(1024);
 
-					sb.append("<table  border='1'>");
+					sb.append("<html><head><meta charset='UTF-8'></head><body><table  border='1'>");
 
 					for (Row tempRow : sheet) {
 
@@ -527,7 +527,8 @@ public class OVWMigration {
 
 					}
 
-					sb.append("</table>");
+					sb.append("</table></body></html>");
+
 
 					java.util.Date date = new java.util.Date();
 					File file = new File(reportspath
@@ -539,7 +540,7 @@ public class OVWMigration {
 							+ ".html");
 					FileWriter fileWriter = new FileWriter(file);
 					BufferedWriter bwr = new BufferedWriter(fileWriter);
-					bwr.write(sb.toString());
+					bwr.write(new String(sb.toString().getBytes("UTF-8")));
 					bwr.flush();
 					bwr.close();
 
