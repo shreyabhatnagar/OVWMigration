@@ -10,7 +10,7 @@ public class Constants {
 
 	//TEXT_HAEDING_NOT_FOUND
 	public static final String TEXT_HAEDING_NOT_FOUND = "<li>Text heading not found.</li>";	
-	
+
 	//TEXT_DESCRIPTION_NOT_FOUND
 	public static final String TEXT_DESCRIPTION_NOT_FOUND = "<li>Text description is not found</li>";
 
@@ -39,7 +39,7 @@ public class Constants {
 
 	// SPOTLIGHT_NODE_COUNT
 	public static final String SPOTLIGHT_NODE_COUNT = "<li>Spotlight Component node count is ";
-	
+
 	//SPOTLIGHT_IMAGE_NOT_AVAILABLE
 	public static final String SPOTLIGHT_IMAGE_NOT_AVAILABLE = "<li>spotlight image doesn't exist</li>";
 
@@ -140,19 +140,19 @@ public class Constants {
 
 	//LEFT_GRID_ANCHOR_ELEMENTS_NOT_FOUND
 	public static final String LEFT_GRID_ANCHOR_ELEMENTS_NOT_FOUND = "<li>Left grid anchor elements not found.</li>";
-	
+
 	//LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND
 	public static final String LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND = "<li>Element_list node is not found for left grid node</li>";
 
 	//LEFT_GRID_LIST_NODE_NOT_FOUND
 	public static final String LEFT_GRID_LIST_NODE_NOT_FOUND = "<li>List node is not found for left grid node.</li>";
-	
+
 	//LEFT_GRID_NODE_NOT_FOUND
 	public static final String LEFT_GRID_NODE_NOT_FOUND = "<li>Node for left grid is not found.</li>";
 
 	//UNABLE_TO_MIGRATE_LEFT_GRID
 	public static final String UNABLE_TO_MIGRATE_LEFT_GRID = "<li>Unable to migrate left grid.</li>";
-	
+
 	//MID_GRID_ELEMENT_NOT_FOUND
 	public static final String MID_GRID_ELEMENT_NOT_FOUND = "<li>Mid grid element not found.</li>";
 
@@ -170,9 +170,9 @@ public class Constants {
 
 	//MID_GRID_LIST_NODE_NOT_FOUND
 	public static final String MID_GRID_LIST_NODE_NOT_FOUND = "<li>List node is not found for mid grid node.</li>";
-	
+
 	//LIST_NOT_FOUND_IN_RIGHT_RAIL
-		public static final String LIST_NOT_FOUND_IN_RIGHT_RAIL = "<li>List element is not found for right rail.</li>";
+	public static final String LIST_NOT_FOUND_IN_RIGHT_RAIL = "<li>List element is not found for right rail.</li>";
 
 	//MID_GRID_NODE_NOT_FOUND
 	public static final String MID_GRID_NODE_NOT_FOUND = "<li>Node for mid grid is not found.</li>";
@@ -190,11 +190,23 @@ public class Constants {
 	public static final String TEXT_NODE_COUNT = "<li>Text Component node count is ";
 
 	// TEXT_ELEMENT_COUNT
-	public static final String TEXT_ELEMENT_COUNT = " and text elements on the page size is ";
+	public static final String TEXT_ELEMENT_COUNT = " and text elements on the local page are ";
+
+	// Text_Element_Mismatch
+	public static final String Text_Element_Mismatch = "<li>Mismatch in the count of text component in left rail. Text component node count is ";
+
+	// TILEBORDER_Element_ON_LOCALE_PAGE
+	public static final String TILEBORDER_Element_ON_LOCALE_PAGE = "<li>Mismatch in the count of tile border panels. Additional panel(s) found on locale page. Locale page has ";
+
+	// TILEBORDER_NODE
+	public static final String TILEBORDER_NODE = " and Tile border Component node count is ";
+
+	// TILEBORDER_EXTRA_ANCHOR_LINK
+	public static final String TILEBORDER_EXTRA_ANCHOR_LINK = "<li>Extra link found in tile border on the locale page.</li>";
 
 	//RIGHT_GRID_ELEMENT_NOT_FOUND
 	public static final String RIGHT_GRID_ELEMENT_NOT_FOUND = "<li>Right grid element not found.</li>";
-		
+
 	//RIGHT_GRID_HEADING_NOT_FOUND
 	public static final String RIGHT_GRID_HEADING_NOT_FOUND = "<li>Right grid heading not found.</li>";
 
@@ -245,10 +257,10 @@ public class Constants {
 
 	//MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT
 	public static final String MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT = "<li>Mis Match of subdrawers count in drawer panel</li>";
-	
+
 	//DRAWER_PANEL_TITLE_NOT_FOUND
 	public static final String DRAWER_PANEL_TITLE_NOT_FOUND = "<li>title of drawer panel doesn't exist</li>";
-	
+
 	//DRAWER_PANEL_LINK_TITLE_NOT_FOUND
 	public static final String DRAWER_PANEL_LINK_TITLE_NOT_FOUND = "<li>link of the title of drawer panel doesn't exist</li>";
 
@@ -263,76 +275,106 @@ public class Constants {
 
 	//TITLE_SUB_DRAWER_NOT_FOUND
 	public static final String TITLE_SUB_DRAWER_NOT_FOUND ="<li>title of sub drawer doesn't exist</li>";
-	
+
 	//LINK_URL_OF_SUB_DRAWER_NOT_FOUND
 	public static final String LINK_URL_OF_SUB_DRAWER_NOT_FOUND = "<li>link url of sub drawer doesn't exist</li>";
 
 	//INFO_LINK_ANCHOR_ELEMENT_NOT_FOUND
 	public static final String INFO_LINK_ANCHOR_ELEMENT_NOT_FOUND = "<li>info links anchor element not found</li>";
-	
+
 	//LI_ELEMENTS_IN_DETAILS_ELEMENT_NOT_FOUND
 	public static final String LI_ELEMENTS_IN_DETAILS_ELEMENT_NOT_FOUND = "<li>li elements in details Element not found</li>";
 
 	//DETAILS_ELEMEMT_NOT_FOUND
 	public static final String DETAILS_ELEMEMT_NOT_FOUND = "<li>details Element not found</li>";
-	
-	
+
+
 	//TITLE_ABOVE_DRAWERS_NOT_FOUND
 	public static final String TITLE_ABOVE_DRAWERS_NOT_FOUND = "<li>Title above the drawer component is not available on the locale page.</li>";
-	
+
 	//UNABLE_TO_UPDATE_SPOTLIGHT
 	public static final String UNABLE_TO_UPDATE_SPOTLIGHT = "<li>Unable to Update Spotlight.</li>";
-	
+
 	//UNABLE_TO_UPDATE_LIST
 	public static final String UNABLE_TO_UPDATE_LIST = "<li>Unable to Update List.</li>";
-		
+
 	//MISMATCH_IN_LIST	
 	public static final String MISMATCH_IN_LIST_ELEMENT = "<li>MisMatch in list components. Additional Elements found in Locale Page. Locale page has ( ";
-				
+
 	//LIST_NODES_COUNT
-	public static final String LIST_NODES_COUNT = " )Elements and Available nodes are";
-		
+	public static final String LIST_NODES_COUNT = " Elements and Available nodes are";
+
 	//MISMATCH_IN_LIST_NODES	
-	public static final String MISMATCH_IN_LIST_NODES = "<li>MisMatch in list components. Additional Nodes found. Locale page has (";
-	
+	public static final String MISMATCH_IN_LIST_NODES = "<li>MisMatch in list components. Locale page has ";
+
+	//MISMATCH_IN_LIST_COUNT	
+	public static final String MISMATCH_IN_LIST_COUNT = "<li>Mismatch of ul list count</li>";
+
+	//MISMATCH_IN_TILEBORDER_COUNT	
+	public static final String MISMATCH_IN_TILEBORDER_COUNT = "<li>Mismatch of tile border count</li>";
+
 	//NO_LIST_ELEMENTS_FOUND
 	public static final String NO_LIST_NODES_FOUND = "<li>No List nodes found</li>";
-	
+
 	//NO_LIST_NODE_FOUND
 	public static final String NO_LIST_NODE_FOUND = "<li>No List node found</li>";
-	
+
+	//LIST_NODE_NOT_FOUND
+	public static final String LIST_NODE_NOT_FOUND = "<li>List node found for respective element on locale page</li>";
+
+	//NO_SUBTITLE_LIST_NODE_FOUND
+	public static final String NO_SUBTITLE_LIST_NODE_FOUND = "<li>No SubTitle List node found</li>";
+
+	//NO_SUBTITLE_LIST_ELEMENT_FOUND
+	public static final String NO_SUBTITLE_LIST_ELEMENT_FOUND = "<li>No SubTitle List element found on locale page</li>";
+
+	//Exception_BY_SPECIAL_CHARACTER
+	public static final String Exception_BY_SPECIAL_CHARACTER = "<li>Special Characters in local page. Need to migrate manually</li>";
+
 	//FOLLOWUS_TITLE_NOT_FOUND
 	public static final String FOLLOWUS_TITLE_NOT_FOUND = "<li>No Title found for FollowUs.</li>";
-	
+
 	//FOLLOWUS_NODE_NOT_FOUND
 	public static final String FOLLOWUS_NODE_NOT_FOUND = "<li>FollowUs Node not Found.</li>";
-	
+
 	//FOLLOWUS_ELEMENT_NOT_FOUND
 	public static final String FOLLOWUS_ELEMENT_NOT_FOUND = "<li>FollowUs Element not Found in locale page.</li>";
-	
+
 	//UNABLE_TO_UPDATE_FOLLOWUS
 	public static final String UNABLE_TO_UPDATE_FOLLOWUS = "<li>Unable to update followus.</li>";
-	
+
 	//EXTRA_TEXT_ELEMENT_FOUND
 	public static final String EXTRA_TEXT_ELEMENT_FOUND = "<li>Found extra text element in locale page</li>";
-	
+
 	//EXTRA_TEXT_NODE_FOUND
 	public static final String EXTRA_TEXT_NODE_FOUND = "<li>Extra text node exist</li>";
-	
+
 	//NO_H2_ELEMENT_IN_LIST
 	public static final String NO_H2_ELEMENT_IN_LIST = "<li>No h2 elements in list.</li>";
-	
+
 	//NO_H3_ELEMENT_IN_LIST
 	public static final String NO_H3_ELEMENT_IN_LIST = "<li>No h3 elements in list.</li>";
-	
+
 	//TITLE_LINK_NODE_NOT_AVAILABLE
 	public static final String TITLE_LINK_NODE_NOT_AVAILABLE = "<li>Title link node not available</li>";
-	
+
 	//TITLE_DONOT_HAVE_LINK
 	public static final String TITLE_DONOT_HAVE_LINK = "<li>Title does not have link in local page.</li>";
-	
+
 	//CTA_NOT_AVAILABLE
 	public static final String CTA_NOT_AVAILABLE = "<li>No cta link available in spotlight on locale page.</li>";
+
+	//UNABLE_TO_MIGRATE_PAGE
+	public static final String UNABLE_TO_MIGRATE_PAGE = "<li>unable to migrate page.</li>";
+
+	//UNABLE_TO_MIGRATE_RIGHTRAIL
+	public static final String UNABLE_TO_MIGRATE_RIGHTRAIL = "<li>The HTML structure for list component in right rail on the locale page is different and hence migration needs to be done manually.</li>";
+
+	//UNABLE_TO_MIGRATE_LIST_COMPONENT
+	public static final String UNABLE_TO_MIGRATE_LIST_COMPONENT = "<li>Unable to update List Component.</li>";
+
+	//LIST_COMPONENT_NOT_FOUND
+	public static final String LIST_COMPONENT_NOT_FOUND = "<li>List Component not found on locale page.</li>";
 	
 	//MISMATCH_OF_LIST_IN_RIGHT_RAIL
 	public static final String MISMATCH_OF_LIST_IN_RIGHT_RAIL = "Mis-match of list components in right rail. Additional Elements found in Locale Page. Locale page has ( ";

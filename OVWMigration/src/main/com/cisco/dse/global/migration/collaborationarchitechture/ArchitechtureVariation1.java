@@ -1,7 +1,6 @@
 package com.cisco.dse.global.migration.collaborationarchitechture;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +9,13 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -28,7 +23,6 @@ import org.jsoup.select.Elements;
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
-import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
 
 public class ArchitechtureVariation1 extends BaseAction{
 
@@ -36,7 +30,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 	 * @param args
 	 */
 
-	Document doc;
+	Document doc = null;
 
 	StringBuilder sb = new StringBuilder(1024);
 
@@ -71,53 +65,58 @@ public class ArchitechtureVariation1 extends BaseAction{
 			architectureRightNode = session.getNode(architectureRight);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 
-			/*// start set page properties.
 
-			FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-
-			// end set page properties.
-			 */
-			try {
-				doc = Jsoup.connect(loc).get();
-				log.debug("Connected to the provided URL");
-			} catch (Exception e) {
+			try{
 				doc = getConnection(loc);
+			}catch(Exception e){
+				log.error("Exception : ",e);
 			}
+
 
 			if(doc != null){
 
+				// start set page properties.
+
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+				// end set page properties.
+
 				// start of text component
 				try{
-					setText(doc, architectureLeftNode);
+					migrateTextComponents(doc, architectureLeftNode ,locale);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.error("Exception : ",e);
 				}	
 				// end of text component
 
 				//Start of List Component
 				try {
-					listElements(doc,architectureLeftNode,session);
+					migratelistElements(doc,architectureLeftNode,session);
 				}
 				catch(Exception e){
 					sb.append("Exception in List Component");
+					log.error("Exception : ",e);
 				}
 
 				//End of List Component
 
 				//Start of Right Rail
 				try{
-					rightRailElements(doc,architectureRightNode);
+					migraterightRailElements(doc,architectureRightNode);
 				}
 				catch(Exception e)
 				{
 					sb.append("Exception in right rail Elements");
+					log.error("Exception : ",e);
 				}
 				// End of Right Rail
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		}catch(Exception e){
-			sb.append("<li>unable to migrate page"+e+"</li>");
+			sb.append(Constants.UNABLE_TO_MIGRATE_PAGE);
+			log.error("Exception : ",e);
 		}
 		sb.append("</ul></td>");
 		session.save();
@@ -125,8 +124,8 @@ public class ArchitechtureVariation1 extends BaseAction{
 		return sb.toString();
 	}
 
-	// Set Text Method
-	public void setText(Document doc, Node architectureLeftNode) throws RepositoryException{
+	// Start Migrate Text Method
+	public void migrateTextComponents(Document doc, Node architectureLeftNode, String locale) throws RepositoryException{
 
 		Elements textElements = doc.select("div.c00-pilot");
 
@@ -141,28 +140,31 @@ public class ArchitechtureVariation1 extends BaseAction{
 				log.debug("node Size" + nodeSize + "ele Size" + eleSize);
 				if(eleSize == nodeSize){
 					log.debug("////////////Inside///////////");
+					Node textNode;
 					for(Element ele : textElements){
-						Node textNode = (Node)textNodeIterator.next();
-						textNode.setProperty("text", ele.html());
+						textNode = (Node)textNodeIterator.next();
+						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
 					}
 				}
 				else if(nodeSize < eleSize){
+					Node textNode;
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
-							Node textNode = (Node)textNodeIterator.next();
-							textNode.setProperty("text", ele.html());
+							textNode = (Node)textNodeIterator.next();
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
 						}
 						else{
-							sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
+							sb.append(Constants.Text_Element_Mismatch+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
 						}
 					}
 				}
 				else if(nodeSize > eleSize){
+					Node textNode;
 					for(Element ele : textElements){
-						Node textNode = (Node)textNodeIterator.next();
-						textNode.setProperty("text", ele.html());
+						textNode = (Node)textNodeIterator.next();
+						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
 					}
-					sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
+					sb.append(Constants.Text_Element_Mismatch+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
 				}
 			}
 			else{
@@ -170,15 +172,14 @@ public class ArchitechtureVariation1 extends BaseAction{
 			}
 		}
 	}
-	//End of Text Method
+	//End of Migrate Text Method
 
-
-	// Start of List Elements method
-	private void listElements(Document doc, Node architectureLeftNode, Session session) throws RepositoryException {
+	// Start of Migrate List Elements method
+	private void migratelistElements(Document doc, Node architectureLeftNode, Session session) throws RepositoryException {
 		Elements listElements = doc.select("div.n13-pilot");
 
 		if(listElements == null || listElements.size() == 0){
-			sb.append("<li>List Component not found on locale page. Extra list Node need to be deleted manually </li>");
+			sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
 		}
 		else {
 			int eleSize = listElements.size();
@@ -187,45 +188,48 @@ public class ArchitechtureVariation1 extends BaseAction{
 				int nodeSize = (int)listNodeIterator.getSize();
 				log.debug("node Size" + nodeSize + "ele Size" + eleSize);
 				if(eleSize == nodeSize){
+					Node listNode;
 					for(Element ele : listElements){
-						Node listNode = (Node)listNodeIterator.next();
+						listNode = (Node)listNodeIterator.next();
 						setListElements(ele , listNode ,session);
 					}
 				}
 				else if(nodeSize < eleSize){
+					Node listNode;
 					for(Element ele : listElements){
 						if(listNodeIterator.hasNext()){
-							Node listNode = (Node)listNodeIterator.next();
+							listNode = (Node)listNodeIterator.next();
 							setListElements(ele , listNode ,session);
 						}
 					}	
-					sb.append("<li>extra element found on locale page</li>");
+					sb.append(Constants.MISMATCH_IN_LIST_NODES+eleSize+Constants.LIST_NODES_COUNT+nodeSize);
 				}
 
 				else if(nodeSize > eleSize){
+					Node listNode;
 					for(Element ele : listElements){
-						Node listNode = (Node)listNodeIterator.next();
+						listNode = (Node)listNodeIterator.next();
 						setListElements(ele , listNode ,session);
 					}
-					sb.append("<li>extra node found</li>");
+					sb.append(Constants.MISMATCH_IN_LIST_NODES+eleSize+Constants.LIST_NODES_COUNT+nodeSize);
 				}
 			}
 
 			else {
-				sb.append("List node not found");
+				sb.append(Constants.NO_LIST_NODE_FOUND);
 			}
 
 		}
 
 	}
-	//SetList Method
+
 	private void setListElements(Element ele, Node architectureListNode, Session session) {
 		try{
 			Elements h2Ele = ele.getElementsByTag("h2");
 			Elements h3Ele = ele.getElementsByTag("h3");
 			Elements ulEle = ele.getElementsByTag("ul");
 			//title Node
-			if(!h2Ele.isEmpty() && h2Ele != null && h2Ele.size()==1){
+			if(!h2Ele.isEmpty() && h2Ele != null){
 				log.debug("h2 of list");
 				architectureListNode.setProperty("title", h2Ele.first().html());
 			}else{
@@ -238,233 +242,231 @@ public class ArchitechtureVariation1 extends BaseAction{
 			if(h3NodeIterator != null){
 				int listNodeSize = (int)h3NodeIterator.getSize();
 				if(!h3Ele.isEmpty() && h3Ele != null){
-					int h3elesize = h3Ele.size();
-					if(h3elesize == listNodeSize){
+					int h3EleSize = h3Ele.size();
+					if(h3EleSize == listNodeSize){
+						Node h3Node;
 						for(Element h3 : h3Ele){
-							Node h3Node = (Node)h3NodeIterator.next();
+							h3Node = (Node)h3NodeIterator.next();
 							h3Node.setProperty("subtitle",h3.html());
 						}
 					}
-					else if(h3elesize > listNodeSize){
+					else if(h3EleSize > listNodeSize){
+						Node h3Node;
 						for(Element h3 : h3Ele){
 							if(h3NodeIterator.hasNext()){
-								Node h3Node = (Node)h3NodeIterator.next();
+								h3Node = (Node)h3NodeIterator.next();
 								h3Node.setProperty("subtitle",h3.html());
 							}
 						}
 					}
-					else if(h3elesize < listNodeSize){
+					else if(h3EleSize < listNodeSize){
+						Node h3Node;
 						for(Element h3 : h3Ele){
-							Node h3Node = (Node)h3NodeIterator.next();
+							h3Node = (Node)h3NodeIterator.next();
 							h3Node.setProperty("subtitle",h3.html());
 						}
 					}
+				}else{
+					sb.append(Constants.NO_SUBTITLE_LIST_ELEMENT_FOUND);
 				}
 			}else {
-				if(h3Ele != null && !h3Ele.isEmpty()){
-					sb.append("<li>element_subtitle_Nodes are not found</li>");
-				}
+				sb.append(Constants.NO_SUBTITLE_LIST_NODE_FOUND);
 			}
 
 			// Element List
 			NodeIterator ulNodeIterator = architectureListNode.hasNode("element_list_0") ? architectureListNode.getNodes("element_list*") : null;
 			if(ulNodeIterator != null){
+				Node ulnodeList;
 				for(Element ulItr : ulEle){
 					if(ulNodeIterator.hasNext()){
-						Node ulnodeList = (Node)ulNodeIterator.next();
+						ulnodeList = (Node)ulNodeIterator.next();
 						if(ulnodeList.getName().equals("element_list_0")){
 							ulnodeList = (Node)ulNodeIterator.next();
 						}
 						if(!ulItr.hasClass("no-bullets")){
 							Elements list = ulItr.getElementsByTag("li");
-							System.out.println("--------------"+list.size());
+							log.debug("--------------"+list.size());
 							List<String> listAdd = new ArrayList<String>();
 							for (Element li : list){
 								String icon = "none";
 								String size = "";
+								String des = "";
 								boolean openNewWindow = false;
 
 								//pdf content
 								try{
 									String pdf = li.ownText().trim();
-									System.out.println(pdf);
+									log.debug(pdf);
 									if(pdf.length()>0){	
-										int i;
+										/*int i;
 										for(i=0;i<pdf.length();i++){
-											char c = pdf.charAt(i);												
-											boolean b = Character.isDigit(c);
-											if(b){
+											char PDFChar = pdf.charAt(i);												
+											boolean check = Character.isDigit(PDFChar);
+											if(check){
 												break;
 											} 
-										}										
-										size = pdf.substring(i,  pdf.length()-1);
-										icon = pdf.substring(1, i-2);
+										}	
+										if(pdf.indexOf("[") != -1){							
+											des = pdf;
+										}else{
+											icon = pdf.substring(1, i-2);
+											size = pdf.substring(i,pdf.length()-1);
+										}*/
 										openNewWindow = true;
 									}
 								}catch(Exception e){
-									sb.append("<li>Special Characters in the link. Need to migrate manually</li>");
+									sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
+									log.error("Exception : ",e);
 								}
 
-									Element a = li.getElementsByTag("a").first();
-									JSONObject obj = new JSONObject();
-									obj.put("linktext", a.text());
-									obj.put("linkurl",a.attr("href"));
-									obj.put("icon",icon);
-									obj.put("size",size);
-									obj.put("description","");
-									obj.put("openInNewWindow",openNewWindow);
-									listAdd.add(obj.toString());
-									System.out.println(",,,,,,,,,"+listAdd.toString());
-								}
-								Property listitems = ulnodeList.getProperty("listitems");
-								if (!listitems.isMultiple()) {
-									listitems.remove();
-									session.save();
-								}
-								ulnodeList.setProperty("listitems",listAdd.toArray(new String[listAdd.size()]));
-							}else{
-								sb.append("<li>No node for extra UL content</li>");
+								Element a = li.getElementsByTag("a").first();
+								JSONObject obj = new JSONObject();
+								obj.put("linktext", li.html());
+								obj.put("linkurl","");
+								obj.put("icon",icon);
+								obj.put("size",size);
+								obj.put("description",des);
+								obj.put("openInNewWindow",openNewWindow);
+								listAdd.add(obj.toString());
+								log.debug(",,,,,,,,,"+listAdd.toString());
 							}
+							Property listitems = ulnodeList.getProperty("listitems");
+							if (!listitems.isMultiple()) {
+								listitems.remove();
+								session.save();
+							}
+							ulnodeList.setProperty("listitems",listAdd.toArray(new String[listAdd.size()]));
 						}else{
-							sb.append("<li>Mismatch of ul list count</li>");
+							sb.append(Constants.LIST_NODE_NOT_FOUND);
 						}
+					}else{
+						sb.append(Constants.MISMATCH_IN_LIST_COUNT);
 					}
+				}
 				if(ulNodeIterator.hasNext()){
-					sb.append("<li>Mismatch in count of ul elements on locale page are less than count of nodes</li>");
+					sb.append(Constants.MISMATCH_IN_LIST_COUNT);
 				}
-				}else{
-					sb.append("<li>Element_List Node not found</li>");
-				}
-				// End of Element List
-			}catch(Exception e){
-				sb.append("<li>Unable to update List Component...</li>");
+			}else{
+				sb.append(Constants.NO_LIST_NODES_FOUND);
 			}
-
+			// End of Element List
+		}catch(Exception e){
+			sb.append(Constants.UNABLE_TO_MIGRATE_LIST_COMPONENT);
+			log.error("Exception : ",e);
 		}
-		//End of Set List Elements Method
-
-		//start right rail properties
-
-		private void rightRailElements(Document doc, Node architectureRightNode) {
-			try {
-				boolean migrate = true;
-				Elements rightRailList = doc.select("div.gd-right").select("div.c23-pilot");
-
-				if (!rightRailList.isEmpty() && rightRailList != null ) {
-					int eleSize = rightRailList.size();
-					if (eleSize == 1) {
-						Element rightListElem =  rightRailList.first();
-						if (rightListElem != null) {
-							Elements ulElements = rightListElem.getElementsByTag("ul");
-							if (ulElements.size() > 1) {
-								sb.append("<li>The HTML structure for list component in right rail on the locale page is different and hence migration needs to be done manually.</li>");
-								migrate = false;
-							}
-						}
-					}
-				}
-
-				if (migrate) {
-					if (rightRailList.isEmpty()) {
-						log.debug("No right rail elements found with div class name.");
-						sb.append("<li>Right rail component of class name does not exist on locale page.</li>");
-					}
-					else {
-						int eleSize = rightRailList.size();
-						NodeIterator tileIterator = architectureRightNode.hasNode("tile_bordered") ? architectureRightNode.getNodes("tile_bordered*") : null;
-						if(tileIterator != null){
-							int nodeSize = (int)tileIterator.getSize();
-
-							if(eleSize == nodeSize){
-								for (Element rightListEle : rightRailList) {
-									Node listNode;
-									if (tileIterator.hasNext()) {
-										listNode = (Node)tileIterator.next();
-										setRightRailList(listNode, rightListEle);
-									}
-									else {
-										log.debug("Next node not found");								
-									}
-
-								}
-							}
-							else if (eleSize > nodeSize) {
-								for (Element rightListEle : rightRailList) {
-									Node listNode;
-									if (tileIterator.hasNext()) {
-										listNode = (Node)tileIterator.next();
-										setRightRailList(listNode, rightListEle);						}
-									else {
-										log.debug("Next node not found");
-										sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-										break;								
-									}
-
-								}
-							}
-							else if (eleSize < nodeSize) {
-								for (Element rightListEle : rightRailList) {
-									Node listNode;
-									if (tileIterator.hasNext()) {
-										listNode = (Node)tileIterator.next();
-										setRightRailList(listNode, rightListEle);						}
-									else {
-										log.debug("Next node not found");
-									}
-								}
-								sb.append("<li>Mismatch in the count of Tile border panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-							}
-						}
-					}
-				}
-
-			} catch (Exception e) {
-				sb.append("<li>Unable to update benefits tile_bordered component.</li>");
-				log.error("Exception : ",e);
-			}
-		}
-		//end of right rail 
-
-		//Start of setting Right rail method
-		public void setRightRailList (Node listNode, Element rightListEle) {
-			try {
-				Element title;
-				Element description;
-				Elements anchor = rightListEle.getElementsByTag("a");
-				Elements headElements = rightListEle.getElementsByTag("h2");
-
-				if (headElements.size() > 1) {
-					title = rightListEle.getElementsByTag("h2").last();
-					description = rightListEle.getElementsByTag("p").last();
-					sb.append("<li>Mismatch in count of list panel component in right rail.</li>");
-				}
-				else {
-					title = rightListEle.getElementsByTag("h2").first();
-					description = rightListEle.getElementsByTag("p").first();
-				}
-
-				listNode.setProperty("title", title.text());
-				listNode.setProperty("description", description.html());
-
-
-				if(anchor.size() > 1){
-					sb.append("Extra link found in the locale page");
-				}
-
-				Element listtext = anchor.first();
-				Element listurl =anchor.first();
-
-				listNode.setProperty("linktext", listtext.text()+rightListEle.ownText());
-				listNode.setProperty("linkurl",listurl.attr("href"));
-
-				log.debug("Updated title, descriptoin and linktext at "+listNode.getPath());
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-		//End of Right rail method
 
 	}
+	//End of Migrate List Elements Method
+
+	//start Migrate right rail Method
+	private void migraterightRailElements(Document doc, Node architectureRightNode) {
+		try {
+			boolean migrate = true;
+			Elements rightRailList = doc.select("div.gd-right").select("div.c23-pilot");
+
+			if (!rightRailList.isEmpty() && rightRailList != null ) {
+				int eleSize = rightRailList.size();
+				if (eleSize == 1) {
+					Element rightListElem =  rightRailList.first();
+					if (rightListElem != null) {
+						Elements ulElements = rightListElem.getElementsByTag("ul");
+						if (ulElements.size() > 1) {
+							sb.append(Constants.UNABLE_TO_MIGRATE_RIGHTRAIL);
+							migrate = false;
+						}
+					}
+				}
+			}
+
+			if (migrate) {
+				if (rightRailList.isEmpty()) {
+					log.debug("No right rail elements found with div class name.");
+					sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
+				}
+				else {
+					int eleSize = rightRailList.size();
+					NodeIterator tileIterator = architectureRightNode.hasNode("tile_bordered") ? architectureRightNode.getNodes("tile_bordered*") : null;
+					if(tileIterator != null){
+						int nodeSize = (int)tileIterator.getSize();
+
+						if(eleSize == nodeSize){
+							Node listNode;
+							for (Element rightListEle : rightRailList) {
+								listNode = (Node)tileIterator.next();
+								setRightRailList(listNode, rightListEle);
+							}
+						}
+						else if (eleSize > nodeSize) {
+							Node listNode;
+							for (Element rightListEle : rightRailList) {
+								if (tileIterator.hasNext()) {
+									listNode = (Node)tileIterator.next();
+									setRightRailList(listNode, rightListEle);						}
+								else {
+									log.debug("Next node not found");
+									sb.append(Constants.TILEBORDER_Element_ON_LOCALE_PAGE+ eleSize +Constants.TILEBORDER_NODE+ nodeSize +"</li>");
+									break;								
+								}
+
+							}
+						}
+						else if (eleSize < nodeSize) {
+							Node listNode;
+							for (Element rightListEle : rightRailList) {
+								listNode = (Node)tileIterator.next();
+								setRightRailList(listNode, rightListEle);						
+							}
+							sb.append(Constants.TILEBORDER_Element_ON_LOCALE_PAGE+ eleSize +Constants.TILEBORDER_NODE+ nodeSize +"</li>");
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			sb.append(Constants.UNABLE_TO_MIGRATE_RIGHTRAIL);
+			log.error("Exception : ",e);
+		}
+	}
+
+	public void setRightRailList (Node listNode, Element rightListEle) {
+		try {
+			Element title;
+			Element description;
+			Elements anchor = rightListEle.getElementsByTag("a");
+			Elements headElements = rightListEle.getElementsByTag("h2");
+
+			if (headElements.size() > 1) {
+				title = rightListEle.getElementsByTag("h2").last();
+				description = rightListEle.getElementsByTag("p").last();
+				sb.append(Constants.MISMATCH_IN_TILEBORDER_COUNT);
+			}
+			else {
+				title = rightListEle.getElementsByTag("h2").first();
+				description = rightListEle.getElementsByTag("p").first();
+			}
+
+			listNode.setProperty("title", title.text());
+			listNode.setProperty("description", description.html());
+
+
+			if(anchor.size() > 1){
+				sb.append(Constants.TILEBORDER_EXTRA_ANCHOR_LINK);
+			}
+
+			Element listtext = anchor.first();
+			Element listurl =anchor.first();
+
+			listNode.setProperty("linktext", listtext.text()+rightListEle.ownText());
+			listNode.setProperty("linkurl",listurl.attr("href"));
+
+			log.debug("Updated title, descriptoin and linktext at "+listNode.getPath());
+		}
+		catch (Exception e) {
+			log.error("Exception : ",e);
+		}
+
+	}
+	//End of Migrate right rail Method
+
+}
 
