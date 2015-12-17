@@ -22,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.cisco.dse.global.migration.benefit.Benefits;
+import com.cisco.dse.global.migration.benefit.BenifitsVariation4;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.collaborationarchitechture.ArchitechtureVariation1;
@@ -534,6 +535,19 @@ public class OVWMigration {
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg15);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														else if ("benefits-var4".equals(type)) {
+															String msg20 = "";
+															msg20 = msg20 + "<tr>";
+															msg20 = msg20
+																	+ new BenifitsVariation4().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg20 = msg20 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
 
