@@ -125,7 +125,9 @@ public class FrameworkUtils {
  	    	   			if (StringUtils.isNotBlank(pageTitle) && (!pageTitle.trim().equalsIgnoreCase(jcrTitle))) {
  	    	   				log.debug("Page title and JCR title are not the same.");
  	    	   				jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
- 	    	   			} 
+ 	    	   			} else {
+ 		    	   	    	sb.append("<li>custom head title not set </li>");
+ 		    	   	    }
      	   			} else {
      	   				sb.append("<li>custom head title not set </li>");
      	   			}
@@ -275,22 +277,17 @@ public class FrameworkUtils {
      *       the StringBuilder
      */
     public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
-    	String outeHtmlText = "";
-    	String imagePath = "";
-    	String imageOldPath = "";
+    	log.debug("In the extractHtmlBlobContent method.");
+    	String outeHtmlText = htmlBlobElement.outerHtml();
+    	String existingimagePath = "";
+    	String updatedImgPath = "";
     	if (htmlBlobElement != null) {
-    		imagePath = extractImagePath(htmlBlobElement, sb);
-    		imagePath = migrateDAMContent(imagePath, fileReference, locale);
-    		Elements imageElements = htmlBlobElement.getElementsByTag("img");
-			if (imageElements != null) {
-				Element imageElement = imageElements.first();
-				if (imageElement != null) {
-					imageOldPath = imageElement.attr("src");
-				} 
-			}
-			log.debug("old path and new path : "+ imageOldPath +" and "+imagePath);
-			if(StringUtils.isNotBlank(imagePath)){
-				outeHtmlText = htmlBlobElement.outerHtml().replace(imageOldPath, imagePath);
+    		existingimagePath = extractImagePath(htmlBlobElement, sb);
+    		updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale);
+    				
+			log.debug(existingimagePath +" is updated to "+updatedImgPath);
+			if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
+				outeHtmlText = outeHtmlText.replace(existingimagePath, updatedImgPath);
 			}
 			}
     	return outeHtmlText;
