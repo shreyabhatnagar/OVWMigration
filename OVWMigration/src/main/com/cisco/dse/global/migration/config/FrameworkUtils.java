@@ -125,9 +125,7 @@ public class FrameworkUtils {
  	    	   			if (StringUtils.isNotBlank(pageTitle) && (!pageTitle.trim().equalsIgnoreCase(jcrTitle))) {
  	    	   				log.debug("Page title and JCR title are not the same.");
  	    	   				jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
- 	    	   			} else {
- 		    	   	    	sb.append("<li>custom head title not set </li>");
- 		    	   	    }
+ 	    	   			} 
      	   			} else {
      	   				sb.append("<li>custom head title not set </li>");
      	   			}
