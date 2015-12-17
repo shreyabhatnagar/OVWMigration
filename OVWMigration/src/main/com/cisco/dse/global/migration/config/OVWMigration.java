@@ -25,8 +25,7 @@ import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.BenifitsVariation4;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
-import com.cisco.dse.global.migration.collaborationarchitechture.ArchitechtureVariation1;
-import com.cisco.dse.global.migration.collaborationarchitechture.ArchitechtureVariation3;
+import com.cisco.dse.global.migration.architechture.ArchitechtureVariation1;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
@@ -510,31 +509,6 @@ public class OVWMigration {
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg14);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("collaboration-architecture-var3".equals(type)) {
-															String msg14 = "";
-															msg14 = msg14 + "<tr>";
-															msg14 = msg14
-																	+ new ArchitechtureVariation3().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg14 = msg14 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg14);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("architechture-var4".equals(type)) {
-															String msg15 = "";
-															msg15 = msg15 + "<tr>";
-															msg15 = msg15
-																	+ new com.cisco.dse.global.migration.collaborationarchitechture.ArchitectureVariation04().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg15 = msg15 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
 														else if ("benefits-var4".equals(type)) {
