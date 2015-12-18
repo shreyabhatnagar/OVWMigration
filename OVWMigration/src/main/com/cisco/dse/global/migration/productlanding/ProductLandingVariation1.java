@@ -449,7 +449,7 @@ public class ProductLandingVariation1 extends BaseAction {
 
 												for (Element drawerPanelLiElement : drawerPanelLiElements) {
 													boolean misMatchFlag = true;
-
+													String panelTitle = "";
 													Elements iconBlock = drawerPanelLiElement.select("div.series");
 													if (iconBlock.size() == 0) {
 														log.debug("SERIES SIZE0");
@@ -462,7 +462,6 @@ public class ProductLandingVariation1 extends BaseAction {
 													Elements seriesElements = drawerPanelLiElement.select("div.series");
 													if (seriesElements != null) {
 														Element seriesElement = seriesElements.first();
-														String panelTitle = "";
 														String linkUrl = "";
 														String panelDescription = "";
 														if (seriesElement != null) {
@@ -716,7 +715,7 @@ public class ProductLandingVariation1 extends BaseAction {
 
 													}
 													if (!misMatchFlag) {
-														sb.append("<li>Mis Match of subdrawers count in drawer panel</li>");
+														sb.append("<li>Mis Match of subdrawers count in drawer panel " + panelTitle + "</li>");
 													}
 												}
 
