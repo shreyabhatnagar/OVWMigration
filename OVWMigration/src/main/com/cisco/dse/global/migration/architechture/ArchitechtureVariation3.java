@@ -6,8 +6,10 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -460,8 +462,18 @@ public class ArchitechtureVariation3 extends BaseAction{
 			listNode.setProperty("description", description.html());
 
 			Element listtext = anchor.first();
-			Element listurl =anchor.first();			
-			if(listNode.getProperty("linktrigger").getValue().equals("none")){
+			Element listurl =anchor.first();
+			String linkStringValue = null;
+			if(listNode.hasProperty("linktrigger")){
+				Property linkTrigger = listNode.getProperty("linktrigger");
+				if(linkTrigger != null){
+				Value linkvalue = linkTrigger.getValue();
+				if(linkvalue != null){
+					linkStringValue = linkvalue.getString();
+				}
+				}
+			}
+			if(linkStringValue.equals("none")){
 				sb.append(Constants.LINK_IS_DISABLED_IN_RIGHT_RAIL);
 			}else{
 				listNode.setProperty("linktext", listtext.text());
