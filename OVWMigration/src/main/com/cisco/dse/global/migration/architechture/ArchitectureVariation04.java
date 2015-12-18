@@ -1,6 +1,6 @@
 /* 
  * S.No		Name	Date		Description of change
- * 1		Vidya			Added the Java file to handle the migration of service listing variation 1 page(s).
+ * 1		Vidya	17-dec-15			Added the Java file to handle the migration of architecture variation 4 page.
  * 
  * */
 package com.cisco.dse.global.migration.architechture;
@@ -375,7 +375,8 @@ public class ArchitectureVariation04 extends BaseAction {
 								}
 								Elements pElements = ele.select("p");
 								if (pElements != null) {
-									pText = pElements.html();
+									pText = pElements.outerHtml();
+									log.debug("pText:"+pText);
 									if (listNode.hasNode("intro")) {
 										Node introNode = listNode
 												.getNode("intro");
@@ -504,7 +505,6 @@ public class ArchitectureVariation04 extends BaseAction {
 			String pText = "";
 			String aText = "";
 			String aHref = "";
-			int count = 0;
 			Elements tileBorderedElements = doc.select("div.gd-right").select(
 					"div.c23-pilot");
 			if (tileBorderedElements != null) {
@@ -543,10 +543,7 @@ public class ArchitectureVariation04 extends BaseAction {
 							} else {
 								sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
 							}
-							String textAppended = ele.ownText();
-							if (StringUtils.isNotBlank(textAppended)) {
-								count++;
-							}
+							
 							tileNode.setProperty("title", h2Text);
 							tileNode.setProperty("description", pText);
 							tileNode.setProperty("linktext", aText);

@@ -539,7 +539,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("architechture-var4".equals(type)) {
+														else if ("collaboration-architecture-var4".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
