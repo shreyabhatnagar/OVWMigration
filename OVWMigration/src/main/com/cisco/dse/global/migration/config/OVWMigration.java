@@ -524,6 +524,33 @@ public class OVWMigration {
 															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
+														else if ("collaboration-architecture-var3".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new ArchitechtureVariation3().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														else if ("architechture-var4".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new ArchitectureVariation04().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														
 
 					}
 
