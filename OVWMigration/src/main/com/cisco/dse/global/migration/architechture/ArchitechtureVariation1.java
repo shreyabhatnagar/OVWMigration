@@ -285,11 +285,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 							Elements list = ulItr.getElementsByTag("li");
 							List<String> listAdd = new ArrayList<String>();
 							for (Element li : list){
-								String icon = "none";
-								String size = "";
-								String des = "";
 								boolean openNewWindow = false;
-
 								//pdf content
 								try{
 									String pdf = li.ownText().trim();
@@ -301,13 +297,13 @@ public class ArchitechtureVariation1 extends BaseAction{
 									sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
 									log.error("Exception : ",e);
 								}
-
+								Element a = li.getElementsByTag("a").first();
 								JSONObject obj = new JSONObject();
-								obj.put("linktext", li.html());
-								obj.put("linkurl","");
-								obj.put("icon",icon);
-								obj.put("size",size);
-								obj.put("description",des);
+								obj.put("linktext", a.text());
+								obj.put("linkurl",a.attr("href"));
+								obj.put("icon","");
+								obj.put("size","");
+								obj.put("description","");
 								obj.put("openInNewWindow",openNewWindow);
 								listAdd.add(obj.toString());
 							}
