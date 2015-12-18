@@ -78,22 +78,22 @@ public class ArchitechtureVariation3 extends BaseAction{
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
 
 				// end set page properties.
-				
+
 				//Start of List Component
 				try {
 					migrateListContent(doc,architectureLeftNode );
 				}
 				catch(Exception e){
-					log.error("exceptionnn"+e);
 					sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 				}
 
 				//End of List Component
-				
+
 				// start of text component
 				try{
 					migrateTextContent(doc, architectureLeftNode, locale);
 				}catch(Exception e){
+					log.error("exceptionnn"+e);
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}	
 				// end of text component
@@ -136,97 +136,138 @@ public class ArchitechtureVariation3 extends BaseAction{
 
 				//Last ul and h2 
 				Element secondPilot = textElements.last();
-				Element lastTag = secondPilot.children().last();
-				Elements lastUlList = secondPilot.getElementsByTag("ul");
-				Elements lastH2List = secondPilot.getElementsByTag("h2");
-				Elements tableUlList = secondPilot.getElementsByTag("table");
+				Elements childs = secondPilot.children();
+				Elements tableUlLists = secondPilot.getElementsByTag("table");
+				
+				String tableUlList = null;
+				String lastTag = null;
+				if(tableUlLists != null){
+					Element tableUlListstring=tableUlLists.last();
+					if(tableUlListstring != null){
+						tableUlList = tableUlListstring.toString();
+					}
+				}
+				if(childs != null){
+					Element lastTagString = childs.last();
+					if(lastTagString !=null){
+						lastTag = lastTagString.toString();
+					}
+				}
 
 				Node textNode = null;
 				Elements tableUl = null;
 				Elements lastH2 = null;
 				Elements lastUl = null;
-			
+
 				if(eleSize == nodeSize){
 
 					for(Element ele : textElements){
 						textNode = (Node)textNodeIterator.next();
-						if((lastTag.toString()).equals(tableUlList.toString())){
-							if(tableUlList != null && lastH2List != null){
-								tableUl = ele.getElementsByTag("table");
-								lastH2 = ele.getElementsByTag("h2");	
-								tableUl.remove();
-								lastH2.remove();
-								textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+						if((lastTag).equals(tableUlList)){
+							tableUl = ele.getElementsByTag("table");
+							lastH2 = ele.getElementsByTag("h2");	
+							if(tableUl != null && lastH2 != null){
+								Element lastTableElement = tableUl.last();
+								Element lastH2Element = lastH2.last();
+								if(lastTableElement != null && lastH2Element != null){
+									lastTableElement.remove();
+									lastH2Element.remove();
+								}
 							}
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+
 						}
 						else{
-							if(lastUlList != null && lastH2List != null){
-								lastUl = ele.getElementsByTag("ul");
-								lastH2 = ele.getElementsByTag("h2");
-								lastUl.remove();
-								lastH2.remove();
-								textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							lastUl = ele.getElementsByTag("ul");
+							lastH2 = ele.getElementsByTag("h2");
+							if(lastUl != null && lastH2 != null){
+								Element lastUlElement = lastUl.last();
+								Element lastH2Element = lastH2.last();
+								if(lastUlElement != null && lastH2Element != null)
+								{
+									lastUlElement.remove();
+									lastH2Element.remove();
+								}
 							}
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+
 						}
 					}
 				}
-				else if(nodeSize < eleSize){
+					else if(nodeSize < eleSize){
 					for(Element ele : textElements){
-						if(textNodeIterator.hasNext()){
-							textNode = (Node)textNodeIterator.next();
-							if((lastTag.toString()).equals(tableUlList.toString())){
-								if(tableUlList != null && lastH2List != null){
-									tableUl = ele.getElementsByTag("table");
-									lastH2 = ele.getElementsByTag("h2");	
-									tableUl.remove();
-									lastH2.remove();
-									textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+						textNode = (Node)textNodeIterator.next();
+						if((lastTag).equals(tableUlList)){
+							tableUl = ele.getElementsByTag("table");
+							lastH2 = ele.getElementsByTag("h2");	
+							if(tableUl != null && lastH2 != null){
+								Element lastTableElement = tableUl.last();
+								Element lastH2Element = lastH2.last();
+								if(lastTableElement != null && lastH2Element != null){
+									lastTableElement.remove();
+									lastH2Element.remove();
 								}
 							}
-							else{
-								if(lastUlList != null && lastH2List != null){
-									lastUl = ele.getElementsByTag("ul");
-									lastH2 = ele.getElementsByTag("h2");
-									lastUl.remove();
-									lastH2.remove();
-									textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
-								}
-							}
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+
 						}
 						else{
-							sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
+							lastUl = ele.getElementsByTag("ul");
+							lastH2 = ele.getElementsByTag("h2");
+							if(lastUl != null && lastH2 != null){
+								Element lastUlElement = lastUl.last();
+								Element lastH2Element = lastH2.last();
+								if(lastUlElement != null && lastH2Element != null)
+								{
+									lastUlElement.remove();
+									lastH2Element.remove();
+								}
+							}
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+
 						}
 					}
 				}
 				else if(nodeSize > eleSize){
 					for(Element ele : textElements){
 						textNode = (Node)textNodeIterator.next();
-						if((lastTag.toString()).equals(tableUlList.toString())){
-							if(tableUlList != null && lastH2List != null){
-								tableUl = ele.getElementsByTag("table");
-								lastH2 = ele.getElementsByTag("h2");	
-								tableUl.remove();
-								lastH2.remove();
-								textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+						if((lastTag).equals(tableUlList)){
+							tableUl = ele.getElementsByTag("table");
+							lastH2 = ele.getElementsByTag("h2");	
+							if(tableUl != null && lastH2 != null){
+								Element lastTableElement = tableUl.last();
+								Element lastH2Element = lastH2.last();
+								if(lastTableElement != null && lastH2Element != null){
+									lastTableElement.remove();
+									lastH2Element.remove();
+								}
 							}
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+
 						}
 						else{
-							if(lastUlList != null && lastH2List != null){
-								lastUl = ele.getElementsByTag("ul");
-								lastH2 = ele.getElementsByTag("h2");
-								lastUl.remove();
-								lastH2.remove();
-								textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							lastUl = ele.getElementsByTag("ul");
+							lastH2 = ele.getElementsByTag("h2");
+							if(lastUl != null && lastH2 != null){
+								Element lastUlElement = lastUl.last();
+								Element lastH2Element = lastH2.last();
+								if(lastUlElement != null && lastH2Element != null)
+								{
+									lastUlElement.remove();
+									lastH2Element.remove();
+								}
 							}
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+
 						}
 					}
-					sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
+				sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
 				}
 			}
 			else{
 				sb.append(Constants.TEXT_NODE_NOT_FOUND);
 			}
-			}
+		}
 	}
 	//End of Text Content migraion
 
@@ -234,13 +275,12 @@ public class ArchitechtureVariation3 extends BaseAction{
 	// Start of List Content Migration
 	private void migrateListContent(Document doc, Node architectureLeftNode) throws RepositoryException {
 		Elements secondPilot = doc.select("div.c00-pilot");
-		System.out.println("seconndddd pilot" + secondPilot.last());
 		Element lastTag = secondPilot.last().children().last();
 		Element h2Ele = secondPilot.last().getElementsByTag("h2").last();
 		Element ulEle = secondPilot.last().getElementsByTag("ul").last();
 		Elements tableUlLists = secondPilot.last().getElementsByTag("table");
 		//Element ulEle = null;
-		
+
 
 		Node listNodeIterator = architectureLeftNode.hasNode("list") ?architectureLeftNode.getNode("list"):null;
 		if(listNodeIterator != null){
@@ -256,19 +296,18 @@ public class ArchitechtureVariation3 extends BaseAction{
 			Node elementNode = listNodeIterator.hasNode("element_list_0") ?listNodeIterator.getNode("element_list_0"):null;
 			if(elementNode != null){
 				Elements liEles = null;
-					if((lastTag.toString()).equals(ulEle.toString())){
-				//	ulEle = ulEles.last();
+				if((lastTag.toString()).equals(ulEle.toString())){
+					//	ulEle = ulEles.last();
 					liEles = ulEle.getElementsByTag("li");
 					setListContentToNodes(liEles , elementNode);
-					System.out.println("lissss" + liEles);
-					}
+				}
 				else{
 					if(tableUlLists != null){
 						Element tableUllist = tableUlLists.last();
-					if((lastTag.toString()).equals(tableUllist.toString())){
-						liEles = tableUllist.getElementsByTag("li");
-						setListContentToNodes(liEles , elementNode);
-					}
+						if((lastTag.toString()).equals(tableUllist.toString())){
+							liEles = tableUllist.getElementsByTag("li");
+							setListContentToNodes(liEles , elementNode);
+						}
 					}
 				}
 			}
@@ -295,11 +334,11 @@ public class ArchitechtureVariation3 extends BaseAction{
 				size = "";
 
 				//pdf content
-					String pdf = li.ownText().trim();
-					if(pdf != null){		
-						openNewWindow = true;
-					}else{				
-						openNewWindow = false;}
+				String pdf = li.ownText().trim();
+				if(pdf != null){		
+					openNewWindow = true;
+				}else{				
+					openNewWindow = false;}
 
 
 				Elements aEle = li.getElementsByTag("a");
@@ -353,7 +392,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 					if(tileIterator != null){
 						int nodeSize = (int)tileIterator.getSize();
 						Node listNode = null;
-						
+
 						if(eleSize == nodeSize){
 							for (Element rightListEle : rightRailList) {
 								if (tileIterator.hasNext()) {
@@ -419,7 +458,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 
 			listNode.setProperty("title", title.text());
 			listNode.setProperty("description", description.html());
-			
+
 			Element listtext = anchor.first();
 			Element listurl =anchor.first();			
 			if(listNode.getProperty("linktrigger").getValue().equals("none")){
