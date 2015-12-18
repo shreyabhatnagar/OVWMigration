@@ -1,3 +1,8 @@
+/* 
+ * S.No		Name	Date		Description of change
+ * 1		Bhavya	16-dec-15			Added the Java file to handle the migration of architecture variation 3 page.
+ * 
+ * */
 package com.cisco.dse.global.migration.architechture;
 
 import java.io.IOException;
