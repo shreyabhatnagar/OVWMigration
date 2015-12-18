@@ -196,7 +196,7 @@ public class ProductLandingVariation12 extends BaseAction {
 														heroImage);
 											}
 										} else {
-											sb.append(Constants.HERO_IMAGE_NOT_AVAILABLE);
+											sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
 										}
 									}
 									// end image
@@ -209,11 +209,10 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 							}
 							if (nodeSize != eleSize) {
-								sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH
+								sb.append("<li>Unable to Migrate Hero component. Element Count is "
 										+ eleSize
-										+ " "
-										+ nodeSize);
-
+										+ " and Node count is "
+										+ nodeSize + ". Count mismatch.</li>");
 							}
 						}
 
@@ -244,17 +243,13 @@ public class ProductLandingVariation12 extends BaseAction {
 						int eleSize = selectorBarLargeElements.size();
 						NodeIterator selectorBarPanel = selectorBarNode
 								.getNodes("selectorbarpanel*");
+						Node selectorBarPanelNode = null;
 						int nodeSize = (int) selectorBarPanel.getSize();
 						for (Element ele : selectorBarLargeElements) {
 							String h2Text = "";
 							String titleURL = "";
 							String aText = "";
 							String aHref = "";
-							selectorBarPanel.hasNext();
-							Node selectorBarPanelNode = (Node) selectorBarPanel
-									.next();
-							// Element titleEle =
-							// selectorBarLargeElements.first();
 							Elements h2TagText = ele.getElementsByTag("h2");
 							if (h2TagText != null) {
 								h2Text = h2TagText.html();
@@ -272,8 +267,6 @@ public class ProductLandingVariation12 extends BaseAction {
 							Element menuelement = null;
 							if(ele.parent().hasClass("c58v1-pilot")){
 								 menuelement = ele.child(0).child(1);
-								 log.debug("menuelement in ifff" + menuelement);
-								//menuEle = ele.child(1);
 							}
 							else{
 								menuelement = ele.child(1);
@@ -292,6 +285,10 @@ public class ProductLandingVariation12 extends BaseAction {
 							}
 							log.debug("selector component titleUrl: "
 									+ titleURL);
+							if(selectorBarPanel.hasNext()){
+								selectorBarPanelNode = (Node) selectorBarPanel
+									.next();
+						
 							selectorBarPanelNode.setProperty("title", h2Text);
 							selectorBarPanelNode.setProperty("titleurl",
 									titleURL);
@@ -334,12 +331,12 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 							}
 						}
-
+						}
 						if (eleSize != nodeSize) {
-							sb.append(Constants.SELECTOR_BAR_ELEMENTS_COUNT_MISMATCH
+							sb.append("<li>Selector Bar Component element size ( "
 									+ eleSize
-									+ " "
-									+ nodeSize);
+									+ " ) and node size ( "
+									+ nodeSize + " ) mismatch</li>");
 						}
 					}
 
@@ -409,10 +406,7 @@ public class ProductLandingVariation12 extends BaseAction {
 						// spotLightNode.getNodes();
 						int nodeSize = (int) tileBorderedNodeIterator.getSize();
 						for (Element ele : tileBorderedElements) {
-							tileBorderedNodeIterator.hasNext();
-							Node spotLightComponentNode = (Node) tileBorderedNodeIterator
-									.next();
-
+							Node spotLightComponentNode = null;
 							Elements h2TagText = ele.getElementsByTag("h2");
 							if (h2TagText != null) {
 								h2Text = h2TagText.html();
@@ -435,7 +429,10 @@ public class ProductLandingVariation12 extends BaseAction {
 							} else {
 								sb.append(Constants.TILE_BORDERED_ANCHOR_NOT_FOUND);
 							}
-
+							if(tileBorderedNodeIterator.hasNext()){
+								spotLightComponentNode = (Node) tileBorderedNodeIterator
+										.next();
+								
 							spotLightComponentNode.setProperty("title", h2Text);
 							spotLightComponentNode.setProperty("description",
 									pText);
@@ -445,12 +442,13 @@ public class ProductLandingVariation12 extends BaseAction {
 									.setProperty("linkurl", aHref);
 
 						}
+						}
 						if (eleSize != nodeSize) {
 
-							sb.append(Constants.TILE_BORDERED_ELEMENT_COUNT_MISMATCH
+							sb.append("<li>Could not migrate  tilebordered node. Count mis match as Element Count is "
 									+ eleSize
-									+ " "
-									+ nodeSize);
+									+ " and node count is "
+									+ nodeSize + " </li>");
 							log.debug("Could not migrate  tilebordered node. Count mis match");
 
 						}
@@ -492,32 +490,33 @@ public class ProductLandingVariation12 extends BaseAction {
 									.getNodes("spotlight_large*");
 							int nodeSize = (int) spoLightNodeIterator.getSize();
 							for (Element ele : spotLightElements) {
+								Node spotLightComponentNode = null;
 								String h2Text = "";
 								String pText = "";
 								String aText = "";
 								String aHref = "";
-								spoLightNodeIterator.hasNext();
-								Node spotLightComponentNode = (Node) spoLightNodeIterator
-										.next();
-
 								Elements h2TagText = ele.getElementsByTag("h2");
 								if (h2TagText != null) {
-									h2Text = h2TagText.html();
+									h2Text = h2TagText.text();
 								} else {
 									sb.append(Constants.SPOTLIGHT_HEADING_TEXT_NOT_FOUND);
 								}
-
+								
+								
 								Elements descriptionText = ele
 										.getElementsByTag("p");
+								
 								if (descriptionText != null) {
-									pText = descriptionText.html();
+									pText = descriptionText.first().html();
 								} else {
 									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 								}
 
+								String ownText = "";
 								Elements anchorText = ele.getElementsByTag("a");
+								ownText = ele.ownText();
 								if (anchorText != null) {
-									aText = anchorText.text();
+									aText = anchorText.text()+ownText;
 									aHref = anchorText.attr("href");
 								} else {
 									sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
@@ -525,6 +524,10 @@ public class ProductLandingVariation12 extends BaseAction {
 								// start image
 								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
 								log.debug("spotLightImage " + spotLightImage + "\n");
+								if(spoLightNodeIterator.hasNext()){
+									spotLightComponentNode = (Node) spoLightNodeIterator
+										.next();
+								
 								if (spotLightComponentNode != null) {
 									if (spotLightComponentNode.hasNode("image")) {
 										Node spotLightImageNode = spotLightComponentNode.getNode("image");
@@ -549,12 +552,12 @@ public class ProductLandingVariation12 extends BaseAction {
 									ctaNode.setProperty("url", aHref);
 								}
 							}
-
+							}
 							if (nodeSize != eleSize) {
-								sb.append(Constants.SPOTLIGHT_NODE_COUNT
+								sb.append("<li>Could not migrate  SpotLight node. Count mis match as Element Count is "
 										+ eleSize
-										+ " "
-										+ nodeSize);
+										+ " and node count is "
+										+ nodeSize + " </li>");
 
 							}
 						}
@@ -564,8 +567,7 @@ public class ProductLandingVariation12 extends BaseAction {
 
 					}
 				} catch (Exception e) {
-					sb.append("<li>Unable to update spotlight component." + e
-							+ "</li>");
+					sb.append(Constants.EXCEPTION_SPOTLIGHT_COMPONENT);
 				}
 				// end set spotlight nodes
 
@@ -694,7 +696,7 @@ public class ProductLandingVariation12 extends BaseAction {
 
 									}
 					} else {
-						sb.append(Constants.LIST_ELEMENTS_COUNT_MISMATCH);
+						sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
 					}
 					
 				} catch (Exception e) {
@@ -888,9 +890,10 @@ public class ProductLandingVariation12 extends BaseAction {
 						}
 						if (eleSize > 1 && eleSize != listNodeSize) {
 
-							sb.append(Constants.LIST_ELEMENTS_COUNT_MISMATCH
+							sb.append("<li>Could not migrate List node. Count mis match as Element Count is "
 									+ eleSize
-									+ listNodeSize);
+									+ " and node count is "
+									+ listNodeSize + " </li>");
 							log.debug("Could not migrate  tilebordered node. Count mis match");
 
 						}
@@ -903,8 +906,16 @@ public class ProductLandingVariation12 extends BaseAction {
 				}
 				// end set benefit list.
 
+				
+				try{
+					Elements extraTextComponent = doc.select("c00v0-pilot");
+					if(!extraTextComponent.isEmpty()){
+						sb.append(Constants.EXTRA_TEXT_ELEMENT_FOUND);
+					}
+				}catch(Exception e){
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+				}
 				// start of follow us component
-
 				try {
 					String h2Content = "";
 					List<String> list = new ArrayList<String>();

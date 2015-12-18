@@ -502,6 +502,24 @@ public class Constants {
 	
 	// SPECIAL_CHARACTER_FOUND_IN_LINK
 	public static final String SPECIAL_CHARACTER_FOUND_IN_LINK = "<li>Special Characters in the link. Need to migrate manually </li>";
+	
+	//PRIMARY_CTA_TITLE_ELEMENT_NOT_FOUND
+	public static final String PRIMARY_CTA_TITLE_ELEMENT_NOT_FOUND = "<li>Primary CTA Heading element not found. </li>";
+	
+	//PRIMARY_CTA_DESCRIPTION_ELEMENT_NOT_FOUND
+	public static final String PRIMARY_CTA_DESCRIPTION_ELEMENT_NOT_FOUND = "<li>Primary CTA description element not found. </li>";
+	
+	//PRIMARY_CTA_ANCHOR_ELEMENT_NOT_FOUND
+	public static final String PRIMARY_CTA_ANCHOR_ELEMENT_NOT_FOUND = "<li>Primary CTA Anchor tag not found. </li>";
+	
+	//PRIMARY_CTA_ANCHOR_ELEMENT_NOT_FOUND
+	public static final String PRIMARY_CTA_LINK_URL_NODE_NOT_FOUND = "<li>Primary CTA Anchor tag not found. </li>";
+		
+	// SPOTLIGHT_NODE_COUNT
+	public static final String SPOTLIGHT_NODE_COUNT_MISMATCH = "<li>Spotlight component count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
+	
+	// SPOTLIGHT_NODE_COUNT
+		public static final String HERO_IMAGE_NODE_NOT_FOUND = "<li>Hero Component Image node not found.</li>";
 
 
 }

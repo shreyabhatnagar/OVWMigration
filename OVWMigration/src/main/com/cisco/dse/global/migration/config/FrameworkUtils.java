@@ -258,12 +258,8 @@ public class FrameworkUtils {
 				Element imageElement = imageElements.first();
 				if (imageElement != null) {
 					imagePath =imageElement.attr("src");
-				} else {
-					sb.append("<li>image doesn't exist </li>");
-				}
-			} else {
-				sb.append("<li>image doesn't exist </li>");
-			}
+				} 
+			} 
     	}
 		log.debug("imagePath " + imagePath + "\n");
 		return imagePath;
