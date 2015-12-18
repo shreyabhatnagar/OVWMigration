@@ -528,12 +528,21 @@ public class ProductLandingVariation08 extends BaseAction {
 								sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
 							}
 							
+							/*Elements imgSrc = ele.getElementsByTag("img");
+							boolean extraImageTagExists = false;
+							if(!imgSrc.isEmpty()){
+								extraImageTagExists = true;
+							}
+							
+							if(extraImageTagExists){
+								sb.append(Constants.EXTRA_IMAGE_TAG_FOUND);
+							}*/
 							Elements anchorText = ele.getElementsByTag("a");
 							if(h3TagExists){
 								Element anchor = anchorText.first();
 									aText = anchor.text();
 									aHref = anchor.attr("href");
-									sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
+									sb.append(Constants.EXTRA_URLS_FOUND_ON_TILE_BORDRED_COMPONENT);
 							}
 							else{
 							if (!anchorText.isEmpty()) {

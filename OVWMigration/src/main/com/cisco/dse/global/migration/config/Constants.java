@@ -519,7 +519,16 @@ public class Constants {
 	public static final String SPOTLIGHT_NODE_COUNT_MISMATCH = "<li>Spotlight component count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
 	
 	// SPOTLIGHT_NODE_COUNT
-		public static final String HERO_IMAGE_NODE_NOT_FOUND = "<li>Hero Component Image node not found.</li>";
+	public static final String HERO_IMAGE_NODE_NOT_FOUND = "<li>Hero Component Image node not found.</li>";
+	
+	// SPOTLIGHT_NODE_COUNT
+	public static final String EXTRA_IMAGE_TAG_FOUND = "<li>Extra image tag found on locale page.</li>";
+				
+	// SPOTLIGHT_NODE_COUNT
+	public static final String EXTRA_LIST_COMPONENT_FOUND = "<li>Extra list component found on WEM page.</li>";
+				
+	// SPOTLIGHT_NODE_COUNT
+	public static final String EXTRA_URLS_FOUND_ON_TILE_BORDRED_COMPONENT = "<li>Extra urls are found on tile bordered component found on locale page</li>";
 
 
 }

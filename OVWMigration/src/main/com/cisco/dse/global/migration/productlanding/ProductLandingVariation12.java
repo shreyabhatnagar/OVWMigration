@@ -467,6 +467,7 @@ public class ProductLandingVariation12 extends BaseAction {
 					if (!primaryCtaElements.isEmpty()) {
 						primaryCtaExists = true;
 						sb.append(Constants.PRIMARY_CTA_COMPONENT_NOT_FOUND);
+						sb.append(Constants.EXTRA_LIST_COMPONENT_FOUND);
 						
 					} 
 
