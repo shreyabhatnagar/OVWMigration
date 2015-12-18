@@ -18,10 +18,12 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
+import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class SolutionListingVariation09 extends BaseAction {
 	Document doc;
@@ -34,12 +36,16 @@ public class SolutionListingVariation09 extends BaseAction {
 			ConstraintViolationException, RepositoryException {
 		log.debug("In the translate method of SolutionListingVariation09");
 		log.debug("In the translate method, catType is :" + catType);
+		String pagePropertiesPath = "/content/<locale>/" + catType
+				+ "/<prod>/solutions-listing/jcr:content";
 
 		// Repo node paths
 		
 		String pageUrl = host + "/content/<locale>/" + catType
 				+ "/<prod>/solutions-listing.html";
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
+		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale)
+				.replace("<prod>", prod);
 		
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>"
 				+ "</td>");
@@ -53,12 +59,25 @@ public class SolutionListingVariation09 extends BaseAction {
 		solutionListing = solutionListing.replace("<locale>", locale).replace(
 				"<prod>", prod);
 		javax.jcr.Node solutionListingMidnode = null;
+		Node pageJcrNode = null;
+		
+		
 		try {
 
 			solutionListingMidnode = session.getNode(solutionListing);
+			pageJcrNode = session.getNode(pagePropertiesPath);
+			
 			doc = getConnection(loc);
 
 			if (doc != null) {
+				
+				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// start set page properties.
+
+				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
+
+				// end set page properties.
+				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// ----------------------------------------------------------------------------------
 				// start of text component properties setting
 				try {
@@ -92,13 +111,24 @@ public class SolutionListingVariation09 extends BaseAction {
 				// start of htmlblob component
 				try {
 					String htmlBlobContent = "";
+					//String newImage="";
+					StringBuilder oldImage = new StringBuilder();
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Elements htmlBlobElements = doc
-							.select("div.htmlblob");
-					if (htmlBlobElements != null
-							&& !htmlBlobElements.isEmpty()) {
+					Element htmlBlobElements = doc.select("div.htmlblob").last();
+					if (htmlBlobElements != null) {
 							htmlBlobContent = htmlBlobElements.select("div.c00-pilot").outerHtml();
+							Element h2Ele = htmlBlobElements.select("h2").first();
+							oldImage.append(h2Ele);
+							oldImage.append("<table><tr>");
+							Elements images = htmlBlobElements.select("td");
+							for(Element ele:images)
+							{
+								htmlBlobContent = ele.outerHtml();
+								htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
+								oldImage.append(htmlBlobContent);
+							}
+							oldImage.append("</tr></table>");
 						}
 					 else {
 						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
@@ -108,7 +138,7 @@ public class SolutionListingVariation09 extends BaseAction {
 					if (solutionListingMidnode.hasNode("htmlblob_0")) {
 						Node htmlBlobNode = solutionListingMidnode.getNode("htmlblob_0");
 						if (!StringUtils.isEmpty(htmlBlobContent)) {
-							htmlBlobNode.setProperty("html",htmlBlobContent);
+							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
@@ -116,7 +146,7 @@ public class SolutionListingVariation09 extends BaseAction {
 					}
 					// End get content.
 				} catch (Exception e) {
-					log.error("Exception : ", e);
+					//log.error("Exception : ", e);
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 				}
 				// end htmlblob component.
