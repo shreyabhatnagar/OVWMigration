@@ -26,6 +26,8 @@ import com.cisco.dse.global.migration.benefit.BenifitsVariation4;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation1;
+import com.cisco.dse.global.migration.architechture.ArchitechtureVariation3;
+import com.cisco.dse.global.migration.architechture.ArchitectureVariation04;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
