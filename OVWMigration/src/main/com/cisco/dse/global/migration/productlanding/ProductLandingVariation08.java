@@ -184,11 +184,6 @@ public class ProductLandingVariation08 extends BaseAction {
 				// start set hero large component properties.
 
 				try {
-					String h2Text = "";
-					String pText = "";
-					String aText = "";
-					String aHref = "";
-
 					Elements heroElements = doc.select("div.c50-pilot");
 					heroElements = heroElements.select("div.frame");
 					Node heroNode = indexRightNode.hasNode("hero_large") ? indexRightNode
@@ -204,6 +199,10 @@ public class ProductLandingVariation08 extends BaseAction {
 							int nodeSize = (int) heroPanelNodeIterator
 									.getSize();
 							for (Element ele : heroElements) {
+								String h2Text = "";
+								String pText = "";
+								String aText = "";
+								String aHref = "";
 								Elements h2TagText = ele.getElementsByTag("h2");
 								if (h2TagText != null) {
 									h2Text = h2TagText.html();
@@ -458,11 +457,11 @@ public class ProductLandingVariation08 extends BaseAction {
 				// start set text component.
 				try {
 					Elements textElements = doc.select("div.c00-pilot");
-					if (textElements != null) {
+					if (!textElements.isEmpty()) {
 						Node textNode = indexMidLeftNode.hasNode("text") ? indexMidLeftNode
 								.getNode("text") : null;
 						if (textNode != null) {
-							for (Element ele : textElements) {
+							Element ele = textElements.first();
 								if (ele != null) {
 									String textProp = ele.html();
 									textProp = FrameworkUtils
@@ -474,7 +473,7 @@ public class ProductLandingVariation08 extends BaseAction {
 									sb.append("<li>Unable to update text component as there are no elements in the class c00-pilot.</li>");
 								}
 
-							}
+							
 						}
 					} else {
 						sb.append("<li>Unable to update text component as its respective div is missing. c00-pilot class is missing.</li>");
@@ -488,11 +487,6 @@ public class ProductLandingVariation08 extends BaseAction {
 				// end set text
 				// start set tilebordered component.
 				try {
-
-					String h2Text = "";
-					String pText = "";
-					String aText = "";
-					String aHref = "";
 
 					Elements tileBorderedElements = doc.select("div.c23-pilot");
 					// Node spotLightNode =
@@ -510,12 +504,13 @@ public class ProductLandingVariation08 extends BaseAction {
 						// spotLightNode.getNodes();
 						int nodeSize = (int) tileBorderedNodeIterator.getSize();
 						for (Element ele : tileBorderedElements) {
+							String h2Text = "";
+							String pText = "";
+							String aText = "";
+							String aHref = "";
 							tileBorderedNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) tileBorderedNodeIterator
 									.next();
-
-							
-							
 							Elements h2TagText = null;
 							boolean h3TagExists = false;
 							h2TagText = ele.getElementsByTag("h2");
@@ -554,13 +549,21 @@ public class ProductLandingVariation08 extends BaseAction {
 							}
 							}
 
-							spotLightComponentNode.setProperty("title", h2Text);
-							spotLightComponentNode.setProperty("description",
+							if(StringUtils.isNotBlank(h2Text)){
+								spotLightComponentNode.setProperty("title", h2Text);
+							}
+							if(StringUtils.isNotBlank(pText)){
+								spotLightComponentNode.setProperty("description",
 									pText);
-							spotLightComponentNode.setProperty("linktext",
+							}
+							if(StringUtils.isNotBlank(aText)){
+								spotLightComponentNode.setProperty("linktext",
 									aText);
-							spotLightComponentNode
+							}
+							if(StringUtils.isNotBlank(aHref)){
+								spotLightComponentNode
 									.setProperty("linkurl", aHref);
+							}
 
 						}
 						if (eleSize != nodeSize) {
@@ -720,7 +723,7 @@ public class ProductLandingVariation08 extends BaseAction {
 
 					}	}
 					Element rightRailPilotElement = indexlistElem.first();
-					if(listItemFound){
+					if(!listItemFound){
 						if (rightRailPilotElement != null ) {
 					
 						for (Element indexListItem : indexlistElem) {

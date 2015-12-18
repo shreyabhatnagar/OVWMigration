@@ -1,5 +1,11 @@
 package com.cisco.dse.global.migration.productlanding;
 
+/* 
+ * S.No     	Name                 Date                    Description of change
+ *  #1         Saroja            15-Dec-15           Added the Java file to handle the migration of product landing variation 12 page(s).
+ * 
+ * */
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +36,6 @@ import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class ProductLandingVariation12 extends BaseAction {
 
 	Document doc;
-
-	String title = null;
-
 	StringBuilder sb = new StringBuilder(1024);
 
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
@@ -113,8 +116,6 @@ public class ProductLandingVariation12 extends BaseAction {
 
 			if (doc != null) {
 
-				title = doc.title();
-
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start set page properties.
 
@@ -127,12 +128,7 @@ public class ProductLandingVariation12 extends BaseAction {
 				// start set hero large component properties.
 
 				try {
-					String h2Text = "";
-					String pText = "";
-					String aText = "";
-					String aHref = "";
-
-					Elements heroElements = doc.select("div.c50-pilot");
+										Elements heroElements = doc.select("div.c50-pilot");
 					heroElements = heroElements.select("div.frame");
 					Node heroNode = indexLeftNode.hasNode("hero_large") ? indexLeftNode
 							.getNode("hero_large") : null;
@@ -147,11 +143,15 @@ public class ProductLandingVariation12 extends BaseAction {
 							int nodeSize = (int) heroPanelNodeIterator
 									.getSize();
 							for (Element ele : heroElements) {
+								String h2Text = "";
+								String pText = "";
+								String aText = "";
+								String aHref = "";
 								Elements h2TagText = ele.getElementsByTag("h2");
 								if (h2TagText != null) {
 									h2Text = h2TagText.html();
 								} else {
-									sb.append("<li>Hero Component Heading element not having any title in it ('h2' is blank)</li>");
+									sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
 								}
 
 								Elements descriptionText = ele
@@ -159,7 +159,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								if (descriptionText != null) {
 									pText = descriptionText.first().text();
 								} else {
-									sb.append("<li>Hero Component description element not having any title in it ('p' is blank)</li>");
+									sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
 								}
 
 								Elements anchorText = ele.getElementsByTag("a");
@@ -167,7 +167,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									aText = anchorText.text();
 									aHref = anchorText.attr("href");
 								} else {
-									sb.append("<li>Hero Component anchor tag not having any content in it ('<a>' is blank)</li>");
+									sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 								}
 								if (heroPanelNodeIterator.hasNext()) {
 									Node heroPanelNode = (Node) heroPanelNodeIterator
@@ -196,7 +196,7 @@ public class ProductLandingVariation12 extends BaseAction {
 														heroImage);
 											}
 										} else {
-											sb.append("<li>hero image node doesn't exist</li>");
+											sb.append(Constants.HERO_IMAGE_NOT_AVAILABLE);
 										}
 									}
 									// end image
@@ -209,40 +209,31 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 							}
 							if (nodeSize != eleSize) {
-								sb.append("<li>Unable to Migrate Hero component. Element Count is "
+								sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH
 										+ eleSize
-										+ " and Node count is "
-										+ nodeSize + ". Count mismatch.</li>");
+										+ " "
+										+ nodeSize);
 
 							}
 						}
 
 					} else {
-						sb.append("<li>Hero Component not found on page. </li>");
+						sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
 
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>Unable to update hero large component." + e
-							+ "</li>");
-					log.debug("Exception: ", e);
+					sb.append(Constants.EXCEPTOIN_IN_UPDATING_HERO_CONTENT);
+					log.debug(" Hero Component Exception: ", e);
 				}
 
 				// ---------------------------------------------------------------------------------------------------------------------------------------
 				// start set selectorbar large component properties.
 
 				try {
-					String h2Text = "";
-					String titleURL = "";
-					String aText = "";
-					String aHref = "";
+					
 					Elements selectorBarLargeElements = doc
 							.select("div.panel");
-
-					// selectorBarLargeElements =
-					// selectorBarLargeElements.select("div.title");
-					// Elements subElements =
-					// selectorBarLargeElements.select("div.menu");
 					log.debug("selector component found indexMidLeftNode: "
 							+ indexMidLeftNode.getPath());
 					Node selectorBarNode = indexMidLeftNode
@@ -251,15 +242,14 @@ public class ProductLandingVariation12 extends BaseAction {
 
 					if (selectorBarNode != null) {
 						int eleSize = selectorBarLargeElements.size();
-						log.debug("selector component found ele size: "
-								+ eleSize);
 						NodeIterator selectorBarPanel = selectorBarNode
 								.getNodes("selectorbarpanel*");
 						int nodeSize = (int) selectorBarPanel.getSize();
-						log.debug("selector component found nodeSize : "
-								+ nodeSize);
-
 						for (Element ele : selectorBarLargeElements) {
+							String h2Text = "";
+							String titleURL = "";
+							String aText = "";
+							String aHref = "";
 							selectorBarPanel.hasNext();
 							Node selectorBarPanelNode = (Node) selectorBarPanel
 									.next();
@@ -269,7 +259,7 @@ public class ProductLandingVariation12 extends BaseAction {
 							if (h2TagText != null) {
 								h2Text = h2TagText.html();
 							} else {
-								sb.append("<li>Selector Bar Large  Component title element not having any title in it ('h2' is blank)</li>");
+								sb.append(Constants.SELECTOR_BAR_TITLE_NOT_AVAILABLE);
 							}
 
 							Elements titleUrl = ele.getElementsByTag("h2")
@@ -277,26 +267,29 @@ public class ProductLandingVariation12 extends BaseAction {
 							if (titleUrl != null) {
 								titleURL = titleUrl.attr("href");
 							} else {
-								sb.append("<li>Selector Bar Component Title URL element not having any content in it ('a href' is blank)</li>");
+								sb.append(Constants.SELECTOR_BAR_TITLE_URL_NOT_AVAILABLE);
 							}
-							Element menuEle = null;
+							Element menuelement = null;
 							if(ele.parent().hasClass("c58v1-pilot")){
-								menuEle = ele.getElementsByClass("title").first(); 
+								 menuelement = ele.child(0).child(1);
+								 log.debug("menuelement in ifff" + menuelement);
 								//menuEle = ele.child(1);
 							}
 							else{
-								menuEle = ele.child(1);
+								menuelement = ele.child(1);
 							}
-							// Element anchor =
-							Element allLinkTag = menuEle.getElementsByTag("a")
+							
+							int childrenSize = menuelement.children().size();
+							if(childrenSize >1){
+								Element allLinkTag = menuelement.getElementsByTag("a")						
 									.last();
 							if (allLinkTag != null) {
 								aText = allLinkTag.text();
 								aHref = allLinkTag.attr("href");
 							} else {
-								sb.append("<li>Selector Bar Component all link url href tag not having any content in it ('<a>' is blank)</li>");
+								sb.append(Constants.SELECTOR_BAR_ALL_LINK_NOT_AVAILABLE);
 							}
-
+							}
 							log.debug("selector component titleUrl: "
 									+ titleURL);
 							selectorBarPanelNode.setProperty("title", h2Text);
@@ -307,19 +300,17 @@ public class ProductLandingVariation12 extends BaseAction {
 							selectorBarPanelNode.setProperty("alllinkurl",
 									aHref);
 
-							Elements menuUlList = menuEle
+							Elements menuUlList = menuelement
 									.getElementsByTag("ul");
 							for (Element element : menuUlList) {
 								List<String> list = new ArrayList<String>();
 								Elements menuLiList = element
 										.getElementsByTag("li");
-
 								if (menuLiList != null) {
 									for (Element li : menuLiList) {
 										JSONObject jsonObj = new JSONObject();
 										Elements listItemAnchor = li
 												.getElementsByTag("a");
-
 										if (listItemAnchor != null) {
 											String anchorText = listItemAnchor
 													.text();
@@ -328,8 +319,9 @@ public class ProductLandingVariation12 extends BaseAction {
 											jsonObj.put("linktext", anchorText);
 											jsonObj.put("linkurl", anchorHref);
 											list.add(jsonObj.toString());
+											log.debug("list is: "+ list.toString());
 										} else {
-											sb.append("<li>Selector Bar Component drop down not having links and corresponding urls in it ('<li>' s are blank)</li>");
+											sb.append(Constants.SELECTOR_BAR_DROPDOWN_URLS_NOT_AVAILABLE);
 										}
 
 									}
@@ -338,22 +330,21 @@ public class ProductLandingVariation12 extends BaseAction {
 													.toArray(new String[list
 															.size()]));
 								} else {
-									sb.append("<li>Selector Bar Component dropdown doesnt have any content in it ('<ul>' is blank)</li>");
+									sb.append(Constants.SELECTOR_BAR_DROPDOWN_URLS_NOT_AVAILABLE);
 								}
 							}
 						}
 
 						if (eleSize != nodeSize) {
-							sb.append("<li>Selector Bar Component element size ( "
+							sb.append(Constants.SELECTOR_BAR_ELEMENTS_COUNT_MISMATCH
 									+ eleSize
-									+ " ) and node size ( "
-									+ nodeSize + " ) mismatch</li>");
+									+ " "
+									+ nodeSize);
 						}
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>Unable to update Selector bar large component."
-							+ e + "</li>");
+					sb.append(Constants.SELECTOR_BAR_COMPONENT_NOT_UPDATED);
 					log.debug("exception : ",e);
 				}
 
@@ -380,18 +371,17 @@ public class ProductLandingVariation12 extends BaseAction {
 									log.debug("text property!: " + textProp);
 									textNode.setProperty("text", textProp);
 								} else {
-									sb.append("<li>Unable to update text component as there are no elements in the class c00-pilot.</li>");
+									sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 								}
 
 							}
 						}
 					} else {
-						sb.append("<li>Unable to update text component as its respective div is missing. c00-pilot class is missing.</li>");
+						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>Unable to update index text component component."
-							+ e + "</li>");
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
 
 				// end set text
@@ -427,7 +417,7 @@ public class ProductLandingVariation12 extends BaseAction {
 							if (h2TagText != null) {
 								h2Text = h2TagText.html();
 							} else {
-								sb.append("<li>TileBordered Component Heading element not having any title in it ('h2' is blank)</li>");
+								sb.append(Constants.TILE_BORDERED_TITLE_NOT_FOUND);
 							}
 
 							Elements descriptionText = ele
@@ -435,7 +425,7 @@ public class ProductLandingVariation12 extends BaseAction {
 							if (descriptionText != null) {
 								pText = descriptionText.html();
 							} else {
-								sb.append("<li>TileBordered Component description element not having any title in it ('p' is blank)</li>");
+								sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
 							}
 
 							Elements anchorText = ele.getElementsByTag("a");
@@ -443,7 +433,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								aText = anchorText.text();
 								aHref = anchorText.attr("href");
 							} else {
-								sb.append("<li>TileBordered Component anchor tag not having any content in it ('<a>' is blank)</li>");
+								sb.append(Constants.TILE_BORDERED_ANCHOR_NOT_FOUND);
 							}
 
 							spotLightComponentNode.setProperty("title", h2Text);
@@ -457,18 +447,18 @@ public class ProductLandingVariation12 extends BaseAction {
 						}
 						if (eleSize != nodeSize) {
 
-							sb.append("<li>Could not migrate  tilebordered node. Count mis match as Element Count is "
+							sb.append(Constants.TILE_BORDERED_ELEMENT_COUNT_MISMATCH
 									+ eleSize
-									+ " and node count is "
-									+ nodeSize + " </li>");
+									+ " "
+									+ nodeSize);
 							log.debug("Could not migrate  tilebordered node. Count mis match");
 
 						}
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>Unable to update spotlight component." + e
-							+ "</li>");
+					sb.append(Constants.TILE_BORDERED_COMPONENT_NOT_UPDATED);
+					log.debug(Constants.TILE_BORDERED_COMPONENT_NOT_UPDATED, e);
 				}
 				
 				boolean primaryCtaExists = false;
@@ -478,13 +468,13 @@ public class ProductLandingVariation12 extends BaseAction {
 					Elements primaryCtaElements = doc.select("div.c47-pilot");
 					if (!primaryCtaElements.isEmpty()) {
 						primaryCtaExists = true;
-						sb.append("<li>Primary CTA Component node not found for english page. Hence element not migrated.</li>");
+						sb.append(Constants.PRIMARY_CTA_COMPONENT_NOT_FOUND);
 						
 					} 
 
 				} catch (Exception e) {
-					sb.append("<li>Unable to update index primary cta component component."
-							+ e + "</li>");
+					sb.append(Constants.PRIMARY_CTA_COMPONENT_NOT_UPDATED);
+					log.debug(Constants.PRIMARY_CTA_COMPONENT_NOT_UPDATED,e);
 				}
 
 				
@@ -493,10 +483,6 @@ public class ProductLandingVariation12 extends BaseAction {
 				
 				// start set spotlight component.
 				try {
-					String h2Text = "";
-					String pText = "";
-					String aText = "";
-					String aHref = "";
 					Elements spotLightElements = doc.select("div.c11-pilot");
 					
 					if (spotLightElements != null) {
@@ -506,6 +492,10 @@ public class ProductLandingVariation12 extends BaseAction {
 									.getNodes("spotlight_large*");
 							int nodeSize = (int) spoLightNodeIterator.getSize();
 							for (Element ele : spotLightElements) {
+								String h2Text = "";
+								String pText = "";
+								String aText = "";
+								String aHref = "";
 								spoLightNodeIterator.hasNext();
 								Node spotLightComponentNode = (Node) spoLightNodeIterator
 										.next();
@@ -514,7 +504,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								if (h2TagText != null) {
 									h2Text = h2TagText.html();
 								} else {
-									sb.append("<li>Spotlight Component Heading element not having any title in it ('h2' is blank)</li>");
+									sb.append(Constants.SPOTLIGHT_HEADING_TEXT_NOT_FOUND);
 								}
 
 								Elements descriptionText = ele
@@ -522,7 +512,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								if (descriptionText != null) {
 									pText = descriptionText.html();
 								} else {
-									sb.append("<li>Spotlight Component description element not having any title in it ('p' is blank)</li>");
+									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 								}
 
 								Elements anchorText = ele.getElementsByTag("a");
@@ -530,7 +520,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									aText = anchorText.text();
 									aHref = anchorText.attr("href");
 								} else {
-									sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
+									sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 								}
 								// start image
 								String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
@@ -545,7 +535,7 @@ public class ProductLandingVariation12 extends BaseAction {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
 										}
 									} else {
-										sb.append("<li>spotlight image node doesn't exist</li>");
+										sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 									}
 								}
 								// end image
@@ -561,17 +551,16 @@ public class ProductLandingVariation12 extends BaseAction {
 							}
 
 							if (nodeSize != eleSize) {
-								sb.append("<li>Unable to Migrate spotlight component. Element Count is "
+								sb.append(Constants.SPOTLIGHT_NODE_COUNT
 										+ eleSize
-										+ " and Node count "
-										+ nodeSize
-										+ ". Count mismatch.</li>");
+										+ " "
+										+ nodeSize);
 
 							}
 						}
 
 					} else {
-						sb.append("<li>Unable to update spotlight component as its respective div is not available.</li>");
+						sb.append(Constants.EXCEPTION_SPOTLIGHT_COMPONENT);
 
 					}
 				} catch (Exception e) {
@@ -583,14 +572,9 @@ public class ProductLandingVariation12 extends BaseAction {
 				// start set ENTERPRISE NETWORK INDEX list.
 				if(!primaryCtaExists){
 					try {
-					
-						boolean listElemExists = false;
-					
-					//Elements rightGridElem = doc.select("div.gd12v2-right");
 					Elements indexlistElem = doc.select("div.n13-pilot");
 					Element rightRailPilotElement = indexlistElem.first();
 					if (rightRailPilotElement != null) {
-						listElemExists = true;
 							String indexTitle = rightRailPilotElement.getElementsByTag(
 									"h2").outerHtml();
 
@@ -657,7 +641,7 @@ public class ProductLandingVariation12 extends BaseAction {
 											listNode.setProperty("title",								
 												indexTitle);
 										}else{
-											sb.append("<li>List Title  is not migrated as it has no content.</li>");
+											sb.append(Constants.RIGHT_LIST_COMPONENT_TITLE_NOT_FOUND);
 										}
 										if (listNode.hasNode("intro")) {
 											Node introNode = listNode
@@ -673,7 +657,7 @@ public class ProductLandingVariation12 extends BaseAction {
 														+ introNode.getPath());
 
 											} else {
-												sb.append("<li>List Paragraph description is not migrated as it has no content.</li>");
+												sb.append(Constants.RIGHT_LIST_COMPONENT_DESCRIPTION_NOT_FOUND);
 											}
 										}
 										//As Ja_jp has commented content in its right node list, this check has been done.
@@ -702,22 +686,19 @@ public class ProductLandingVariation12 extends BaseAction {
 																.size()]));
 												log.debug("Updated listitems at "+ eleNode.getPath());
 												}else{
-													sb.append("<li>element_list node doesn't exists</li>");
+													sb.append(Constants.LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 												}
 														
 											}
-										} else {
-											sb.append("<li>List items are not migrated as they have no content(Content is commented).</li>");
-											
-										}
+										} 
 
 									}
 					} else {
-						sb.append("<li>Mismatch in the right rail. List element is not found.</li>");
+						sb.append(Constants.LIST_ELEMENTS_COUNT_MISMATCH);
 					}
 					
 				} catch (Exception e) {
-					sb.append("<li>Unable to update index list component.\n</li>");
+					sb.append(Constants.EXCEPTION_IN_UPDATING_LIST_COMPONENT);
 					log.error("Exception : ", e);
 				}
 				}
@@ -750,7 +731,7 @@ public class ProductLandingVariation12 extends BaseAction {
 							htmlBlobNode.setProperty("html",
 									htmlBlobContent.toString());
 						} else {
-							sb.append("<li>htmlblob content doesn't exist</li>");
+							sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 						}
 
 					} else {
@@ -760,8 +741,7 @@ public class ProductLandingVariation12 extends BaseAction {
 					
 
 				} catch (Exception e) {
-					log.debug("<li>Unable to update html blob component." + e
-							+ "</li>");
+					log.debug(Constants.EXCEPTION_IN_HTMLBLOB);
 				}
 				}
 				// end set html blob component content.
@@ -865,7 +845,7 @@ public class ProductLandingVariation12 extends BaseAction {
 														+ introNode.getPath());
 
 											} else {
-												sb.append("<li>Paragraph description is not migrated as it has no content.</li>");
+												sb.append(Constants.RIGHT_LIST_COMPONENT_DESCRIPTION_NOT_FOUND);
 											}
 										}
 
@@ -894,31 +874,31 @@ public class ProductLandingVariation12 extends BaseAction {
 														+ eleNode.getPath());
 											}
 										} else {
-											sb.append("<li>element_list node doesn't exists</li>");
+											sb.append(Constants.LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
 										}
 
 									}
 								}
 							}
+							eleSize = childElements.size();
 
 						}
-							eleSize = childElements.size();
+							
 
 						}
 						if (eleSize > 1 && eleSize != listNodeSize) {
 
-							sb.append("<li>Could not migrate  List Component. Count mis match as Element Count is "
+							sb.append(Constants.LIST_ELEMENTS_COUNT_MISMATCH
 									+ eleSize
-									+ " and node count is "
-									+ listNodeSize + " </li>");
+									+ listNodeSize);
 							log.debug("Could not migrate  tilebordered node. Count mis match");
 
 						}
 						} else {
-						sb.append("<li>Mismatch in the right rail. List element is not found.</li>");
+						sb.append(Constants.LIST_NOT_FOUND_IN_RIGHT_RAIL);
 					}
 				} catch (Exception e) {
-					sb.append("<li>Unable to update index list component.\n</li>");
+					sb.append(Constants.EXCEPTION_IN_UPDATING_LIST_COMPONENT);
 					log.error("Exception : ", e);
 				}
 				// end set benefit list.
@@ -939,7 +919,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								Element h2Element = h2Elements.first();
 								h2Content = h2Element.text();
 							} else {
-								sb.append("<li>h2 of right rail with class 'div.s14-pilot' is blank.</li>");
+								sb.append(Constants.FOLLOWUS_TITLE_NOT_FOUND);
 							}
 							Elements liElements = rightRailPilotElement
 									.getElementsByTag("li");
@@ -955,23 +935,20 @@ public class ProductLandingVariation12 extends BaseAction {
 									obj.put("linktext", title);
 									obj.put("linkurl", href);
 								} else {
-									sb.append("<li>No anchor tag found in the right rail social links</li>");
+									sb.append(Constants.FOLLOW_US_ANCHOR_ELEMENT_NOT_FOUND);
 								}
 								list.add(obj.toString());
 							}
 						} else {
-							sb.append("<li>right rail does not have followus element.</li>");
+							sb.append(Constants.FOLLOWUS_ELEMENT_NOT_FOUND);
 						}
-					} else {
-						sb.append("<li>No pilot found on right rail with class 'div.s14-pilot'</li>");
-					}
-
+					} 
 					if (indexRightRailNode.hasNode("followus")) {
 						Node followus = indexRightRailNode.getNode("followus");
 						if (StringUtils.isNotBlank(h2Content)) {
 							followus.setProperty("title", h2Content);
 						} else {
-							sb.append("<li>No title found at right rail social media piolot.</li>");
+							sb.append(Constants.FOLLOWUS_TITLE_NOT_FOUND);
 						}
 
 						if (list.size() > 1) {
@@ -980,13 +957,11 @@ public class ProductLandingVariation12 extends BaseAction {
 						}
 
 					} else {
-						sb.append("<li>No 'followus' node found under "
-								+ indexRightRailNode.getPath() + "</li>");
+						sb.append(Constants.FOLLOWUS_NODE_NOT_FOUND);
 					}
 				} catch (Exception e) {
 
-					sb.append("<li>Unable to update followus component. Exception found is:  "
-							+ e + "</li>");
+					sb.append(Constants.EXCEPTION_IN_FOLLOW_US_COMPONENT);
 				}
 
 
@@ -997,7 +972,8 @@ public class ProductLandingVariation12 extends BaseAction {
 			}
 
 		} catch (Exception e) {
-			sb.append("<li>Exception as URL cannot be connected! </li>");
+			
+			sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			log.debug("Exception as url cannot be connected: " + e);
 		}
 
