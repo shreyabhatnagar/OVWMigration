@@ -530,5 +530,6 @@ public class Constants {
 	// SPOTLIGHT_NODE_COUNT
 	public static final String EXTRA_URLS_FOUND_ON_TILE_BORDRED_COMPONENT = "<li>Extra urls are found on tile bordered component found on locale page</li>";
 
-
+	// IMAGE_NOT_FOUND_IN_LOCALE_PAGE
+	public static final String IMAGE_NOT_FOUND_IN_LOCALE_PAGE = "<li>Image not found in locale page.</li>";
 }
