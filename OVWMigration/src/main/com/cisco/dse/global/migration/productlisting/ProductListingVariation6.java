@@ -197,7 +197,7 @@ public class ProductListingVariation6 extends BaseAction {
 																if (drawersPanelNode.hasNode("drawers-image")) {
 																	Node drawersImageNode = drawersPanelNode.getNode("drawers-image");
 																	String fileReference = drawersImageNode.hasProperty("fileReference")?drawersImageNode.getProperty("fileReference").getString():"";
-																	drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale);
+																	drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale,sb);
 																	log.debug("drawerImage " + drawerImage + "\n");
 																	if (StringUtils.isNotBlank(drawerImage)) {
 																		drawersImageNode.setProperty("fileReference" , drawerImage);
@@ -370,7 +370,7 @@ public class ProductListingVariation6 extends BaseAction {
 																			if (StringUtils.isNotBlank(subDrawerImage) && subdrawerpanel.hasNode("subdrawers-image")) {
 																				Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
 																				String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
-																				subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale);
+																				subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale,sb);
 																				log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
 																				if (StringUtils.isNotBlank(subDrawerImage)) {
 																					subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
