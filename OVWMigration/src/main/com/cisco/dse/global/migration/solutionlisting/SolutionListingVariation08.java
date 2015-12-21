@@ -151,7 +151,7 @@ public class SolutionListingVariation08 extends BaseAction {
 													if (heroPanelNode.hasNode("image")) {
 														Node imageNode = heroPanelNode.getNode("image");
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 														log.debug("heroImage " + heroImage + "\n");
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
@@ -328,7 +328,7 @@ public class SolutionListingVariation08 extends BaseAction {
 									if (heroPanelNode.hasNode("image")) {
 										Node spotLightImageNode = heroPanelNode.getNode("image");
 										String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
