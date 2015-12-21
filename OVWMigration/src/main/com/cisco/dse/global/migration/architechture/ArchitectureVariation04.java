@@ -82,7 +82,7 @@ public class ArchitectureVariation04 extends BaseAction {
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				Elements allListElements = doc.select("div.gd-left").select(
-						"div.n13-pilot");
+						"div.n13-pilot,div.n13-dm");
 				if (allListElements.size() == 1) {
 					// start of text component and first list properties setting
 					try {
