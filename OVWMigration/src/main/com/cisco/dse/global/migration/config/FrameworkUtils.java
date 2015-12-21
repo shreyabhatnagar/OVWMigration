@@ -150,7 +150,7 @@ public class FrameworkUtils {
     }
 
 	public static String migrateDAMContent(String path, String imgRef,
-			String locale) {
+			String locale, StringBuilder sb) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
 		log.debug("Image path from the WEM node : " + imgRef);
 		String newImagePath = "";
@@ -185,6 +185,7 @@ public class FrameworkUtils {
 					return "";
 				}
 			} else {
+				sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 				log.debug("image path is blank.");
 			}
 		} catch (Exception e) {
@@ -279,7 +280,7 @@ public class FrameworkUtils {
     	String updatedImgPath = "";
     	if (htmlBlobElement != null) {
     		existingimagePath = extractImagePath(htmlBlobElement, sb);
-    		updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale);
+    		updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb);
     				
 			log.debug(existingimagePath +" is updated to "+updatedImgPath);
 			if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
