@@ -206,7 +206,7 @@ public class ProductLandingVariation6 extends BaseAction {
 													if (heropanelNode.hasNode("image")) {
 														Node imageNode = heropanelNode.getNode("image");
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 														log.debug("heroImage " + heroImage + "\n");
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
@@ -820,7 +820,7 @@ public class ProductLandingVariation6 extends BaseAction {
 											if (tile_slp_small.hasNode("image")) {
 												Node imageNode = tile_slp_small.getNode("image");
 												String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 												log.debug("spotLightImage " + spotLightImage + "\n");
 												if (StringUtils.isNotBlank(spotLightImage)) {
 													imageNode.setProperty("fileReference" , spotLightImage);
@@ -948,7 +948,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										if (spotlight_large_v2.hasNode("image")) {
 											Node imageNode = spotlight_large_v2.getNode("image");
 											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 											log.debug("spotLightImage " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												imageNode.setProperty("fileReference" , spotLightImage);
