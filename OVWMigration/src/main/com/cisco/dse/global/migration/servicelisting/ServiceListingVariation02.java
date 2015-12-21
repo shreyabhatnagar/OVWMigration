@@ -405,7 +405,7 @@ public class ServiceListingVariation02 extends BaseAction {
 			if (spotLightComponentNode.hasNode("image")) {
 				Node spotLightImageNode = spotLightComponentNode.hasNode("image")?spotLightComponentNode.getNode("image"):null;
 				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference,  locale);
+				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference,  locale,sb);
 				log.debug("spotLightImage " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
