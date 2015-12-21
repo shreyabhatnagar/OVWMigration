@@ -313,7 +313,7 @@ public class ProductLandingVariation1 extends BaseAction {
 										if (heroPanelNode.hasNode("image")) {
 											Node imageNode = heroPanelNode.getNode("image");
 											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-											heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale);
+											heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 											log.debug("heroImage " + heroImage + "\n");
 											if (StringUtils.isNotBlank(heroImage)) {
 												imageNode.setProperty("fileReference" , heroImage);
@@ -498,7 +498,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																if (drawersPanelNode.hasNode("drawers-image")) {
 																	Node drawersImageNode = drawersPanelNode.getNode("drawers-image");
 																	String fileReference = drawersImageNode.hasProperty("fileReference")?drawersImageNode.getProperty("fileReference").getString():"";
-																	drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale);
+																	drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale,sb);
 																	log.debug("drawerImage " + drawerImage + "\n");
 																	if (StringUtils.isNotBlank(drawerImage)) {
 																		drawersImageNode.setProperty("fileReference" , drawerImage);
@@ -593,7 +593,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																		if (subdrawerpanel.hasNode("subdrawers-image")) {
 																			Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
 																			String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
-																			subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale);
+																			subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale,sb);
 																			log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
 																			if (StringUtils.isNotBlank(subDrawerImage)) {
 																				subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
