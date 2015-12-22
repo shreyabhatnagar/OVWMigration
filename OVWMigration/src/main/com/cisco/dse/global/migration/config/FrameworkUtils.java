@@ -196,14 +196,31 @@ public class FrameworkUtils {
 
 	public static String setContentToDAM(String path, String imgPath) {
 		log.debug("In the setContentToDAM to migrate : " + path);
+		
+		Properties prop = new Properties();
+		InputStream input = null;
+		String host = "";
+		String domain = "";
+		try{
+		String filename = "config.properties";
+		input = OVWMigration.class.getClassLoader().getResourceAsStream(filename);
+		if (input == null) {
+			log.debug("input is null");
+		}
+		// load a properties file from class path, inside static method
+		prop.load(input);
+		host = StringUtils.isNotBlank(prop.getProperty("serverurl")) ? prop.getProperty("serverurl") : "";
+		domain = StringUtils.isNotBlank(prop.getProperty("domain")) ? prop.getProperty("domain") : "";
+		}catch(Exception e){
+			log.error("Exception : ",e);
+		}
 
 		HttpClient client = new HttpClient();
-		HttpMethod method = new GetMethod(
-				"http://chard.cisco.com:4502/bin/services/DAMMigration?imgPath="
+		HttpMethod method = new GetMethod(host + "/bin/services/DAMMigration?imgPath="
 						+ path+"&imgRef="+imgPath);
 		Credentials defaultcreds = new UsernamePasswordCredentials("admin",
 				"admin");
-		AuthScope authscope = new AuthScope("chard.cisco.com", 4502,
+		AuthScope authscope = new AuthScope(domain, 4502,
 				AuthScope.ANY_REALM);
 		client.getState().setCredentials(authscope, defaultcreds);
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
