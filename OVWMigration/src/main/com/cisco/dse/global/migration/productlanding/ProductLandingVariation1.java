@@ -752,10 +752,12 @@ public class ProductLandingVariation1 extends BaseAction {
 				// ---------------------------------------------------------------------------------------------------------------------------------------
 				// start of html blob components content.
 				try {
+					log.debug("Started Migrating html blob.");
 					String html = "";
 					Elements iconBlockElements = doc.select("div.icon-block");
 					//				boolean test = doc.select("div.c23-pilot").contains("div.icon-block");
 					if (iconBlockElements.isEmpty()) {
+						log.debug("html blob content not found with class icon-block");
 						iconBlockElements = doc.select("div.poly");
 						if (iconBlockElements != null) {
 							//Element htmlblobElement = iconBlockElements.first();
@@ -775,11 +777,14 @@ public class ProductLandingVariation1 extends BaseAction {
 						}
 					}
 					else {
+						log.debug("html blob content found with class icon-block");
 						if (iconBlockElements != null) {
 							//Element htmlblobElement = iconBlockElements.first();
 							for (Element htmlblobElement : iconBlockElements) {
 								if (htmlblobElement != null) {
-									html = htmlblobElement.outerHtml();
+									//html = htmlblobElement.outerHtml();
+									Element htmlElement = htmlblobElement.parent();
+									html = FrameworkUtils.extractHtmlBlobContent(htmlElement, "",locale, sb);
 									if (htmlblobElement.getElementsByTag("ul").size() > 0) {
 									}
 									else {
@@ -795,7 +800,7 @@ public class ProductLandingVariation1 extends BaseAction {
 											}
 										}
 									}
-
+									
 								} else {
 									log.debug("<li>htmlblob/icon-block Element section not found</li>");
 								}
@@ -818,7 +823,7 @@ public class ProductLandingVariation1 extends BaseAction {
 					}
 
 				} catch (Exception e) {
-					log.debug("<li>Unable to update html blob component."+e+"</li>");
+					log.debug("Excepiton : ",e);
 				}
 				// end set html blob component content.
 				// --------------------------------------------------------------------------------------------------------------------------
