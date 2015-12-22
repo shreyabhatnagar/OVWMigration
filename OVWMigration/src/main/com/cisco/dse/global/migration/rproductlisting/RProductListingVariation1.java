@@ -1,5 +1,11 @@
 package com.cisco.dse.global.migration.rproductlisting;
 
+/* 
+ * S.No     	Name                 Date                    Description of change
+ *  #1         Saroja            21-Dec-15           Added the Java file to handle the migration of product listing responsive page(s).
+ * 
+ * */
+
 import java.io.IOException;
 
 import javax.jcr.Node;
@@ -87,10 +93,6 @@ public class RProductListingVariation1 extends BaseAction{
 
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
-
-
-				
-				
 				// start set text component.
 				try {
 					String h2TagVal = "";
@@ -101,14 +103,14 @@ public class RProductListingVariation1 extends BaseAction{
 					if(gridNarrowWideNode.hasNode("text")){
 						textNodeOne = gridNarrowWideNode.getNode("text");
 					}else{
-						sb.append("<li> Text Node not found</li>");
+						sb.append(Constants.TEXT_NODE_NOT_FOUND);
 
 					}
 
 					if(gridNarrowWideNode.hasNode("text_0")){
 						textNodeTwo = gridNarrowWideNode.getNode("text_0");
 					}else{
-						sb.append("<li> Text Node not found</li>");
+						sb.append(Constants.TEXT_NODE_NOT_FOUND);
 					}
 					
 					Element firstTextElement = doc.select("div.c00-pilot").first();
@@ -164,6 +166,8 @@ public class RProductListingVariation1 extends BaseAction{
 								textNodeTwo.setProperty("text", pTagVal);
 							}
 
+						}else{
+							sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 						}
 
 						}else{
@@ -172,8 +176,9 @@ public class RProductListingVariation1 extends BaseAction{
 						}
 					
 				} catch (Exception e) {
-					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
-							+ e + "</li>");
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT
+							);
+					log.error("Exception in updating text component: ", e);
 				}
 				
 				session.save();
@@ -182,8 +187,8 @@ public class RProductListingVariation1 extends BaseAction{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		} catch (Exception e) {
-			sb.append("<li>unable to migrate page "+e+"</li>");
-			log.debug("Exception as url cannot be connected: "+ e);
+			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			log.debug("Exception as url cannot be connected: ", e);
 		}
 		sb.append("</ul></td>");
 
