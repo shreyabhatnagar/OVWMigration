@@ -124,50 +124,54 @@ public class BenifitsVariation4 extends BaseAction {
 					//End of Hero
 
 					//Start of Spotlight
+					try{
+						Element spotLightEle = doc.select("div.gd-left").select("div.c11-pilot").first();
+						if(spotLightEle!=null){
+							String slTitle = spotLightEle.getElementsByTag("h2").first().text();
+							String slDesc = spotLightEle.getElementsByTag("p").first().text();
+							Element aEle = spotLightEle.getElementsByTag("a").first();
 
-					Element spotLightEle = doc.select("div.gd-left").select("div.c11-pilot").first();
-					if(spotLightEle!=null){
-						String slTitle = spotLightEle.getElementsByTag("h2").first().text();
-						String slDesc = spotLightEle.getElementsByTag("p").first().text();
-						Element aEle = spotLightEle.getElementsByTag("a").first();
-
-						Node spNode = benifitsLeftNode.hasNode("spotlight_medium_v2")?benifitsLeftNode.getNode("spotlight_medium_v2"):null;
-						if(spNode!=null){
-							spNode.setProperty("title",slTitle);
-							spNode.setProperty("description",slDesc);
-							spNode.setProperty("linktext",aEle.text());
-							Node ctaNode = spNode.hasNode("cta")?spNode.getNode("cta"):null;
-							if(ctaNode!=null){
-								spNode.setProperty("url",aEle.attr("href"));
+							Node spNode = benifitsLeftNode.hasNode("spotlight_medium_v2")?benifitsLeftNode.getNode("spotlight_medium_v2"):null;
+							if(spNode!=null){
+								spNode.setProperty("title",slTitle);
+								spNode.setProperty("description",slDesc);
+								spNode.setProperty("linktext",aEle.text());
+								Node ctaNode = spNode.hasNode("cta")?spNode.getNode("cta"):null;
+								if(ctaNode!=null){
+									spNode.setProperty("url",aEle.attr("href"));
+								}else{
+									sb.append(Constants.SPOTLIGHT_CTA_NODE_NOT_FOUND);
+								}
 							}else{
-								sb.append(Constants.SPOTLIGHT_CTA_NODE_NOT_FOUND);
+								sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 							}
 						}else{
-							sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
+							sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
 						}
-					}else{
-						sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
+					}catch(Exception e){
+						log.error("Exception in spotlight : "+e);
 					}
-
 					//End of Spotlight
-					
+
 					//Start of Rightrail
-					
-					Elements tileEle = doc.select("div.gd-right").select("div.c23-pilot");
-					int tileEleSize = tileEle.size();
-					NodeIterator tileNodeIterator = benifitsRightNode.hasNode("tile_bordered")?benifitsRightNode.getNodes("tile_bordered*"):null;
-					int tileNodeSize = (int)tileNodeIterator.getSize();
-					
-					if(tileEleSize==tileNodeSize){
-						setTile(tileEle, tileNodeIterator);
-					}else if(tileEleSize>tileNodeSize){
-						setTile(tileEle, tileNodeIterator);
-						sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
-					}else if(tileEleSize<tileNodeSize){
-						setTile(tileEle, tileNodeIterator);
-						sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
+					try{			
+						Elements tileEle = doc.select("div.gd-right").select("div.c23-pilot");
+						int tileEleSize = tileEle.size();
+						NodeIterator tileNodeIterator = benifitsRightNode.hasNode("tile_bordered")?benifitsRightNode.getNodes("tile_bordered*"):null;
+						int tileNodeSize = (int)tileNodeIterator.getSize();
+
+						if(tileEleSize==tileNodeSize){
+							setTile(tileEle, tileNodeIterator);
+						}else if(tileEleSize>tileNodeSize){
+							setTile(tileEle, tileNodeIterator);
+							sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
+						}else if(tileEleSize<tileNodeSize){
+							setTile(tileEle, tileNodeIterator);
+							sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
+						}
+					}catch(Exception e){
+						log.error("Exception in right rail : "+e);
 					}
-					
 					//End of Rightrail
 
 					// ------------------------------------------------------------------------------------------------------------------------------------------

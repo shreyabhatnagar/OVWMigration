@@ -247,7 +247,7 @@ public class ProductLandingVariation08 extends BaseAction {
 													.migrateDAMContent(
 															heroImage,
 															fileReference,
-															locale);
+															locale,sb);
 											log.debug("heroImage " + heroImage
 													+ "\n");
 											if (StringUtils

@@ -40,114 +40,114 @@ import org.jsoup.select.Elements;
 
 public class FrameworkUtils {
 
-    /** The Constant LOG. */
-   
-    static Logger log = Logger.getLogger(FrameworkUtils.class);
-  
-    protected FrameworkUtils() {
-        /**
-         * This is a constructor.
-         */
-    }
+	/** The Constant LOG. */
+
+	static Logger log = Logger.getLogger(FrameworkUtils.class);
+
+	protected FrameworkUtils() {
+		/**
+		 * This is a constructor.
+		 */
+	}
 
 
-    /**
-     * set page properties.
-     * @param jcr node 
-     * 			  the Node
-     * @param doc
-     *            the Document
-     * @param session
-     *            the Session
-     * @param sb
-     *       	  the StringBuilder
-     */
-    public static void setPageProperties(javax.jcr.Node jcrNode, Document doc, Session session, StringBuilder sb) {
-       System.out.println("inside setPageProperties");
-      
-    	   String description = "";
-    	   Properties metaProp = new Properties();
-   		   InputStream metaInput = null;
-    	   	try {
-    	   		// reading metadata.properties file
-    	   		String metafilename = "metadata.properties";
-    	   		metaInput = FrameworkUtils.class.getClassLoader().getResourceAsStream(
-    					metafilename);
-    			if (metaInput == null) {
-    				log.debug("input is null");
-    				return;
-    			}
-    			// load a properties file from class path, inside static method
-    			metaProp.load(metaInput);
-    			Enumeration<?> e = metaProp.propertyNames();
-    			while (e.hasMoreElements()) {
-    				String key = (String) e.nextElement();
-    				String value = metaProp.getProperty(key);
-    				System.out.println("Key : " + key + ", Value : " + value);
-    			}
-    			//getting html page property of meta data from properties file
-    			
-				String descriptionHtmlProperty = StringUtils.isNotBlank(metaProp
-    					.getProperty("jcr:description")) ? metaProp
-    					.getProperty("jcr:description") : "";
-				// getting meta data from html document
-    	   		Elements metas = doc.getElementsByTag("meta"); 
-    	   		if (metas != null) {
-	    	   	   for (Element meta : metas) { 
-	    	   	      if (meta.hasAttr("name") && meta.attr("name").equals(descriptionHtmlProperty)) { 
-	    	   	    	 description =  meta.attr("content"); 
-	    	   	         log.debug("description of document:::  " + description);
-	    	   	      }
-	    	   	   } 
-    	   		}
-    	   		
-	    	   	// start check title of the page
- 	   			String pageTitle = doc.title();
- 	   			log.debug("pageTitle::::::: " + pageTitle);
-	 	   		// end check title of the page
- 	   			
-    	   		//setting html meta data to as page properties
-	    	   	if (jcrNode != null) {
-	    	   		
-	    	   		if (StringUtils.isNotBlank(description)) {
-	    	   			jcrNode.setProperty("jcr:description", description);
-	    	   		} else {
-	    	   	    	sb.append("<li>meta data description doesn't exist </li>");
-	    	   	    }
-	    	   		if (StringUtils.isNotBlank(pageTitle)) {
- 	    	   			pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
- 	    	   			String jcrTitle = "";
- 	    	   			if (jcrNode.hasProperty("jcr:title")) {
- 	    	   				jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
- 	    	   			}
- 	    	   			 
- 	    	   			log.debug("JCR Title in chard is "+jcrTitle);
- 	    	   			if (StringUtils.isNotBlank(pageTitle) && (!pageTitle.trim().equalsIgnoreCase(jcrTitle))) {
- 	    	   				log.debug("Page title and JCR title are not the same.");
- 	    	   				jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
- 	    	   			} else {
- 	    	   				log.debug("<li>custom head title not set </li>");
- 		    	   	    }
-     	   			} else {
-     	   				sb.append("<li>custom head title not set </li>");
-     	   			}
-	    	   	} else {
-	    	   		log.debug("jcr node doesn't exist");
-	    	   	}
-    	   		session.save();
-			} catch (Exception e) {
-				log.debug("Unable to update metadata.", e);
-			} finally {
-				if (metaInput != null) {
-					try {
-						metaInput.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+	/**
+	 * set page properties.
+	 * @param jcr node 
+	 * 			  the Node
+	 * @param doc
+	 *            the Document
+	 * @param session
+	 *            the Session
+	 * @param sb
+	 *       	  the StringBuilder
+	 */
+	public static void setPageProperties(javax.jcr.Node jcrNode, Document doc, Session session, StringBuilder sb) {
+		System.out.println("inside setPageProperties");
+
+		String description = "";
+		Properties metaProp = new Properties();
+		InputStream metaInput = null;
+		try {
+			// reading metadata.properties file
+			String metafilename = "metadata.properties";
+			metaInput = FrameworkUtils.class.getClassLoader().getResourceAsStream(
+					metafilename);
+			if (metaInput == null) {
+				log.debug("input is null");
+				return;
+			}
+			// load a properties file from class path, inside static method
+			metaProp.load(metaInput);
+			Enumeration<?> e = metaProp.propertyNames();
+			while (e.hasMoreElements()) {
+				String key = (String) e.nextElement();
+				String value = metaProp.getProperty(key);
+				System.out.println("Key : " + key + ", Value : " + value);
+			}
+			//getting html page property of meta data from properties file
+
+			String descriptionHtmlProperty = StringUtils.isNotBlank(metaProp
+					.getProperty("jcr:description")) ? metaProp
+							.getProperty("jcr:description") : "";
+							// getting meta data from html document
+							Elements metas = doc.getElementsByTag("meta"); 
+							if (metas != null) {
+								for (Element meta : metas) { 
+									if (meta.hasAttr("name") && meta.attr("name").equals(descriptionHtmlProperty)) { 
+										description =  meta.attr("content"); 
+										log.debug("description of document:::  " + description);
+									}
+								} 
+							}
+
+							// start check title of the page
+							String pageTitle = doc.title();
+							log.debug("pageTitle::::::: " + pageTitle);
+							// end check title of the page
+
+							//setting html meta data to as page properties
+							if (jcrNode != null) {
+
+								if (StringUtils.isNotBlank(description)) {
+									jcrNode.setProperty("jcr:description", description);
+								} else {
+									sb.append("<li>meta data description doesn't exist </li>");
+								}
+								if (StringUtils.isNotBlank(pageTitle)) {
+									pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
+									String jcrTitle = "";
+									if (jcrNode.hasProperty("jcr:title")) {
+										jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
+									}
+
+									log.debug("JCR Title in chard is "+jcrTitle);
+									if (StringUtils.isNotBlank(pageTitle) && (!pageTitle.trim().equalsIgnoreCase(jcrTitle))) {
+										log.debug("Page title and JCR title are not the same.");
+										jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
+									} else {
+										log.debug("<li>custom head title not set </li>");
+									}
+								} else {
+									sb.append("<li>custom head title not set </li>");
+								}
+							} else {
+								log.debug("jcr node doesn't exist");
+							}
+							session.save();
+		} catch (Exception e) {
+			log.debug("Unable to update metadata.", e);
+		} finally {
+			if (metaInput != null) {
+				try {
+					metaInput.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
-       
-    }
+		}
+
+	}
 
 	public static String migrateDAMContent(String path, String imgRef,
 			String locale, StringBuilder sb) {
@@ -243,50 +243,85 @@ public class FrameworkUtils {
 		}
 		return null;
 	}
-    
+
 	/**
-     * extract image path.
-     * @param element 
-     * 		 the Element
-     * @param sb
-     *       the StringBuilder
-     */
-    public static String extractImagePath(Element element, StringBuilder sb) {
-    	String imagePath = "";
-    	if (element != null) {
-	    	Elements imageElements = element.getElementsByTag("img");
+	 * extract image path.
+	 * @param element 
+	 * 		 the Element
+	 * @param sb
+	 *       the StringBuilder
+	 */
+	public static String extractImagePath(Element element, StringBuilder sb) {
+		String imagePath = "";
+		if (element != null) {
+			Elements imageElements = element.getElementsByTag("img");
 			if (imageElements != null) {
 				Element imageElement = imageElements.first();
 				if (imageElement != null) {
 					imagePath =imageElement.attr("src");
 				} 
 			} 
-    	}
+		}
 		log.debug("imagePath " + imagePath + "\n");
 		return imagePath;
-    }
-    
-    /**
-     * extract image path.
-     * @param htmlElement 
-     * 		 the Element
-     * @param sb
-     *       the StringBuilder
-     */
-    public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
-    	log.debug("In the extractHtmlBlobContent method.");
-    	String outeHtmlText = htmlBlobElement.outerHtml();
-    	String existingimagePath = "";
-    	String updatedImgPath = "";
-    	if (htmlBlobElement != null) {
-    		existingimagePath = extractImagePath(htmlBlobElement, sb);
-    		updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb);
-    				
+	}
+
+	/**
+	 * extract image path.
+	 * @param htmlElement 
+	 * 		 the Element
+	 * @param sb
+	 *       the StringBuilder
+	 */
+	/*public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
+		log.debug("In the extractHtmlBlobContent method.");
+		String outeHtmlText = htmlBlobElement.outerHtml();
+		String existingimagePath = "";
+		String updatedImgPath = "";
+		if (htmlBlobElement != null) {
+			existingimagePath = extractImagePath(htmlBlobElement, sb);
+			updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb);
+
 			log.debug(existingimagePath +" is updated to "+updatedImgPath);
 			if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
 				outeHtmlText = outeHtmlText.replace(existingimagePath, updatedImgPath);
 			}
+		}
+		return outeHtmlText;
+	}
+*/
+	//anudeep
+	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
+		log.debug("In the extractHtmlBlobContent method.");
+		String outeHtmlText = htmlBlobElement.outerHtml();
+		String[] existingimagePaths = {};
+		String updatedImgPath = "";
+		if (htmlBlobElement != null) {
+			existingimagePaths = extractImagePaths(htmlBlobElement, sb);
+			for(String existingimagePath : existingimagePaths){
+				updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb);
+
+				log.debug(existingimagePath +" is updated to "+updatedImgPath);
+				if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
+					outeHtmlText = outeHtmlText.replace(existingimagePath, updatedImgPath);
+				}
 			}
-    	return outeHtmlText;
-    }
-   }
+		}
+		return outeHtmlText;
+	}
+	public static String[] extractImagePaths(Element element, StringBuilder sb) {
+		String[] imagePath = {};
+		if (element != null) {
+			Elements imageElements = element.getElementsByTag("img");
+			if (imageElements != null) {
+				int i=0;
+				for(Element imgEle : imageElements){
+					imagePath[i] = imgEle.attr("src");
+				}
+			} 
+		}
+		log.debug("imagePath " + imagePath + "\n");
+		return imagePath;
+	}
+	//anudeep
+}

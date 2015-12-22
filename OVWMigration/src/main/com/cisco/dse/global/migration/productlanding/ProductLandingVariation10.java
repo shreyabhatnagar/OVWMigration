@@ -1,5 +1,11 @@
 package com.cisco.dse.global.migration.productlanding;
 
+/* 
+ * S.No     	Name              Date          Description of change
+ *  #1          Rohan/Anudeep     n/a	        Added the Java file to handle the migration of product landing variation10 2page(s).
+ * 
+ * */
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +33,6 @@ import com.cisco.dse.global.migration.config.FrameworkUtils;
 
 public class ProductLandingVariation10 extends BaseAction {
 
-	/**
-	 * @param args
-	 */
-	// TODO Auto-generated method stub
 	Document doc;
 
 	StringBuilder sb = new StringBuilder(1024);
@@ -97,42 +99,14 @@ public class ProductLandingVariation10 extends BaseAction {
 								int nodeSize = (int)heroPanelNodeIterator.getSize();
 								log.debug("hero node nodeSize : "+ nodeSize);
 								if(eleSize == nodeSize){
-									for(Element ele : heroElements){
-										Node heroPanelNode;
-										if (heroPanelNodeIterator.hasNext()) {
-											heroPanelNode = (Node)heroPanelNodeIterator.next();
-											heroPanelTranslate(heroPanelNode, ele, locale);
-										}
-										else {
-											log.debug("Next node not found");								
-										}
-									}
+									setForHero(heroElements,heroPanelNodeIterator,locale);
 								}
 								else if(nodeSize < eleSize){
-									for(Element ele : heroElements){
-										Node heroPanelNode;
-										if (heroPanelNodeIterator.hasNext()) {
-											heroPanelNode = (Node)heroPanelNodeIterator.next();
-											heroPanelTranslate(heroPanelNode, ele, locale);		
-										}
-										else {
-											log.debug("Next node not found");
-											sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-											break;
-										}
-									}										
+									setForHero(heroElements,heroPanelNodeIterator,locale);
+									sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 								else if (nodeSize > eleSize) {
-									for(Element ele : heroElements){
-										Node heroPanelNode;
-										if (heroPanelNodeIterator.hasNext()) {
-											heroPanelNode = (Node)heroPanelNodeIterator.next();
-											heroPanelTranslate(heroPanelNode, ele, locale);		
-										}
-										else {
-											log.debug("Next node not found");								
-										}
-									}
+									setForHero(heroElements,heroPanelNodeIterator,locale);
 									sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 							}
@@ -144,16 +118,14 @@ public class ProductLandingVariation10 extends BaseAction {
 						log.debug("End of Hero component");
 
 					} catch (Exception e) {
-						sb.append("<li>Unable to update hero large component." + e
-								+ "</li>");
+						sb.append("<li>Unable to update hero large component.</li>");
 					}		
 
 					// end set Hero Large component properties.
 
 					// start set selectorbar large component properties.				
 					try {
-						Elements selectorBarLargeElements;
-						selectorBarLargeElements = doc.select("div.selectorbarpanel");
+						Elements selectorBarLargeElements = doc.select("div.selectorbarpanel");
 						if (selectorBarLargeElements.size() == 0) {
 							selectorBarLargeElements = doc.select("div.c58-pilot").select("div.left,div.mid,div.right"); //("div.selectorbarpanel");
 						}
@@ -173,7 +145,6 @@ public class ProductLandingVariation10 extends BaseAction {
 								int nodeSize = (int)selectorBarPanel.getSize();
 								log.debug("selector component nodeSize : "+ nodeSize);
 								if(eleSize == nodeSize){
-
 									for(Element ele : selectorBarLargeElements){
 										Node selectorBarPanelNode;
 										if (selectorBarPanel.hasNext()) {
@@ -250,7 +221,7 @@ public class ProductLandingVariation10 extends BaseAction {
 						}
 						
 						if (textNode2 != null) {
-							Node textChildNode = textNode2.getNode("text");
+							Node textChildNode = textNode2.hasNode("text")?textNode2.getNode("text"):null;
 							if (textElements.size() >= 2) { 
 								if (textElements.get(1).html() != null) { 
 									textChildNode.setProperty("text", textElements.get(1).html());
@@ -422,10 +393,6 @@ public class ProductLandingVariation10 extends BaseAction {
 											listNode = (Node)listIterator.next();
 											rightRailList(listNode, rightListEle);
 										}
-										else {
-											log.debug("Next node not found");								
-										}
-
 									}
 								}
 								else if (eleSize > nodeSize) {
@@ -434,13 +401,8 @@ public class ProductLandingVariation10 extends BaseAction {
 										if (listIterator.hasNext()) {
 											listNode = (Node)listIterator.next();
 											rightRailList(listNode, rightListEle);						}
-										else {
-											log.debug("Next node not found");
-											sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
-											break;								
-										}
-
 									}
+									sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 								else if (eleSize < nodeSize) {
 									for (Element rightListEle : rightRailList) {
@@ -448,9 +410,6 @@ public class ProductLandingVariation10 extends BaseAction {
 										if (listIterator.hasNext()) {
 											listNode = (Node)listIterator.next();
 											rightRailList(listNode, rightListEle);						}
-										else {
-											log.debug("Next node not found");
-										}
 									}
 									sb.append("<li>Mismatch in the count of list panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
@@ -560,7 +519,7 @@ public class ProductLandingVariation10 extends BaseAction {
 		return sb.toString();
 	}
 
-
+	//start setting of heropanel
 	public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale) {
 
 		try {			
@@ -596,9 +555,21 @@ public class ProductLandingVariation10 extends BaseAction {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}	
-
+	}
+	
+	public void setForHero(Elements heroElements,NodeIterator heroPanelNodeIterator,String locale){
+	for(Element ele : heroElements){
+		Node heroPanelNode;
+		if (heroPanelNodeIterator.hasNext()) {
+			heroPanelNode = (Node)heroPanelNodeIterator.next();
+			heroPanelTranslate(heroPanelNode, ele, locale);
+		}
+	}
+}
+	
+	//end setting of heropanel
+	
+	//start setting of selectorbar
 	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele) {
 
 		try {
@@ -625,7 +596,6 @@ public class ProductLandingVariation10 extends BaseAction {
 						selectorBarPanelNode.setProperty("alllinkurl", allLinkUrl);
 
 						Elements menuUlList = menuEle.getElementsByTag("ul");
-						System.out.println("/////////"+menuUlList.size());
 						for (Element element : menuUlList) {
 							java.util.List<String> list = new ArrayList<String>();
 							Elements menuLiList = element.getElementsByTag("li");
@@ -660,7 +630,9 @@ public class ProductLandingVariation10 extends BaseAction {
 			e.printStackTrace();
 		}
 	}
+	//end setting of selectorbar
 
+	//start setting of spotlight
 	public void spotLightTranslate (Node slNode, Element spElement, String locale) {
 		try {
 			Element spotLightTitle = spElement.getElementsByTag("h2").first();
@@ -740,7 +712,9 @@ public class ProductLandingVariation10 extends BaseAction {
 			e.printStackTrace();
 		}
 	}
+	//end setting of spotlight
 
+	//start setting of list in right rail
 	public void rightRailList (Node listNode, Element rightListEle) {
 		try {
 			Element title;
@@ -788,5 +762,5 @@ public class ProductLandingVariation10 extends BaseAction {
 		}
 
 	}
-
+	//end setting of list in right rail
 }
