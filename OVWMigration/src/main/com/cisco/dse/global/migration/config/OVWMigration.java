@@ -54,6 +54,9 @@ import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
 import com.cisco.dse.global.migration.technology.TechnologyVariation2;
+import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation01;
+import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation02;
+
 
 public class OVWMigration {
 
@@ -589,6 +592,32 @@ public class OVWMigration {
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg20);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														else if ("rsolution-listing-var1".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new RSolutionListingVariation01().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														else if ("rsolution-listing-var2".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new RSolutionListingVariation02().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
 
