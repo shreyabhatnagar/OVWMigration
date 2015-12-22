@@ -186,7 +186,7 @@ public class ProductLandingVariation12 extends BaseAction {
 													.getString() : "";
 											heroImage = FrameworkUtils.migrateDAMContent(heroImage,
 															fileReference,
-															locale);
+															locale,sb);
 											log.debug("heroImage " + heroImage
 													+ "\n");
 											if (StringUtils
@@ -533,7 +533,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									if (spotLightComponentNode.hasNode("image")) {
 										Node spotLightImageNode = spotLightComponentNode.getNode("image");
 										String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale);
+										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
@@ -579,7 +579,7 @@ public class ProductLandingVariation12 extends BaseAction {
 					Element rightRailPilotElement = indexlistElem.first();
 					if (rightRailPilotElement != null) {
 							String indexTitle = rightRailPilotElement.getElementsByTag(
-									"h2").outerHtml();
+									"h2").text();
 
 							Elements indexUlList = rightRailPilotElement
 									.getElementsByTag("ul");
@@ -608,7 +608,9 @@ public class ProductLandingVariation12 extends BaseAction {
 									String listIcon = listItemSpan
 											.attr("class");
 									// String icon = li.ownText();
-
+									if (StringUtils.isBlank(anchorText)) {
+										anchorText = li.text();
+									}
 									jsonObj.put("linktext", anchorText);
 									jsonObj.put("linkurl", anchorHref);
 									jsonObj.put("icon", listIcon);
@@ -909,7 +911,7 @@ public class ProductLandingVariation12 extends BaseAction {
 
 				
 				try{
-					Elements extraTextComponent = doc.select("c00v0-pilot");
+					Elements extraTextComponent = doc.select("div.c00v0-pilot");
 					if(!extraTextComponent.isEmpty()){
 						sb.append(Constants.EXTRA_TEXT_ELEMENT_FOUND);
 					}

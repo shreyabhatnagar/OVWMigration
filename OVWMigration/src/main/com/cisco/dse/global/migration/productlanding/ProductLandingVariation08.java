@@ -247,7 +247,7 @@ public class ProductLandingVariation08 extends BaseAction {
 													.migrateDAMContent(
 															heroImage,
 															fileReference,
-															locale);
+															locale,sb);
 											log.debug("heroImage " + heroImage
 													+ "\n");
 											if (StringUtils
@@ -525,6 +525,7 @@ public class ProductLandingVariation08 extends BaseAction {
 							if (!descriptionText.isEmpty()) {
 								pText = descriptionText.html();
 							} else {
+								if (!h3TagExists)
 								sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
 							}
 							
@@ -538,15 +539,17 @@ public class ProductLandingVariation08 extends BaseAction {
 								sb.append(Constants.EXTRA_IMAGE_TAG_FOUND);
 							}*/
 							Elements anchorText = ele.getElementsByTag("a");
+							String ownText = ele.ownText();
+							log.debug("owntext:::" + ownText);
 							if(h3TagExists){
 								Element anchor = anchorText.first();
-									aText = anchor.text();
+									aText = anchor.text() + ownText;
 									aHref = anchor.attr("href");
 									sb.append(Constants.EXTRA_URLS_FOUND_ON_TILE_BORDRED_COMPONENT);
 							}
 							else{
 							if (!anchorText.isEmpty()) {
-								aText = anchorText.text();
+								aText = anchorText.text() + ownText;
 								aHref = anchorText.attr("href");
 							} else {
 								sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
