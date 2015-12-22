@@ -62,12 +62,12 @@ public class RSolutionListingVariation01 extends BaseAction{
 			}
 
 			if(doc != null){
-				/*// start set page properties.
+				// start set page properties.
 
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
 
 				// end set page properties.
-*/
+
 				//Start of text Element
 				try {
 					migrateTextContent(doc,solutionWideNode );
