@@ -25,17 +25,17 @@ import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.BenifitsVariation4;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
+import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation01;
+import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation02;
+import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation03;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation1;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation3;
 import com.cisco.dse.global.migration.architechture.ArchitectureVariation04;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
-import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
-import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation1;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation6;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation7;
-import com.cisco.dse.global.migration.rproductindex.RProductVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation08;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
@@ -555,43 +555,46 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("rproduct-listing-var1".equals(type)) {
+														else if ("buyersguide-var1".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
-																	+ new RProductListingVariation1().translate(
+																	+ new BuyersGuideVariation01().translate(
 																			host, gLink, prod, type, cattype,
 																			sheet.getSheetName(), session);
 															msg16 = msg16 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rservice-listing-var1".equals(type)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RServiceListingVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-														}else if ("rindex-var1".equals(type)) {
-															String msg20 = "";
-															msg20 = msg20 + "<tr>";
-															msg20 = msg20
-																	+ new RProductVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg20 = msg20 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
+														else if ("buyersguide-var3".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new BuyersGuideVariation03().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
 
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+														else if ("buyersguide-var2".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new BuyersGuideVariation02().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}
+										
 														
 
 					}

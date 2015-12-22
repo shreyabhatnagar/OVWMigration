@@ -94,25 +94,48 @@ public class BuyersGuideVariation01 extends BaseAction {
 				try {
 					String rawHtml1 = "";
 					String rawHtml2 = "";
+					String rawHtml3="";
+					String rawHtml4="";
+					StringBuilder oldImage = new StringBuilder();
 					log.debug("Started migrating HtmlBlob content.");
-					Elements rawElements = doc.select("html");
+					//Elements rawElements=doc.getElementsByTag("html");
+					//Elements images=doc.getElementsByTag("img");
 					Elements tabElements = doc.select("div.gd01-pilot,div.sitecopy");
-					if (rawElements != null
+					
+					/*if (rawElements != null
 							&& !rawElements.isEmpty()) {
-						rawHtml1 = rawElements.outerHtml();
-						} else {
+						rawHtml1 = rawElements.html();
+				}
+						 else {
 						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 					}
+					*/
 					if (tabElements != null
 							&& !tabElements.isEmpty()) {
+						rawHtml1= tabElements.html();
 						rawHtml2 = tabElements.outerHtml();
-						if("ja_jp".equals(locale)){
+						Elements images = tabElements.select("img");
+						
+						
+						for(Element ele:images)
+						{
+							rawHtml3 = ele.outerHtml();
+							rawHtml3 = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
+							oldImage.append(rawHtml3);
+							rawHtml4 = oldImage.toString();
+						 //oldImage.append(rawHtml2);
+						//log.debug("oldImage:"+oldImage);
+						}
+						rawHtml4 = rawHtml4 + rawHtml2;
+				}
+						/*if("ja_jp".equals(locale)){
 						String listDesc = tabElements.first().getElementsByTag("ul").addClass("no-bullets").outerHtml();
 						rawHtml2 = rawHtml2 + listDesc;
-						}
-						} else {
+						}*/
+						 else {
 						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 					}
+					
 					// End get content.
 					// Start set content.
 					if (buyersTopNode.hasNode("raw_html")) {

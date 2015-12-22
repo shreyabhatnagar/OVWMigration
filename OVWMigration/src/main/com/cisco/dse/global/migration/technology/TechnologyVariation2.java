@@ -108,7 +108,7 @@ public class TechnologyVariation2 extends BaseAction {
 							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
 					}catch(Exception e){
-						log.debug("Exception in title" +e);
+						log.debug("Exception in title",e);
 					}
 					//end of text	
 
