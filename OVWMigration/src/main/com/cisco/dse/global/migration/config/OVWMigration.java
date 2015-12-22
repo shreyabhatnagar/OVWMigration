@@ -34,6 +34,7 @@ import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation6;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation7;
+import com.cisco.dse.global.migration.rproductindex.RProductVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation08;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation1;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation10;
@@ -564,6 +565,18 @@ public class OVWMigration {
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}else if ("rindex-var1".equals(type)) {
+															String msg20 = "";
+															msg20 = msg20 + "<tr>";
+															msg20 = msg20
+																	+ new RProductVariation1().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg20 = msg20 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
 
