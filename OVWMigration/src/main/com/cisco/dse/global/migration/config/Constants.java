@@ -532,4 +532,8 @@ public class Constants {
 
 	// IMAGE_NOT_FOUND_IN_LOCALE_PAGE
 	public static final String IMAGE_NOT_FOUND_IN_LOCALE_PAGE = "<li>Image not found in locale page.</li>";
+	
+	// UNABLE_TO_MIGRATE_TEXT
+	public static final String UNABLE_TO_MIGRATE_TEXT = "<li>Unable to update the text component</li>";
+
 }
