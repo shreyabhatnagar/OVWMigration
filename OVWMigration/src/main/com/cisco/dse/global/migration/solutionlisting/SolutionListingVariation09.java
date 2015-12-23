@@ -66,11 +66,8 @@ public class SolutionListingVariation09 extends BaseAction {
 
 			solutionListingMidnode = session.getNode(solutionListing);
 			pageJcrNode = session.getNode(pagePropertiesPath);
-			try {
-				doc = getConnection(loc);
-			} catch (Exception e) {
-				log.error("Exception " , e);
-			}
+			
+			doc = getConnection(loc);
 
 			if (doc != null) {
 				
@@ -81,6 +78,7 @@ public class SolutionListingVariation09 extends BaseAction {
 
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
+				// ----------------------------------------------------------------------------------
 				// start of text component properties setting
 				try {
 					String textProp = "";
@@ -107,24 +105,26 @@ public class SolutionListingVariation09 extends BaseAction {
 						}
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
-					log.error("Exception " , e);
 				}
 				// end of text component properties setting
 				//----------------------------------------------------------------------------------------------------------------
 				// start of htmlblob component
 				try {
 					String htmlBlobContent = "";
+					//String newImage="";
 					StringBuilder oldImage = new StringBuilder();
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
 					Element htmlBlobElements = doc.select("div.htmlblob").last();
 					if (htmlBlobElements != null) {
+							htmlBlobContent = htmlBlobElements.select("div.c00-pilot").outerHtml();
 							Element h2Ele = htmlBlobElements.select("h2").first();
 							oldImage.append(h2Ele);
 							oldImage.append("<table><tr>");
 							Elements images = htmlBlobElements.select("td");
 							for(Element ele:images)
 							{
+								htmlBlobContent = ele.outerHtml();
 								htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
 								oldImage.append(htmlBlobContent);
 							}
@@ -146,8 +146,8 @@ public class SolutionListingVariation09 extends BaseAction {
 					}
 					// End get content.
 				} catch (Exception e) {
+					//log.error("Exception : ", e);
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
-					log.error("Exception " , e);
 				}
 				// end htmlblob component.
 				
@@ -156,9 +156,8 @@ public class SolutionListingVariation09 extends BaseAction {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		} catch (Exception e) {
-			sb.append(Constants.UNABLE_TO_MIGRATE_PAGE);
+			sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			log.debug("Exception as url cannot be connected: " + e);
-			log.error("Exception " , e);
 		}
 
 		sb.append("</ul></td>");
