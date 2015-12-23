@@ -536,4 +536,40 @@ public class Constants {
 	// UNABLE_TO_MIGRATE_TEXT
 	public static final String UNABLE_TO_MIGRATE_TEXT = "<li>Unable to update the text component</li>";
 
+	//HEADER_ELEMENT_NOT_FOUND
+	public static final String HEADER_ELEMENT_NOT_FOUND = "<li>Header elements not found in web publisher page.</li>";
+
+	//HEADER_NODE_NOT_FOUND
+	public static final String HEADER_NODE_NOT_FOUND = "<li>Header node not found.</li>";
+
+	//UNABLE_TO_MIGRATE_HEADER
+	public static final String UNABLE_TO_MIGRATE_HEADER = "<li>Heading cannot be migrated.</li>";
+
+	//LIST_ANCHOR_ELEMENTS_NOT_FOUND
+	public static final String LIST_ANCHOR_ELEMENTS_NOT_FOUND = "<li>List anchor elements not found.</li>";
+
+	//LINK_TEXT_NOT_FOUND_IN_LIST
+	public static final String LINK_TEXT_NOT_FOUND_IN_LIST = "<li>Link text not found in list</li>";
+
+	//LINK_URL_NOT_FOUND_IN_LIST
+	public static final String LINK_URL_NOT_FOUND_IN_LIST = "<li>Link ulr(href) not found.</li>";
+
+	//LEFT_LIST_ITEMS_NODE_NOT_FOUND
+	public static final String LEFT_LIST_ITEMS_NODE_NOT_FOUND = "<li>Left list items node not found</li>";
+
+	//LEFT_LIST_HEDAING_NODE_NOT_FOUND
+	public static final String LEFT_LIST_HEDAING_NODE_NOT_FOUND = "<li>Left list heading node not found.</li>";
+	
+	//MID_LIST_ITEMS_NODE_NOT_FOUND
+	public static final String MID_LIST_ITEMS_NODE_NOT_FOUND = "<li>Mid list items node not found</li>";
+
+	//MID_LIST_HEDAING_NODE_NOT_FOUND
+	public static final String MID_LIST_HEDAING_NODE_NOT_FOUND = "<li>Mid list heading node not found.</li>";
+	
+	//RIGHT_LIST_ITEMS_NODE_NOT_FOUND
+	public static final String RIGHT_LIST_ITEMS_NODE_NOT_FOUND = "<li>Right list items node not found</li>";
+
+	//RIGHT_LIST_HEDAING_NODE_NOT_FOUND
+	public static final String RIGHT_LIST_HEDAING_NODE_NOT_FOUND = "<li>Right list heading node not found.</li>";
+
 }

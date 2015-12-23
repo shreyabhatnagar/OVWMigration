@@ -1,3 +1,8 @@
+/* 
+ * S.No		Name	Date		Description of change
+ * 1		Vidya	22-dec-15	Added the Java file to handle the migration of responsive service listing pages.
+ * 
+ * */
 package com.cisco.dse.global.migration.rservicelisting;
 
 import java.io.IOException;
@@ -82,7 +87,7 @@ public class RServiceListingVariation1 {
 						if (h1Elements != null) {
 							h1Text = h1Elements.text();
 						} else {
-							sb.append("<li>Heading elements not found in web publisher page.</li>");
+							sb.append(Constants.HEADER_ELEMENT_NOT_FOUND);
 						}
 					} else {
 						headingElements = doc.select("div.gd-right")
@@ -90,24 +95,20 @@ public class RServiceListingVariation1 {
 						if(headingElements != null){
 							h1Text = headingElements.html();
 						}else{
-							sb.append("<li>Heading elements not found in web publisher page.</li>");
+							sb.append(Constants.HEADER_ELEMENT_NOT_FOUND);
 						}
 					}
 					// setting data
 					Node headerNode = serviceListingNode.hasNode("header") ? serviceListingNode
 							.getNode("header") : null;
 					if (headerNode != null) {
-						log.debug("header node path:" + headerNode.getPath());
-						log.debug("h1Text:" + h1Text);
-						log.debug("title property:"
-								+ headerNode.hasProperty("title"));
 						headerNode.setProperty("title", h1Text);
 					} else {
-						sb.append("<li>Header node not found.</li>");
+						sb.append(Constants.HEADER_NODE_NOT_FOUND);
 					}
 
 				} catch (Exception e) {
-					sb.append("<li>Heading cannot be migrated.</li>");
+					sb.append(Constants.UNABLE_TO_MIGRATE_HEADER);
 				}
 
 				// end of heading component
@@ -117,7 +118,6 @@ public class RServiceListingVariation1 {
 					String h2Text = "";
 					String h3Text = "";
 					String pText = "";
-					int count = 1;
 					Elements spotlightElements = doc.select("div.gd-right")
 							.select("div.c11-pilot");
 					NodeIterator spotlightNodeIterator = serviceListingNode
@@ -125,7 +125,6 @@ public class RServiceListingVariation1 {
 							.getNodes("spotlight*") : null;
 					if (!spotlightElements.isEmpty()) {
 						for (Element ele : spotlightElements) {
-							log.debug("Loop run:" + count);
 							Element h2Element = ele.getElementsByTag("h2")
 									.first();
 							if (h2Element != null) {
@@ -144,14 +143,7 @@ public class RServiceListingVariation1 {
 							Element ulElement = ele.getElementsByTag("ul")
 									.first();
 							if (ulElement != null) {
-								/*//log.debug("old ul Elements:" + ulElement);
-								String newElements = FrameworkUtils
-										.extractHtmlBlobContent(ulElement, "",
-												locale, sb);
-								//log.debug("new ul elements:" + newElements);
-*/								descText.append(ulElement.outerHtml());
-							} else {
-								sb.append("<li>SPOTLIGHT_LIST_ELEMENTS_NOT_FOUND</li>");
+								descText.append(ulElement.outerHtml());
 							}
 							if (spotlightNodeIterator.hasNext()) {
 								Node spotlightNode = (Node) spotlightNodeIterator
@@ -181,25 +173,22 @@ public class RServiceListingVariation1 {
 														spotLightImage);
 									}
 								} else {
-									sb.append("<li>spotlight image node doesn't exist</li>");
+									sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
 								}
 								// end image
 
 								if (h2Text != null) {
-									log.debug("h2Text:" + h2Text);
 									log.debug("spotlight node path:"
 											+ spotlightNode.getPath());
 									spotlightNode.setProperty("title", h2Text);
 								}
 								if (descText != null) {
-									log.debug("descText:" + descText);
 									spotlightNode.setProperty("description",
 											descText.toString());
 								}
 							} else {
 								sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 							}
-							count++;
 						}
 					} else {
 						int sCount = 1;
@@ -207,10 +196,7 @@ public class RServiceListingVariation1 {
 								.select("div.cc00-pilot");
 						if(!spotlightElements.isEmpty()){
 						for(Element ele:spotlightElements){
-							log.debug("sCount:"+sCount);
 							if(sCount!=1 &&sCount != 5){
-								log.debug("sCount:"+sCount);
-								log.debug("Loop run:" + count);
 								Element h3Element = ele.getElementsByTag("h3")
 										.first();
 								if (h3Element != null) {
@@ -252,7 +238,7 @@ public class RServiceListingVariation1 {
 															spotLightImage);
 										}
 									} else {
-										sb.append("<li>spotlight image node doesn't exist</li>");
+										sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
 									}
 									// end image
 
@@ -280,7 +266,6 @@ public class RServiceListingVariation1 {
 
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_UPDATE_SPOTLIGHT);
-					log.debug("Exception:" + e);
 				}
 				// end of spotlight components
 				// ----------------------------------------------------------------------------------------------------------------------------
@@ -310,14 +295,11 @@ public class RServiceListingVariation1 {
 							.getNode("list_item_parsys/list_content/listitems");
 					rightListItemsNode = rightListContainerNode
 							.getNode("list_item_parsys/list_content/listitems");
-					log.debug("Left list node path:"
-							+ leftListContainerNode.getPath());
 					Elements listElements = doc.select("div.gd23-pilot")
 							.select("div.c00-pilot");
 
 					if (!listElements.isEmpty()) {
 						for (Element ele : listElements) {
-							log.debug("List loop run:"+count);
 							Element h2Elements = ele.getElementsByTag("h2")
 									.first();
 							if (h2Elements != null) {
@@ -332,12 +314,11 @@ public class RServiceListingVariation1 {
 							}
 							Elements aElements = ele.getElementsByTag("a");
 							if (aElements == null) {
-								sb.append("<li>List anchor elements not found.</li>");
+								sb.append(Constants.LIST_ANCHOR_ELEMENTS_NOT_FOUND);
 							}
 							if (count == 1) {
 								if (leftListContainerNode != null) {
 									if (h2Text != null) {
-										log.debug("List heading:"+h2Text);
 										leftListContainerNode.setProperty(
 												"title", h2Text);
 									}
@@ -356,40 +337,36 @@ public class RServiceListingVariation1 {
 												}
 												aHref = aEle.attr("href");
 												if (aText != null) {
-													log.debug("aText:" + aText);
 													listItemNode.setProperty(
 															"linktext", aText);
 												} else {
-													sb.append("<li>Link text not found.</li>");
+													sb.append(Constants.LINK_TEXT_NOT_FOUND_IN_LIST);
 												}
 												if (aHref != null) {
-													log.debug("aHref:" + aHref);
 													listItemNode.setProperty(
 															"ulr", aHref);
 												} else {
-													sb.append("<li>Link href not found.</li>");
+													sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
 												}
 											}
 										}
 									} else {
-										sb.append("<li>List items node not found</li>");
+										sb.append(Constants.LEFT_LIST_ITEMS_NODE_NOT_FOUND);
 									}
 								} else {
-									sb.append("<li>Left list_container node not found.</li>");
+									sb.append(Constants.LEFT_LIST_HEDAING_NODE_NOT_FOUND);
 								}
 							} else if (count == 2) {
 								if (midListContainerNode != null) {
 									if (h2Text != null) {
-										log.debug("List heading:"+h2Text);
 										midListContainerNode.setProperty(
 												"title", h2Text);
 									}
 									if (introText != null) {
-										log.debug("List para:"+introText);
 										midListContainerNode.setProperty(
 												"intropara", introText);
 									} else {
-										sb.append("<li>List intropara canot be migrated</li>");
+										sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
 									}
 									Node listItemsNode = midListItemsNode
 											.getNode("item_1/linkdata");
@@ -399,40 +376,36 @@ public class RServiceListingVariation1 {
 										}
 										aHref = aElements.first().attr("href");
 										if (aText != null) {
-											log.debug("aText:" + aText);
 											listItemsNode.setProperty(
 													"linktext", aText);
 										} else {
-											sb.append("<li>Link text not found.</li>");
+											sb.append(Constants.LINK_TEXT_NOT_FOUND_IN_LIST);
 										}
 										if (aHref != null) {
-											log.debug("aHref:" + aHref);
 											listItemsNode.setProperty("ulr",
 													aHref);
 										} else {
-											sb.append("<li>Link href not found.</li>");
+											sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
 										}
 
 									} else {
-										sb.append("<li>List items node not found</li>");
+										sb.append(Constants.MID_LIST_ITEMS_NODE_NOT_FOUND);
 									}
 
 								} else {
-									sb.append("<li>Mid list_container node not found.</li>");
+									sb.append(Constants.MID_LIST_HEDAING_NODE_NOT_FOUND);
 								}
 							} else if (count == 3) {
 								if (rightListContainerNode != null) {
 									if (h2Text != null) {
-										log.debug("List heading:"+h2Text);
 										rightListContainerNode.setProperty(
 												"title", h2Text);
 									}
 									if (introText != null) {
-										log.debug("List para:"+introText);
 										rightListContainerNode.setProperty(
 												"intropara", introText);
 									} else {
-										sb.append("<li>List intropara canot be migrated</li>");
+										sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
 									}
 									Node listItemsNode = rightListItemsNode
 											.getNode("item_1/linkdata");
@@ -442,26 +415,24 @@ public class RServiceListingVariation1 {
 										}
 										aHref = aElements.first().attr("href");
 										if (aText != null) {
-											log.debug("aText:" + aText);
 											listItemsNode.setProperty(
 													"linktext", aText);
 										} else {
-											sb.append("<li>Link text not found.</li>");
+											sb.append(Constants.LINK_TEXT_NOT_FOUND_IN_LIST);
 										}
 										if (aHref != null) {
-											log.debug("aHref:" + aHref);
 											listItemsNode.setProperty("ulr",
 													aHref);
 										} else {
-											sb.append("<li>Link href not found.</li>");
+											sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
 										}
 
 									} else {
-										sb.append("<li>List items node not found</li>");
+										sb.append(Constants.RIGHT_LIST_ITEMS_NODE_NOT_FOUND);
 									}
 
 								} else {
-									sb.append("<li>right list_container node not found.</li>");
+									sb.append(Constants.RIGHT_LIST_HEDAING_NODE_NOT_FOUND);
 								}
 							}
 							count++;
