@@ -239,16 +239,19 @@ public class FrameworkUtils {
 			String responseObj = new String(responseBody);
 			log.debug("josn object from service respones.");
 			log.debug(responseObj);
-			JSONObject resObj = new JSONObject(responseObj);
+			JSONObject resObj = null;
+			if(StringUtils.isNotBlank(responseObj)){
+			resObj = new JSONObject(responseObj);
+			}
 			String newImagePath = "";
 			String error = "";
-			if (resObj.has("newImagePath")) {
+			if (resObj != null && resObj.has("newImagePath")) {
 				newImagePath = (String) resObj.get("newImagePath");
 				log.debug("Updated dam Image path : " + newImagePath);
 			} else {
 				log.debug("No 'newImagePath' found in service response.");
 			}
-			if (resObj.has("error")) {
+			if (resObj != null && resObj.has("error")) {
 				error = (String) resObj.get("error");
 				if (StringUtils.isNotBlank(newImagePath)) {
 					log.debug("Error in updating dam path : " + error);
