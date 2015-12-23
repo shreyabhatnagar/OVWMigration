@@ -347,7 +347,7 @@ public class Constants {
 	public static final String LIST_ELEMENT_LIST_NODE_NOT_FOUND = "<li>Element_list node not found for list node</li>";
 
 	//LIST_NODE_NOT_FOUND
-	public static final String LIST_NODE_NOT_FOUND = "<li>List Node not found</li>";
+	public static final String LIST_NODE_NOT_FOUND = "<li>Extra link found in web publisher page. As there is no node to map it, that link is not migrated</li>";
 
 	//TITLE_OF_LIST_ELEMENT_NOT_FOUND
 	public static final String TITLE_OF_LIST_ELEMENT_NOT_FOUND = "<li>Title element of list component not found</li>";
@@ -390,7 +390,7 @@ public class Constants {
 	public static final String MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL = "Mis-match of tile components in right rail. Additional nodes found. Locale page has ( ";
 
 	// LINK_IS_DISABLED_IN_RIGHT_RAIL
-	public static final String LINK_IS_DISABLED_IN_RIGHT_RAIL = "<li>Link is been disabled since the link trigger value is none</li>";
+	public static final String LINK_IS_DISABLED_IN_RIGHT_RAIL = "<li>Link is been disabled in the right rail since the link trigger value is none</li>";
 
 	// RIGHT_RAIL_COUNT
 	public static final String RIGHT_RAIL_NODE_COUNT = "<li>Right rail Component node count is ";
