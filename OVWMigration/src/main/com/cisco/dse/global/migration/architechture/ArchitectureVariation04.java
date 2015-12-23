@@ -514,8 +514,9 @@ public class ArchitectureVariation04 extends BaseAction {
 							.getNodes("tile_bordered*");
 					int nodeSize = (int) tileBorderedNodeIterator.getSize();
 					if (eleSize != nodeSize) {
-						sb.append(Constants.MIS_MATCH_OF_TILE_BORDERED_COMPONENTS);
+						//sb.append(Constants.MIS_MATCH_OF_TILE_BORDERED_COMPONENTS);
 						log.debug("Could not migrate  tilebordered node. Count mis match");
+						sb.append("<li>Mis-Match in tilebordered Panels count."+eleSize+" is not equal "+nodeSize+"</li>");
 					}
 					for (Element ele : tileBorderedElements) {
 						if (tileBorderedNodeIterator.hasNext()) {

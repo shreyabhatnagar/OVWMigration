@@ -332,31 +332,40 @@ public class ArchitechtureVariation3 extends BaseAction{
 	private void setListContentToNodes(Elements liList, Node elementNode) {
 		try{
 			List<String> listAdd = new ArrayList<String>();
-			String icon = null;
-			String size = null;
 			boolean openNewWindow = false;
 
 			for(Element li : liList){
-				icon = "none";
-				size = "";
-
-				//pdf content
-				String pdf = li.ownText().trim();
-				if(pdf != null){		
-					openNewWindow = true;
-				}else{				
-					openNewWindow = false;}
-
+				// start pdf
+				String pdf = li.ownText();
+				String pdfIcon = null;
+				if (pdf.length() > 0) {
+					if (pdf.toLowerCase().contains("pdf"))
+						pdfIcon = "pdf";
+					int i = 0;
+					for (; i < pdf.length(); i++) {
+						char character = pdf.charAt(i);
+						boolean isDigit = Character
+								.isDigit(character);
+						if (isDigit) {
+							break;
+						}
+					}
+					pdf = pdf
+							.substring(i, pdf.length() - 1);
+				}
+				// pdf = pdf.replace(")", "");
+				pdf = pdf.trim();
+				// end pdf
 
 				Elements aEle = li.getElementsByTag("a");
 				for(Element a : aEle){
 					JSONObject obj = new JSONObject();
 					obj.put("linktext", a.text());
 					obj.put("linkurl",a.attr("href"));
-					obj.put("icon",icon);
-					obj.put("size",size);
+					obj.put("icon",pdfIcon);
+					obj.put("size",pdf);
 					obj.put("description","");
-					obj.put("openInNewWindow",openNewWindow);
+					obj.put("openInNewWindow",false);
 					listAdd.add(obj.toString());
 				}
 			}

@@ -175,7 +175,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 
 	// Start of Migrate List Elements method
 	private void migratelistElements(Document doc, Node architectureLeftNode, Session session) throws RepositoryException {
-		Elements listElements = doc.select("div.n13-pilot");
+		Elements listElements = doc.select("div.gd-left").select("div.n13-pilot");
 
 		if(listElements == null || listElements.size() == 0){
 			sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
