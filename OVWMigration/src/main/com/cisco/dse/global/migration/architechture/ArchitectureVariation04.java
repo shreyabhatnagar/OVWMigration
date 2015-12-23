@@ -71,7 +71,11 @@ public class ArchitectureVariation04 extends BaseAction {
 			architectureLeftNode = session.getNode(architectureLeftPath);
 			architectureRightNode = session.getNode(architectureRightPath);
 			pageJcrNode = session.getNode(pagePropertiesPath);
-			doc = getConnection(loc);
+			try {
+				doc = getConnection(loc);
+			} catch (Exception e) {
+				log.error("Exception " , e);
+			}
 
 			if (doc != null) {
 				// ------------------------------------------------------------------------------------------------------------------------------------------
@@ -166,6 +170,7 @@ public class ArchitectureVariation04 extends BaseAction {
 
 					} catch (Exception e) {
 						sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+						log.error("Exception :",e);
 					}
 					// end of text component and first list properties setting
 					// -------------------------------------------------------------------------------------------------------------------
@@ -294,6 +299,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						}
 					} catch (Exception e) {
 						sb.append(Constants.UNABLE_TO_UPDATE_LIST);
+						log.error("Exception :",e);
 					}
 					// end of middle content migration
 					// -----------------------------------------------------------------------------------------------------------------------------
@@ -339,6 +345,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						}
 					} catch (Exception e) {
 						sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+						log.error("Exception :",e);
 					}
 					// end of text component
 					// --------------------------------------------------------------------------------------------------------------------------------------
@@ -430,7 +437,7 @@ public class ArchitectureVariation04 extends BaseAction {
 							count++;
 						}
 					} catch (Exception e) {
-						log.debug("Exception :"+e);
+						log.error("Exception :",e);
 						sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 					}
 					// end of migrating list components
@@ -457,8 +464,9 @@ public class ArchitectureVariation04 extends BaseAction {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		} catch (Exception e) {
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			sb.append(Constants.UNABLE_TO_MIGRATE_PAGE);
 			log.debug("Exception as url cannot be connected: " + e);
+			log.error("Exception :",e);
 		}
 
 		sb.append("</ul></td>");
@@ -492,6 +500,7 @@ public class ArchitectureVariation04 extends BaseAction {
 
 		} catch (Exception e) {
 			sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
+			log.error("Exception :",e);
 		}
 
 		// end of htmlblob content
@@ -560,7 +569,7 @@ public class ArchitectureVariation04 extends BaseAction {
 
 		} catch (Exception e) {
 			sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
-			log.debug("Exception :" + e);
+			log.error("Exception :" , e);
 		}
 		// end of tile bordered section
 	}
