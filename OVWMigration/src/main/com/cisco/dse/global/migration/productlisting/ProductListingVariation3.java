@@ -3,7 +3,6 @@ package com.cisco.dse.global.migration.productlisting;
 import java.io.IOException;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
@@ -104,8 +103,6 @@ public class ProductListingVariation3 extends BaseAction{
 						sb.append("<li> Text Node not found</li>");
 					}
 
-					NodeIterator textNodeIterator = indexMidLeftNode.getNodes("text*");
-					int nodeSize = (int) textNodeIterator.getSize();
 					Elements textElements = doc.select("div.c00v1-pilot");
 					if(textElements.isEmpty()){
 						textElements = doc.select("div.c00-pilot");
@@ -116,16 +113,14 @@ public class ProductListingVariation3 extends BaseAction{
 					if(textElements.isEmpty()){
 						textElements = doc.select("div.no-border");
 					}
-					int eleSize = 0;
 
 					if (textElements != null && !textElements.isEmpty()) {
-						Elements hElements = textElements.select("h2")!=null?textElements.select("h2"):textElements.select("h1");
+						Elements hElements = !textElements.select("h2").isEmpty()?textElements.select("h2"):textElements.select("h1");
 						Element ele = hElements.first();
 						if (ele != null) {
 							Element textProp = ele.getElementsByTag("h1").first()!=null?ele.getElementsByTag("h1").first():ele.getElementsByTag("h2").first();
 							log.debug("text property!: " + textProp);
 							if(textProp != null){
-								eleSize++;
 								h2TagVal = textProp.outerHtml();
 								if(textNodeOne != null){
 									textNodeOne.setProperty("text", h2TagVal);
@@ -150,7 +145,6 @@ public class ProductListingVariation3 extends BaseAction{
 						Element pTagText = pTag.getElementsByTag("p").first();
 						//log.debug("pTagText property!: " + pTagText);
 						if(pTagText != null){
-							eleSize++;
 							pTagVal = pTagText.outerHtml();	
 							if(textNodeTwo != null){
 								textNodeTwo.setProperty("text", pTagVal);
@@ -159,7 +153,6 @@ public class ProductListingVariation3 extends BaseAction{
 						}else if(pTag.parent().hasClass("c00-pilot") || pTag.parent().hasClass("cc00-pilot")){
 							pTagText = pTag.getElementsByTag("p").first();
 							if(pTagText != null){
-								eleSize++;
 								pTagVal = pTagText.outerHtml();	
 								if(textNodeTwo != null){
 									textNodeTwo.setProperty("text", pTagVal);
