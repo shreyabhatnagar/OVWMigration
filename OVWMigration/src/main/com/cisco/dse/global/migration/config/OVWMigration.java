@@ -557,7 +557,33 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}else if ("rproduct-listing-var1".equals(type)) {
+															String msg16 = "";
+															msg16 = msg16 + "<tr>";
+															msg16 = msg16
+																	+ new RProductListingVariation1().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg16 = msg16 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg16);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
+														}else if ("rindex-var1".equals(type)) {
+															String msg20 = "";
+															msg20 = msg20 + "<tr>";
+															msg20 = msg20
+																	+ new RProductVariation1().translate(
+																			host, gLink, prod, type, cattype,
+																			sheet.getSheetName(), session);
+															msg20 = msg20 + "</tr>";
+
+															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+															sb.append(msg20);
+															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
+
+														
 														else if ("buyersguide-var1".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
@@ -571,32 +597,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("buyersguide-var3".equals(type)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new BuyersGuideVariation03().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("buyersguide-var2".equals(type)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new BuyersGuideVariation02().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rservice-listing-var1".equals(type)) {
+														else if ("rservice-listing-var1".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
