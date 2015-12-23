@@ -384,7 +384,8 @@ public class ProductLandingVariation3 extends BaseAction{
 					if (htmlblobElements != null) {
 						//Element htmlblobElement = htmlblobElements.first();
 						for (Element htmlblobElement : htmlblobElements) {
-							html = html + htmlblobElement.outerHtml();
+							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb);
+							//html = html + htmlblobElement.outerHtml();
 						} 
 					} else {
 						sb.append("<li>htmlblob component not found on web publisher page</li>");
@@ -475,7 +476,7 @@ public class ProductLandingVariation3 extends BaseAction{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		} catch (Exception e) {
-			log.debug("<li>Exception "+e+"</li>");
+			log.debug("Exception : ",e);
 		}
 
 		sb.append("</ul></td>");
