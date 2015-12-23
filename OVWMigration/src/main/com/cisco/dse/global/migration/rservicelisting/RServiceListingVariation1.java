@@ -85,7 +85,13 @@ public class RServiceListingVariation1 {
 							sb.append("<li>Heading elements not found in web publisher page.</li>");
 						}
 					} else {
-						sb.append("<li>Heading elements not found in web publisher page.</li>");
+						headingElements = doc.select("div.gd-right")
+								.select("div.cc00-pilot").first();
+						if(headingElements != null){
+							h1Text = headingElements.html();
+						}else{
+							sb.append("<li>Heading elements not found in web publisher page.</li>");
+						}
 					}
 					// setting data
 					Node headerNode = serviceListingNode.hasNode("header") ? serviceListingNode
@@ -109,13 +115,15 @@ public class RServiceListingVariation1 {
 				// start of spotlight components
 				try {
 					String h2Text = "";
+					String h3Text = "";
+					String pText = "";
 					int count = 1;
 					Elements spotlightElements = doc.select("div.gd-right")
 							.select("div.c11-pilot");
 					NodeIterator spotlightNodeIterator = serviceListingNode
 							.hasNode("spotlight") ? serviceListingNode
 							.getNodes("spotlight*") : null;
-					if (spotlightElements != null) {
+					if (!spotlightElements.isEmpty()) {
 						for (Element ele : spotlightElements) {
 							log.debug("Loop run:" + count);
 							Element h2Element = ele.getElementsByTag("h2")
@@ -194,7 +202,80 @@ public class RServiceListingVariation1 {
 							count++;
 						}
 					} else {
-						sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
+						int sCount = 1;
+						spotlightElements = doc.select("div.gd-right")
+								.select("div.cc00-pilot");
+						if(!spotlightElements.isEmpty()){
+						for(Element ele:spotlightElements){
+							log.debug("sCount:"+sCount);
+							if(sCount!=1 &&sCount != 5){
+								log.debug("sCount:"+sCount);
+								log.debug("Loop run:" + count);
+								Element h3Element = ele.getElementsByTag("h3")
+										.first();
+								if (h3Element != null) {
+									h3Text = h3Element.text();
+								} else {
+									sb.append(Constants.SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND);
+								}
+								Elements pElements = ele.getElementsByTag("p");
+								if (pElements != null) {
+									pText = pElements.html();
+								} else {
+									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
+								}
+								if (spotlightNodeIterator.hasNext()) {
+									Node spotlightNode = (Node) spotlightNodeIterator
+											.next();
+
+									// start image
+
+									String spotLightImage = FrameworkUtils
+											.extractImagePath(ele, sb);
+									log.debug("spotLightImage befor migration : "
+											+ spotLightImage + "\n");
+									if (spotlightNode.hasNode("image")) {
+										Node spotLightImageNode = spotlightNode
+												.getNode("image");
+										String fileReference = spotLightImageNode
+												.hasProperty("fileReference") ? spotLightImageNode
+												.getProperty("fileReference")
+												.getString() : "";
+										spotLightImage = FrameworkUtils
+												.migrateDAMContent(spotLightImage,
+														fileReference, locale, sb);
+										log.debug("spotLightImage after migration : "
+												+ spotLightImage + "\n");
+										if (StringUtils.isNotBlank(spotLightImage)) {
+											spotLightImageNode
+													.setProperty("fileReference",
+															spotLightImage);
+										}
+									} else {
+										sb.append("<li>spotlight image node doesn't exist</li>");
+									}
+									// end image
+
+									if (h3Text != null) {
+										spotlightNode.setProperty("title", h3Text);
+									}
+									if (pText != null) {
+										spotlightNode.setProperty("description",
+												pText);
+									}
+								} else {
+									sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
+								}
+							}
+							else if(sCount == 5){
+								pText = spotlightElements.select("p").first().ownText();
+								sb.append("<li>paragarph "+pText+"extra in web page</li>");
+							}
+							sCount++;
+						}
+						}else{
+							sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
+						}
 					}
 
 				} catch (Exception e) {
@@ -234,7 +315,7 @@ public class RServiceListingVariation1 {
 					Elements listElements = doc.select("div.gd23-pilot")
 							.select("div.c00-pilot");
 
-					if (listElements != null) {
+					if (!listElements.isEmpty()) {
 						for (Element ele : listElements) {
 							log.debug("List loop run:"+count);
 							Element h2Elements = ele.getElementsByTag("h2")

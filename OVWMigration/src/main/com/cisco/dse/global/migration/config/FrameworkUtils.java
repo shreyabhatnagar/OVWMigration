@@ -10,7 +10,10 @@ package com.cisco.dse.global.migration.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import javax.jcr.Session;
@@ -290,7 +293,7 @@ public class FrameworkUtils {
 	 * @param sb
 	 *       the StringBuilder
 	 */
-	/*public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
+/*	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
 		log.debug("In the extractHtmlBlobContent method.");
 		String outeHtmlText = htmlBlobElement.outerHtml();
 		String existingimagePath = "";
@@ -305,17 +308,19 @@ public class FrameworkUtils {
 			}
 		}
 		return outeHtmlText;
-	}
-*/
+	}*/
+
 	//anudeep
 	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
 		log.debug("In the extractHtmlBlobContent method.");
 		String outeHtmlText = htmlBlobElement.outerHtml();
-		String[] existingimagePaths = {};
+		List<String> existingimagePaths = null;
 		String updatedImgPath = "";
 		if (htmlBlobElement != null) {
 			existingimagePaths = extractImagePaths(htmlBlobElement, sb);
-			for(String existingimagePath : existingimagePaths){
+			Iterator<String> iterator = existingimagePaths.iterator();
+			while(iterator.hasNext()){
+				String existingimagePath = iterator.next();
 				updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb);
 
 				log.debug(existingimagePath +" is updated to "+updatedImgPath);
@@ -326,14 +331,14 @@ public class FrameworkUtils {
 		}
 		return outeHtmlText;
 	}
-	public static String[] extractImagePaths(Element element, StringBuilder sb) {
-		String[] imagePath = {};
+
+	public static List<String> extractImagePaths(Element element, StringBuilder sb) {
+		List<String> imagePath =new ArrayList<String>();
 		if (element != null) {
 			Elements imageElements = element.getElementsByTag("img");
 			if (imageElements != null) {
-				int i=0;
 				for(Element imgEle : imageElements){
-					imagePath[i] = imgEle.attr("src");
+					imagePath.add(imgEle.attr("src"));
 				}
 			} 
 		}

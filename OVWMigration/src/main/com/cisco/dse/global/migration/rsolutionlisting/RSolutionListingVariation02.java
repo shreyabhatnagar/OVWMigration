@@ -64,12 +64,12 @@ public class RSolutionListingVariation02 extends BaseAction{
 			}
 
 			if(doc != null){
-				/*// start set page properties.
+				// start set page properties.
 
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
 
 				// end set page properties.
-*/
+
 				//Start of text Element
 				try {
 					migrateTextContent(doc,solutionWideNode );
@@ -110,21 +110,26 @@ public class RSolutionListingVariation02 extends BaseAction{
 		Element c00 = null;
 		Element cc00 = null;
 		Elements h1Tags = null;
+		Elements h2Tags= null;
 		int childCount = 0;
 
 		if(rightElements != null){
-			c00Elements = rightElements.select("div.c00-pilot");
+			c00Elements = rightElements.select("div.c00-pilot,div.c11-pilot");
 			cc00Elements = rightElements.select("div.cc00-pilot");
-			if(c00Elements != null){
+			if(!c00Elements.isEmpty()){
 				c00 = c00Elements.first();
 				if(c00 != null){
 					h1Tags = c00.getElementsByTag("h1");
-					if(h1Tags != null){
+					h2Tags = c00.getElementsByTag("h2");
+					if(!h1Tags.isEmpty()){
 						setText= h1Tags.first();
+					}
+					else if(!h2Tags.isEmpty()){
+						setText= h2Tags.first();
 					}
 					childCount = c00.children().size();
 				}
-			}else if(cc00Elements != null){
+			}else if(!cc00Elements.isEmpty()){
 				cc00 = cc00Elements.first();
 				if(cc00 != null){
 					h1Tags = cc00.getElementsByTag("h1");
@@ -163,7 +168,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 		Elements spotLightTextElements = doc.select("div.cc00-pilot");
 
 		if (solutionWideNode != null) {
-			if(spotLightElements != null){
+			if(!spotLightElements.isEmpty()){
 				int eleSize = spotLightElements.size();
 				NodeIterator spoLightNodeIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
 				int nodeSize = (int) spoLightNodeIterator.getSize();
@@ -194,33 +199,52 @@ public class RSolutionListingVariation02 extends BaseAction{
 					sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
 				}
 			}
-			else if(spotLightTextElements != null){
+			else if(!spotLightTextElements.isEmpty()){
 				Element cc00Last = spotLightTextElements.last();
 				if(cc00Last != null){
-					Elements spotLightChildrenElements = cc00Last.children();
-					int eleSize = cc00Last.getElementsByTag("h3").size();
-					NodeIterator spoLightNodeIterator = solutionWideNode.getNodes("spotlight*");
+					Elements h3Tag = cc00Last.getElementsByTag("h3");
+					Elements pTag = cc00Last.getElementsByTag("p");
+					int eleSize = h3Tag.size();
+					NodeIterator spoLightNodeIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
+					NodeIterator spoLightNodePTagIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
 					int nodeSize = (int) spoLightNodeIterator.getSize();
 					if (eleSize == nodeSize) {
-						for (Element ele : spotLightChildrenElements) {
+						for (Element ele : h3Tag) {
 							spoLightNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
+							setSpotLightTitleContent(ele,spotLightComponentNode, locale);
+						}
+						for (Element ele : pTag) {
+							spoLightNodePTagIterator.hasNext();
+							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
 							setSpotLightTextContent(ele,spotLightComponentNode, locale);
 						}
 					}
 
 					if (nodeSize < eleSize) {
-						for (Element ele : spotLightChildrenElements) {
-							spoLightNodeIterator.hasNext();
+						for (Element ele : h3Tag) {
+							if(spoLightNodeIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
+							setSpotLightTitleContent(ele,spotLightComponentNode, locale);
+							}
+						}
+						for (Element ele : pTag) {
+							if(spoLightNodePTagIterator.hasNext()){
+							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
 							setSpotLightTextContent(ele,spotLightComponentNode, locale);
+							}
 						}
 						sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
 					}
 					if (nodeSize > eleSize) {
-						for (Element ele : spotLightChildrenElements) {
+						for (Element ele : h3Tag) {
 							spoLightNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
+							setSpotLightTitleContent(ele,spotLightComponentNode, locale);
+						}
+						for (Element ele : pTag) {
+							spoLightNodePTagIterator.hasNext();
+							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
 							setSpotLightTextContent(ele,spotLightComponentNode, locale);
 						}
 						sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
@@ -236,8 +260,59 @@ public class RSolutionListingVariation02 extends BaseAction{
 		}
 	}
 
-	private void setSpotLightTextContent(Element ele,Node spotLightComponentNode, String locale) {
+
+	private void setSpotLightTextContent(Element ele,Node spotLightComponentNode, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+		String pText = "";
+		Elements descriptionText = ele.getElementsByTag("p");
+
+		 if (!descriptionText.isEmpty()) {
+				pText = descriptionText.html();
+				spotLightComponentNode.setProperty("description", pText);
+			} else {
+				sb.append("<li>Extra element found on locale page</li>");
+			}
+	}
+
+	private void setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+		String pText = "";
+		String aText = "";
+			
+		Elements anchorText = ele.getElementsByTag("a");
+		Elements h3Text = ele.getElementsByTag("h3");
+		if(!h3Text.isEmpty()){
+			Element h3First = h3Text.first();
+			if(h3First != null){
+				String h3OwnText = h3First.ownText();
+				if(!h3OwnText.isEmpty()){
+					spotLightComponentNode.setProperty("title",h3OwnText);
+				}
+				else if (!anchorText.isEmpty()){
+					aText = anchorText.text();
+					spotLightComponentNode.setProperty("title",aText);
+					sb.append("<li>link cannot be migrated Since node is not available</li>");
+				}
+			}
+		}
+
+		// start image
+		String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+		log.debug("spotLightImage befor migration : " + spotLightImage + "\n");
+		if (spotLightComponentNode != null) {
+			if (spotLightComponentNode.hasNode("image")) {
+				Node spotLightImageNode = spotLightComponentNode.getNode("image");
+				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb);
+				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
+				if (StringUtils.isNotBlank(spotLightImage)) {
+					spotLightImageNode.setProperty("fileReference" , spotLightImage);
+				}
+			} else {
+				sb.append("<li>spotlight image node doesn't exist</li>");
+			}
+		}
+		// end image
 		
+
 	}
 
 	//Start Spotlight Set Method
@@ -250,7 +325,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 		
 		Elements h2TagText = ele.getElementsByTag("h2");
 		Elements h3TagText = ele.getElementsByTag("h3");
-		if (h2TagText != null) {
+		if (!h2TagText.isEmpty()) {
 			h2Text = h2TagText.html();		
 			spotLightComponentNode.setProperty("title",h2Text);
 		}else if (h3TagText != null){
