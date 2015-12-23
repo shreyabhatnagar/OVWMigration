@@ -138,7 +138,8 @@ public class SolutionListingVariation12 extends BaseAction{
 									+ ") of html blob component doesn't match.</li>"); 
 						}
 						for (Element htmlblobElement : htmlblobElements) {
-							String htmlblobtext = htmlblobElement.outerHtml();
+							String htmlblobtext = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb);
+							//String htmlblobtext = htmlblobElement.outerHtml();
 
 							if (htmlBlobIterator != null && htmlBlobIterator.hasNext())
 								htmlBlobNode = htmlBlobIterator.nextNode();
