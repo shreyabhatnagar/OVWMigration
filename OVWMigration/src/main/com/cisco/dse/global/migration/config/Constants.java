@@ -434,105 +434,102 @@ public class Constants {
 	// TILEBORDER_NODE
 	public static final String TILEBORDER_NODE = " and Tile border Component node count is ";
 
-	//MISMATCH_IN_TILEBORDER_COUNT	
-	public static final String MISMATCH_IN_TILEBORDER_COUNT = "<li>Mismatch of tile border count</li>";
-
 	// TILEBORDER_EXTRA_ANCHOR_LINK
 	public static final String TILEBORDER_EXTRA_ANCHOR_LINK = "<li>Extra link found in tile border on the locale page.</li>";
-	
+
 	//SELECTOR_BAR_TITLE_NOT_AVAILABLE
 	public static final String SELECTOR_BAR_TITLE_NOT_AVAILABLE = "<li>Selector Bar Large  Component title element not found. </li>";
-	
+
 	//SELECTOR_BAR_DESCRIPTION_NOT_AVAILABLE
 	public static final String SELECTOR_BAR_ALL_LINK_NOT_AVAILABLE = "<li>Selector Bar Large  Component all link url element not found. </li>";
-	
+
 	//SELECTOR_BAR_TITLE_URL_NOT_AVAILABLE
 	public static final String SELECTOR_BAR_TITLE_URL_NOT_AVAILABLE = "<li>Selector Bar Large  Component title url element not found. </li>";
-	
+
 	//SELECTOR_BAR_TITLE_URL_NOT_AVAILABLE
 	public static final String SELECTOR_BAR_DROPDOWN_URLS_NOT_AVAILABLE = "<li>Selector Bar Component dropdown is empty. </li>";
-		
+
 	//HERO_CONTENT_COUNT_MISMATCH
 	public static final String SELECTOR_BAR_ELEMENTS_COUNT_MISMATCH = "<li>Selector Bar content count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String SELECTOR_BAR_COMPONENT_NOT_UPDATED = "<li> Unable to update Selector bar large component. </li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String TILE_BORDERED_TITLE_NOT_FOUND = "<li>TileBordered Component title element not found.</li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String TILE_BORDERED_DESCRIPTION_NOT_FOUND = "<li>TileBordered Component description element not found.</li>";
-		
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String TILE_BORDERED_ANCHOR_NOT_FOUND = "<li>TileBordered Component anchor tag not found.</li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String TILE_BORDERED_ELEMENT_COUNT_MISMATCH = "<li>Tile Bordered component count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String TILE_BORDERED_COMPONENT_NOT_UPDATED = "<li> Unable to update tile bordered component. </li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String PRIMARY_CTA_COMPONENT_NOT_FOUND ="<li>Primary CTA Component node not found for english page. Hence element not migrated.</li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String PRIMARY_CTA_COMPONENT_NOT_UPDATED ="<li> Unable to update Primary CTA component </li>";
-	
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
-		public static final String RIGHT_LIST_COMPONENT_TITLE_NOT_FOUND = "<li>List Title  element is not found.</li>";
-		
+	public static final String RIGHT_LIST_COMPONENT_TITLE_NOT_FOUND = "<li>List Title  element is not found.</li>";
+
 	//SELECTOR_BAR_COMPONENT_NOT_UPDATED
 	public static final String RIGHT_LIST_COMPONENT_DESCRIPTION_NOT_FOUND = "<li>List description element  is not found.</li>";
-		
+
 	//HERO_CONTENT_COUNT_MISMATCH
 	public static final String LIST_ELEMENTS_COUNT_MISMATCH = "<li>LIST components count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
-	
+
 	//HERO_CONTENT_COUNT_MISMATCH
-		public static final String EXCEPTION_IN_UPDATING_LIST_COMPONENT = "<li>Unable to update index list component.\n</li>";
-		
+	public static final String EXCEPTION_IN_UPDATING_LIST_COMPONENT = "<li>Unable to update index list component.\n</li>";
+
 	//HERO_CONTENT_COUNT_MISMATCH
 	public static final String FOLLOW_US_ANCHOR_ELEMENT_NOT_FOUND = "<li>No anchor tag found in the right rail social links of followus component.</li>";
-				
+
 	//HERO_CONTENT_COUNT_MISMATCH
 	public static final String EXCEPTION_IN_FOLLOW_US_COMPONENT = "<li>Unable to update followus component.</li> ";
-	
+
 	//HERO_IMAGE_NOT_AVAILABLE
 	public static final String HERO_IMAGE_NOT_AVAILABLE = "<li>Hero image doesn't exist</li>";
-	
+
 	// SPECIAL_CHARACTER_FOUND_IN_LINK
 	public static final String SPECIAL_CHARACTER_FOUND_IN_LINK = "<li>Special Characters in the link. Need to migrate manually </li>";
-	
+
 	//PRIMARY_CTA_TITLE_ELEMENT_NOT_FOUND
 	public static final String PRIMARY_CTA_TITLE_ELEMENT_NOT_FOUND = "<li>Primary CTA Heading element not found. </li>";
-	
+
 	//PRIMARY_CTA_DESCRIPTION_ELEMENT_NOT_FOUND
 	public static final String PRIMARY_CTA_DESCRIPTION_ELEMENT_NOT_FOUND = "<li>Primary CTA description element not found. </li>";
-	
+
 	//PRIMARY_CTA_ANCHOR_ELEMENT_NOT_FOUND
 	public static final String PRIMARY_CTA_ANCHOR_ELEMENT_NOT_FOUND = "<li>Primary CTA Anchor tag not found. </li>";
-	
+
 	//PRIMARY_CTA_ANCHOR_ELEMENT_NOT_FOUND
 	public static final String PRIMARY_CTA_LINK_URL_NODE_NOT_FOUND = "<li>Primary CTA Anchor tag not found. </li>";
-		
+
 	// SPOTLIGHT_NODE_COUNT
 	public static final String SPOTLIGHT_NODE_COUNT_MISMATCH = "<li>Spotlight component count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
-	
+
 	// SPOTLIGHT_NODE_COUNT
 	public static final String HERO_IMAGE_NODE_NOT_FOUND = "<li>Hero Component Image node not found.</li>";
-	
+
 	// SPOTLIGHT_NODE_COUNT
 	public static final String EXTRA_IMAGE_TAG_FOUND = "<li>Extra image tag found on locale page.</li>";
-				
+
 	// SPOTLIGHT_NODE_COUNT
 	public static final String EXTRA_LIST_COMPONENT_FOUND = "<li>Extra list component found on WEM page.</li>";
-				
+
 	// SPOTLIGHT_NODE_COUNT
 	public static final String EXTRA_URLS_FOUND_ON_TILE_BORDRED_COMPONENT = "<li>Extra urls are found on tile bordered component found on locale page</li>";
 
 	// IMAGE_NOT_FOUND_IN_LOCALE_PAGE
 	public static final String IMAGE_NOT_FOUND_IN_LOCALE_PAGE = "<li>Image not found in locale page.</li>";
-	
+
 	// UNABLE_TO_MIGRATE_TEXT
 	public static final String UNABLE_TO_MIGRATE_TEXT = "<li>Unable to update the text component</li>";
 
@@ -559,17 +556,28 @@ public class Constants {
 
 	//LEFT_LIST_HEDAING_NODE_NOT_FOUND
 	public static final String LEFT_LIST_HEDAING_NODE_NOT_FOUND = "<li>Left list heading node not found.</li>";
-	
+
 	//MID_LIST_ITEMS_NODE_NOT_FOUND
 	public static final String MID_LIST_ITEMS_NODE_NOT_FOUND = "<li>Mid list items node not found</li>";
 
 	//MID_LIST_HEDAING_NODE_NOT_FOUND
 	public static final String MID_LIST_HEDAING_NODE_NOT_FOUND = "<li>Mid list heading node not found.</li>";
-	
+
 	//RIGHT_LIST_ITEMS_NODE_NOT_FOUND
 	public static final String RIGHT_LIST_ITEMS_NODE_NOT_FOUND = "<li>Right list items node not found</li>";
 
 	//RIGHT_LIST_HEDAING_NODE_NOT_FOUND
 	public static final String RIGHT_LIST_HEDAING_NODE_NOT_FOUND = "<li>Right list heading node not found.</li>";
 
+	//MISMATCH_IN_TILEBORDER_COUNT	
+	public static final String MISMATCH_IN_TILEBORDER_COUNT = "<li>Mismatch of tile border count. Locale page has ";
+
+	//TILEBORDER_NODE_COUNT	
+	public static final String TILEBORDER_NODE_COUNT = " and tile node count is ";
+
+	//TILEBORDER_NODE_COUNT	
+	public static final String TILEBORDER_COMPONENT_NOT_FOUND = "<li>Tile Border Component not found on local page.</li>";
+
+	//UNABLE_TO_MIGRATE_TEXT_IMAGE
+	public static final String UNABLE_TO_MIGRATE_TEXT_IMAGE = "<li>Unable to migrate text image.</li>";
 }
