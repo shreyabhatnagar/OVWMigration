@@ -45,7 +45,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
 import com.cisco.dse.global.migration.rproductindex.RProductVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
-import com.cisco.dse.global.migration.rproducttechnology.RProductTechnology;
+import com.cisco.dse.global.migration.rtechnology.RProductTechnology;
 import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation1;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation02;
