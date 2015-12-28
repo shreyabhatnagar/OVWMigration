@@ -21,12 +21,12 @@ import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.jsoup.Jsoup;
 
+import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
 
-public class RServiceListingVariation1 {
+public class RServiceListingVariation1 extends BaseAction {
 	Document doc;
 	StringBuilder sb = new StringBuilder(1024);
 	static Logger log = Logger.getLogger(RServiceListingVariation1.class);
@@ -65,7 +65,11 @@ public class RServiceListingVariation1 {
 			serviceListingNode = session.getNode(serviceListingNodePath);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 
-			doc = Jsoup.connect(loc).get();
+			try {
+				doc = getConnection(loc);
+			} catch (Exception e) {
+				log.error("Exception ", e);
+			}
 
 			if (doc != null) {
 				// ------------------------------------------------------------------------------------------------------------------------------------------
@@ -92,9 +96,9 @@ public class RServiceListingVariation1 {
 					} else {
 						headingElements = doc.select("div.gd-right")
 								.select("div.cc00-pilot").first();
-						if(headingElements != null){
+						if (headingElements != null) {
 							h1Text = headingElements.html();
-						}else{
+						} else {
 							sb.append(Constants.HEADER_ELEMENT_NOT_FOUND);
 						}
 					}
@@ -109,6 +113,7 @@ public class RServiceListingVariation1 {
 
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_HEADER);
+					log.error("Exception ", e);
 				}
 
 				// end of heading component
@@ -118,6 +123,7 @@ public class RServiceListingVariation1 {
 					String h2Text = "";
 					String h3Text = "";
 					String pText = "";
+					String aHref = "";
 					Elements spotlightElements = doc.select("div.gd-right")
 							.select("div.c11-pilot");
 					NodeIterator spotlightNodeIterator = serviceListingNode
@@ -148,124 +154,67 @@ public class RServiceListingVariation1 {
 							if (spotlightNodeIterator.hasNext()) {
 								Node spotlightNode = (Node) spotlightNodeIterator
 										.next();
-
-								// start image
-
-								String spotLightImage = FrameworkUtils
-										.extractImagePath(ele, sb);
-								log.debug("spotLightImage befor migration : "
-										+ spotLightImage + "\n");
-								if (spotlightNode.hasNode("image")) {
-									Node spotLightImageNode = spotlightNode
-											.getNode("image");
-									String fileReference = spotLightImageNode
-											.hasProperty("fileReference") ? spotLightImageNode
-											.getProperty("fileReference")
-											.getString() : "";
-									spotLightImage = FrameworkUtils
-											.migrateDAMContent(spotLightImage,
-													fileReference, locale, sb);
-									log.debug("spotLightImage after migration : "
-											+ spotLightImage + "\n");
-									if (StringUtils.isNotBlank(spotLightImage)) {
-										spotLightImageNode
-												.setProperty("fileReference",
-														spotLightImage);
-									}
-								} else {
-									sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
-								}
-								// end image
-
-								if (h2Text != null) {
-									log.debug("spotlight node path:"
-											+ spotlightNode.getPath());
-									spotlightNode.setProperty("title", h2Text);
-								}
-								if (descText != null) {
-									spotlightNode.setProperty("description",
-											descText.toString());
-								}
+								pText = descText.toString();
+								handleSpotlightMigration(spotlightNode, ele,
+										locale, h2Text, pText, aHref);
 							} else {
 								sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 							}
 						}
 					} else {
 						int sCount = 1;
-						spotlightElements = doc.select("div.gd-right")
-								.select("div.cc00-pilot");
-						if(!spotlightElements.isEmpty()){
-						for(Element ele:spotlightElements){
-							if(sCount!=1 &&sCount != 5){
-								Element h3Element = ele.getElementsByTag("h3")
-										.first();
-								if (h3Element != null) {
-									h3Text = h3Element.text();
-								} else {
-									sb.append(Constants.SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND);
-								}
-								Elements pElements = ele.getElementsByTag("p");
-								if (pElements != null) {
-									pText = pElements.html();
-								} else {
-									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
-								}
-								if (spotlightNodeIterator.hasNext()) {
-									Node spotlightNode = (Node) spotlightNodeIterator
-											.next();
-
-									// start image
-
-									String spotLightImage = FrameworkUtils
-											.extractImagePath(ele, sb);
-									log.debug("spotLightImage befor migration : "
-											+ spotLightImage + "\n");
-									if (spotlightNode.hasNode("image")) {
-										Node spotLightImageNode = spotlightNode
-												.getNode("image");
-										String fileReference = spotLightImageNode
-												.hasProperty("fileReference") ? spotLightImageNode
-												.getProperty("fileReference")
-												.getString() : "";
-										spotLightImage = FrameworkUtils
-												.migrateDAMContent(spotLightImage,
-														fileReference, locale, sb);
-										log.debug("spotLightImage after migration : "
-												+ spotLightImage + "\n");
-										if (StringUtils.isNotBlank(spotLightImage)) {
-											spotLightImageNode
-													.setProperty("fileReference",
-															spotLightImage);
+						spotlightElements = doc.select("div.gd-right").select(
+								"div.cc00-pilot");
+						if (!spotlightElements.isEmpty()) {
+							for (Element ele : spotlightElements) {
+								if (sCount != 1 && sCount != 5) {
+									Element h3Element = ele.getElementsByTag(
+											"h3").first();
+									if (h3Element != null) {
+										Element aEle = h3Element.getElementsByTag("a").first();
+										if(aEle != null){
+											h3Text = aEle.text()+h3Element.ownText();
+											aHref = aEle.attr("href");
+										}else{
+											h3Text = h3Element.text();
+											sb.append(Constants.SPOTLIGHT_TITLELINK_NODE_NOT_FOUND);
 										}
+										
 									} else {
-										sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
+										sb.append(Constants.SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND);
 									}
-									// end image
+									Elements pElements = ele
+											.getElementsByTag("p");
+									if (pElements != null) {
+										pText = pElements.html();
+									} else {
+										sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
+									}
+									if (spotlightNodeIterator.hasNext()) {
+										Node spotlightNode = (Node) spotlightNodeIterator
+												.next();
 
-									if (h3Text != null) {
-										spotlightNode.setProperty("title", h3Text);
+										handleSpotlightMigration(spotlightNode,
+												ele, locale, h3Text, pText, aHref);
+									} else {
+										sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 									}
-									if (pText != null) {
-										spotlightNode.setProperty("description",
-												pText);
-									}
-								} else {
-									sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
+								} else if (sCount == 5) {
+									pText = spotlightElements.select("p")
+											.first().ownText();
+									sb.append("<li>paragarph " + pText
+											+ "extra in web page</li>");
 								}
+								sCount++;
 							}
-							else if(sCount == 5){
-								pText = spotlightElements.select("p").first().ownText();
-								sb.append("<li>paragarph "+pText+"extra in web page</li>");
-							}
-							sCount++;
-						}
-						}else{
+						} else {
 							sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
 						}
 					}
 
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_UPDATE_SPOTLIGHT);
+					log.error("Exception ", e);
 				}
 				// end of spotlight components
 				// ----------------------------------------------------------------------------------------------------------------------------
@@ -276,25 +225,49 @@ public class RServiceListingVariation1 {
 					int count = 1;
 					String aText = "";
 					String aHref = "";
+					String ownPdfText = "";
+					String ownText = "";
+					String pdfIcon = "";
+					String pdfSize = "";
 					Node leftListContainerNode = null;
 					Node midListContainerNode = null;
 					Node rightListContainerNode = null;
 					Node leftListItemsNode = null;
 					Node midListItemsNode = null;
 					Node rightListItemsNode = null;
-					leftListContainerNode = serviceListingNode
-							.getNode("thirds/Th-Third-1/list_container");
-					midListContainerNode = serviceListingNode
-							.getNode("thirds/Th-Third-2/list_container");
-					rightListContainerNode = serviceListingNode
-							.getNode("thirds/Th-Third-3/list_container");
-
-					leftListItemsNode = leftListContainerNode
-							.getNode("list_item_parsys/list_content/listitems");
-					midListItemsNode = midListContainerNode
-							.getNode("list_item_parsys/list_content/listitems");
-					rightListItemsNode = rightListContainerNode
-							.getNode("list_item_parsys/list_content/listitems");
+					Node listContainerNode = null;
+					Node listNode = null;
+					Node listItemsNode = null;
+					if (serviceListingNode
+							.hasNode("thirds/Th-Third-1/list_container")) {
+						leftListContainerNode = serviceListingNode
+								.getNode("thirds/Th-Third-1/list_container");
+					}
+					if (serviceListingNode
+							.hasNode("thirds/Th-Third-2/list_container")) {
+						midListContainerNode = serviceListingNode
+								.getNode("thirds/Th-Third-2/list_container");
+					}
+					if (serviceListingNode
+							.hasNode("thirds/Th-Third-3/list_container")) {
+						rightListContainerNode = serviceListingNode
+								.getNode("thirds/Th-Third-3/list_container");
+					}
+					if (leftListContainerNode
+							.hasNode("list_item_parsys/list_content/listitems")) {
+						leftListItemsNode = leftListContainerNode
+								.getNode("list_item_parsys/list_content/listitems");
+					}
+					if (midListContainerNode
+							.hasNode("list_item_parsys/list_content/listitems")) {
+						midListItemsNode = midListContainerNode
+								.getNode("list_item_parsys/list_content/listitems");
+					}
+					if (rightListContainerNode
+							.hasNode("list_item_parsys/list_content/listitems")) {
+						rightListItemsNode = rightListContainerNode
+								.getNode("list_item_parsys/list_content/listitems");
+					}
 					Elements listElements = doc.select("div.gd23-pilot")
 							.select("div.c00-pilot");
 
@@ -330,10 +303,40 @@ public class RServiceListingVariation1 {
 											if (listItemsIterator.hasNext()) {
 												Node listItemNode = (Node) listItemsIterator
 														.next();
+												//start handle pdf in wireless
+												Element liElement = aEle.parent();
+												ownPdfText = liElement.ownText();
+												if(StringUtils.isNotEmpty(ownPdfText)){
+													log.debug("OWn text is:"+ownPdfText);
+													if(ownPdfText.toLowerCase().contains("pdf")){
+														pdfIcon = "pdf";
+														int i=0;
+														for(;i<ownPdfText.length();i++){
+															char character = ownPdfText.charAt(i);												
+															boolean isDigit = Character.isDigit(character);
+															if(isDigit){
+																break;
+															} 
+													}	
+													pdfSize = ownPdfText.substring(i, ownPdfText.length()-1);
+													pdfSize = pdfSize.replace(")", "");
+													pdfSize = pdfSize.trim();
+													log.debug("Pdf size set to the node:"+listItemNode.getPath());
+													listItemNode.setProperty("icon", pdfIcon);
+													listItemNode.setProperty("size", pdfSize);
+												}
+												else{
+													ownText = ownPdfText;
+													log.debug("ownText:"+ownText);
+												}
+												}
+												log.debug("Pdf size:"+pdfSize);
+												log.debug("Pdf icon:"+pdfIcon);
+												//end handle pdf in wireless
 												listItemNode = listItemNode
 														.getNode("linkdata");
 												if (pElements.isEmpty()) {
-												aText = aEle.text();
+													aText = aEle.text()+ownText;
 												}
 												aHref = aEle.attr("href");
 												if (aText != null) {
@@ -344,7 +347,7 @@ public class RServiceListingVariation1 {
 												}
 												if (aHref != null) {
 													listItemNode.setProperty(
-															"ulr", aHref);
+															"url", aHref);
 												} else {
 													sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
 												}
@@ -356,62 +359,32 @@ public class RServiceListingVariation1 {
 								} else {
 									sb.append(Constants.LEFT_LIST_HEDAING_NODE_NOT_FOUND);
 								}
-							} else if (count == 2) {
-								if (midListContainerNode != null) {
-									if (h2Text != null) {
-										midListContainerNode.setProperty(
-												"title", h2Text);
-									}
-									if (introText != null) {
-										midListContainerNode.setProperty(
-												"intropara", introText);
-									} else {
-										sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
-									}
-									Node listItemsNode = midListItemsNode
-											.getNode("item_1/linkdata");
-									if (listItemsNode != null) {
-										if (pElements.isEmpty()) {
-										aText = aElements.first().text();
-										}
-										aHref = aElements.first().attr("href");
-										if (aText != null) {
-											listItemsNode.setProperty(
-													"linktext", aText);
-										} else {
-											sb.append(Constants.LINK_TEXT_NOT_FOUND_IN_LIST);
-										}
-										if (aHref != null) {
-											listItemsNode.setProperty("ulr",
-													aHref);
-										} else {
-											sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
-										}
-
-									} else {
-										sb.append(Constants.MID_LIST_ITEMS_NODE_NOT_FOUND);
-									}
-
-								} else {
-									sb.append(Constants.MID_LIST_HEDAING_NODE_NOT_FOUND);
+							} else {
+								if (count == 2) {
+									listContainerNode = midListContainerNode;
+									listNode = midListItemsNode;
+								} else if (count == 3) {
+									listContainerNode = rightListContainerNode;
+									listNode = rightListItemsNode;
 								}
-							} else if (count == 3) {
-								if (rightListContainerNode != null) {
+								if (listContainerNode != null) {
 									if (h2Text != null) {
-										rightListContainerNode.setProperty(
-												"title", h2Text);
+										listContainerNode.setProperty("title",
+												h2Text);
 									}
 									if (introText != null) {
-										rightListContainerNode.setProperty(
+										listContainerNode.setProperty(
 												"intropara", introText);
 									} else {
 										sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
 									}
-									Node listItemsNode = rightListItemsNode
-											.getNode("item_1/linkdata");
+									if (listNode.hasNode("item_1/linkdata")) {
+										listItemsNode = listNode
+												.getNode("item_1/linkdata");
+									}
 									if (listItemsNode != null) {
 										if (pElements.isEmpty()) {
-										aText = aElements.first().text();
+											aText = aElements.first().text();
 										}
 										aHref = aElements.first().attr("href");
 										if (aText != null) {
@@ -428,11 +401,17 @@ public class RServiceListingVariation1 {
 										}
 
 									} else {
-										sb.append(Constants.RIGHT_LIST_ITEMS_NODE_NOT_FOUND);
+										if (count == 2)
+											sb.append(Constants.MID_LIST_ITEMS_NODE_NOT_FOUND);
+										else if (count == 3)
+											sb.append(Constants.RIGHT_LIST_ITEMS_NODE_NOT_FOUND);
 									}
 
 								} else {
-									sb.append(Constants.RIGHT_LIST_HEDAING_NODE_NOT_FOUND);
+									if (count == 2)
+										sb.append(Constants.MID_LIST_HEDAING_NODE_NOT_FOUND);
+									else if (count == 3)
+										sb.append(Constants.RIGHT_LIST_HEDAING_NODE_NOT_FOUND);
 								}
 							}
 							count++;
@@ -444,7 +423,7 @@ public class RServiceListingVariation1 {
 
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_LIST_COMPONENT);
-					e.printStackTrace();
+					log.error("Exception ", e);
 				}
 				// end of list components
 				session.save();
@@ -452,12 +431,56 @@ public class RServiceListingVariation1 {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		} catch (Exception e) {
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			sb.append(Constants.UNABLE_TO_MIGRATE_PAGE);
 			log.debug("Exception as url cannot be connected: " + e);
+			log.error("Exception ", e);
 		}
 
 		sb.append("</ul></td>");
 
 		return sb.toString();
+	}
+
+	public void handleSpotlightMigration(Node spotlightNode, Element ele,
+			String locale, String hText, String pText, String aHref) {
+		try {
+			// start image
+			String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+			log.debug("spotLightImage befor migration : " + spotLightImage
+					+ "\n");
+			if (spotlightNode.hasNode("image")) {
+				Node spotLightImageNode = spotlightNode.getNode("image");
+				String fileReference = spotLightImageNode
+						.hasProperty("fileReference") ? spotLightImageNode
+						.getProperty("fileReference").getString() : "";
+				spotLightImage = FrameworkUtils.migrateDAMContent(
+						spotLightImage, fileReference, locale, sb);
+				log.debug("spotLightImage after migration : " + spotLightImage
+						+ "\n");
+				if (StringUtils.isNotBlank(spotLightImage)) {
+					spotLightImageNode.setProperty("fileReference",
+							spotLightImage);
+				}
+			} else {
+				sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
+			}
+			// end image
+
+			if (hText != null) {
+				spotlightNode.setProperty("title", hText);
+			}
+			if (aHref != null && StringUtils.isNotEmpty("aHref")) {
+				if (spotlightNode.hasNode("titleLink")) {
+					Node spotLightTitleLinkNode = spotlightNode.getNode("titleLink");
+					spotLightTitleLinkNode.setProperty("linktype", "Url");
+					spotLightTitleLinkNode.setProperty("url", aHref);
+				}
+			}
+			if (pText != null) {
+				spotlightNode.setProperty("description", pText);
+			}
+		} catch (Exception e) {
+			log.error("Exception:", e);
+		}
 	}
 }
