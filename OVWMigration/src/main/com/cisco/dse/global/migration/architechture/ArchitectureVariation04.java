@@ -8,6 +8,7 @@ package com.cisco.dse.global.migration.architechture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +36,7 @@ public class ArchitectureVariation04 extends BaseAction {
 	static Logger log = Logger.getLogger(ArchitectureVariation04.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		log.debug("In the translate method of ArchitectureVariation04");
@@ -304,7 +305,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end of middle content migration
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start html blob
-					handleHtmlBolb(architectureLeftNode, locale);
+					handleHtmlBolb(architectureLeftNode, locale, urlMap);
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of last list in left section
@@ -452,7 +453,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end tile section
 					// --------------------------------------------------------------------------------------------------------------------
 					// start html blob
-					handleHtmlBolb(architectureLeftNode, locale);
+					handleHtmlBolb(architectureLeftNode, locale, urlMap);
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of right side list component migration
@@ -475,7 +476,7 @@ public class ArchitectureVariation04 extends BaseAction {
 
 	}
 
-	public void handleHtmlBolb(Node architectureLeftNode, String locale) {
+	public void handleHtmlBolb(Node architectureLeftNode, String locale, Map<String, String> urlMap) {
 		// start of htmlblob content
 		try {
 			Elements htmlElements = doc.select("div.gd22v2-right");
@@ -487,7 +488,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						if (ele != null) {
 							String textProp = ele.html();
 							textProp = FrameworkUtils.extractHtmlBlobContent(
-									ele, "", locale, sb);
+									ele, "", locale, sb, urlMap);
 							htmlNode.setProperty("html", textProp);
 						} 
 					}

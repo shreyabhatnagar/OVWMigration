@@ -92,15 +92,12 @@ public class BuyersGuideVariation01 extends BaseAction {
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start of htmlblob component
 				try {
-					String rawHtml1 = "";
-					String rawHtml2 = "";
-					String rawHtml3="";
-					String rawHtml4="";
-					StringBuilder oldImage = new StringBuilder();
+					String rawHtml = "";
+					//StringBuilder oldImage = new StringBuilder();
 					log.debug("Started migrating HtmlBlob content.");
 					//Elements rawElements=doc.getElementsByTag("html");
 					//Elements images=doc.getElementsByTag("img");
-					Elements tabElements = doc.select("div.gd01-pilot,div.sitecopy");
+					Element tabElements = doc.select("div.gd01-pilot,div.sitecopy").first();
 					
 					/*if (rawElements != null
 							&& !rawElements.isEmpty()) {
@@ -110,23 +107,13 @@ public class BuyersGuideVariation01 extends BaseAction {
 						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 					}
 					*/
-					if (tabElements != null
-							&& !tabElements.isEmpty()) {
-						rawHtml1= tabElements.html();
-						rawHtml2 = tabElements.outerHtml();
-						Elements images = tabElements.select("img");
-						
-						
-						for(Element ele:images)
-						{
-							rawHtml3 = ele.outerHtml();
-							rawHtml3 = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
-							oldImage.append(rawHtml3);
-							rawHtml4 = oldImage.toString();
+					if (tabElements != null){
+						log.debug("tabElements before:"+tabElements);
+							rawHtml = FrameworkUtils.extractHtmlBlobContent(tabElements, "", locale, sb);
+							log.debug("tabElements after:"+rawHtml);
 						 //oldImage.append(rawHtml2);
 						//log.debug("oldImage:"+oldImage);
-						}
-						rawHtml4 = rawHtml4 + rawHtml2;
+						
 				}
 						/*if("ja_jp".equals(locale)){
 						String listDesc = tabElements.first().getElementsByTag("ul").addClass("no-bullets").outerHtml();
@@ -140,8 +127,8 @@ public class BuyersGuideVariation01 extends BaseAction {
 					// Start set content.
 					if (buyersTopNode.hasNode("raw_html")) {
 						Node htmlBlobNode = buyersTopNode.getNode("raw_html");
-						if (StringUtils.isNotBlank(rawHtml1)) {
-							htmlBlobNode.setProperty("htmlContent",rawHtml1);
+						if (StringUtils.isNotBlank(rawHtml)) {
+							htmlBlobNode.setProperty("htmlContent",rawHtml);
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
@@ -149,8 +136,8 @@ public class BuyersGuideVariation01 extends BaseAction {
 					}
 					if (buyersBottomNode.hasNode("raw_html")) {
 						Node htmlBlobNode = buyersBottomNode.getNode("raw_html");
-						if (StringUtils.isNotBlank(rawHtml2)) {
-							htmlBlobNode.setProperty("htmlContent",rawHtml2);
+						if (StringUtils.isNotBlank(rawHtml)) {
+							htmlBlobNode.setProperty("htmlContent",rawHtml);
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
