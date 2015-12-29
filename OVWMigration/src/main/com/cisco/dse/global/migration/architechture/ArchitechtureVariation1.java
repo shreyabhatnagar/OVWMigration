@@ -3,6 +3,7 @@ package com.cisco.dse.global.migration.architechture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -37,7 +38,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 	Logger log = Logger.getLogger(ArchitechtureVariation1.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -83,7 +84,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 
 				// start of text component
 				try{
-					migrateTextComponents(doc, architectureLeftNode ,locale);
+					migrateTextComponents(doc, architectureLeftNode ,locale, urlMap);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ",e);
@@ -125,7 +126,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 	}
 
 	// Start Migrate Text Method
-	public void migrateTextComponents(Document doc, Node architectureLeftNode, String locale) throws RepositoryException{
+	public void migrateTextComponents(Document doc, Node architectureLeftNode, String locale, Map<String, String> urlMap) throws RepositoryException{
 
 		Elements textElements = doc.select("div.c00-pilot");
 
@@ -142,7 +143,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 					Node textNode;
 					for(Element ele : textElements){
 						textNode = (Node)textNodeIterator.next();
-						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 					}
 				}
 				else if(nodeSize < eleSize){
@@ -150,7 +151,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
 							textNode = (Node)textNodeIterator.next();
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 						}
 						else{
 							sb.append(Constants.Text_Element_Mismatch+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
@@ -161,7 +162,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 					Node textNode;
 					for(Element ele : textElements){
 						textNode = (Node)textNodeIterator.next();
-						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 					}
 					sb.append(Constants.Text_Element_Mismatch+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
 				}

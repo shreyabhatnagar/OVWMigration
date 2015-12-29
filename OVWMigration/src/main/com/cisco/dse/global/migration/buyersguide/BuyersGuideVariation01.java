@@ -8,6 +8,7 @@
 package com.cisco.dse.global.migration.buyersguide;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -36,7 +37,7 @@ public class BuyersGuideVariation01 extends BaseAction {
 	static Logger log = Logger.getLogger(BuyersGuideVariation01.class);
 	
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -120,7 +121,7 @@ public class BuyersGuideVariation01 extends BaseAction {
 						for(Element ele:images)
 						{
 							rawHtml3 = ele.outerHtml();
-							rawHtml3 = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
+							rawHtml3 = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 							oldImage.append(rawHtml3);
 							rawHtml4 = oldImage.toString();
 						 //oldImage.append(rawHtml2);

@@ -8,6 +8,7 @@ package com.cisco.dse.global.migration.architechture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -43,7 +44,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 	Logger log = Logger.getLogger(ArchitechtureVariation3.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -98,7 +99,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 
 				// start of text component
 				try{
-					migrateTextContent(doc, architectureLeftNode, locale);
+					migrateTextContent(doc, architectureLeftNode, locale, urlMap);
 				}catch(Exception e){
 					log.error("exceptionnn"+e);
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
@@ -127,7 +128,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 	}
 
 	// Start of Text Content migraion
-	public void migrateTextContent(Document doc, Node architectureLeftNode, String locale) throws RepositoryException{
+	public void migrateTextContent(Document doc, Node architectureLeftNode, String locale, Map<String, String> urlMap) throws RepositoryException{
 
 		Elements textElements = doc.select("div.c00-pilot");
 
@@ -181,7 +182,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 									lastH2Element.remove();
 								}
 							}
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 
 						}
 						else{
@@ -196,7 +197,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 									lastH2Element.remove();
 								}
 							}
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 
 						}
 					}
@@ -215,7 +216,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 									lastH2Element.remove();
 								}
 							}
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 
 						}
 						else{
@@ -230,7 +231,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 									lastH2Element.remove();
 								}
 							}
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 
 						}
 					}
@@ -249,7 +250,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 									lastH2Element.remove();
 								}
 							}
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 
 						}
 						else{
@@ -264,7 +265,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 									lastH2Element.remove();
 								}
 							}
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 
 						}
 					}
