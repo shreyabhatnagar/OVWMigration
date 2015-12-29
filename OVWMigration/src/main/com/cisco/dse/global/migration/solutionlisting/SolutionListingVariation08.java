@@ -1,6 +1,7 @@
 package com.cisco.dse.global.migration.solutionlisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +36,7 @@ public class SolutionListingVariation08 extends BaseAction {
 	static Logger log = Logger.getLogger(SolutionListingVariation08.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -245,7 +246,7 @@ public class SolutionListingVariation08 extends BaseAction {
 					if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 						for(Element ele: htmlblobElements){
 							log.debug("html blob content: "+ ele);
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 						}
 					} else {
 						isHtml = false;//No Html node content node found.

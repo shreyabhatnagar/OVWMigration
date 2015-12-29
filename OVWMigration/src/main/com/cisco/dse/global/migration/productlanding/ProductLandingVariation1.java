@@ -3,6 +3,7 @@ package com.cisco.dse.global.migration.productlanding;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -38,7 +39,7 @@ public class ProductLandingVariation1 extends BaseAction {
 	static Logger log = Logger.getLogger(ProductLandingVariation1.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -128,8 +129,10 @@ public class ProductLandingVariation1 extends BaseAction {
 								log.debug("<li>Primary CTA Para element section not found </li>");
 							}
 							Elements ctaLinksElements = primaryCTAElement.select("ul.cta-links");
+							log.debug("primaryCTALinkUrl::::::::::::::***" + primaryCTALinkUrl + "\n");
 							if (ctaLinksElements != null) {
 								Elements ctaLiElements = ctaLinksElements.select("li.cta");
+								log.debug("primaryCTALinkUrl::::::::::::::***" + primaryCTALinkUrl + "\n");
 								if (ctaLiElements != null) {
 									Element ctaLiElement = ctaLiElements.first();
 									if (ctaLiElement != null) {
@@ -139,6 +142,12 @@ public class ProductLandingVariation1 extends BaseAction {
 											if (anchorElement != null) {
 												primaryCTALinkText = anchorElement.text();
 												primaryCTALinkUrl = anchorElement.attr("href");
+												log.debug("primaryCTALinkUrl::::::::::::::***" + primaryCTALinkUrl + "\n");
+												// Start extracting valid href
+												log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+												log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												// End extracting valid href
 											} else {
 												log.debug("<li>Primary CTA Link anchor tag not found </li>");
 											}
@@ -273,6 +282,11 @@ public class ProductLandingVariation1 extends BaseAction {
 										Element heroPanelLinkUrlElement = heroPanelLinkUrlElements.first();
 										if (heroPanelLinkUrlElement != null) {
 											heroPanellinkUrl =heroPanelLinkUrlElement.attr("href");
+											// Start extracting valid href
+											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+											log.debug("after heroPanellinkUrl" + heroPanellinkUrl + "\n");
+											// End extracting valid href
 										} else {
 											log.debug("<li>Hero Panel element not having any linkurl in it </li>");
 										}
@@ -406,6 +420,11 @@ public class ProductLandingVariation1 extends BaseAction {
 											if (anchorElement != null) {
 												anchorText = anchorElement.text();
 												anchorHref = anchorElement.attr("href");
+												// Start extracting valid href
+												log.debug("Before anchorHref" + anchorHref + "\n");
+												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+												log.debug("after anchorHref" + anchorHref + "\n");
+												// End extracting valid href
 											} else {
 												log.debug("<li>drawerComponent link Element not found</li>");
 											}
@@ -473,6 +492,11 @@ public class ProductLandingVariation1 extends BaseAction {
 																	if (anchorTag.size() > 0) {
 																		panelTitle = anchorTag.first().text();
 																		linkUrl = anchorTag.first().attr("href");
+																		// Start extracting valid href
+																		log.debug("Before linkUrl" + linkUrl + "\n");
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+																		log.debug("after linkUrl" + linkUrl + "\n");
+																		// End extracting valid href
 																	} 
 																	if (StringUtils.isBlank(panelTitle)) {
 																		panelTitle = panelTitleElement.text();
@@ -573,6 +597,11 @@ public class ProductLandingVariation1 extends BaseAction {
 																					log.debug("siATitle.text() " + siATitle.attr("href") + "\n");
 																					title = siATitle.text();
 																					linkTitleUrl = siATitle.attr("href");
+																					// Start extracting valid href
+																					log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
+																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																					log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
+																					// End extracting valid href
 																				} else {
 																					log.debug("<li>sub series title Element anchor not found</li>");
 																				}
@@ -646,6 +675,11 @@ public class ProductLandingVariation1 extends BaseAction {
 																				if (linkTextElement != null) {
 																					linkText = linkTextElement.text();
 																					linkTextUrl = linkTextElement.attr("href");
+																					// Start extracting valid href
+																					log.debug("Before linkTextUrl" + linkTextUrl + "\n");
+																					linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																					log.debug("after linkTextUrl" + linkTextUrl + "\n");
+																					// End extracting valid href
 																				} else {
 																					log.debug("<li>info links anchor element not found</li>");
 																				}
@@ -768,7 +802,7 @@ public class ProductLandingVariation1 extends BaseAction {
 								if (htmlblobElement != null) {
 									Elements ulElements = htmlblobElement.getElementsByTag("ul");
 									if (ulElements.size() > 0) {
-										html = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb);
+										html = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb, urlMap);
 									}
 								} 
 							}
@@ -784,7 +818,7 @@ public class ProductLandingVariation1 extends BaseAction {
 								if (htmlblobElement != null) {
 									//html = htmlblobElement.outerHtml();
 									Element htmlElement = htmlblobElement.parent();
-									html = FrameworkUtils.extractHtmlBlobContent(htmlElement, "",locale, sb);
+									html = FrameworkUtils.extractHtmlBlobContent(htmlElement, "",locale, sb, urlMap);
 									if (htmlblobElement.getElementsByTag("ul").size() > 0) {
 									}
 									else {
@@ -868,7 +902,11 @@ public class ProductLandingVariation1 extends BaseAction {
 								}
 								String anchorText = anchor!=null?anchor.text():"";
 								String anchorHref = anchor!=null?anchor.attr("href"):"";
-
+								// Start extracting valid href
+								log.debug("Before anchorHref" + anchorHref + "\n");
+								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+								log.debug("after anchorHref" + anchorHref + "\n");
+								// End extracting valid href
 								if (titleBorderNodes.hasNext()) {
 									rightRailNode = (Node)titleBorderNodes.next();
 								} else {

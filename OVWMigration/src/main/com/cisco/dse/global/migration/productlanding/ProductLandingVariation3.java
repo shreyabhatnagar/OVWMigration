@@ -1,6 +1,7 @@
 package com.cisco.dse.global.migration.productlanding;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -34,7 +35,7 @@ public class ProductLandingVariation3 extends BaseAction{
 	static Logger log = Logger.getLogger(ProductLandingVariation3.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session,Map<String,String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -138,6 +139,11 @@ public class ProductLandingVariation3 extends BaseAction{
 											if (anchorElement != null) {
 												primaryCTALinkText = anchorElement.text();
 												primaryCTALinkUrl = anchorElement.attr("href");
+												// Start extracting valid href
+												log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+												log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												// End extracting valid href
 											} else {
 												log.debug("<li>Primary CTA Link anchor tag not found </li>");
 											}
@@ -272,6 +278,11 @@ public class ProductLandingVariation3 extends BaseAction{
 										Element heroPanelLinkUrlElement = heroPanelLinkUrlElements.first();
 										if (heroPanelLinkUrlElement != null) {
 											heroPanellinkUrl =heroPanelLinkUrlElement.attr("href");
+											// Start extracting valid href
+											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+											log.debug("after heroPanellinkUrl" + heroPanellinkUrl + "\n");
+											// End extracting valid href
 										} else {
 											log.debug("<li>Hero Panel element not having any linkurl in it </li>");
 										}
@@ -384,7 +395,7 @@ public class ProductLandingVariation3 extends BaseAction{
 					if (htmlblobElements != null) {
 						//Element htmlblobElement = htmlblobElements.first();
 						for (Element htmlblobElement : htmlblobElements) {
-							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb);
+							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb,urlMap);
 							//html = html + htmlblobElement.outerHtml();
 						} 
 					} else {
@@ -437,6 +448,11 @@ public class ProductLandingVariation3 extends BaseAction{
 
 								String anchorText = anchor!=null?anchor.text():"";
 								String anchorHref = anchor.attr("href");
+								// Start extracting valid href
+								log.debug("Before tileborderedLinkUrl" + anchorHref + "\n");
+								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+								log.debug("after tileborderedLinkUrl" + anchorHref + "\n");
+								// End extracting valid href
 								if (titleBorderNodes.hasNext()) {
 									rightRailNode = (Node)titleBorderNodes.next();
 								} else {

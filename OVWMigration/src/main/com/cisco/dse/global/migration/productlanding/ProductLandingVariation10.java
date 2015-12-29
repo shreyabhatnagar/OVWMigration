@@ -9,6 +9,7 @@ package com.cisco.dse.global.migration.productlanding;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -40,7 +41,7 @@ public class ProductLandingVariation10 extends BaseAction {
 	Logger log = Logger.getLogger(ProductLandingVariation10.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -99,14 +100,14 @@ public class ProductLandingVariation10 extends BaseAction {
 								int nodeSize = (int)heroPanelNodeIterator.getSize();
 								log.debug("hero node nodeSize : "+ nodeSize);
 								if(eleSize == nodeSize){
-									setForHero(heroElements,heroPanelNodeIterator,locale);
+									setForHero(heroElements,heroPanelNodeIterator,locale,urlMap);
 								}
 								else if(nodeSize < eleSize){
-									setForHero(heroElements,heroPanelNodeIterator,locale);
+									setForHero(heroElements,heroPanelNodeIterator,locale,urlMap);
 									sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 								else if (nodeSize > eleSize) {
-									setForHero(heroElements,heroPanelNodeIterator,locale);
+									setForHero(heroElements,heroPanelNodeIterator,locale,urlMap);
 									sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 							}
@@ -149,7 +150,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node selectorBarPanelNode;
 										if (selectorBarPanel.hasNext()) {
 											selectorBarPanelNode = (Node)selectorBarPanel.next();
-											selectorBarTranslate(selectorBarPanelNode, ele);
+											selectorBarTranslate(selectorBarPanelNode, ele,urlMap);
 										}
 										else {
 											log.debug("Next node not found");								
@@ -161,7 +162,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node selectorBarPanelNode;
 										if (selectorBarPanel.hasNext()) {
 											selectorBarPanelNode = (Node)selectorBarPanel.next();
-											selectorBarTranslate(selectorBarPanelNode, ele);
+											selectorBarTranslate(selectorBarPanelNode, ele,urlMap);
 										}
 										else {
 											log.debug("Next node not found");
@@ -176,7 +177,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node selectorBarPanelNode;
 										if (selectorBarPanel.hasNext()) {
 											selectorBarPanelNode = (Node)selectorBarPanel.next();
-											selectorBarTranslate(selectorBarPanelNode, ele);
+											selectorBarTranslate(selectorBarPanelNode, ele,urlMap);
 										}
 									}
 									sb.append("<li>Mismatch in the count of selector bar panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");						
@@ -259,6 +260,11 @@ public class ProductLandingVariation10 extends BaseAction {
 									Elements cqAnchor = a00v1CqElement.getElementsByTag("a");
 									String anchorText = cqAnchor != null ? cqAnchor.text() : "";
 									String anchorHref = cqAnchor.attr("href");
+									// Start extracting valid href
+									log.debug("Before ButtonLinkUrl" + anchorHref + "\n");
+									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+									log.debug("after ButtonLinkUrl" + anchorHref + "\n");
+									// End extracting valid href
 									buttonNode.setProperty("linkText", anchorText);
 									buttonNode.setProperty("linkUrl", anchorHref);
 								}
@@ -304,7 +310,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node slNode;
 										if (slNodeIterator.hasNext()) {
 											slNode = (Node)slNodeIterator.next();
-											spotLightTranslate(slNode, spElement, locale);
+											spotLightTranslate(slNode, spElement, locale,urlMap);
 										}
 										else {
 											log.debug("Next node not found");								
@@ -317,7 +323,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node slNode;
 										if (slNodeIterator.hasNext()) {
 											slNode = (Node)slNodeIterator.next();
-											spotLightTranslate(slNode, spElement, locale);
+											spotLightTranslate(slNode, spElement, locale,urlMap);
 										}
 										else {
 											log.debug("Next node not found");
@@ -332,7 +338,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node slNode;
 										if (slNodeIterator.hasNext()) {
 											slNode = (Node)slNodeIterator.next();
-											spotLightTranslate(slNode, spElement, locale);
+											spotLightTranslate(slNode, spElement, locale,urlMap);
 										}
 										else {
 											log.debug("Next node not found");
@@ -391,7 +397,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node listNode;
 										if (listIterator.hasNext()) {
 											listNode = (Node)listIterator.next();
-											rightRailList(listNode, rightListEle);
+											rightRailList(listNode, rightListEle,urlMap);
 										}
 									}
 								}
@@ -400,7 +406,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node listNode;
 										if (listIterator.hasNext()) {
 											listNode = (Node)listIterator.next();
-											rightRailList(listNode, rightListEle);						}
+											rightRailList(listNode, rightListEle,urlMap);						}
 									}
 									sb.append("<li>Mismatch in the count of list panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
@@ -409,7 +415,7 @@ public class ProductLandingVariation10 extends BaseAction {
 										Node listNode;
 										if (listIterator.hasNext()) {
 											listNode = (Node)listIterator.next();
-											rightRailList(listNode, rightListEle);						}
+											rightRailList(listNode, rightListEle,urlMap);						}
 									}
 									sb.append("<li>Mismatch in the count of list panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
@@ -449,6 +455,11 @@ public class ProductLandingVariation10 extends BaseAction {
 										Element aElement = aElements.first();
 										String title = aElement.attr("title");
 										String href = aElement.attr("href");
+										// Start extracting valid href
+										log.debug("Before pilotLinkUrl" + href + "\n");
+										href = FrameworkUtils.getLocaleReference(href, urlMap);
+										log.debug("after pilotLinkUrl" + href + "\n");
+										// End extracting valid href
 										obj.put("linktext", title);
 										obj.put("linkurl", href);
 									} else {
@@ -520,7 +531,7 @@ public class ProductLandingVariation10 extends BaseAction {
 	}
 
 	//start setting of heropanel
-	public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale) {
+	public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale,Map<String,String> urlMap) {
 
 		try {			
 			String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").text():"";
@@ -529,6 +540,11 @@ public class ProductLandingVariation10 extends BaseAction {
 			Elements anchor = ele.getElementsByTag("a");		
 			String anchorText = anchor!=null?anchor.text():"";
 			String anchorHref = anchor.attr("href");
+			// Start extracting valid href
+			log.debug("Before heroPanelLinkUrl" + anchorHref + "\n");
+			anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+			log.debug("after heroPanelLinkUrl" + anchorHref + "\n");
+			// End extracting valid href
 
 			// start image
 			String heroImage = FrameworkUtils.extractImagePath(ele, sb);
@@ -557,12 +573,12 @@ public class ProductLandingVariation10 extends BaseAction {
 		}
 	}
 	
-	public void setForHero(Elements heroElements,NodeIterator heroPanelNodeIterator,String locale){
+	public void setForHero(Elements heroElements,NodeIterator heroPanelNodeIterator,String locale,Map<String,String> urlMap){
 	for(Element ele : heroElements){
 		Node heroPanelNode;
 		if (heroPanelNodeIterator.hasNext()) {
 			heroPanelNode = (Node)heroPanelNodeIterator.next();
-			heroPanelTranslate(heroPanelNode, ele, locale);
+			heroPanelTranslate(heroPanelNode, ele, locale,urlMap);
 		}
 	}
 }
@@ -570,11 +586,16 @@ public class ProductLandingVariation10 extends BaseAction {
 	//end setting of heropanel
 	
 	//start setting of selectorbar
-	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele) {
+	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele,Map<String,String> urlMap) {
 
 		try {
 			String title = (ele!=null?ele.getElementsByTag("a").first().text():"");
 			String titleUrl = ele.getElementsByTag("a").first().attr("href");
+			// Start extracting valid href
+			log.debug("Before selector bar title LinkUrl" + titleUrl + "\n");
+			titleUrl = FrameworkUtils.getLocaleReference(titleUrl, urlMap);
+			log.debug("after selector bar title LinkUrl" + titleUrl + "\n");
+			// End extracting valid href
 			log.debug("selector component titleUrl: "+ titleUrl);							
 			selectorBarPanelNode.setProperty("title", title);
 			selectorBarPanelNode.setProperty("titleurl", titleUrl);
@@ -592,6 +613,11 @@ public class ProductLandingVariation10 extends BaseAction {
 						Element anchor = menuEle.getElementsByTag("a").last();
 						String allLinkText = anchor!=null? anchor.text():"";
 						String allLinkUrl = anchor!=null?anchor.attr("href"):"";
+						// Start extracting valid href
+						log.debug("Before selector bar menu LinkUrl" + allLinkUrl + "\n");
+						allLinkUrl = FrameworkUtils.getLocaleReference(allLinkUrl, urlMap);
+						log.debug("after selector bar menu LinkUrl" + allLinkUrl + "\n");
+						// End extracting valid href
 						selectorBarPanelNode.setProperty("alllinktext", allLinkText);
 						selectorBarPanelNode.setProperty("alllinkurl", allLinkUrl);
 
@@ -606,6 +632,11 @@ public class ProductLandingVariation10 extends BaseAction {
 								Elements listItemAnchor = li.getElementsByTag("a");
 								String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
 								String anchorHref = listItemAnchor.attr("href");
+								// Start extracting valid href
+								log.debug("Before selectorbarLinkUrl" + anchorHref + "\n");
+								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+								log.debug("after selectorbarLinkUrl" + anchorHref + "\n");
+								// End extracting valid href
 
 								jsonObj.put("linktext", anchorText);
 								jsonObj.put("linkurl", anchorHref);
@@ -633,7 +664,7 @@ public class ProductLandingVariation10 extends BaseAction {
 	//end setting of selectorbar
 
 	//start setting of spotlight
-	public void spotLightTranslate (Node slNode, Element spElement, String locale) {
+	public void spotLightTranslate (Node slNode, Element spElement, String locale,Map<String,String> urlMap) {
 		try {
 			Element spotLightTitle = spElement.getElementsByTag("h2").first();
 			Element spotLightDescription = spElement.getElementsByTag("p").first();
@@ -677,6 +708,11 @@ public class ProductLandingVariation10 extends BaseAction {
 			if (spotLightAnchor != null) {
 				String linkText = spotLightAnchor.text();
 				String linkUrl = spotLightAnchor.attr("href");
+				// Start extracting valid href
+				log.debug("Before spotlight LinkUrl" + linkUrl + "\n");
+				linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+				log.debug("after spotlight LinkUrl" + linkUrl + "\n");
+				// End extracting valid href
 				slNode.setProperty("linktext", linkText);
 				javax.jcr.Node ctaNode = slNode.getNode("cta");
 				if (ctaNode != null) {
@@ -696,6 +732,11 @@ public class ProductLandingVariation10 extends BaseAction {
 					Element spotLightLinkEle = spotLightLink.first();
 					String slLinkText = spotLightLinkEle.text();
 					String slLinkUrl = spotLightLinkEle.attr("href");
+					// Start extracting valid href
+					log.debug("Before spotlight LinkUrl" + slLinkUrl + "\n");
+					slLinkUrl = FrameworkUtils.getLocaleReference(slLinkUrl, urlMap);
+					log.debug("after spotlight LinkUrl" + slLinkUrl + "\n");
+					// End extracting valid href
 					slNode.setProperty("title", slLinkText);
 					javax.jcr.Node titleLinkNode = slNode.getNode("titlelink");
 					if (titleLinkNode != null) {
@@ -715,7 +756,7 @@ public class ProductLandingVariation10 extends BaseAction {
 	//end setting of spotlight
 
 	//start setting of list in right rail
-	public void rightRailList (Node listNode, Element rightListEle) {
+	public void rightRailList (Node listNode, Element rightListEle,Map<String,String> urlMap) {
 		try {
 			Element title;
 			Element description;
@@ -744,6 +785,11 @@ public class ProductLandingVariation10 extends BaseAction {
 					Elements listItemAnchor = li.getElementsByTag("a");
 					String anchorText = listItemAnchor != null ? listItemAnchor.text() : "";
 					String anchorHref = listItemAnchor.attr("href");
+					// Start extracting valid href
+					log.debug("Before right list LinkUrl" + anchorHref + "\n");
+					anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+					log.debug("after right list LinkUrl" + anchorHref + "\n");
+					// End extracting valid href
 
 					jsonObjrr.put("linktext", anchorText);
 					jsonObjrr.put("linkurl", anchorHref);
