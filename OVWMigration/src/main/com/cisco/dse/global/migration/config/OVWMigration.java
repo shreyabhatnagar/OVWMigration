@@ -640,7 +640,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("rsolution-listing-var1".equals(type)) {
+														else if ("solution-listing-Rvar1".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -653,7 +653,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("rsolution-listing-var2".equals(type)) {
+														else if ("solution-listing-Rvar2".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
