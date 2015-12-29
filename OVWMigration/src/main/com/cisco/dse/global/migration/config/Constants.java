@@ -46,7 +46,7 @@ public class Constants {
 	//SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE
 	public static final String SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE = "<li>spotlight image node doesn't exist</li>";
 	// SPOTLIGHT_ELEMENT_COUNT
-	public static final String SPOTLIGHT_ELEMENT_COUNT = " and Spotlight elements on the page size is ";
+	public static final String SPOTLIGHT_ELEMENT_COUNT = " and Spotlight elements on locale page is ";
 
 	//
 	public static final String SPOTLIGHT_ELEMENT_NOT_FOUND = "<li>Spotlight element not found.</li>";
@@ -580,4 +580,14 @@ public class Constants {
 
 	//UNABLE_TO_MIGRATE_TEXT_IMAGE
 	public static final String UNABLE_TO_MIGRATE_TEXT_IMAGE = "<li>Unable to migrate text image.</li>";
+
+	// PARTNER_HELP_COMPONENT_NOT_FOUND
+	public static final String PARTNER_HELP_COMPONENT_NOT_FOUND = "<li>PARTNER_HELP Element not found on locale page.</li>";
+
+	//RIGHT_LIST_COMPONENT_SUBTITLE_NOT_FOUND
+	public static final String RIGHT_LIST_COMPONENT_SUBTITLE_NOT_FOUND = "<li>RightRail List SubTitle element is not found.</li>";
+
+	// SPOTLIGHT_ELEMENT_MISMATCH
+	public static final String SPOTLIGHT_ELEMENT_MISMATCH = "<li>Mismatch in the count of spotlights. Spotlight Node count is ";
+
 }
