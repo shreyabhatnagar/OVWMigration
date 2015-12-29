@@ -3,6 +3,7 @@ package com.cisco.dse.global.migration.productlanding;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -40,7 +41,7 @@ public class ProductLandingVariation11 extends BaseAction {
 	static Logger log = Logger.getLogger(ProductLandingVariation11.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -144,6 +145,11 @@ public class ProductLandingVariation11 extends BaseAction {
 										if (anchorText != null) {
 											aText = anchorText.text();
 											aHref = anchorText.attr("href");
+											// Start extracting valid href
+											log.debug("Before heropanelLinkUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after heropanelLinkUrl" + aHref + "\n");
+											// End extracting valid href
 										} else {
 											sb.append("<li>Hero Component anchor tag not having any content in it ('<a>' is blank)</li>");
 										}
@@ -362,6 +368,11 @@ public class ProductLandingVariation11 extends BaseAction {
 							if (anchorText != null) {
 								aText = anchorText.text();
 								aHref = anchorText.attr("href");
+								// Start extracting valid href
+								log.debug("Before tileborderedLinkUrl" + aHref + "\n");
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								log.debug("after tileborderedLinkUrl" + aHref + "\n");
+								// End extracting valid href
 							} else {
 								sb.append("<li>TileBordered Component anchor tag not having any content in it ('<a>' is blank)</li>");
 							}
@@ -421,6 +432,12 @@ public class ProductLandingVariation11 extends BaseAction {
 									String anchorText = listItemAnchor != null ? listItemAnchor
 											.text() : "";
 											String anchorHref = listItemAnchor.attr("href");
+											// Start extracting valid href
+											log.debug("Before listItemLinkUrl" + anchorHref + "\n");
+											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+											log.debug("after listItemLinkUrl" + anchorHref + "\n");
+											// End extracting valid href
+											
 											String anchorTarget = listItemAnchor
 													.attr("target");
 											String listIcon = listItemSpan.attr("class");
@@ -542,6 +559,11 @@ public class ProductLandingVariation11 extends BaseAction {
 									Element aElement = aElements.first();
 									String title = aElement.attr("title");
 									String href = aElement.attr("href");
+									// Start extracting valid href
+									log.debug("Before followusLinkUrl" + href + "\n");
+									href = FrameworkUtils.getLocaleReference(href, urlMap);
+									log.debug("after followusLinkUrl" + href + "\n");
+									// End extracting valid href
 									obj.put("linktext", title);
 									obj.put("linkurl", href);
 								} else {

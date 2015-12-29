@@ -1,8 +1,9 @@
-package com.cisco.dse.global.migration.rproducttechnology;
+package com.cisco.dse.global.migration.rtechnology;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +36,7 @@ public class RProductTechnology extends BaseAction {
 	static Logger log = Logger.getLogger(RProductTechnology.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -79,7 +80,7 @@ public class RProductTechnology extends BaseAction {
 				//start Text Migration
 				try{
 					Element textEle = doc.select("div.cc00-pilot").first();
-					migrateText(textEle , technologyLeftNode , locale);
+					migrateText(textEle , technologyLeftNode , locale, urlMap);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
@@ -108,7 +109,7 @@ public class RProductTechnology extends BaseAction {
 	}
 
 
-	private void migrateText(Element textEle, Node technologyLeftNode, String locale) throws RepositoryException {
+	private void migrateText(Element textEle, Node technologyLeftNode, String locale, Map<String, String> urlMap) throws RepositoryException {
 		if(textEle != null){
 			NodeIterator textNodes = technologyLeftNode.hasNode("text")?technologyLeftNode.getNodes("text*"):null;
 			if(textNodes != null){
@@ -129,7 +130,7 @@ public class RProductTechnology extends BaseAction {
 					if(text != ""){
 						eleSize++;
 						try{
-							text = FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb);
+							text = FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap);
 						}catch(Exception e){
 							sb.append(Constants.UNABLE_TO_MIGRATE_TEXT_IMAGE);
 						}

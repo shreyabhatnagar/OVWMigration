@@ -6,6 +6,7 @@
 package com.cisco.dse.global.migration.solutionlisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -31,7 +32,7 @@ public class SolutionListingVariation09 extends BaseAction {
 	static Logger log = Logger.getLogger(SolutionListingVariation09.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		log.debug("In the translate method of SolutionListingVariation09");
@@ -125,7 +126,7 @@ public class SolutionListingVariation09 extends BaseAction {
 							Elements images = htmlBlobElements.select("td");
 							for(Element ele:images)
 							{
-								htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb);
+								htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 								oldImage.append(htmlBlobContent);
 							}
 							oldImage.append("</tr></table>");

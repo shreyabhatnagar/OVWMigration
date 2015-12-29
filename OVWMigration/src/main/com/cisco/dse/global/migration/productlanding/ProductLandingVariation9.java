@@ -2,6 +2,7 @@ package com.cisco.dse.global.migration.productlanding;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -38,7 +39,7 @@ public class ProductLandingVariation9 extends BaseAction{
 	static Logger log = Logger.getLogger(ProductLandingVariation9.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -144,6 +145,11 @@ public class ProductLandingVariation9 extends BaseAction{
 										if (anchorText != null) {
 											aText = anchorText.text();
 											aHref = anchorText.attr("href");
+											// Start extracting valid href
+											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after primaryCTALinkUrl" + aHref + "\n");
+											// End extracting valid href
 										} else {
 											sb.append("<li>Primary CTA anchor tag not having any content in it ('<a>' is blank)</li>");
 										}
@@ -215,6 +221,11 @@ public class ProductLandingVariation9 extends BaseAction{
 										if (anchorText != null) {
 											aText = anchorText.text();
 											aHref = anchorText.attr("href");
+											// Start extracting valid href
+											log.debug("Before heroPanelLinkUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after heroPanelLinkUrl" + aHref + "\n");
+											// End extracting valid href
 										} else {
 											sb.append("<li>Hero Component anchor tag not having any content in it ('<a>' is blank)</li>");
 										}
@@ -306,6 +317,11 @@ public class ProductLandingVariation9 extends BaseAction{
 														.select("a");
 												if (titleUrl != null) {
 													titleURL = titleUrl.attr("href");
+													// Start extracting valid href
+													log.debug("Before selectorbartitleLinkUrl" + titleURL + "\n");
+													titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap);
+													log.debug("after selectorbartitleLinkUrl" + titleURL + "\n");
+													// End extracting valid href
 												} else {
 													sb.append("<li>Selector Bar Component Title URL element not having any content in it ('a href' is blank)</li>");
 												}
@@ -316,6 +332,11 @@ public class ProductLandingVariation9 extends BaseAction{
 												if (allLinkTag != null) {
 													aText = allLinkTag.text();
 													aHref = allLinkTag.attr("href");
+													// Start extracting valid href
+													log.debug("Before selectorbarmenuLinkUrl" + aHref + "\n");
+													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+													log.debug("after selectorbarmenuLinkUrl" + aHref + "\n");
+													// End extracting valid href
 												} else {
 													sb.append("<li>Selector Bar Component all link url href tag not having any content in it ('<a>' is blank)</li>");
 												}
@@ -348,6 +369,11 @@ public class ProductLandingVariation9 extends BaseAction{
 																		.text();
 																String anchorHref = listItemAnchor
 																		.attr("href");
+																// Start extracting valid href
+																log.debug("Before selectorbarLinkUrl" + anchorHref + "\n");
+																anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+																log.debug("after selectorbarLinkUrl" + anchorHref + "\n");
+																// End extracting valid href
 																jsonObj.put("linktext", anchorText);
 																jsonObj.put("linkurl", anchorHref);
 																list.add(jsonObj.toString());
@@ -608,6 +634,11 @@ public class ProductLandingVariation9 extends BaseAction{
 								if (anchorText != null) {
 									aText = anchorText.text();
 									aHref = anchorText.attr("href");
+									// Start extracting valid href
+									log.debug("Before tileborderedLinkUrl" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after tileborderedLinkUrl" + aHref + "\n");
+									// End extracting valid href
 								} else {
 									sb.append("<li>TileBordered Component anchor tag not having any content in it ('<a>' is blank)</li>");
 								}

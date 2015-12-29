@@ -3,6 +3,7 @@ package com.cisco.dse.global.migration.productlanding;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -34,7 +35,7 @@ public class ProductLandingVariation6 extends BaseAction {
 	static Logger log = Logger.getLogger(ProductLandingVariation6.class);
 
 	public String translate(String host,String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String>urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -185,6 +186,11 @@ public class ProductLandingVariation6 extends BaseAction {
 																.text();
 														String ahref = aElement
 																.attr("href");
+														// Start extracting valid href
+														log.debug("Before heroPanelLinkUrl" + ahref + "\n");
+														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
+														log.debug("after heroPanelLinkUrl" + ahref + "\n");
+														// End extracting valid href
 														heropanelNode
 														.setProperty(
 																"linktext",
@@ -307,6 +313,11 @@ public class ProductLandingVariation6 extends BaseAction {
 									if (aTagElement != null) {
 										aText = aTagElement.text();
 										aHref = aTagElement.attr("href");
+										// Start extracting valid href
+										log.debug("Before primaryCTALinkUrl" + aHref + "\n");
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										log.debug("after primaryCTALinkUrl" + aHref + "\n");
+										// End extracting valid href
 									} else {
 										sb.append("<li>No anchor tag found in 'div. c47-pilot' div element</li>");
 									}
@@ -347,6 +358,11 @@ public class ProductLandingVariation6 extends BaseAction {
 										Element aElement = aElements.first();
 										String title = aElement.attr("title");
 										String href = aElement.attr("href");
+										// Start extracting valid href
+										log.debug("Before rightrailsocialLinkUrl" + href + "\n");
+										href = FrameworkUtils.getLocaleReference(href, urlMap);
+										log.debug("after rightrailsocialLinkUrl" + href + "\n");
+										// End extracting valid href
 										obj.put("linktext", title);
 										obj.put("linkurl", href);
 									} else {
@@ -631,6 +647,11 @@ public class ProductLandingVariation6 extends BaseAction {
 												JSONObject obj = new JSONObject();
 												String aText = ele.text();
 												String aLink = ele.attr("href");
+												// Start extracting valid href
+												log.debug("Before listLinkUrl" + aLink + "\n");
+												aLink = FrameworkUtils.getLocaleReference(aLink, urlMap);
+												log.debug("after listLinkUrl" + aLink + "\n");
+												// End extracting valid href
 												obj.put("linktext", aText);
 												obj.put("linkurl", aLink);
 												obj.put("icon", "");
@@ -785,6 +806,11 @@ public class ProductLandingVariation6 extends BaseAction {
 								if (aElements != null) {
 									Element aElement = aElements.first();
 									aHref = aElement.attr("href");
+									// Start extracting valid href
+									log.debug("Before gridtwoLinkUrl" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after gridtwoLinkUrl" + aHref + "\n");
+									// End extracting valid href
 								} else {
 									sb.append("<li>No anchors found in grid two.</li>");
 								}
@@ -890,6 +916,11 @@ public class ProductLandingVariation6 extends BaseAction {
 								if (aElement != null) {
 									aText = aElement.text();
 									aHref = aElement.attr("href");
+									// Start extracting valid href
+									log.debug("Before gridThreeLinkUrl" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after gridThreeLinkUrl" + aHref + "\n");
+									// End extracting valid href
 								} else {
 									sb.append("<li>No Anchor found in spotlight block.</li>");
 								}
@@ -1026,6 +1057,11 @@ public class ProductLandingVariation6 extends BaseAction {
 								if (aElement != null) {
 									aText = aElement.text();
 									aHref = aElement.attr("href");
+									// Start extracting valid href
+									log.debug("Before gridFourLinkUrl" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after gridFourLinkUrl" + aHref + "\n");
+									// End extracting valid href
 								} else {
 									sb.append("<li>No anchor found in fouth grid.</li>");
 								}
@@ -1117,6 +1153,11 @@ public class ProductLandingVariation6 extends BaseAction {
 									if (aElement != null) {
 										aText = aElement.text();
 										aHref = aElement.attr("href");
+										// Start extracting valid href
+										log.debug("Before rightGridLinkUrl" + aHref + "\n");
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										log.debug("after rightGridLinkUrl" + aHref + "\n");
+										// End extracting valid href
 									} else {
 										sb.append("<li>No heading found in right grid.</li>");
 									}

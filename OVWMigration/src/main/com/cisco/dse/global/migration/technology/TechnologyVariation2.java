@@ -10,6 +10,7 @@ package com.cisco.dse.global.migration.technology;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -39,7 +40,7 @@ public class TechnologyVariation2 extends BaseAction {
 	static Logger log = Logger.getLogger(TechnologyVariation2.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -87,7 +88,7 @@ public class TechnologyVariation2 extends BaseAction {
 
 							Element listEle = doc.select("div.gd-left").select("div.nn13-pilot").first();
 							String h1Tag = textEle.getElementsByTag("h1").first().outerHtml();
-							String textDesc = FrameworkUtils.extractHtmlBlobContent(textEle, "",locale, sb); //2
+							String textDesc = FrameworkUtils.extractHtmlBlobContent(textEle, "",locale, sb, urlMap); //2
 							if(textDesc.equals("")){ //3
 								textDesc = textEle.outerHtml();
 							} //3

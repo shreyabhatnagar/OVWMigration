@@ -3,6 +3,7 @@ package com.cisco.dse.global.migration.productlanding;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -33,7 +34,7 @@ public class ProductLandingVariation5 extends BaseAction {
 	static Logger log = Logger.getLogger(ProductLandingVariation5.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -141,6 +142,11 @@ public class ProductLandingVariation5 extends BaseAction {
 										if (aTagElement != null) {
 											aText = aTagElement.text();
 											aHref = aTagElement.attr("href");
+											// Start extracting valid href
+											log.debug("Before heroPanelLinkUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after heroPanelLinkUrl" + aHref + "\n");
+											// End extracting valid href
 										} else {
 											sb.append("<li>No anchor tag found in 'div.c50-text' div element</li>");
 										}
@@ -345,6 +351,11 @@ public class ProductLandingVariation5 extends BaseAction {
 										if (aTagElement != null) {
 											aText = aTagElement.text();
 											aHref = aTagElement.attr("href");
+											// Start extracting valid href
+											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after primaryCTALinkUrl" + aHref + "\n");
+											// End extracting valid href
 										} else {
 											sb.append("<li>No anchor tag found in 'div. c47-pilot' div element</li>");
 										}
@@ -386,6 +397,11 @@ public class ProductLandingVariation5 extends BaseAction {
 											String title = aElement
 													.attr("title");
 											String href = aElement.attr("href");
+											// Start extracting valid href
+											log.debug("Before rightrailsocialLinkUrl" + href + "\n");
+											href = FrameworkUtils.getLocaleReference(href, urlMap);
+											log.debug("after rightrailsocialLinkUrl" + href + "\n");
+											// End extracting valid href
 											obj.put("linktext", title);
 											obj.put("linkurl", href);
 										} else {

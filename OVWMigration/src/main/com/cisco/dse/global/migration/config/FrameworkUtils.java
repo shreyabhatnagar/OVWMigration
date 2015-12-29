@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.jcr.Session;
@@ -314,7 +315,7 @@ public class FrameworkUtils {
 	}*/
 
 	//anudeep
-	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
+	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb, Map<String, String> urlMap) {
 		log.debug("In the extractHtmlBlobContent method.");
 		String outeHtmlText = htmlBlobElement.outerHtml();
 		List<String> existingimagePaths = null;
@@ -331,10 +332,44 @@ public class FrameworkUtils {
 					outeHtmlText = outeHtmlText.replace(existingimagePath, updatedImgPath);
 				}
 			}
+			List<String> existingAnchorPaths = null;
+			String updatedAnchorPath = "";
+			existingAnchorPaths = extractAnchorLinks(htmlBlobElement, sb);
+			Iterator<String> anchorIterator = existingAnchorPaths.iterator();
+			while(anchorIterator.hasNext()){
+				String existingAnchorPath = anchorIterator.next();
+				log.debug("Before anchorHref" + existingAnchorPath + "\n");
+				updatedAnchorPath = FrameworkUtils.getLocaleReference(existingAnchorPath, urlMap);
+				log.debug("after anchorHref" + updatedAnchorPath + "\n");
+
+				log.debug(existingAnchorPath +" is updated to "+updatedAnchorPath);
+				if(StringUtils.isNotBlank(existingAnchorPath) && StringUtils.isNotBlank(updatedAnchorPath)){
+					outeHtmlText = outeHtmlText.replace("\"" +existingAnchorPath + "\"", "\"" + updatedAnchorPath + "\"");
+				}
+			}
 		}
 		return outeHtmlText;
 	}
-
+	
+	private static List<String> extractAnchorLinks(Element htmlBlobElement,
+			StringBuilder sb) {
+		List<String> anchorPath =new ArrayList<String>();
+		if (htmlBlobElement != null) {
+			Elements anchorElements = htmlBlobElement.getElementsByTag("a");
+			log.debug("&&&&&&&&&&&& null" + htmlBlobElement.outerHtml());
+			if (anchorElements != null) {
+				log.debug("anchorPath not null");
+				for(Element anchorElement : anchorElements){
+					log.debug("anchorPath not null))))))))))))" + anchorElement.attr("href"));
+					anchorPath.add(anchorElement.attr("href"));
+				}
+			} else {
+				log.debug("anchorPath null");
+			}
+		}
+		log.debug("anchorPath " + anchorPath + "\n");
+		return anchorPath;
+	}
 	public static List<String> extractImagePaths(Element element, StringBuilder sb) {
 		List<String> imagePath =new ArrayList<String>();
 		if (element != null) {
@@ -349,4 +384,20 @@ public class FrameworkUtils {
 		return imagePath;
 	}
 	//anudeep
+	
+	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap) {
+		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
+			if (urlMap.containsKey(primaryCTALinkUrl)) {
+				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
+			} else {
+				String primaryCTALinkUrlWithHost = "http://www.cisco.com" + primaryCTALinkUrl;
+				log.debug("primaryCTALinkUrlWithHost " + primaryCTALinkUrlWithHost + "\n");
+				if (urlMap.containsKey(primaryCTALinkUrlWithHost)) {
+					primaryCTALinkUrl = urlMap.get(primaryCTALinkUrlWithHost);
+				}
+			}
+		}
+		return primaryCTALinkUrl;
+	}
+	
 }
