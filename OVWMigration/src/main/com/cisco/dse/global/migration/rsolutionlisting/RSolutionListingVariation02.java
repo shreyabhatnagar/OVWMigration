@@ -172,7 +172,6 @@ public class RSolutionListingVariation02 extends BaseAction{
 				int eleSize = spotLightElements.size();
 				NodeIterator spoLightNodeIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
 				int nodeSize = (int) spoLightNodeIterator.getSize();
-				System.out.println("ele sizeee" + eleSize + "nodddd sizee" + nodeSize);
 				if (eleSize == nodeSize) {
 					for (Element ele : spotLightElements) {
 						spoLightNodeIterator.hasNext();
@@ -184,11 +183,11 @@ public class RSolutionListingVariation02 extends BaseAction{
 				if (nodeSize < eleSize) {
 					for (Element ele : spotLightElements) {
 						if(spoLightNodeIterator.hasNext()){
-						Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-						setSpotLightContent(ele,spotLightComponentNode, locale);
+							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
+							setSpotLightContent(ele,spotLightComponentNode, locale);
 						}
 					}
-					sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
+					sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 				}
 				if (nodeSize > eleSize) {
 					for (Element ele : spotLightElements) {
@@ -196,7 +195,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 						Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
 						setSpotLightContent(ele,spotLightComponentNode, locale);
 					}
-					sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
+					sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 				}
 			}
 			else if(!spotLightTextElements.isEmpty()){
@@ -204,9 +203,28 @@ public class RSolutionListingVariation02 extends BaseAction{
 				if(cc00Last != null){
 					Elements h3Tag = cc00Last.getElementsByTag("h3");
 					Elements pTag = cc00Last.getElementsByTag("p");
+					Elements aTag = cc00Last.getElementsByTag("a");
+
+					/*	Elements descriptionLinkText = cc00Last.select("p[class]");
+					String ctaLink = null;
+					boolean ctaLinkExists = false;
+					if(!descriptionLinkText.isEmpty()){ 
+						ctaLink = descriptionLinkText.attr("class");
+						if(!ctaLink.isEmpty()){
+							if(ctaLink.equals("cta-link")){
+								ctaLinkExists = true;
+							}
+							else {
+								ctaLinkExists = false;
+							}
+						}
+					}*/
+
 					int eleSize = h3Tag.size();
 					NodeIterator spoLightNodeIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
 					NodeIterator spoLightNodePTagIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
+					NodeIterator spoLightNodeLinkIterator = solutionWideNode.hasNode("spotlight") ? solutionWideNode.getNodes("spotlight*") : null;
+
 					int nodeSize = (int) spoLightNodeIterator.getSize();
 					if (eleSize == nodeSize) {
 						for (Element ele : h3Tag) {
@@ -218,6 +236,11 @@ public class RSolutionListingVariation02 extends BaseAction{
 							spoLightNodePTagIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
 							setSpotLightTextContent(ele,spotLightComponentNode, locale);
+						}
+						for (Element ele : aTag) {
+							spoLightNodeLinkIterator.hasNext();
+							Node spotLightComponentNode = (Node) spoLightNodeLinkIterator.next();
+							setSpotLightAnchorContent(ele,spotLightComponentNode, locale);
 						}
 					}
 
@@ -234,7 +257,13 @@ public class RSolutionListingVariation02 extends BaseAction{
 							setSpotLightTextContent(ele,spotLightComponentNode, locale);
 							}
 						}
-						sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
+						for (Element ele : aTag) {
+							if(spoLightNodeLinkIterator.hasNext()){
+							Node spotLightComponentNode = (Node) spoLightNodeLinkIterator.next();
+							setSpotLightAnchorContent(ele,spotLightComponentNode, locale);
+							}
+						}
+						sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 					}
 					if (nodeSize > eleSize) {
 						for (Element ele : h3Tag) {
@@ -247,36 +276,165 @@ public class RSolutionListingVariation02 extends BaseAction{
 							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
 							setSpotLightTextContent(ele,spotLightComponentNode, locale);
 						}
-						sb.append(Constants.SPOTLIGHT_NODE_COUNT_MISMATCH);
+						for (Element ele : aTag) {
+							spoLightNodePTagIterator.hasNext();
+							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
+							setSpotLightAnchorContent(ele,spotLightComponentNode, locale);
+						}
+						sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 					}
 				}
 			}
 			else {
-					System.out.println("error");
+				sb.append(Constants.SPOTLIGHT_PARENT_DIV_NOT_FOUND);
 			}
 		} else {
-			sb.append("<li>Unable to update spotlight component as its respective div is not available.</li>");
+			sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 
 		}
 	}
 
+	private void setSpotLightAnchorContent(Element ele,Node spotLightComponentNode, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 
+		Element parentEle = ele.parent();
+		if(parentEle != null){
+			Elements h3Parent = parentEle.getElementsByTag("h3");
+			if(h3Parent.isEmpty()){
+				
+				String aText = "";
+				String aHref = "";
+			
+				Elements anchorText = ele.getElementsByTag("a");
+				if (anchorText != null) {
+					aText = anchorText.text();
+					spotLightComponentNode.setProperty("ctaText",aText);
+				} else {
+					sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
+				}
+
+				Elements anchorHref = ele.select("a[href]");
+				Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
+				if (anchorHref != null) {
+					aHref = anchorHref.attr("href");
+					spoLightNode.setProperty("url",aHref);
+				} else {
+					sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
+				}
+				
+			}else {
+				sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
+				sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
+			}
+		}
+	}
+
+	//Start Spotlight Set Method
+	private void setSpotLightContent(Element ele, Node spotLightComponentNode,String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+		String h2Text = "";
+		String pText = "";
+		String aText = "";
+		String aHref = "";
+		String h3Text = "";
+
+		Elements h2TagText = ele.getElementsByTag("h2");
+		Elements h3TagText = ele.getElementsByTag("h3");
+		if (!h2TagText.isEmpty()) {
+			h2Text = h2TagText.html();		
+			spotLightComponentNode.setProperty("title",h2Text);
+		}else if (h3TagText != null){
+			h3Text = h3TagText.html();
+			spotLightComponentNode.setProperty("title",h3Text);
+		} 
+		else {
+			sb.append(Constants.SPOTLIGHT_HEADING_TEXT_NOT_FOUND);
+		}
+
+		Elements descriptionText = ele.getElementsByTag("p");
+		if (descriptionText != null) {
+			pText = descriptionText.html();
+			spotLightComponentNode.setProperty("description", pText);
+		} else {
+			sb.append(Constants.SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND);
+		}
+
+		Elements anchorText = ele.getElementsByTag("a");
+		if (anchorText != null) {
+			aText = anchorText.text();
+			spotLightComponentNode.setProperty("ctaText",aText);
+		} else {
+			sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
+		}
+
+		Elements anchorHref = ele.select("a[href]");
+		Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
+		if (anchorHref != null) {
+			aHref = anchorHref.attr("href");
+			spoLightNode.setProperty("url",aHref);
+		} else {
+			sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
+		}
+
+		// start image
+		String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
+		log.debug("spotLightImage befor migration : " + spotLightImage + "\n");
+		if (spotLightComponentNode != null) {
+			if (spotLightComponentNode.hasNode("image")) {
+				Node spotLightImageNode = spotLightComponentNode.getNode("image");
+				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
+				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb);
+				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
+				if (StringUtils.isNotBlank(spotLightImage)) {
+					spotLightImageNode.setProperty("fileReference" , spotLightImage);
+				}
+			} else {
+				sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+			}
+		}
+		// end image
+
+	}
+	//End of SpotLight Set Method
+
+	//Start of Spot Light text Content into Spotlight
 	private void setSpotLightTextContent(Element ele,Node spotLightComponentNode, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		String pText = "";
 		Elements descriptionText = ele.getElementsByTag("p");
-
-		 if (!descriptionText.isEmpty()) {
-				pText = descriptionText.html();
-				spotLightComponentNode.setProperty("description", pText);
-			} else {
-				sb.append("<li>Extra element found on locale page</li>");
-			}
-	}
-
-	private void setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
-		String pText = "";
+		Elements descriptionLinkText = ele.select("p[class]");
 		String aText = "";
-			
+		String aHref = "";
+
+		if(!descriptionLinkText.isEmpty()){
+			Elements anchorText = ele.getElementsByTag("a");
+			if (anchorText != null) {
+				aText = anchorText.text();
+				spotLightComponentNode.setProperty("ctaText",aText);
+			} else {
+				sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
+			}
+
+			Elements anchorHref = ele.select("a[href]");
+			Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
+			if (anchorHref != null) {
+				aHref = anchorHref.attr("href");
+				spoLightNode.setProperty("url",aHref);
+			} else {
+				sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
+			}
+
+		}
+		else if (!descriptionText.isEmpty()) {
+			pText = descriptionText.html();
+			spotLightComponentNode.setProperty("description", pText);
+		} else {
+			sb.append(Constants.EXTRA_TEXT_ELEMENT_FOUND);
+		}
+	}
+	//End of Spot Light text Content into Spotlight
+
+	//Start of Spot Light title Content into Spotlight
+	private void setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+		String aText = "";
+
 		Elements anchorText = ele.getElementsByTag("a");
 		Elements h3Text = ele.getElementsByTag("h3");
 		if(!h3Text.isEmpty()){
@@ -289,7 +447,17 @@ public class RSolutionListingVariation02 extends BaseAction{
 				else if (!anchorText.isEmpty()){
 					aText = anchorText.text();
 					spotLightComponentNode.setProperty("title",aText);
-					sb.append("<li>link cannot be migrated Since node is not available</li>");
+					Node titleLink = spotLightComponentNode.hasNode("titleLink") ? spotLightComponentNode.getNode("titleLink") : null;
+					if(titleLink != null){
+						Elements aHref = anchorText.select("a[href]");
+						if (aHref != null) {
+							String anchorHref = aHref.attr("href");
+							titleLink.setProperty("linktype", "Url");
+							titleLink.setProperty("url",anchorHref);
+						} 
+					}else {
+						sb.append(Constants.TITLE_LINK_NODE_NOT_AVAILABLE);
+					}
 				}
 			}
 		}
@@ -307,85 +475,12 @@ public class RSolutionListingVariation02 extends BaseAction{
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
 				}
 			} else {
-				sb.append("<li>spotlight image node doesn't exist</li>");
+				sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 			}
 		}
 		// end image
-		
-
 	}
-
-	//Start Spotlight Set Method
-	private void setSpotLightContent(Element ele, Node spotLightComponentNode,String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
-		String h2Text = "";
-		String pText = "";
-		String aText = "";
-		String aHref = "";
-		String h3Text = "";
-		
-		Elements h2TagText = ele.getElementsByTag("h2");
-		Elements h3TagText = ele.getElementsByTag("h3");
-		if (!h2TagText.isEmpty()) {
-			h2Text = h2TagText.html();		
-			spotLightComponentNode.setProperty("title",h2Text);
-		}else if (h3TagText != null){
-			h3Text = h3TagText.html();
-			spotLightComponentNode.setProperty("title",h3Text);
-		} 
-		else {
-			sb.append("<li>Spotlight Component Heading element not having any title in it ('h2' is blank)</li>");
-		}
-
-		Elements descriptionText = ele.getElementsByTag("p");
-		if (descriptionText != null) {
-			pText = descriptionText.html();
-			spotLightComponentNode.setProperty("description", pText);
-		} else {
-			sb.append("<li>Spotlight Component description element not having any title in it ('p' is blank)</li>");
-		}
-
-		Elements anchorText = ele.getElementsByTag("a");
-		if (anchorText != null) {
-			aText = anchorText.text();
-			spotLightComponentNode.setProperty("ctaText",aText);
-		} else {
-			sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
-		}
-
-		Elements anchorHref = ele.select("a[href]");
-		Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
-		if (anchorHref != null) {
-			aHref = anchorHref.attr("href");
-			spoLightNode.setProperty("url",aHref);
-		} else {
-			sb.append("<li>Spotlight Component anchor tag not having any href content in it ('<a>' is blank)</li>");
-		}
-
-		// start image
-		String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
-		log.debug("spotLightImage befor migration : " + spotLightImage + "\n");
-		if (spotLightComponentNode != null) {
-			if (spotLightComponentNode.hasNode("image")) {
-				Node spotLightImageNode = spotLightComponentNode.getNode("image");
-				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb);
-				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
-				if (StringUtils.isNotBlank(spotLightImage)) {
-					spotLightImageNode.setProperty("fileReference" , spotLightImage);
-				}
-			} else {
-				sb.append("<li>spotlight image node doesn't exist</li>");
-			}
-		}
-		// end image
-		
-	}
-	//End of SpotLight Set Method
-
+	//End of Spot Light title Content into Spotlight
 
 }
 // end set spotlight nodes
-
-
-
-

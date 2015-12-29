@@ -123,7 +123,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 		Node textNode = solutionWideNode.hasNode("text") ? solutionWideNode.getNode("text"):null;
 		if(textNode != null){
 			if(setTitle != null){
-				textNode.setProperty("text", setTitle.text());
+				textNode.setProperty("text", setTitle.outerHtml());
 			}else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
 			}
