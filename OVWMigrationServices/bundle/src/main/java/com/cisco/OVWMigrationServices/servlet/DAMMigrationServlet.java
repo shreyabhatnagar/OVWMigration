@@ -36,7 +36,7 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 
 	@Reference
 	private ResourceResolverFactory resolverFactory;
-//doPost method to migrate the images.
+
 	protected void doPost(SlingHttpServletRequest request,
 			SlingHttpServletResponse response) throws IOException {
 
