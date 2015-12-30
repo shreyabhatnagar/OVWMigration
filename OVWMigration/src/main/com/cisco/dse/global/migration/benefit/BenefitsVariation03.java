@@ -37,10 +37,9 @@ public class BenefitsVariation03 extends BaseAction {
 	Logger log = Logger.getLogger(BenefitsVariation03.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
+			String catType, String locale, Session session,  Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-
 		log.debug("In the translate method BenifitsVariation03");
 		log.debug("In the translate method, catType is :" + catType);
 		String pagePropertiesPath = "/content/<locale>/" + catType
@@ -92,7 +91,7 @@ public class BenefitsVariation03 extends BaseAction {
 				// start of text component
 				try {
 					migrateTextAndHtmlBlob(doc, benefitLeftNode,locale, urlMap);
-					} catch (Exception e) {
+				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
 				}
@@ -100,7 +99,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 				// Start of List Component
 				try {
-					migratelistElements(doc, benefitLeftNode, session, prod);
+					migratelistElements(doc, benefitLeftNode, session, prod, locale, urlMap);
 				} catch (Exception e) {
 					sb.append("Exception in List Component");
 					log.error("Exception : ", e);
@@ -110,7 +109,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 				// Start of Right Rail
 				try {
-					migrateRightRailContent(doc, benefitRightNode);
+					migrateRightRailContent(doc, benefitRightNode, locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 					log.error("Exception : ", e);
@@ -138,17 +137,17 @@ public class BenefitsVariation03 extends BaseAction {
 		log.debug("lastTextNode:"+lastTextNode);
 		Elements textElements = doc.select("div.c00-pilot");
 		if (textElements.size() != 1) {
-			migrateTextComponents(textElements.first(),firstTextNode, locale);
-			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale, urlMap);
+			migrateTextComponents(textElements.first(),firstTextNode, locale, urlMap);
+			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale,urlMap);
 		} else if (textElements.size() == 1) {
 			Element titleEle = textElements.first();
 			Element titleEl = titleEle.getElementsByTag("h1").first();
 			if (titleEl == null) {
 				titleEl = titleEle.getElementsByTag("h2").first();
 			}
-			migrateTextComponents(titleEl, lastTextNode, locale);
+			migrateTextComponents(titleEl, lastTextNode, locale, urlMap);
 			if(titleEl != null){
-			titleEl.remove();
+				titleEl.remove();
 			}
 			migrateTextDescriptionComponents(titleEle, firstTextNode,locale, urlMap);
 		}
@@ -156,12 +155,12 @@ public class BenefitsVariation03 extends BaseAction {
 	//End of migration of the Text and Text Description
 
 	// Start of Text Content Migration
-	private void migrateTextComponents(Element textElements, Node textNode,
-			String locale) throws PathNotFoundException, RepositoryException {
+	private void migrateTextComponents(Element textElements, Node textNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		if (textNode != null) {
 			log.debug("Text node path:"+textNode.getPath());
 			if (textElements != null) {
-				textNode.setProperty("text", textElements.outerHtml());
+				String html = FrameworkUtils.extractHtmlBlobContent(textElements, "",locale, sb, urlMap);
+				textNode.setProperty("text", html);
 
 			} else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
@@ -175,12 +174,12 @@ public class BenefitsVariation03 extends BaseAction {
 
 	// Start of text description Content Migration
 	private void migrateTextDescriptionComponents(Element textElements, Node textNode,
-			String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
-		
+			String locale , Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+
 		if (textNode != null) {
 			log.debug("Text node path:"+textNode.getPath());
 			if (textElements != null) {
-				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElements, "", locale, sb, urlMap));
+				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElements, "", locale, sb , urlMap));
 			} else {
 				sb.append(Constants.TEXT_DESCRIPTION_NOT_FOUND);
 			}
@@ -193,9 +192,9 @@ public class BenefitsVariation03 extends BaseAction {
 	// End of text description Content Migration
 
 	// Start of Migrate List Elements method
-	private void migratelistElements(Document doc, Node architectureLeftNode,Session session, String prod) throws RepositoryException {
+	private void migratelistElements(Document doc, Node architectureLeftNode,Session session, String prod, String locale, Map<String, String> urlMap) throws RepositoryException {
 		Elements listElements = doc.select("div.n13-pilot");
-		
+
 		if(listElements.isEmpty()){
 			listElements = doc.select("div.nn13-pilot");
 		}
@@ -209,14 +208,14 @@ public class BenefitsVariation03 extends BaseAction {
 				Node listNode = null;
 				for (Element ele : listElements) {
 					listNode = (Node) listNodeIterator.next();
-					setListElements(ele, listNode, session,prod);
+					setListElements(ele, listNode, session,prod, locale, urlMap);
 				}
 			} else if (nodeSize < eleSize) {
 				Node listNode;
 				for (Element ele : listElements) {
 					if (listNodeIterator.hasNext()) {
 						listNode = (Node) listNodeIterator.next();
-						setListElements(ele, listNode, session,prod);
+						setListElements(ele, listNode, session,prod, locale, urlMap);
 					}
 				}
 				sb.append(Constants.MISMATCH_IN_LIST_NODES + eleSize
@@ -227,7 +226,7 @@ public class BenefitsVariation03 extends BaseAction {
 				Node listNode;
 				for (Element ele : listElements) {
 					listNode = (Node) listNodeIterator.next();
-					setListElements(ele, listNode, session,prod);
+					setListElements(ele, listNode, session,prod, locale, urlMap);
 				}
 				sb.append(Constants.MISMATCH_IN_LIST_NODES + eleSize
 						+ Constants.LIST_NODES_COUNT + nodeSize);
@@ -238,7 +237,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 	}
 
-	private void setListElements(Element ele, Node architectureListNode,Session session,String prod) {
+	private void setListElements(Element ele, Node architectureListNode,Session session,String prod, String locale, Map<String, String> urlMap) {
 		try {
 			String ownPdfText = "";
 			String pdfIcon = "";
@@ -249,15 +248,15 @@ public class BenefitsVariation03 extends BaseAction {
 			int ulSize=0;
 			// start of handling title and subtitle of list component
 			if (h2Ele.size() == 3) {
-				setListTitles(h2Ele, architectureListNode,prod);
+				setListTitles(h2Ele, architectureListNode,prod, locale, urlMap);
 			} else if (h3Ele.size() == 3) {
-				setListTitles(h3Ele, architectureListNode,prod);
+				setListTitles(h3Ele, architectureListNode,prod, locale, urlMap);
 			} else {
 				Elements titleElements = ele.select("h2,h3");
-				setListTitles(titleElements, architectureListNode,prod);
+				setListTitles(titleElements, architectureListNode,prod, locale, urlMap);
 			}
 			// end of handling title and subtitle of list component
-			
+
 			// Flag to ignore the first Element List
 			Elements titles = ele.select("h2,h3");
 			boolean flagList = false;
@@ -267,12 +266,12 @@ public class BenefitsVariation03 extends BaseAction {
 				if(titleSize == ulSize){
 					flagList = true;
 				}else if(titleSize < ulSize){
-				flagList = true;
+					flagList = true;
 				}
 			}else {
 				flagList = false;
 			}
-			
+
 			//Element List
 			NodeIterator ulNodeIterator = architectureListNode.hasNode("element_list_0") ? architectureListNode.getNodes("element_list*") : null;
 			if (ulNodeIterator != null) {
@@ -283,10 +282,10 @@ public class BenefitsVariation03 extends BaseAction {
 						log.debug("Flag of List Value" + flagList);
 						if(!flagList){
 							if (ulNodeIterator.hasNext()) {
-							ulnodeList = (Node) ulNodeIterator.next();
-							flagList = false;
-							int nodeSize = (int) ulNodeIterator.getSize();
-							sb.append(Constants.MISMATCH_IN_LIST_NODES+ ulSize+Constants.LIST_NODES_COUNT +nodeSize);
+								ulnodeList = (Node) ulNodeIterator.next();
+								flagList = false;
+								int nodeSize = (int) ulNodeIterator.getSize();
+								sb.append(Constants.MISMATCH_IN_LIST_NODES+ ulSize+Constants.LIST_NODES_COUNT +nodeSize);
 							}
 						}
 						Elements list = ulItr.getElementsByTag("li");
@@ -303,7 +302,7 @@ public class BenefitsVariation03 extends BaseAction {
 									if (ownPdfText.toLowerCase()
 											.contains("pdf")
 											|| ownPdfText.toLowerCase()
-													.contains("video")) {
+											.contains("video")) {
 										pdfIcon = "pdf";
 										if (ownPdfText.toLowerCase().contains(
 												"video")) {
@@ -330,15 +329,20 @@ public class BenefitsVariation03 extends BaseAction {
 								log.error("Exception : ", e);
 							}
 							if(!li.getElementsByTag("a").isEmpty()){
-							Element a = li.getElementsByTag("a").first();
-							JSONObject obj = new JSONObject();
-							obj.put("linktext", a.text());
-							obj.put("linkurl", a.attr("href"));
-							obj.put("icon", pdfIcon);
-							obj.put("size", pdfSize);
-							obj.put("description", "");
-							obj.put("openInNewWindow", openNewWindow);
-							listAdd.add(obj.toString());
+								Element a = li.getElementsByTag("a").first();
+								// Start extracting valid href
+								log.debug("Before anchorHref" + a.attr("href") + "\n");
+								String anchorHref = FrameworkUtils.getLocaleReference(a.attr("href"), urlMap);
+								log.debug("after anchorHref" + anchorHref + "\n");
+								// End extracting valid href
+								JSONObject obj = new JSONObject();
+								obj.put("linktext", a.text());
+								obj.put("linkurl", anchorHref);
+								obj.put("icon", pdfIcon);
+								obj.put("size", pdfSize);
+								obj.put("description", "");
+								obj.put("openInNewWindow", openNewWindow);
+								listAdd.add(obj.toString());
 							}
 						}
 						Property listitems = ulnodeList
@@ -368,31 +372,37 @@ public class BenefitsVariation03 extends BaseAction {
 	}
 
 	// End of Migrate List Elements Method
-	
+
 	// start of list title setting
-	private void setListTitles(Elements titleElements,Node architectureListNode, String prod) {
+	private void setListTitles(Elements titleElements,Node architectureListNode, String prod, String locale, Map<String, String> urlMap) {
 		try {
 			int count = 1;
 			Node subtitleLastNodeIterator = architectureListNode.hasNode("element_subtitle_0") ? architectureListNode.getNode("element_subtitle_0") : null;
 			Node subtitleFirstNodeIterator = architectureListNode.hasNode("element_subtitle_1") ? architectureListNode.getNode("element_subtitle_1") : null;
 			for (Element ele : titleElements) {
+				String textEleHtml = null;
 				if (count == 1) {
-					architectureListNode.setProperty("title", ele.html());
+					textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
+					architectureListNode.setProperty("title", textEleHtml);
 				} else if (count == 2) {
 					if (("unified-communications").equals(prod)) {
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleFirstNodeIterator.setProperty("subtitle",
-								ele.html());
+								textEleHtml);
 					} else {
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleLastNodeIterator.setProperty("subtitle",
-								ele.html());
+								textEleHtml);
 					}
 				} else if (count == 3) {
 					if (("unified-communications").equals(prod)) {
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleLastNodeIterator.setProperty("subtitle",
-								ele.html());
+								textEleHtml);
 					} else {
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleFirstNodeIterator.setProperty("subtitle",
-								ele.html());
+								textEleHtml);
 					}
 				}
 				count++;
@@ -407,7 +417,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 	// Start of Right rail migration
 	private void migrateRightRailContent(Document doc,
-			Node architectureRightNode) {
+			Node architectureRightNode, String locale, Map<String, String> urlMap) {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select(
@@ -436,50 +446,50 @@ public class BenefitsVariation03 extends BaseAction {
 					int eleSize = rightRailList.size();
 					NodeIterator tileIterator = architectureRightNode
 							.hasNodes() ? architectureRightNode
-							.getNodes("tile_bordered*") : null;
-					if (tileIterator != null) {
-						int nodeSize = (int) tileIterator.getSize();
-						Node listNode = null;
-						if (eleSize == nodeSize) {
-							for (Element rightListEle : rightRailList) {
-								if (tileIterator.hasNext()) {
-									listNode = (Node) tileIterator.next();
-									setRightRailContent(listNode, rightListEle);
-								} else {
-									log.debug("Next node not found");
-								}
+									.getNodes("tile_bordered*") : null;
+									if (tileIterator != null) {
+										int nodeSize = (int) tileIterator.getSize();
+										Node listNode = null;
+										if (eleSize == nodeSize) {
+											for (Element rightListEle : rightRailList) {
+												if (tileIterator.hasNext()) {
+													listNode = (Node) tileIterator.next();
+													setRightRailContent(listNode, rightListEle,locale, urlMap);
+												} else {
+													log.debug("Next node not found");
+												}
 
-							}
-						} else if (eleSize > nodeSize) {
-							for (Element rightListEle : rightRailList) {
-								if (tileIterator.hasNext()) {
-									listNode = (Node) tileIterator.next();
-									setRightRailContent(listNode, rightListEle);
-								} else {
-									log.debug("Next node not found");
-									sb.append(Constants.RIGHT_RAIL_NODE_COUNT
-											+ nodeSize
-											+ Constants.RIGHT_RAIL_ELEMENT_COUNT
-											+ eleSize + "</li>");
-									break;
-								}
+											}
+										} else if (eleSize > nodeSize) {
+											for (Element rightListEle : rightRailList) {
+												if (tileIterator.hasNext()) {
+													listNode = (Node) tileIterator.next();
+													setRightRailContent(listNode, rightListEle, locale, urlMap);
+												} else {
+													log.debug("Next node not found");
+													sb.append(Constants.RIGHT_RAIL_NODE_COUNT
+															+ nodeSize
+															+ Constants.RIGHT_RAIL_ELEMENT_COUNT
+															+ eleSize + "</li>");
+													break;
+												}
 
-							}
-						} else if (eleSize < nodeSize) {
-							for (Element rightListEle : rightRailList) {
-								if (tileIterator.hasNext()) {
-									listNode = (Node) tileIterator.next();
-									setRightRailContent(listNode, rightListEle);
-								} else {
-									log.debug("Next node not found");
-								}
-							}
-							sb.append(Constants.RIGHT_RAIL_NODE_COUNT
-									+ nodeSize
-									+ Constants.RIGHT_RAIL_ELEMENT_COUNT
-									+ eleSize + "</li>");
-						}
-					}
+											}
+										} else if (eleSize < nodeSize) {
+											for (Element rightListEle : rightRailList) {
+												if (tileIterator.hasNext()) {
+													listNode = (Node) tileIterator.next();
+													setRightRailContent(listNode, rightListEle, locale, urlMap );
+												} else {
+													log.debug("Next node not found");
+												}
+											}
+											sb.append(Constants.RIGHT_RAIL_NODE_COUNT
+													+ nodeSize
+													+ Constants.RIGHT_RAIL_ELEMENT_COUNT
+													+ eleSize + "</li>");
+										}
+									}
 				}
 			}
 
@@ -491,7 +501,7 @@ public class BenefitsVariation03 extends BaseAction {
 	// End of right rail migration
 
 	// Start of setting Right rail Content
-	public void setRightRailContent(Node listNode, Element rightListEle) {
+	public void setRightRailContent(Node listNode, Element rightListEle, String locale, Map<String, String> urlMap) {
 		try {
 			Element title;
 			Element description;
@@ -509,15 +519,22 @@ public class BenefitsVariation03 extends BaseAction {
 				title = headElements.first();
 				description = rightListEle.getElementsByTag("p").first();
 			}
+			String descriptionHtml = FrameworkUtils.extractHtmlBlobContent(description, "",locale, sb,urlMap);
 			listNode.setProperty("title", title.text());
-			listNode.setProperty("description", description.html());
+			listNode.setProperty("description", descriptionHtml);
 
-			Element listtext = anchor.first();
-			Element listurl = anchor.first();
-
-			listNode.setProperty("linktext", listtext.text());
-			listNode.setProperty("linkurl", listurl.attr("href"));
-
+			if(!anchor.isEmpty()){
+				Element listtext = anchor.first();
+				Element listurl = anchor.first();
+				
+				// Start extracting valid href
+				log.debug("Before anchorHref" + listurl.attr("href") + "\n");
+				String anchorHref = FrameworkUtils.getLocaleReference(listurl.attr("href"), urlMap);
+				log.debug("after anchorHref" + anchorHref + "\n");
+				// End extracting valid href
+				listNode.setProperty("linktext", listtext.text());
+				listNode.setProperty("linkurl", anchorHref);
+			}
 			log.debug("Updated title, descriptoin and linktext at "
 					+ listNode.getPath());
 		} catch (Exception e) {
