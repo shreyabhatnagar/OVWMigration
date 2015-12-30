@@ -590,4 +590,12 @@ public class Constants {
 	// SPOTLIGHT_ELEMENT_MISMATCH
 	public static final String SPOTLIGHT_ELEMENT_MISMATCH = "<li>Mismatch in the count of spotlights. Spotlight Node count is ";
 
+	//EXCEPTION_IN_HERO_MIGRATION
+	public static final String EXCEPTION_IN_HERO_MIGRATION = "<li>Exception in Hero Element migration.</li>";
+
+	// IMAGE_LINK_NODE_NOT_FOUND
+		public static final String IMAGE_LINK_NODE_NOT_FOUND = "<li>Image Link node not found. Addtional image exist on locale page along with the link '";
+
+		
+
 }
