@@ -6,6 +6,7 @@ package com.cisco.dse.global.migration.benefit;
  * */
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +36,7 @@ public class BenifitsVariation4 extends BaseAction {
 	static Logger log = Logger.getLogger(BenifitsVariation4.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -79,7 +80,8 @@ public class BenifitsVariation4 extends BaseAction {
 							for(Element text : textEle){
 								if(textNodeIterator.hasNext()){
 									textNode = (Node)textNodeIterator.next();
-									textNode.setProperty("text",text.outerHtml());
+									String textHtml = FrameworkUtils.extractHtmlBlobContent(text, "",locale, sb,urlMap);
+									textNode.setProperty("text",textHtml);
 								}
 								else{
 									sb.append(Constants.TEXT_NODE_NOT_FOUND);
@@ -106,10 +108,15 @@ public class BenifitsVariation4 extends BaseAction {
 
 							Node heroNode = benifitsLeftNode.hasNode("hero_large")?benifitsLeftNode.getNode("hero_large").getNode("heropanel_0"):null;
 							if(heroNode!=null){
+								// Start extracting valid href
+								log.debug("Before anchorHref" + heroCtaText.attr("href") + "\n");
+								String anchorHref = FrameworkUtils.getLocaleReference(heroCtaText.attr("href"), urlMap);
+								log.debug("after anchorHref" + anchorHref + "\n");
+								// End extracting valid href
 								heroNode.setProperty("title",heroTitle);
 								heroNode.setProperty("description",heroDesc);
 								heroNode.setProperty("linktext",heroCtaText.text());
-								heroNode.setProperty("linkurl",heroCtaText.attr("href"));
+								heroNode.setProperty("linkurl",anchorHref);
 							}else{
 								sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
 							}
@@ -138,7 +145,12 @@ public class BenifitsVariation4 extends BaseAction {
 								spNode.setProperty("linktext",aEle.text());
 								Node ctaNode = spNode.hasNode("cta")?spNode.getNode("cta"):null;
 								if(ctaNode!=null){
-									spNode.setProperty("url",aEle.attr("href"));
+									// Start extracting valid href
+									log.debug("Before anchorHref" + aEle.attr("href") + "\n");
+									String anchorHref = FrameworkUtils.getLocaleReference(aEle.attr("href"), urlMap);
+									log.debug("after anchorHref" + anchorHref + "\n");
+									// End extracting valid href
+									spNode.setProperty("url",anchorHref);
 								}else{
 									sb.append(Constants.SPOTLIGHT_CTA_NODE_NOT_FOUND);
 								}
@@ -161,12 +173,12 @@ public class BenifitsVariation4 extends BaseAction {
 						int tileNodeSize = (int)tileNodeIterator.getSize();
 
 						if(tileEleSize==tileNodeSize){
-							setTile(tileEle, tileNodeIterator);
+							setTile(tileEle, tileNodeIterator, urlMap);
 						}else if(tileEleSize>tileNodeSize){
-							setTile(tileEle, tileNodeIterator);
+							setTile(tileEle, tileNodeIterator, urlMap);
 							sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}else if(tileEleSize<tileNodeSize){
-							setTile(tileEle, tileNodeIterator);
+							setTile(tileEle, tileNodeIterator, urlMap);
 							sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}
 					}catch(Exception e){
@@ -197,7 +209,7 @@ public class BenifitsVariation4 extends BaseAction {
 		session.save();
 		return sb.toString();
 	}
-	public void setTile(Elements tileEle,NodeIterator tileNodeIterator) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setTile(Elements tileEle,NodeIterator tileNodeIterator, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		for(Element tile : tileEle){
 			String tTitle = tile.getElementsByTag("h2").first().text();
 			String tDesc = tile.getElementsByTag("p").first().text();
@@ -209,7 +221,12 @@ public class BenifitsVariation4 extends BaseAction {
 				tileNode.setProperty("description",tDesc);
 				tileNode.setProperty("linktext",aEle.text());
 				if(tileNode.hasProperty("linkurl")){
-					tileNode.setProperty("linkurl",aEle.attr("href"));	
+					// Start extracting valid href
+					log.debug("Before anchorHref" + aEle.attr("href") + "\n");
+					String anchorHref = FrameworkUtils.getLocaleReference(aEle.attr("href"), urlMap);
+					log.debug("after anchorHref" + anchorHref + "\n");
+					// End extracting valid href
+					tileNode.setProperty("linkurl",anchorHref);	
 				}/*else{
 					sb.append(Constants.URL_NODE_NOT_FOUND_FOR_TILE_IN_RIGHT_RAIL);
 				}*/
