@@ -9,6 +9,7 @@ package com.cisco.dse.global.migration.productlisting;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -41,7 +42,7 @@ public class ProductListingVariation6 extends BaseAction {
 	static Logger log = Logger.getLogger(ProductListingVariation6.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -173,6 +174,11 @@ public class ProductListingVariation6 extends BaseAction {
 																	if (anchorTag.size() > 0) {
 																		panelTitle = anchorTag.first().text();
 																		linkUrl = anchorTag.first().attr("href");
+																		// Start extracting valid href
+																		log.debug("Before linkUrl" + linkUrl + "\n");
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+																		log.debug("after linkUrl" + linkUrl + "\n");
+																		// End extracting valid href
 																	} 
 																	if (StringUtils.isBlank(panelTitle)) {
 																		panelTitle = panelTitleElement.text();
@@ -264,6 +270,11 @@ public class ProductListingVariation6 extends BaseAction {
 																						if (siATitle != null) {
 																							title = siATitle.text() +" "+ownText;
 																							linkTitleUrl = siATitle.attr("href");
+																							// Start extracting valid href
+																							log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
+																							linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																							log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
+																							// End extracting valid href
 																							if (title.equals(previousTitle)) {
 																								continue;
 																							}
@@ -327,6 +338,11 @@ public class ProductListingVariation6 extends BaseAction {
 																						if (linkTextElement != null) {
 																							linkText = linkTextElement.text();
 																							linkTextUrl = linkTextElement.attr("href");
+																							// Start extracting valid href
+																							log.debug("Before linkTextUrl" + linkTextUrl + "\n");
+																							linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																							log.debug("after linkTextUrl" + linkTextUrl + "\n");
+																							// End extracting valid href
 																						} else {
 																							log.debug("<li>info links anchor element not found</li>");
 																						}

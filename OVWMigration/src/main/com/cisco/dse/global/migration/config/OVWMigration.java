@@ -441,7 +441,7 @@ public class OVWMigration {
 															msg10 = msg10
 																	+ new ProductListingVariation7().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg10 = msg10 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
@@ -493,7 +493,7 @@ public class OVWMigration {
 															msg15 = msg15
 																	+ new ProductListingVariation6().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg15 = msg15 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
@@ -506,7 +506,7 @@ public class OVWMigration {
 															msg15 = msg15
 																	+ new ProductListingVariation5().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg15 = msg15 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
