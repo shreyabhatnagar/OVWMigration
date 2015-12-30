@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -15,6 +17,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -123,27 +126,49 @@ public class SolutionListingVariation08 extends BaseAction {
 				// start set hero large component properties.
 
 				try {
-					String h2Text = "";
+					String heroPanelTitle = "";
 					String pText = "";
 					String aText = "";
 					String aHref = "";
-
+					int eleSize;
+					int nodeSize;
+					Value[] panelPropertiest = null;
+					javax.jcr.Node heroPanelNode = null;
 					Elements heroElements = doc.select("div.frame");
 					//heroElements = heroElements.select("div.c50-text");
 					//Elements heroImageElements = doc.select("div.c50-image");
-					Node heroNode = indexMidNode.hasNode("hero_large") ? indexMidNode
+					Node heroLargeNode = indexMidNode.hasNode("hero_large") ? indexMidNode
 							.getNode("hero_large") : null;
 							if (heroElements != null && !heroElements.isEmpty()) {
-								if (heroNode != null) {
-									int eleSize = heroElements.size();
-									NodeIterator heroPanelNodeIterator = heroNode
-											.getNodes("heropanel*");
-									int nodeSize = (int) heroPanelNodeIterator.getSize();
-									if (eleSize == nodeSize) {
+								if (heroLargeNode != null) {
+									eleSize = heroElements.size();
+									if(heroLargeNode.hasNodes()){
+									nodeSize = (int) heroLargeNode.getNodes("heropanel*").getSize();
+									if (eleSize != nodeSize) {
+												log.debug("Hero component node count mismatch!");
+												sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH.replace("<ele>",  Integer.toString(eleSize)).replace("<node>", Integer.toString(nodeSize)));
+											}
+									}
+									Property panelNodesProperty = heroLargeNode.hasProperty("panelNodes")?heroLargeNode.getProperty("panelNodes"):null;
+									if(panelNodesProperty.isMultiple()){
+										panelPropertiest = panelNodesProperty.getValues();
+										
+									}
+									int i = 0;
 										for (Element ele : heroElements) {
-											if (heroPanelNodeIterator.hasNext()) {
-												Node heroPanelNode = (Node) heroPanelNodeIterator
-														.next();
+											if(panelPropertiest != null && i<=panelPropertiest.length){
+												String propertyVal = panelPropertiest[i].getString();
+												if(StringUtils.isNotBlank(propertyVal)){
+													JSONObject jsonObj = new JSONObject(propertyVal);
+													if(jsonObj.has("panelnode")){
+														String panelNodeProperty = jsonObj.get("panelnode").toString();
+														heroPanelNode = heroLargeNode.hasNode(panelNodeProperty)?heroLargeNode.getNode(panelNodeProperty):null;
+													}
+												}
+												i++;
+											}else{
+												sb.append("<li>No heropanel Node found.</li>");
+											}
 												// start image
 												
 												String heroImage = FrameworkUtils.extractImagePath(ele, sb);
@@ -163,14 +188,30 @@ public class SolutionListingVariation08 extends BaseAction {
 												}
 												
 												// end image
-												Elements h2TagText = ele
-														.getElementsByTag("h2");
-												if (h2TagText != null) {
-													h2Text = h2TagText.html();
-												} else {
-													sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
-												}
-
+												if (heroPanelNode != null) {
+													Node heroPanelPopUpNode = null;
+													Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+													if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+														sb.append("inside if condition."+heroPanelNode.getPath());
+														Element lightBoxElement = lightBoxElements.first();
+														heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+													}
+													Elements h2TagText = ele.getElementsByTag("h2");
+													if (h2TagText != null) {
+														heroPanelTitle = h2TagText.html();
+													} else {
+														sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
+													}
+													if (StringUtils.isNotBlank(heroPanelTitle)) {
+														heroPanelNode.setProperty("title", heroPanelTitle);
+														if(heroPanelPopUpNode != null){
+															heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+														}else{
+															sb.append("<li>Hero content video pop up node not found.</li>");
+														}
+													}else {
+														sb.append("<li>title of hero slide doesn't exist</li>");
+													}
 												Elements descriptionText = ele
 														.getElementsByTag("p");
 												if (descriptionText != null) {
@@ -192,12 +233,6 @@ public class SolutionListingVariation08 extends BaseAction {
 												} else {
 													sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 												}
-												if (StringUtils.isNotBlank(h2Text)) {
-													heroPanelNode.setProperty("title",
-															h2Text);
-												} else {
-													sb.append(Constants.HERO_CONTENT_HEADING_IS_BLANK);
-												}
 												if (StringUtils.isNotBlank(pText)) {
 													heroPanelNode.setProperty(
 															"description", pText);
@@ -217,14 +252,9 @@ public class SolutionListingVariation08 extends BaseAction {
 												} else {
 													sb.append(Constants.HERO_CONTENT_ANCHOR_LINK_IS_BLANK);
 												}
-											} else {
-												sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
-											}
+											
 										}
-										} else {
-										log.debug("Hero component node count mismatch!");
-										sb.append(Constants.HERO_CONTENT_COUNT_MISMATCH.replace("<ele>",  Integer.toString(eleSize)).replace("<node>", Integer.toString(nodeSize)));
-									}
+										}
 								} else {
 									isHero = false;//No Hero Content Node Found.
 									//sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
