@@ -221,7 +221,7 @@ public class OVWMigration {
 															msg3 = msg3
 																	+ new BenefitsVariation03().translate(host, gLink,
 																			prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg3 = msg3 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
