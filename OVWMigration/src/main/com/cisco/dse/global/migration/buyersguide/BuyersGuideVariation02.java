@@ -9,6 +9,7 @@
 package com.cisco.dse.global.migration.buyersguide;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -36,7 +37,7 @@ public class BuyersGuideVariation02 extends BaseAction{
 	static Logger log = Logger.getLogger(BuyersGuideVariation02.class);
 	
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -154,7 +155,7 @@ public class BuyersGuideVariation02 extends BaseAction{
 										if(htmlblobNode!=null){
 											
 											
-											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb);
+											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap);
 											
 											htmlblobNode.setProperty("html",rawHtml );
 											
