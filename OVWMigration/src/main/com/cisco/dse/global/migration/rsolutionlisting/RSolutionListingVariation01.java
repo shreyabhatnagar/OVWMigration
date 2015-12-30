@@ -1,6 +1,7 @@
 package com.cisco.dse.global.migration.rsolutionlisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -28,7 +29,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 	Logger log = Logger.getLogger(RSolutionListingVariation01.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -70,7 +71,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 
 				//Start of text Element
 				try {
-					migrateTextContent(doc,solutionWideNode );
+					migrateTextContent(doc,solutionWideNode, locale, urlMap);
 				}
 				catch(Exception e){
 					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
@@ -90,7 +91,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 		return sb.toString();
 	}
 
-	private void migrateTextContent(Document doc, Node solutionWideNode) throws PathNotFoundException, RepositoryException {
+	private void migrateTextContent(Document doc, Node solutionWideNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
 		Elements rightElements = doc.select("div.gd-right");
 		Elements c100Elements = null;
@@ -121,9 +122,11 @@ public class RSolutionListingVariation01 extends BaseAction{
 			}
 		}
 		Node textNode = solutionWideNode.hasNode("text") ? solutionWideNode.getNode("text"):null;
+		String html = "";
 		if(textNode != null){
 			if(setTitle != null){
-				textNode.setProperty("text", setTitle.outerHtml());
+				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap);
+				textNode.setProperty("text", html);
 			}else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
 			}
@@ -136,16 +139,24 @@ public class RSolutionListingVariation01 extends BaseAction{
 			if(!c100Elements.isEmpty()){
 				Elements gdv1 = rightElements.select("div.gd21v1-mid");
 				if(gdv1 != null){
+					Element gdv1Element = gdv1.first();
+					if (gdv1Element != null) {
 					if(setTitle != null){
 				String textString = setTitle.toString();
-				textNode0.setProperty("text", gdv1.html().replace(textString, ""));
+				html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap);
+				textNode0.setProperty("text", html.replace(textString, ""));
 					}
 				}
-			}else if(!cc00Elements.isEmpty()){
+				}
+			}else if(!rightElements.isEmpty()){
+				Element rightElement = rightElements.first();
+				if (rightElement != null) {
 				if(setTitle != null){
 					String textString = setTitle.toString();
-					textNode0.setProperty("text", cc00Elements.html().replace(textString, ""));
+					html = FrameworkUtils.extractHtmlBlobContent(rightElement, "",locale, sb, urlMap);
+					textNode0.setProperty("text", html.replace(textString, ""));
 				}
+			}
 			}else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
 			}

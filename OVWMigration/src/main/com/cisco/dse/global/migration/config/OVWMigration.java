@@ -160,13 +160,13 @@ public class OVWMigration {
 								.getCell(2).getStringCellValue() : "";
 						String cattype = tempRow.getCell(3) != null ? tempRow
 								.getCell(3).getStringCellValue() : "";
-
-						String variationType =  type.substring(0, type.lastIndexOf("-"));
-						log.debug("actual type : " + variationType);
-						String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-						pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
-						urlMap.put(gLink, pageUrl);
-														
+						if (StringUtils.isNotBlank(type) && type.indexOf("-") != -1) {
+							String variationType =  type.substring(0, type.lastIndexOf("-"));
+							log.debug("actual type : " + variationType);
+							String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
+							pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
+							urlMap.put(gLink, pageUrl);
+						}
 
 					}
 					
@@ -647,7 +647,7 @@ public class OVWMigration {
 															msg16 = msg16
 																	+ new RSolutionListingVariation01().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg16 = msg16 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
@@ -660,7 +660,7 @@ public class OVWMigration {
 															msg16 = msg16
 																	+ new RSolutionListingVariation02().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg16 = msg16 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
