@@ -10,6 +10,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -218,11 +219,13 @@ public class ProductLandingVariation1 extends BaseAction {
 				// start set Hero Large component content.
 				try {
 					javax.jcr.Node heroLargeNode = null;
-					NodeIterator heroPanelIterator = null;
+					Value[] panelPropertiest = null;
 					if (indexUpperRightNode.hasNode("hero_large")) {
 						heroLargeNode = indexUpperRightNode.getNode("hero_large");
-						if (heroLargeNode.hasNodes()) {
-							heroPanelIterator = heroLargeNode.getNodes("heropanel*");
+						Property panelNodesProperty = heroLargeNode.hasProperty("panelNodes")?heroLargeNode.getProperty("panelNodes"):null;
+						if(panelNodesProperty.isMultiple()){
+							panelPropertiest = panelNodesProperty.getValues();
+							
 						}
 					} else{
 						log.debug("<li>Node with name 'hero_large' doesn't exist under "+indexUpperRightNode.getPath()+"</li>");
@@ -239,6 +242,7 @@ public class ProductLandingVariation1 extends BaseAction {
 								if (heroLargeFrameElements.size() != heroLargeNode.getNodes("heropanel*").getSize()) {
 									sb.append("<li>Mismatch in the count of slides in the hero component </li>");
 								}
+								int i = 0;
 								for (Element ele : heroLargeFrameElements) {
 									String heroPanelTitle = "";
 									String heroPanelDescription = "";
@@ -301,11 +305,36 @@ public class ProductLandingVariation1 extends BaseAction {
 									log.debug("heroPanelDescription " + heroPanelDescription + "\n");
 									log.debug("heroPanelLinkText " + heroPanelLinkText + "\n");
 									log.debug("heroPanellinkUrl " + heroPanellinkUrl + "\n");
-									if (heroPanelIterator != null && heroPanelIterator.hasNext())
-										heroPanelNode = heroPanelIterator.nextNode();
+									
+									if(panelPropertiest != null && i<=panelPropertiest.length){
+										String propertyVal = panelPropertiest[i].getString();
+										if(StringUtils.isNotBlank(propertyVal)){
+											JSONObject jsonObj = new JSONObject(propertyVal);
+											if(jsonObj.has("panelnode")){
+												String panelNodeProperty = jsonObj.get("panelnode").toString();
+												heroPanelNode = heroLargeNode.hasNode(panelNodeProperty)?heroLargeNode.getNode(panelNodeProperty):null;
+											}
+										}
+										i++;
+									}else{
+										sb.append("<li>No heropanel Node found.</li>");
+									}
+									
 									if (heroPanelNode != null) {
+										Node heroPanelPopUpNode = null;
+										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+										if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+											sb.append("inside if condition."+heroPanelNode.getPath());
+											Element lightBoxElement = lightBoxElements.first();
+											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+										}
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
+											if(heroPanelPopUpNode != null){
+												heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+											}else{
+												sb.append("<li>Hero content video pop up node not found.</li>");
+											}
 										} else {
 											sb.append("<li>title of hero slide doesn't exist</li>");
 										}
