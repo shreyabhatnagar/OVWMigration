@@ -85,7 +85,7 @@ public class RSolutionIndex extends BaseAction {
 					migrateHero(heroEle , indexLeftNode , locale);
 					log.debug("Hero Element Migrated");
 				}catch(Exception e){
-					sb.append(Constants.EXCEPTION_IN_HEROELEMENT);
+					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
 					log.debug("Exception in Hero Element Migration"+e);
 				}
 				//End Hero Migration
