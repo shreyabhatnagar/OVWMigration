@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.cisco.dse.global.migration.benefit.Benefits;
+import com.cisco.dse.global.migration.benefit.BenefitsVariation03;
 import com.cisco.dse.global.migration.benefit.BenifitsVariation4;
 import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
 import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
@@ -218,7 +219,7 @@ public class OVWMigration {
 															String msg3 = "";
 															msg3 = msg3 + "<tr>";
 															msg3 = msg3
-																	+ new Benefits().translate(host, gLink,
+																	+ new BenefitsVariation03().translate(host, gLink,
 																			prod, type, cattype,
 																			sheet.getSheetName(), session);
 															msg3 = msg3 + "</tr>";
