@@ -184,6 +184,11 @@ public class SolutionListingVariation08 extends BaseAction {
 												if (anchorText != null) {
 													aText = anchorText.text();
 													aHref = anchorText.attr("href");
+													// Start extracting valid href
+													log.debug("Before aHref" + aHref + "\n");
+													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+													log.debug("after primaryCTALinkUrl" + aHref + "\n");
+													// End extracting valid href
 												} else {
 													sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 												}
@@ -305,6 +310,11 @@ public class SolutionListingVariation08 extends BaseAction {
 										if (aElement != null) {
 											aText = aElement.text();
 											aHref = aElement.attr("href");
+											// Start extracting valid href
+											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after primaryCTALinkUrl" + aHref + "\n");
+											// End extracting valid href
 										} else {
 											sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 										}

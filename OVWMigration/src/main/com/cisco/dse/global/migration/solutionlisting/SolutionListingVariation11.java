@@ -1,6 +1,7 @@
 package com.cisco.dse.global.migration.solutionlisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -36,7 +37,7 @@ public class SolutionListingVariation11 extends BaseAction {
 	static Logger log = Logger.getLogger(SolutionListingVariation11.class);
 
 	public String translate(String host,String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -204,6 +205,11 @@ public class SolutionListingVariation11 extends BaseAction {
 								String ahref = "";
 								if (anchorText != null) {
 									ahref = anchorText.attr("href");
+									// Start extracting valid href
+									log.debug("Before ahref" + ahref + "\n");
+									ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
+									log.debug("after ahref" + ahref + "\n");
+									// End extracting valid href
 								} else {
 									sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 								}

@@ -375,7 +375,7 @@ public class OVWMigration {
 															msg12 = msg12
 																	+ new SolutionListingVariation11().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg12 = msg12 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
@@ -594,7 +594,7 @@ public class OVWMigration {
 															msg16 = msg16
 																	+ new RProductListingVariation1().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg16 = msg16 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
