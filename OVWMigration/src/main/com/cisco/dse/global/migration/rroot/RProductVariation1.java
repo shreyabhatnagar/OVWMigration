@@ -42,9 +42,11 @@ public class RProductVariation1 extends BaseAction {
 		String pagePropertiesPath = "/content/<locale>/" + catType
 				+ "/index/jcr:content";
 		String indexTopRight = "/content/<locale>/" + catType
-				+ "/index/jcr:content/Grid/widenarrow/WN-Narrow-2/htmlblob_0";
+				+ "/index/jcr:content/Grid/widenarrow/WN-Narrow-2";
+		String indexHero = "/content/<locale>/" + catType
+				+ "/index/jcr:content/Grid/widenarrow/WN-Wide-1/carousel/carouselContents";
 		String indexThird1 = "/content/<locale>/" + catType
-				+ "/index/jcr:content/Grid/thirds/Th-Third-1/list_container";
+				+ "/index/jcr:content/Grid/thirds/Th-Third-1";
 		String indexThird21 = "/content/<locale>/" + catType
 				+ "/index/jcr:content/Grid/thirds/Th-Third-2/list_container";
 		String indexThird22 = "/content/<locale>/" + catType
@@ -68,6 +70,8 @@ public class RProductVariation1 extends BaseAction {
 
 		indexTopRight = indexTopRight.replace("<locale>", locale).replace(
 				"<prod>", prod);
+		indexHero = indexHero.replace("<locale>", locale).replace(
+				"<prod>", prod);
 		indexThird1 = indexThird1.replace("<locale>", locale).replace(
 				"<prod>", prod);
 		indexThird21 = indexThird21.replace("<locale>", locale).replace(
@@ -82,6 +86,7 @@ public class RProductVariation1 extends BaseAction {
 				"<prod>", prod);
 		log.debug("Index : " + indexThird1);
 		javax.jcr.Node indexTopRightNode = null;
+		javax.jcr.Node indexHeroNode = null;
 		javax.jcr.Node indexThirdNode1 = null;
 		javax.jcr.Node indexThirdNode21 = null;
 		javax.jcr.Node indexThirdNode22 = null;
@@ -90,6 +95,7 @@ public class RProductVariation1 extends BaseAction {
 		javax.jcr.Node indexTwothirdsthirdNode = null;
 		javax.jcr.Node pageJcrNode = null;
 		try {
+			indexHeroNode = session.getNode(indexHero);
 			indexTopRightNode = session.getNode(indexTopRight);
 			indexThirdNode1 = session.getNode(indexThird1);
 			indexThirdNode21 = session.getNode(indexThird21);
@@ -113,30 +119,49 @@ public class RProductVariation1 extends BaseAction {
 
 				// end set page properties.
 
-				//start of top-gd-right
+				//start of top-gd
+				NodeIterator heroNodes = indexHeroNode.hasNode("hero_panel")?indexHeroNode.getNodes("hero_panel*"):null;
+				if(heroNodes != null){
+					sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
+				}
+
+				Element htmlBlobEle = doc.select("div.gd12v2-pilot").first();
+				if(htmlBlobEle != null){
+					sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
+				}
 
 				Element topRight = doc.select("div.c23v5-pilot").first();
 				if(topRight != null){
-					if(indexTopRightNode != null){
-						indexTopRightNode.setProperty("html", topRight.outerHtml());
+					Node htmlBlobNode = indexTopRightNode.hasNode("htmlblob_0")?indexTopRightNode.getNode("htmlblob_0"):null;
+					if(htmlBlobNode != null){
+						htmlBlobNode.setProperty("html", topRight.outerHtml());
+					}else{
+						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
+				}else{
+					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 				}
 
-				//end of top-gd-right
+				if(indexTopRightNode.hasNode("letushelp_eot_partne")){
+					sb.append(Constants.PARTNER_HELP_COMPONENT_NOT_FOUND);
+				}
+
+				//end of top-gd
 
 				// start of Third Elements
 
 				//start of third1
 				Element thirdElement1 = doc.select("div.n04-pilot").first();
 				if(thirdElement1 != null){
-					if(indexThirdNode1 != null){
+					Node indexThirdNode11 = indexThirdNode1.hasNode("list_container")?indexThirdNode1.getNode("list_container"):null;
+					if(indexThirdNode11 != null){
 						//Heading h2
-						migrateListHeading(thirdElement1, indexThirdNode1);
+						migrateListHeading(thirdElement1, indexThirdNode11);
 						//End of Heading h2
 
 						//List items
-						if(indexThirdNode1.hasNode("list_item_parsys")){
-							Node list_item_parsys = indexThirdNode1.getNode("list_item_parsys");
+						if(indexThirdNode11.hasNode("list_item_parsys")){
+							Node list_item_parsys = indexThirdNode11.getNode("list_item_parsys");
 							if(list_item_parsys.hasNode("list_content")){
 								Node list_content =  list_item_parsys.getNode("list_content");
 								migrateListContentT(thirdElement1, list_content);
@@ -153,11 +178,18 @@ public class RProductVariation1 extends BaseAction {
 				}else{
 					sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
 				}
+
+				if(indexThirdNode1.hasNode("list_container_0")){
+					sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
+				}
 				//end of third1
 
 				//start of third21
 				Element thirdElement21 = doc.select("div.c23v2-pilot").first();
 				if(thirdElement21 != null){
+					if(thirdElement21.getElementsByTag("img") != null){
+						sb.append(Constants.EXTRA_IMAGE_TAG_FOUND);
+					}
 					if(indexThirdNode21 != null){
 						//Heading h2
 						migrateListHeading(thirdElement21, indexThirdNode21);
@@ -287,12 +319,23 @@ public class RProductVariation1 extends BaseAction {
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 							}
 							i+=2;
+							if(twoThird.hasNode("list_container")){
+								sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
+							}
 						}
 					}else{
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
 				}else{
 					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+				}
+
+				Elements htmlBlobCheck = doc.select("div.gd13v2-pilot");
+				if(htmlBlobCheck != null){
+					int mismatchCount = htmlBlobCheck.size()-3;
+					if(mismatchCount > 0 ){
+						sb.append("<li>"+mismatchCount+Constants.EXTRA_HTMLBLOB_ELEMENT_FOUND);
+					}
 				}
 				//End of Two Third Elements
 
@@ -389,7 +432,7 @@ public class RProductVariation1 extends BaseAction {
 						}
 						if(ele.child(0).hasAttr("href")){
 							log.debug("Extra image link url : "+ele.child(0).attr("href"));
-							sb.append("<li>Image Link node not found. Addtional image exist on locale page along with the link '"+ anchorText +"'.</li>");
+							sb.append(Constants.IMAGE_LINK_NODE_NOT_FOUND+ anchorText +"'.</li>");
 						}
 					}
 				}else if(nodeSize < eleSize){
@@ -404,7 +447,7 @@ public class RProductVariation1 extends BaseAction {
 							}
 							if(ele.child(0).hasAttr("href")){
 								log.debug("Extra image link url : "+ele.child(0).attr("href"));
-								sb.append("<li>Image Link node not found. Addtional image exist on locale page along with the link '"+ anchorText +"'.</li>");
+								sb.append(Constants.IMAGE_LINK_NODE_NOT_FOUND+ anchorText +"'.</li>");
 							}
 						}else{
 							sb.append(Constants.MISMATCH_IN_LIST_COUNT+eleSize+Constants.LIST_NODES_COUNT+nodeSize+".</li>");
@@ -422,7 +465,7 @@ public class RProductVariation1 extends BaseAction {
 						}
 						if(ele.child(0).hasAttr("href")){
 							log.debug("Extra image link url : "+ele.child(0).attr("href"));
-							sb.append("<li>Image Link node not found. Addtional image exist on locale page along with the link '"+ anchorText +"'.</li>");
+							sb.append(Constants.IMAGE_LINK_NODE_NOT_FOUND+ anchorText +"'.</li>");
 						}
 					}
 					sb.append(Constants.MISMATCH_IN_LIST_NODES+eleSize+Constants.LIST_NODES_COUNT+nodeSize+".</li>");

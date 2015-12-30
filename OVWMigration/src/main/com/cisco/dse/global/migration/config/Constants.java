@@ -594,8 +594,9 @@ public class Constants {
 	public static final String EXCEPTION_IN_HERO_MIGRATION = "<li>Exception in Hero Element migration.</li>";
 
 	// IMAGE_LINK_NODE_NOT_FOUND
-		public static final String IMAGE_LINK_NODE_NOT_FOUND = "<li>Image Link node not found. Addtional image exist on locale page along with the link '";
+	public static final String IMAGE_LINK_NODE_NOT_FOUND = "<li>Image Link node not found. Addtional image exist on locale page along with the link '";
 
-		
+	// EXTRA_HTMLBLOB_ELEMENT_FOUND
+	public static final String EXTRA_HTMLBLOB_ELEMENT_FOUND = " Extra html blob found on locale page and respective Nodes not found.</li>";
 
 }
