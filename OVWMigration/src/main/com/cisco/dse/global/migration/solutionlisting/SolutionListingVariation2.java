@@ -100,7 +100,7 @@ public class SolutionListingVariation2 extends BaseAction{
 						}
 						for (Element textElement : textElements) {
 							String text = "";
-							text = textElement.outerHtml();
+							text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
 							if (textNodesIterator != null && textNodesIterator.hasNext())
 								textNode = textNodesIterator.nextNode();
 							if (textNode != null) {

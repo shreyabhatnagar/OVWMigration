@@ -7,6 +7,7 @@ package com.cisco.dse.global.migration.rproductlisting;
  * */
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -39,7 +40,7 @@ public class RProductListingVariation1 extends BaseAction{
 	static Logger log = Logger.getLogger(RProductListingVariation1.class);
 
 	public String translate(String host,String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -161,7 +162,7 @@ public class RProductListingVariation1 extends BaseAction{
 						Element pTagText = pTag.getElementsByTag("p").last();
 						log.debug("pTagText property!: " + pTagText);
 						if(pTagText != null){
-							pTagVal = pTagText.outerHtml();	
+							pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap);
 							if(textNodeTwo != null){
 								textNodeTwo.setProperty("text", pTagVal);
 							}

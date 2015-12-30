@@ -89,12 +89,12 @@ public class SolutionListingVariation09 extends BaseAction {
 					Elements textHeadingElements = doc.select("div.c00v0-pilot");
 					Elements textDescriptionElements = doc.select("div.c00v1-pilot");
 					if (textHeadingElements != null ) {
-						textContent.append(textHeadingElements.first().html());
+						textContent.append(FrameworkUtils.extractHtmlBlobContent(textHeadingElements.first(), "", locale, sb, urlMap));
 					}else {
 							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
 					if(textDescriptionElements != null){
-						textContent.append(textDescriptionElements.html());
+						textContent.append(FrameworkUtils.extractHtmlBlobContent(textDescriptionElements.first(), "", locale, sb, urlMap));
 					}
 					textProp = textContent.toString();
 					Node textNode = solutionListingMidnode.hasNode("text") ? solutionListingMidnode

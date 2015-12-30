@@ -96,7 +96,8 @@ public class SolutionListingVariation12 extends BaseAction{
 							if (textElements != null) {
 								Element textElement = textElements.first();
 								if (textElement != null) {
-									text = textElement.outerHtml();
+									
+									text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
 								}
 							}
 							if (textNode != null) {
