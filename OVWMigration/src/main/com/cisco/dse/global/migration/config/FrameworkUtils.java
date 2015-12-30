@@ -17,7 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -398,6 +403,33 @@ public class FrameworkUtils {
 			}
 		}
 		return primaryCTALinkUrl;
+	}
+	
+	public static Node getHeroPopUpNode(Node heroNode){
+		try {
+			log.debug("In the getPopUpNode method to get the pop up node for " + heroNode.getPath());
+			String lightboxId = heroNode.hasProperty("lightboxid") ? heroNode.getProperty("lightboxid").getString() : "";
+			Node heroLargeNodeParent = heroNode.getParent().getParent();
+			NodeIterator heroPanelPopUpNodes = heroLargeNodeParent.getNodes("c26v4_popup_cq*");
+			while (heroPanelPopUpNodes.hasNext()) {
+				Node heroPanelPopUpNode = (Node) heroPanelPopUpNodes.next();
+				String lightboxPopUpId = heroPanelPopUpNode.hasProperty("lightboxId") ? heroPanelPopUpNode.getProperty("lightboxId").getString() : "";
+				log.debug("Hero Node lightboxId : "+lightboxId);
+				log.debug("Hero PopUp Node lightboxId : "+lightboxPopUpId);
+				if (StringUtils.isNotBlank(lightboxId) && StringUtils.isNotBlank(lightboxPopUpId)) {
+					if (lightboxId.equals(lightboxPopUpId)) {
+						return heroPanelPopUpNode;
+					}
+				}
+			}
+		}catch (ValueFormatException e) {
+			log.error("ValueFormatException : ",e);
+		} catch (PathNotFoundException e) {
+			log.error("PathNotFoundException : ",e);
+		} catch (RepositoryException e) {
+			log.error("RepositoryException : ",e);
+		}
+		return null;
 	}
 	
 }
