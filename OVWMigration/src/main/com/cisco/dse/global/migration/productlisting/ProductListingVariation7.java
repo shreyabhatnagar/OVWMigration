@@ -1,6 +1,7 @@
 package com.cisco.dse.global.migration.productlisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -34,7 +35,7 @@ public class ProductListingVariation7 extends BaseAction {
 	static Logger log = Logger.getLogger(ProductListingVariation7.class);
 
 	public String translate(String host,String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -95,12 +96,14 @@ public class ProductListingVariation7 extends BaseAction {
 						sb.append("<li> Text Node not found</li>");
 
 					}
+					String html = "";
 					Elements textElements = doc.select("div.gd-right");
 					if (textElements != null && !textElements.isEmpty()) {
 						Element rightGridContent = textElements.first();
 						if(rightGridContent != null){
+							html = FrameworkUtils.extractHtmlBlobContent(rightGridContent, "",locale, sb, urlMap);
 							if(textNodeOne !=null){
-								textNodeOne.setProperty("text",rightGridContent.html());
+								textNodeOne.setProperty("text",html);
 							}
 						}
 

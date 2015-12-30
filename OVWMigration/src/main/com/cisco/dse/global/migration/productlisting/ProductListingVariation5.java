@@ -8,6 +8,7 @@ package com.cisco.dse.global.migration.productlisting;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -39,7 +40,7 @@ public class ProductListingVariation5 {
 	static Logger log = Logger.getLogger(ProductListingVariation5.class);
 
 	public String translate(String host, String loc, String prod, String type, String catType,
-			String locale, Session session) throws IOException,
+			String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		log.debug("In the translate method");
@@ -293,6 +294,11 @@ public class ProductListingVariation5 {
 																									log.debug("siATitle.text() " + siATitle.attr("href") + "\n");
 																									title = siATitle.text();
 																									linkTitleUrl = siATitle.attr("href");
+																									// Start extracting valid href
+																									log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
+																									linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																									log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
+																									// End extracting valid href
 																								} else {
 																									sb.append(Constants.SUB_DRAWER_TITLE_ELEMENT_LINK_NOT_FOUND);
 																								}
@@ -362,6 +368,11 @@ public class ProductListingVariation5 {
 																									if (linkTextElement != null) {
 																										linkText = linkTextElement.text();
 																										linkTextUrl = linkTextElement.attr("href");
+																										// Start extracting valid href
+																										log.debug("Before linkTextUrl" + linkTextUrl + "\n");
+																										linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																										log.debug("after linkTextUrl" + linkTextUrl + "\n");
+																										// End extracting valid href
 																									} else {
 																										sb.append(Constants.INFO_LINK_ANCHOR_ELEMENT_NOT_FOUND);
 																									}
