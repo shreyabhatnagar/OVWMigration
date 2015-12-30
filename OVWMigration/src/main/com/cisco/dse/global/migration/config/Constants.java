@@ -597,6 +597,50 @@ public class Constants {
 	public static final String IMAGE_LINK_NODE_NOT_FOUND = "<li>Image Link node not found. Addtional image exist on locale page along with the link '";
 
 	// EXTRA_HTMLBLOB_ELEMENT_FOUND
-	public static final String EXTRA_HTMLBLOB_ELEMENT_FOUND = " Extra html blob found on locale page and respective Nodes not found.</li>";
+	public static final String EXTRA_HTMLBLOB_ELEMENT_FOUND = " <li>Extra html blob found on locale page and respective Nodes not found.</li>";
+
+	public static final String HERO_NODE_NOT_AVAILABLE = "<li>Hero node not found</li>";
+	
+	//PRIMARY_CTA_TITLE_NOT_FOUND
+    public static final String PRIMARY_CTA_TITLE_NOT_FOUND = "<li>title of primary CTA doesn't exist</li>";
+                   
+    //PRIMARY_CTA_DESCRIPTION_NOT_FOUND
+    public static final String PRIMARY_CTA_DESCRIPTION_NOT_FOUND ="<li>description of primary CTA doesn't exist</li>";
+    
+    //PRIMARY_CTA_LINKTEXT_NOT_FOUND
+    public static final String PRIMARY_CTA_LINKTEXT_NOT_FOUND ="<li>link text of primary CTA doesn't exist</li>";
+    
+    //PRIMARY_CTA_LINKURL_NOT_FOUND
+    public static final String PRIMARY_CTA_LINKURL_NOT_FOUND ="<li>link url of primary CTA doesn't exist</li>";
+    
+    //PRIMARY_CTA_COMPONENT_INWEB_NOT_FOUND
+    public static final String PRIMARY_CTA_COMPONENT_INWEB_NOT_FOUND ="<li> Primary CTA component is not there in web publisher page.</li>";
+    
+    //MISMATCH_IN_HERO_SLIDES
+    public static final String MISMATCH_IN_HERO_SLIDES ="<li>Mismatch in the count of slides in the hero component </li>";
+    
+    //HERO_SLIDE_TITLE_NOT_FOUND
+    public static final String HERO_SLIDE_TITLE_NOT_FOUND="<li>title of hero slide doesn't exist</li>";
+    
+    //HERO_SLIDE_DESCRIPTION_NOT_FOUND
+    public static final String HERO_SLIDE_DESCRIPTION_NOT_FOUND="<li>description of hero slide doesn't exist</li>";
+    
+    //HERO_SLIDE_LINKTEXT_NOT_FOUND
+    public static final String HERO_SLIDE_LINKTEXT_NOT_FOUND="<li>link text of hero slide doesn't exist</li>";
+    
+    //HERO_SLIDE_LINKURL_NOT_FOUND
+    public static final String HERO_SLIDE_LINKURL_NOT_FOUND="<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>";
+    
+    //HERO_SLIDE_IMAGE_NODE_NOT_FOUND
+    public static final String HERO_SLIDE_IMAGE_NODE_NOT_FOUND="<li>hero image node doesn't exist</li>";
+    
+    //DRAWERCONTAINER_LINK_NOT_FOUND
+    public static final  String DRAWERCONTAINER_LINK_NOT_FOUND="<li>link of drawer container doesn't exist</li>";
+    
+    //MISMATCH_IN_INFOLINKS
+    public static final  String MISMATCH_IN_INFOLINKS="<li>Mismatch in count of infolinks in subdrawer panel.</li>";  
+    
+    //TILE_BORDERED_COMPONENT_NOT_FOUND
+    public static final  String  TILE_BORDERED_COMPONENT_NOT_FOUND="<li>tile bordered component not present in the web publisher page</li>";
 
 }
