@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -15,6 +17,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -214,11 +217,13 @@ public class ProductLandingVariation3 extends BaseAction{
 				// start set Hero Large component content.
 				try {
 					javax.jcr.Node heroLargeNode = null;
-					NodeIterator heroPanelIterator = null;
+					Value[] panelPropertiest = null;
 					if (indexUpperRightNode.hasNode("hero_large")) {
 						heroLargeNode = indexUpperRightNode.getNode("hero_large");
-						if (heroLargeNode.hasNodes()) {
-							heroPanelIterator = heroLargeNode.getNodes("heropanel*");
+						Property panelNodesProperty = heroLargeNode.hasProperty("panelNodes")?heroLargeNode.getProperty("panelNodes"):null;
+						if(panelNodesProperty.isMultiple()){
+							panelPropertiest = panelNodesProperty.getValues();
+							
 						}
 					} else{
 						sb.append("<li>Node with name 'hero_large' doesn't exist under "+indexUpperRightNode.getPath()+"</li>");
@@ -235,6 +240,7 @@ public class ProductLandingVariation3 extends BaseAction{
 								if (heroLargeFrameElements.size() != heroLargeNode.getNodes("heropanel*").getSize()) {
 									sb.append("<li>Mismatch in Hero Panels count.</li>");
 								}
+								int i=0;
 								for (Element ele : heroLargeFrameElements) {
 									String heroPanelTitle = "";
 									String heroPanelDescription = "";
@@ -289,8 +295,20 @@ public class ProductLandingVariation3 extends BaseAction{
 									} else {
 										log.debug("<li>Hero Panel link url element not found </li>");
 									}
-									if (heroPanelIterator != null && heroPanelIterator.hasNext())
-										heroPanelNode = heroPanelIterator.nextNode();
+									
+									if(panelPropertiest != null && i<=panelPropertiest.length){
+										String propertyVal = panelPropertiest[i].getString();
+										if(StringUtils.isNotBlank(propertyVal)){
+											JSONObject jsonObj = new JSONObject(propertyVal);
+											if(jsonObj.has("panelnode")){
+												String panelNodeProperty = jsonObj.get("panelnode").toString();
+												heroPanelNode = heroLargeNode.hasNode(panelNodeProperty)?heroLargeNode.getNode(panelNodeProperty):null;
+											}
+										}
+										i++;
+									}else{
+										sb.append("<li>No heropanel Node found.</li>");
+									}
 									// start image
 									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage before migration : " + heroImage + "\n");
@@ -314,8 +332,19 @@ public class ProductLandingVariation3 extends BaseAction{
 									log.debug("heroPanellinkUrl " + heroPanellinkUrl + "\n");
 									
 									if (heroPanelNode != null) {
+										Node heroPanelPopUpNode = null;
+										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+										if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+											Element lightBoxElement = lightBoxElements.first();
+											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+										}
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
+											if(heroPanelPopUpNode != null){
+												heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+											}else{
+												sb.append("<li>Hero content video pop up node not found.</li>");
+											}
 										} else {
 											sb.append("<li>title of hero slide doesn't exist</li>");
 											log.debug("title property is not set at " + heroPanelNode.getPath());

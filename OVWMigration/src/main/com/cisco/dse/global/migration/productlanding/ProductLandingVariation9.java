@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -179,29 +181,42 @@ public class ProductLandingVariation9 extends BaseAction{
 					String pText = "";
 					String aText = "";
 					String aHref = "";
-
+					Value[] panelPropertiest = null;
 					Elements heroElements = doc.select("div.c50-pilot");
 					heroElements = heroElements.select("div.frame");
-					Node heroNode = indexRightNode.hasNode("hero_large") ? indexRightNode
-							.getNode("hero_large") : null;
-
+					Node heroNode = indexRightNode.hasNode("hero_large") ? indexRightNode.getNode("hero_large") : null;
+					Property panelNodesProperty = heroNode.hasProperty("panelNodes")?heroNode.getProperty("panelNodes"):null;
+					if(panelNodesProperty.isMultiple()){
+						panelPropertiest = panelNodesProperty.getValues();
+						
+					}
 							if(heroElements != null){
 								if (heroNode != null) {
 
 									int eleSize = heroElements.size();
-									NodeIterator heroPanelNodeIterator = heroNode
-											.getNodes("heropanel*");
+									NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
 									int nodeSize = (int) heroPanelNodeIterator.getSize();
 									if(eleSize != nodeSize){
 										log.debug("Hero component node count mismatch!");
 										sb.append("<li>Hero Component count mis match. Elements on page are: "+eleSize+" Node Count is: "+nodeSize+"</li>");
 									}
-
+									int i = 0;
 									for (Element ele : heroElements) {
-										heroPanelNodeIterator.hasNext();
-										Node heroPanelNode = (Node) heroPanelNodeIterator
-												.next();
-
+										Node heroPanelNode = null;
+										if(panelPropertiest != null && i<=panelPropertiest.length){
+											String propertyVal = panelPropertiest[i].getString();
+											if(StringUtils.isNotBlank(propertyVal)){
+												JSONObject jsonObj = new JSONObject(propertyVal);
+												if(jsonObj.has("panelnode")){
+													String panelNodeProperty = jsonObj.get("panelnode").toString();
+													heroPanelNode = heroNode.hasNode(panelNodeProperty)?heroNode.getNode(panelNodeProperty):null;
+												}
+											}
+											i++;
+										}else{
+											sb.append("<li>No heropanel Node found.</li>");
+										}
+										
 										Elements h2TagText = ele.getElementsByTag("h2");
 										if (h2TagText != null) {
 											h2Text = h2TagText.html();
@@ -209,8 +224,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											sb.append("<li>Hero Component Heading element not having any title in it ('h2' is blank)</li>");
 										}
 
-										Elements descriptionText = ele
-												.getElementsByTag("p");
+										Elements descriptionText = ele.getElementsByTag("p");
 										if (descriptionText != null) {
 											pText = descriptionText.first().text();
 										} else {
@@ -234,6 +248,13 @@ public class ProductLandingVariation9 extends BaseAction{
 										String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 										log.debug("heroImage before migration : " + heroImage + "\n");
 										if (heroPanelNode != null) {
+											Node heroPanelPopUpNode = null;
+											Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+											if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+												Element lightBoxElement = lightBoxElements.first();
+												heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+											}
+											
 											if (heroPanelNode.hasNode("image")) {
 												Node imageNode = heroPanelNode.getNode("image");
 												String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
@@ -245,13 +266,21 @@ public class ProductLandingVariation9 extends BaseAction{
 											} else {
 												sb.append("<li>hero image node doesn't exist</li>");
 											}
+											
+											if(heroPanelPopUpNode != null){
+												heroPanelPopUpNode.setProperty("popupHeader", h2Text);
+											}else{
+												sb.append("<li>Hero content video pop up node not found.</li>");
+											}
+											
+											heroPanelNode.setProperty("title", h2Text);
+											heroPanelNode.setProperty("description", pText);
+											heroPanelNode.setProperty("linktext", aText);
+											heroPanelNode.setProperty("linkurl", aHref);
 										}
 										// end image
 										
-										heroPanelNode.setProperty("title", h2Text);
-										heroPanelNode.setProperty("description", pText);
-										heroPanelNode.setProperty("linktext", aText);
-										heroPanelNode.setProperty("linkurl", aHref);
+										
 
 									}
 

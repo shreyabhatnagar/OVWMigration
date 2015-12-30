@@ -7,8 +7,10 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -203,6 +205,8 @@ public class ProductLandingVariation5 extends BaseAction {
 						Node gd12v2_left = null;
 						Node hero_large = null;
 						Node heroPanelNode = null;
+						Value[] panelPropertiest = null;
+						int i = 0;
 						if (layoutOverViewNode != null) {
 							if (layoutOverViewNode.hasNode("gd12v2")) {
 								gd12v2 = layoutOverViewNode.getNode("gd12v2");
@@ -211,14 +215,44 @@ public class ProductLandingVariation5 extends BaseAction {
 									if (gd12v2_left.hasNode("hero_large")) {
 										hero_large = gd12v2_left
 												.getNode("hero_large");
-										NodeIterator heroPanelIterator = hero_large
-												.getNodes("heropanel*");
-										if (heroPanelIterator.hasNext()) {
-											heroPanelNode = (Node) heroPanelIterator
-													.next();
+										
+										Property panelNodesProperty = hero_large.hasProperty("panelNodes")?hero_large.getProperty("panelNodes"):null;
+										if(panelNodesProperty.isMultiple()){
+											panelPropertiest = panelNodesProperty.getValues();
+										}else{
+											panelPropertiest = new Value[1];
+											panelPropertiest[0] = panelNodesProperty.getValue();
+										}
+										
+										if(panelPropertiest != null && i<=panelPropertiest.length){
+											String propertyVal = panelPropertiest[i].getString();
+											if(StringUtils.isNotBlank(propertyVal)){
+												JSONObject jsonObj = new JSONObject(propertyVal);
+												if(jsonObj.has("panelnode")){
+													String panelNodeProperty = jsonObj.get("panelnode").toString();
+													heroPanelNode = hero_large.hasNode(panelNodeProperty)?hero_large.getNode(panelNodeProperty):null;
+												}
+											}
+											i++;
+										}else{
+											sb.append("<li>No heropanel Node found.</li>");
+										}
+										
+										if (heroPanelNode!=null) {
+											Node heroPanelPopUpNode = null;
+											Elements lightBoxElements = gridLeftElements.select("div.c50-image").select("a.c26v4-lightbox");
+											if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+												Element lightBoxElement = lightBoxElements.first();
+												heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+											}
 											if (StringUtils.isNotBlank(h2Text)) {
 												heroPanelNode.setProperty(
 														"title", h2Text);
+												if(heroPanelPopUpNode != null){
+													heroPanelPopUpNode.setProperty("popupHeader", h2Text);
+												}else{
+													sb.append("<li>Hero content video pop up node not found.</li>");
+												}
 											} else {
 												sb.append("<li>h2 Text is blank in hero panel.</li>");
 											}

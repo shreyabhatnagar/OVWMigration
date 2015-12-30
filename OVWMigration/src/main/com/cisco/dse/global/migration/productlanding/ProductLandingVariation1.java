@@ -225,7 +225,6 @@ public class ProductLandingVariation1 extends BaseAction {
 						Property panelNodesProperty = heroLargeNode.hasProperty("panelNodes")?heroLargeNode.getProperty("panelNodes"):null;
 						if(panelNodesProperty.isMultiple()){
 							panelPropertiest = panelNodesProperty.getValues();
-							
 						}
 					} else{
 						log.debug("<li>Node with name 'hero_large' doesn't exist under "+indexUpperRightNode.getPath()+"</li>");
@@ -324,7 +323,6 @@ public class ProductLandingVariation1 extends BaseAction {
 										Node heroPanelPopUpNode = null;
 										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
 										if(lightBoxElements != null && !lightBoxElements.isEmpty()){
-											sb.append("inside if condition."+heroPanelNode.getPath());
 											Element lightBoxElement = lightBoxElements.first();
 											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
 										}
