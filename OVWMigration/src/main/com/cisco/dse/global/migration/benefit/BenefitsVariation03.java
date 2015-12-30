@@ -1,8 +1,10 @@
 package com.cisco.dse.global.migration.benefit;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +37,7 @@ public class BenefitsVariation03 extends BaseAction {
 	Logger log = Logger.getLogger(BenefitsVariation03.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
@@ -89,7 +91,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 				// start of text component
 				try {
-					migrateTextAndHtmlBlob(doc, benefitLeftNode,locale);
+					migrateTextAndHtmlBlob(doc, benefitLeftNode,locale, urlMap);
 					} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -129,7 +131,7 @@ public class BenefitsVariation03 extends BaseAction {
 	}
 
 	//Start of migration of the Text and Text Description
-	private void migrateTextAndHtmlBlob(Document doc, Node benefitLeftNode,String locale) throws PathNotFoundException, RepositoryException {
+	private void migrateTextAndHtmlBlob(Document doc, Node benefitLeftNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		Node firstTextNode = benefitLeftNode.hasNode("text") ? benefitLeftNode.getNode("text") : null;
 		Node lastTextNode = benefitLeftNode.hasNode("text_0") ? benefitLeftNode.getNode("text_0") : null;
 		log.debug("firstTextNode:"+firstTextNode);
@@ -137,7 +139,7 @@ public class BenefitsVariation03 extends BaseAction {
 		Elements textElements = doc.select("div.c00-pilot");
 		if (textElements.size() != 1) {
 			migrateTextComponents(textElements.first(),firstTextNode, locale);
-			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale);
+			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale, urlMap);
 		} else if (textElements.size() == 1) {
 			Element titleEle = textElements.first();
 			Element titleEl = titleEle.getElementsByTag("h1").first();
@@ -148,7 +150,7 @@ public class BenefitsVariation03 extends BaseAction {
 			if(titleEl != null){
 			titleEl.remove();
 			}
-			migrateTextDescriptionComponents(titleEle, firstTextNode,locale);
+			migrateTextDescriptionComponents(titleEle, firstTextNode,locale, urlMap);
 		}
 	}
 	//End of migration of the Text and Text Description
@@ -173,12 +175,12 @@ public class BenefitsVariation03 extends BaseAction {
 
 	// Start of text description Content Migration
 	private void migrateTextDescriptionComponents(Element textElements, Node textNode,
-			String locale) throws PathNotFoundException, RepositoryException {
+			String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		
 		if (textNode != null) {
 			log.debug("Text node path:"+textNode.getPath());
 			if (textElements != null) {
-				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElements, "", locale, sb));
+				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElements, "", locale, sb, urlMap));
 			} else {
 				sb.append(Constants.TEXT_DESCRIPTION_NOT_FOUND);
 			}
