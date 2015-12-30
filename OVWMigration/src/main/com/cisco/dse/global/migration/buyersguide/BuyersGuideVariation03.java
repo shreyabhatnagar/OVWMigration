@@ -8,6 +8,7 @@
 package com.cisco.dse.global.migration.buyersguide;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -34,7 +35,7 @@ public class BuyersGuideVariation03 extends BaseAction {
 	static Logger log = Logger.getLogger(BuyersGuideVariation03.class);
 	
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		
@@ -93,7 +94,7 @@ public class BuyersGuideVariation03 extends BaseAction {
 //						htmlBlobLeftElement = htmlBlobLeftElement.removeClass("div.clearfix");
 							htmlBlobLeftElement.select("div.clearfix").remove().first();
 							htmlBlobLeftElement.select("div#top_r,div.fw-cisco-assistant").remove().first();
-						 rawHtml1 = FrameworkUtils.extractHtmlBlobContent(htmlBlobLeftElement, "", locale, sb);
+						 rawHtml1 = FrameworkUtils.extractHtmlBlobContent(htmlBlobLeftElement, "", locale, sb, urlMap);
 //					rawHtml1 = htmlBlobLeftElement.outerHtml();
 				
 			}
