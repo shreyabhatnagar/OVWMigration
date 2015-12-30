@@ -13,8 +13,10 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -100,14 +102,14 @@ public class ProductLandingVariation10 extends BaseAction {
 								int nodeSize = (int)heroPanelNodeIterator.getSize();
 								log.debug("hero node nodeSize : "+ nodeSize);
 								if(eleSize == nodeSize){
-									setForHero(heroElements,heroPanelNodeIterator,locale,urlMap);
+									setForHero(heroElements,heroNode,locale,urlMap);
 								}
 								else if(nodeSize < eleSize){
-									setForHero(heroElements,heroPanelNodeIterator,locale,urlMap);
+									setForHero(heroElements,heroNode,locale,urlMap);
 									sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 								else if (nodeSize > eleSize) {
-									setForHero(heroElements,heroPanelNodeIterator,locale,urlMap);
+									setForHero(heroElements,heroNode,locale,urlMap);
 									sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 								}
 							}
@@ -550,6 +552,12 @@ public class ProductLandingVariation10 extends BaseAction {
 			String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 			log.debug("heroImage before migration : " + heroImage + "\n");
 			if (heroPanelNode != null) {
+				Node heroPanelPopUpNode = null;
+				Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+				if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+					Element lightBoxElement = lightBoxElements.first();
+					heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+				}
 				if (heroPanelNode.hasNode("image")) {
 					Node imageNode = heroPanelNode.getNode("image");
 					String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
@@ -561,27 +569,53 @@ public class ProductLandingVariation10 extends BaseAction {
 				} else {
 					sb.append("<li>hero image node doesn't exist</li>");
 				}
+				
+				if(heroPanelPopUpNode != null){
+					heroPanelPopUpNode.setProperty("popupHeader", title);
+				}else{
+					sb.append("<li>Hero content video pop up node not found.</li>");
+				}
+				
+				heroPanelNode.setProperty("title", title);
+				heroPanelNode.setProperty("description", desc);
+				heroPanelNode.setProperty("linktext", anchorText);
+				heroPanelNode.setProperty("linkurl", anchorHref);
 			}
 			// end image
 			
-			heroPanelNode.setProperty("title", title);
-			heroPanelNode.setProperty("description", desc);
-			heroPanelNode.setProperty("linktext", anchorText);
-			heroPanelNode.setProperty("linkurl", anchorHref);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void setForHero(Elements heroElements,NodeIterator heroPanelNodeIterator,String locale,Map<String,String> urlMap){
-	for(Element ele : heroElements){
-		Node heroPanelNode;
-		if (heroPanelNodeIterator.hasNext()) {
-			heroPanelNode = (Node)heroPanelNodeIterator.next();
-			heroPanelTranslate(heroPanelNode, ele, locale,urlMap);
+	public void setForHero(Elements heroElements, Node heroPanelLarge, String locale, Map<String, String> urlMap) {
+		try {
+			Value[] panelPropertiest = null;
+			Property panelNodesProperty = heroPanelLarge.hasProperty("panelNodes") ? heroPanelLarge.getProperty("panelNodes") : null;
+			if (panelNodesProperty.isMultiple()) {
+				panelPropertiest = panelNodesProperty.getValues();
+			}
+			int i = 0;
+			Node heroPanelNode = null;
+			for (Element ele : heroElements) {
+				if (panelPropertiest != null && i <= panelPropertiest.length) {
+					String propertyVal = panelPropertiest[i].getString();
+					if (StringUtils.isNotBlank(propertyVal)) {
+						JSONObject jsonObj = new JSONObject(propertyVal);
+						if (jsonObj.has("panelnode")) {
+							String panelNodeProperty = jsonObj.get("panelnode").toString();
+							heroPanelNode = heroPanelLarge.hasNode(panelNodeProperty) ? heroPanelLarge.getNode(panelNodeProperty) : null;
+						}
+					}
+					i++;
+				} else {
+					sb.append("<li>No heropanel Node found.</li>");
+				}
+				heroPanelTranslate(heroPanelNode, ele, locale, urlMap);
+			}
+		} catch (Exception e) {
 		}
 	}
-}
 	
 	//end setting of heropanel
 	

@@ -16,6 +16,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -200,11 +201,14 @@ public class ProductLandingVariation08 extends BaseAction {
 						log.debug("heronode found: " + heroNode.getPath());
 						if (heroElements != null) {
 							int eleSize = heroElements.size();
-
-							NodeIterator heroPanelNodeIterator = heroNode
-									.getNodes("heropanel*");
-							int nodeSize = (int) heroPanelNodeIterator
-									.getSize();
+							Value[] panelPropertiest = null;
+							NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
+							Property panelNodesProperty = heroNode.hasProperty("panelNodes")?heroNode.getProperty("panelNodes"):null;
+							if(panelNodesProperty.isMultiple()){
+								panelPropertiest = panelNodesProperty.getValues();
+							}
+							int nodeSize = (int) heroPanelNodeIterator.getSize();
+							int i=0;
 							for (Element ele : heroElements) {
 								String h2Text = "";
 								String pText = "";
@@ -238,15 +242,38 @@ public class ProductLandingVariation08 extends BaseAction {
 									sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 								}
 								Node heroPanelNode = null;
-								if (heroPanelNodeIterator.hasNext()) {
-									 heroPanelNode = (Node) heroPanelNodeIterator
-											.next();
+								if (heroNode != null) {
+									
+									if(panelPropertiest != null && i<=panelPropertiest.length){
+										String propertyVal = panelPropertiest[i].getString();
+										if(StringUtils.isNotBlank(propertyVal)){
+											JSONObject jsonObj = new JSONObject(propertyVal);
+											if(jsonObj.has("panelnode")){
+												String panelNodeProperty = jsonObj.get("panelnode").toString();
+												heroPanelNode = heroNode.hasNode(panelNodeProperty)?heroNode.getNode(panelNodeProperty):null;
+											}
+										}
+										i++;
+									}else{
+										sb.append("<li>No heropanel Node found.</li>");
+									}
 								
 								// start image
 									String heroImage = FrameworkUtils
 											.extractImagePath(ele, sb);
 									log.debug("heroImage " + heroImage + "\n");
 									if (heroPanelNode != null) {
+										Node heroPanelPopUpNode = null;
+										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+										if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+											Element lightBoxElement = lightBoxElements.first();
+											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+										}
+										if(heroPanelPopUpNode != null){
+											heroPanelPopUpNode.setProperty("popupHeader", h2Text);
+										}else{
+											sb.append("<li>Hero content video pop up node not found.</li>");
+										}
 										if (heroPanelNode.hasNode("image")) {
 											Node imageNode = heroPanelNode
 													.getNode("image");
@@ -274,8 +301,7 @@ public class ProductLandingVariation08 extends BaseAction {
 									}
 									// end image
 									heroPanelNode.setProperty("title", h2Text);
-									heroPanelNode.setProperty("description",
-											pText);
+									heroPanelNode.setProperty("description", pText);
 									heroPanelNode
 											.setProperty("linktext", aText);
 									heroPanelNode.setProperty("linkurl", aHref);

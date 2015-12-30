@@ -10,6 +10,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -121,6 +122,7 @@ public class ProductLandingVariation6 extends BaseAction {
 						sb.append("<li>No parbse text found.('div.text parbase section' element not found in 'div.gd-left')</li>");
 					}
 
+					Value[] panelPropertiest = null;
 					if (layoutOverViewNode != null) {
 						if (layoutOverViewNode.hasNode("gd12v2_0")) {
 							Node gd12v2_0 = layoutOverViewNode
@@ -129,29 +131,50 @@ public class ProductLandingVariation6 extends BaseAction {
 								Node gd12v2_left = gd12v2_0
 										.getNode("gd12v2-left");
 								if (gd12v2_left.hasNode("hero_large")) {
-									Node hero_large = gd12v2_left
-											.getNode("hero_large");
-									NodeIterator heropanel = hero_large
-											.getNodes("heropanel*");
+									Node hero_large = gd12v2_left.getNode("hero_large");
+									
+									Property panelNodesProperty = hero_large.hasProperty("panelNodes")?hero_large.getProperty("panelNodes"):null;
+									if(panelNodesProperty.isMultiple()){
+										panelPropertiest = panelNodesProperty.getValues();
+									}
+									
 									if (frameElements != null) {
-										if (heropanel.getSize() == frameElements
-												.size()) {
+										if (frameElements.size()>0) {
+											int i = 0;
 											for (Element ele : frameElements) {
-												heropanel.hasNext();
-												Node heropanelNode = (Node) heropanel
-														.next();
-												Elements h2Elements = ele
-														.getElementsByTag("h2");
+												Node heropanelNode = null;
+												if(panelPropertiest != null && i<=panelPropertiest.length){
+													String propertyVal = panelPropertiest[i].getString();
+													if(StringUtils.isNotBlank(propertyVal)){
+														JSONObject jsonObj = new JSONObject(propertyVal);
+														if(jsonObj.has("panelnode")){
+															String panelNodeProperty = jsonObj.get("panelnode").toString();
+															heropanelNode = hero_large.hasNode(panelNodeProperty)?hero_large.getNode(panelNodeProperty):null;
+														}
+													}
+													i++;
+												}else{
+													sb.append("<li>No heropanel Node found.</li>");
+												}
+												
+												Node heroPanelPopUpNode = null;
+												Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+												if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+													Element lightBoxElement = lightBoxElements.first();
+													heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heropanelNode);
+												}
+												
+												Elements h2Elements = ele.getElementsByTag("h2");
 												if (h2Elements != null) {
-													Element h2element = h2Elements
-															.first();
+													Element h2element = h2Elements.first();
 													if (h2element != null) {
-														String h2 = h2element
-																.text();
-														heropanelNode
-														.setProperty(
-																"title",
-																h2);
+														String h2 = h2element.text();
+														heropanelNode.setProperty("title", h2);
+														if(heroPanelPopUpNode != null){
+															heroPanelPopUpNode.setProperty("popupHeader", h2);
+														}else{
+															sb.append("<li>Hero content video pop up node not found.</li>");
+														}
 													} else {
 														sb.append("<li>No heading foundin hero panel.</li>");
 													}
@@ -161,44 +184,29 @@ public class ProductLandingVariation6 extends BaseAction {
 												Elements pElements = ele
 														.getElementsByTag("p");
 												if (pElements != null) {
-													Element pElement = pElements
-															.first();
+													Element pElement = pElements.first();
 													if (pElement != null) {
-														String p = pElement
-																.text();
-														heropanelNode
-														.setProperty(
-																"description",
-																p);
+														String p = pElement.text();
+														heropanelNode.setProperty("description", p);
 													} else {
 														sb.append("<li>No description found in hero panel.</li>");
 													}
 												} else {
 													sb.append("<li>No description found in hero panel.</li>");
 												}
-												Elements aElements = ele
-														.getElementsByTag("a");
+												Elements aElements = ele.getElementsByTag("a");
 												if (aElements != null) {
-													Element aElement = aElements
-															.first();
+													Element aElement = aElements.first();
 													if (aElement != null) {
-														String aText = aElement
-																.text();
-														String ahref = aElement
-																.attr("href");
+														String aText = aElement.text();
+														String ahref = aElement.attr("href");
 														// Start extracting valid href
 														log.debug("Before heroPanelLinkUrl" + ahref + "\n");
 														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
 														log.debug("after heroPanelLinkUrl" + ahref + "\n");
 														// End extracting valid href
-														heropanelNode
-														.setProperty(
-																"linktext",
-																aText);
-														heropanelNode
-														.setProperty(
-																"linkurl",
-																ahref);
+														heropanelNode.setProperty("linktext", aText);
+														heropanelNode.setProperty("linkurl", ahref);
 													} else {
 														sb.append("<li>No anchor link found in hero panel.</li>");
 													}
@@ -224,11 +232,7 @@ public class ProductLandingVariation6 extends BaseAction {
 												// end image
 											}
 										} else {
-											sb.append("<li>Hero panel nodes("
-													+ heropanel.getSize()
-													+ ") and elements("
-													+ frameElements.size()
-													+ ") size doesn't match.</li>");
+											sb.append("<li>No hero frames found.</li>");
 										}
 									} else {
 										sb.append("<li>No Frames found inside hero panel.</li>");
