@@ -191,6 +191,13 @@ public class RProductLandingVariation1 extends BaseAction {
 														.text();
 												primaryCTALinkUrl = anchorElement
 														.attr("href");
+												log.debug("primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												// Start extracting valid href
+												log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+												log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+												// End extracting valid href
+									
 											} else {
 												log.debug("<li>Primary CTA Link anchor tag not found </li>");
 											}
@@ -360,6 +367,12 @@ public class RProductLandingVariation1 extends BaseAction {
 										if (heroPanelLinkUrlElement != null) {
 											heroPanellinkUrl = heroPanelLinkUrlElement
 													.attr("href");
+											// Start extracting valid href
+											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+											log.debug("after heroPanellinkUrl" + heroPanellinkUrl + "\n");
+											// End extracting valid href
+									
 										} else {
 											log.debug("<li>Hero Panel element not having any linkurl in it </li>");
 										}
@@ -448,7 +461,7 @@ public class RProductLandingVariation1 extends BaseAction {
 							log.debug("<li>Hero Large Element is not found</li>");
 						}
 					} else {
-						sb.append("<li>Hero Large component is not found on web publisher page</li>");
+						sb.append(Constants.HERO_LARGE_COMPONENT_NOT_FOUND);
 					}
 				} catch (Exception e) {
 					sb.append("<li>Unable to update hero_large component." + e
@@ -499,7 +512,7 @@ public class RProductLandingVariation1 extends BaseAction {
 												"title",
 												drawerComponentHeaderTitle);
 									} else {
-										sb.append("<li>title of drawer container doesn't exist</li>");
+										sb.append(Constants.DRAWERCONTAINER_TITLE_NOT_FOUND);
 									}
 									Elements hTextElements = doc
 											.getElementsByAttribute("data-config-hidetext");
@@ -562,6 +575,11 @@ public class RProductLandingVariation1 extends BaseAction {
 												anchorText = aElement.text();
 												anchorHref = aElement
 														.attr("href");
+												// Start extracting valid href
+												log.debug("Before anchorHref " + anchorHref + "\n");
+												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+												log.debug("after anchorHref" + anchorHref + "\n");
+												// End extracting valid href
 												if (linkItemIterator.hasNext()) {
 													itemNode = linkItemIterator
 															.nextNode();
@@ -645,6 +663,11 @@ public class RProductLandingVariation1 extends BaseAction {
 																		linkUrl = anchorTag
 																				.first()
 																				.attr("href");
+																		// Start extracting valid href
+																		log.debug("Before linkUrl" + linkUrl + "\n");
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+																		log.debug("after linkUrl" + linkUrl + "\n");
+																		// End extracting valid href
 																	}
 																	if (StringUtils
 																			.isBlank(panelTitle)) {
@@ -684,7 +707,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																		drawersPanelNode.getNode("overview"):null;
 																		if(drawersOverviewNode!=null){
 																			if(drawersOverviewNode.hasProperty("linktext")){
-																				sb.append("<li>Extra Overview node found.</li>");
+																				sb.append(Constants.EXTRA_OVERVIEW_NODE_FOUND);
 																			}
 																		}
 																String fileReference = drawersImageNode
@@ -758,7 +781,7 @@ public class RProductLandingVariation1 extends BaseAction {
 													for(Element cFix : clearfixdivs){
 														Element div = cFix.getElementsByTag("div").first();
 														if(div.hasAttr("align")){
-															sb.append("<li>Extra link found aligned at centre found along with sub-drawers.</li>");
+															sb.append(Constants.EXTRA_LINK_IN_SUBDRAWER);
 														}
 													}
 
@@ -819,6 +842,11 @@ public class RProductLandingVariation1 extends BaseAction {
 																					}
 																					linkTitleUrl = siATitle
 																							.attr("href");
+																					// Start extracting valid href
+																					log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
+																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																					log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
+																					// End extracting valid href
 																				} else {
 																					title = siTitle
 																							.text();
@@ -924,6 +952,12 @@ public class RProductLandingVariation1 extends BaseAction {
 																							.text();
 																					linkTextUrl = linkTextElement
 																							.attr("href");
+																					// Start extracting valid href
+																					log.debug("Before linkTextUrl" + linkTextUrl + "\n");
+																					linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																					log.debug("after linkTextUrl" + linkTextUrl + "\n");
+																					// End extracting valid href
+																				
 																				} else {
 																					log.debug("<li>info links anchor element not found</li>");
 																				}
@@ -1140,7 +1174,11 @@ public class RProductLandingVariation1 extends BaseAction {
 										.text() : "";
 								String anchorHref = anchor != null ? anchor
 										.attr("href") : "";
-
+										// Start extracting valid href
+										log.debug("Before anchorHref" + anchorHref + "\n");
+										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+										log.debug("after anchorHref" + anchorHref + "\n");
+										// End extracting valid href
 								if (titleBorderNodes.hasNext()) {
 									rightRailNode = (Node) titleBorderNodes
 											.next();
@@ -1246,7 +1284,7 @@ public class RProductLandingVariation1 extends BaseAction {
 															.getElementsByTag("li");
 													int liSize = indexUlLiList.size();
 													if(itemSize!=liSize){
-														sb.append("<li>Mis-match of links in list of right rail.</li>");
+														sb.append(Constants.MISMATCH_RIGHT_RAIL_LIST);
 													}
 
 													for (Element li : indexUlLiList) {
@@ -1256,6 +1294,11 @@ public class RProductLandingVariation1 extends BaseAction {
 																.text() : "";
 														String anchorHref = listItemAnchor
 																.attr("href");
+														// Start extracting valid href
+														log.debug("Before anchorHref" + anchorHref + "\n");
+														anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+														log.debug("after anchorHref" + anchorHref + "\n");
+														// End extracting valid href
 														if (item.hasNext()) {
 															itemNode = (Node) item.next();
 															log.debug("items path is : "
@@ -1271,7 +1314,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																"url",
 																anchorHref);
 													}else {
-														sb.append("<li>List Item Node not found</li>");
+														sb.append(Constants.LIST_ITEM_NODE_NOT_FOUND);
 													}
 												}
 											} 
@@ -1287,7 +1330,7 @@ public class RProductLandingVariation1 extends BaseAction {
 
 					} else {
 						if(listContainerNode!=null){
-						sb.append("<li>Extra List node found in right rail</li>");
+						sb.append(Constants.EXTRA_LIST_NODE_RIGHT_RAIL);
 						}
 					}
 				} catch (Exception e) {
