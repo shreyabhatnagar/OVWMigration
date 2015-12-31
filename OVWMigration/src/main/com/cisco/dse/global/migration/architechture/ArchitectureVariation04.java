@@ -81,9 +81,9 @@ public class ArchitectureVariation04 extends BaseAction {
 			if (doc != null) {
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start set page properties.
-				
+
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
-				
+
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				Elements allListElements = doc.select("div.gd-left").select(
@@ -132,42 +132,42 @@ public class ArchitectureVariation04 extends BaseAction {
 						}
 						Node textNode = architectureLeftNode.hasNode("text") ? architectureLeftNode
 								.getNode("text") : null;
-						if (textNode != null) {
-							if (textProp != null) {
-								textNode.setProperty("text", textProp);
-							}
-						} else {
-							sb.append(Constants.TEXT_NODE_NOT_FOUND);
-						}
-						if (architectureLeftNode.hasNode("list_0")) {
-							Node listNode = architectureLeftNode
-									.getNode("list_0");
-							if (listNode.hasNode("intro")) {
-								Node introNode = listNode.getNode("intro");
-								introNode.setProperty("paragraph_rte",
-										listIntroText);
-							} else {
-								sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
-							}
-							if (listNode.hasNode("element_list_0")) {
-								Node element_list_0 = listNode
-										.getNode("element_list_0");
-								int size = list.size();
-								if (size > 1) {
-									element_list_0
+								if (textNode != null) {
+									if (textProp != null) {
+										textNode.setProperty("text", textProp);
+									}
+								} else {
+									sb.append(Constants.TEXT_NODE_NOT_FOUND);
+								}
+								if (architectureLeftNode.hasNode("list_0")) {
+									Node listNode = architectureLeftNode
+											.getNode("list_0");
+									if (listNode.hasNode("intro")) {
+										Node introNode = listNode.getNode("intro");
+										introNode.setProperty("paragraph_rte",
+												listIntroText);
+									} else {
+										sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
+									}
+									if (listNode.hasNode("element_list_0")) {
+										Node element_list_0 = listNode
+												.getNode("element_list_0");
+										int size = list.size();
+										if (size > 1) {
+											element_list_0
 											.setProperty("listitems", list
 													.toArray(new String[list
-															.size()]));
+													                    .size()]));
+										} else {
+											element_list_0.setProperty("listitems",
+													list.get(0));
+										}
+									} else {
+										sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
+									}
 								} else {
-									element_list_0.setProperty("listitems",
-											list.get(0));
+									sb.append(Constants.LIST_NODE_NOT_FOUND);
 								}
-							} else {
-								sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
-							}
-						} else {
-							sb.append(Constants.LIST_NODE_NOT_FOUND);
-						}
 
 					} catch (Exception e) {
 						sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
@@ -227,11 +227,11 @@ public class ArchitectureVariation04 extends BaseAction {
 									} else if (loop == 2) {
 										listNode = architectureLeftNode
 												.hasNode("list_2") ? architectureLeftNode
-												.getNode("list_2") : null;
+														.getNode("list_2") : null;
 									} else if (loop == 3) {
 										listNode = architectureLeftNode
 												.hasNode("list_1") ? architectureLeftNode
-												.getNode("list_1") : null;
+														.getNode("list_1") : null;
 									}
 									if (listNode != null) {
 										String h2Text = "";
@@ -278,10 +278,10 @@ public class ArchitectureVariation04 extends BaseAction {
 													.isMultiple();
 											if (multiple) {
 												element_list_0
-														.setProperty(
-																"listitems",
-																list.toArray(new String[list
-																		.size()]));
+												.setProperty(
+														"listitems",
+														list.toArray(new String[list
+														                        .size()]));
 											} else {
 												element_list_0.setProperty(
 														"listitems",
@@ -309,15 +309,15 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of last list in left section
-					handleResourcesSection(architectureLeftNode);
+					handleResourcesSection(architectureLeftNode, urlMap);
 					// end of last list in left section
 					// --------------------------------------------------------------------------------------------------------------------------------------
 					// start of right side list component migration
-					handleRightListSection(architectureRightNode);
+					handleRightListSection(architectureRightNode, urlMap);
 					// end of right side list component migration
 					//---------------------------------------------------------------------------------------------------------------------------------------
 					// start tile section
-					handleTileSection(architectureRightNode);
+					handleTileSection(architectureRightNode, urlMap);
 					// end of tile section
 				} else {
 
@@ -355,11 +355,11 @@ public class ArchitectureVariation04 extends BaseAction {
 						int count = 1;
 						String aText = "";
 						Node listNode = null;
-							NodeIterator insideListIterator = architectureLeftNode
-									.getNode("gd22v2").getNode("gd22v2-left")
-									.getNodes("list*");
-							NodeIterator outsideListIterator = architectureLeftNode
-									.getNodes("list*");
+						NodeIterator insideListIterator = architectureLeftNode
+								.getNode("gd22v2").getNode("gd22v2-left")
+								.getNodes("list*");
+						NodeIterator outsideListIterator = architectureLeftNode
+								.getNodes("list*");
 						for (Element ele : allListElements) {
 							if(count == 6) break;
 							if (count == 2 || count == 3) {
@@ -404,8 +404,9 @@ public class ArchitectureVariation04 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									Element aElements = liEle.select("a").first();
 									if (aElements != null) {
-										aText = aElements.html();
+										aText = aElements.text();
 										linkurl = aElements.attr("href");
+										linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap);
 									} else {
 										aText = liEle.html();
 									}
@@ -426,7 +427,7 @@ public class ArchitectureVariation04 extends BaseAction {
 									if (multiple) {
 										element_list_0.setProperty("listitems",
 												list.toArray(new String[list
-														.size()]));
+												                        .size()]));
 									} else {
 										element_list_0.setProperty("listitems",
 												list.toString());
@@ -444,11 +445,11 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end of migrating list components
 					// -------------------------------------------------------------------------------------------------------------------------
 					// start of last list in left section
-					handleResourcesSection(architectureLeftNode);
+					handleResourcesSection(architectureLeftNode, urlMap);
 					// end of last list in left section
 					//-------------------------------------------------------------------------------------------------------------------------
 					// start tile section
-					handleTileSection(architectureRightNode);
+					handleTileSection(architectureRightNode, urlMap);
 
 					// end tile section
 					// --------------------------------------------------------------------------------------------------------------------
@@ -457,7 +458,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of right side list component migration
-					handleRightListSection(architectureRightNode);
+					handleRightListSection(architectureRightNode, urlMap);
 					// end of right side list component migration
 				}
 				session.save();
@@ -508,7 +509,7 @@ public class ArchitectureVariation04 extends BaseAction {
 
 	}
 
-	public void handleTileSection(Node architectureRightNode) {
+	public void handleTileSection(Node architectureRightNode, Map<String, String> urlMap) {
 		// start of tile bordered section
 		try {
 			String h2Text = "";
@@ -550,10 +551,11 @@ public class ArchitectureVariation04 extends BaseAction {
 							if (anchorText != null) {
 								aText = anchorText.text();
 								aHref = anchorText.attr("href");
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 							} else {
 								sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
 							}
-							
+
 							tileNode.setProperty("title", h2Text);
 							tileNode.setProperty("description", pText);
 							tileNode.setProperty("linktext", aText);
@@ -574,7 +576,7 @@ public class ArchitectureVariation04 extends BaseAction {
 		}
 		// end of tile bordered section
 	}
-	public void handleRightListSection(Node architectureRightNode) {
+	public void handleRightListSection(Node architectureRightNode, Map<String, String> urlMap) {
 		try {
 			String h2Text = "";
 			boolean anchor = true;
@@ -597,6 +599,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						Elements aEle = ele.getElementsByTag("a");
 						String aText = aEle.text();
 						String aHref = aEle.attr("href");
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 						obj.put("linktext", aText);
 						obj.put("linkurl", aHref);
 						obj.put("icon", "");
@@ -621,22 +624,22 @@ public class ArchitectureVariation04 extends BaseAction {
 					listNode.setProperty("title", h2Text);
 				}
 				if(anchor){
-				if (listNode.hasNode("element_list_0")) {
-					Node element_list_0 = listNode
-							.getNode("element_list_0");
-					int size = list.size();
-					if (size > 1) {
-						element_list_0
-								.setProperty("listitems", list
-										.toArray(new String[list
-												.size()]));
-					} else if(size >0){
-						element_list_0.setProperty("listitems",
-								list.get(0));
+					if (listNode.hasNode("element_list_0")) {
+						Node element_list_0 = listNode
+								.getNode("element_list_0");
+						int size = list.size();
+						if (size > 1) {
+							element_list_0
+							.setProperty("listitems", list
+									.toArray(new String[list
+									                    .size()]));
+						} else if(size >0){
+							element_list_0.setProperty("listitems",
+									list.get(0));
+						}
+					} else {
+						sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
 					}
-				} else {
-					sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
-				}
 				}
 			} else {
 				sb.append(Constants.LIST_NODE_NOT_FOUND);
@@ -646,96 +649,97 @@ public class ArchitectureVariation04 extends BaseAction {
 			log.error("Exception : ", e);
 			sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 		}
-		
+
 	}
-	public void handleResourcesSection(Node architectureLeftNode){
-	try {
-		String h2Text = "";
-		String text = "";
-		// boolean anchor = true;
-		List<String> list = new ArrayList<String>();
-		Element listElements = doc.select("div.gd-left")
-				.select("div.n13-dm,div.n13-pilot").last();
-		if (listElements != null) {
-			Elements h2Elements = listElements
-					.select("h2.bdr-1");
-			if (h2Elements != null && !h2Elements.isEmpty()) {
-				Element h2Element = h2Elements.first();
-				if (h2Element != null) {
-					h2Text = h2Element.text();
+	public void handleResourcesSection(Node architectureLeftNode, Map<String, String> urlMap){
+		try {
+			String h2Text = "";
+			String text = "";
+			// boolean anchor = true;
+			List<String> list = new ArrayList<String>();
+			Element listElements = doc.select("div.gd-left")
+					.select("div.n13-dm,div.n13-pilot").last();
+			if (listElements != null) {
+				Elements h2Elements = listElements
+						.select("h2.bdr-1");
+				if (h2Elements != null && !h2Elements.isEmpty()) {
+					Element h2Element = h2Elements.first();
+					if (h2Element != null) {
+						h2Text = h2Element.text();
+					} else {
+						sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
+					}
+					Elements aElements = listElements.select("li");
+					for (Element ele : aElements) {
+						JSONObject obj = new JSONObject();
+						Elements aEle = ele.getElementsByTag("a");
+						String pdf = ele.ownText();
+						String pdfIcon = null;
+						if (pdf.length() > 0) {
+							if (pdf.toLowerCase().contains("pdf"))
+								pdfIcon = "pdf";
+							int i = 0;
+							for (; i < pdf.length(); i++) {
+								char character = pdf.charAt(i);
+								boolean isDigit = Character
+										.isDigit(character);
+								if (isDigit) {
+									break;
+								}
+							}
+							pdf = pdf
+									.substring(i, pdf.length() - 1);
+						}
+						// pdf = pdf.replace(")", "");
+						pdf = pdf.trim();
+						String aText = aEle.text();
+						String aHref = aEle.attr("href");
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						obj.put("linktext", aText);
+						obj.put("linkurl", aHref);
+						obj.put("icon", pdfIcon);
+						obj.put("size", pdf);
+						obj.put("description", text);
+						obj.put("openInNewWindow", false);
+						list.add(obj.toString());
+					}
 				} else {
 					sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
-				}
-				Elements aElements = listElements.select("li");
-				for (Element ele : aElements) {
-					JSONObject obj = new JSONObject();
-					Elements aEle = ele.getElementsByTag("a");
-					String pdf = ele.ownText();
-					String pdfIcon = null;
-					if (pdf.length() > 0) {
-						if (pdf.toLowerCase().contains("pdf"))
-							pdfIcon = "pdf";
-						int i = 0;
-						for (; i < pdf.length(); i++) {
-							char character = pdf.charAt(i);
-							boolean isDigit = Character
-									.isDigit(character);
-							if (isDigit) {
-								break;
-							}
-						}
-						pdf = pdf
-								.substring(i, pdf.length() - 1);
-					}
-					// pdf = pdf.replace(")", "");
-					pdf = pdf.trim();
-					String aText = aEle.text();
-					String aHref = aEle.attr("href");
-					obj.put("linktext", aText);
-					obj.put("linkurl", aHref);
-					obj.put("icon", pdfIcon);
-					obj.put("size", pdf);
-					obj.put("description", text);
-					obj.put("openInNewWindow", false);
-					list.add(obj.toString());
-				}
-			} else {
-				sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
-			}
-		} else {
-			sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
-		}
-		// End get content.
-		// Start set content.
-		if (architectureLeftNode.hasNode("list")) {
-			Node listNode = architectureLeftNode
-					.getNode("list");
-			if (StringUtils.isNotBlank(h2Text)) {
-				listNode.setProperty("title", h2Text);
-			}
-			if (listNode.hasNode("element_list_0")) {
-				Node element_list_0 = listNode
-						.getNode("element_list_0");
-				int size = list.size();
-				if (size > 1) {
-					element_list_0
-							.setProperty("listitems", list
-									.toArray(new String[list
-											.size()]));
-				} else {
-					element_list_0.setProperty("listitems",
-							list.get(0));
 				}
 			} else {
 				sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
 			}
-		} else {
-			sb.append(Constants.LIST_NODE_NOT_FOUND);
+			// End get content.
+			// Start set content.
+			if (architectureLeftNode.hasNode("list")) {
+				Node listNode = architectureLeftNode
+						.getNode("list");
+				if (StringUtils.isNotBlank(h2Text)) {
+					listNode.setProperty("title", h2Text);
+				}
+				if (listNode.hasNode("element_list_0")) {
+					Node element_list_0 = listNode
+							.getNode("element_list_0");
+					int size = list.size();
+					if (size > 1) {
+						element_list_0
+						.setProperty("listitems", list
+								.toArray(new String[list
+								                    .size()]));
+					} else {
+						element_list_0.setProperty("listitems",
+								list.get(0));
+					}
+				} else {
+					sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
+				}
+			} else {
+				sb.append(Constants.LIST_NODE_NOT_FOUND);
+			}
+			// End set content.
+		} catch (Exception e) {
+			log.error("Exception : ", e);
+			sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 		}
-		// End set content.
-	} catch (Exception e) {
-		log.error("Exception : ", e);
-		sb.append(Constants.UNABLE_TO_UPDATE_LIST);
-	}
 	}
 }

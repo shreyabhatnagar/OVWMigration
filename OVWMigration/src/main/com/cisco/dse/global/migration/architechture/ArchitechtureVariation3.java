@@ -89,7 +89,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 
 				//Start of List Component
 				try {
-					migrateListContent(doc,architectureLeftNode );
+					migrateListContent(doc,architectureLeftNode , urlMap);
 				}
 				catch(Exception e){
 					sb.append(Constants.UNABLE_TO_UPDATE_LIST);
@@ -108,7 +108,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 
 				//Start of Right Rail
 				try{
-					migrateRightRailContent(doc,architectureRightNode);
+					migrateRightRailContent(doc,architectureRightNode, urlMap);
 				}
 				catch(Exception e)
 				{
@@ -281,7 +281,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 
 
 	// Start of List Content Migration
-	private void migrateListContent(Document doc, Node architectureLeftNode) throws RepositoryException {
+	private void migrateListContent(Document doc, Node architectureLeftNode, Map<String, String> urlMap) throws RepositoryException {
 		Elements secondPilot = doc.select("div.c00-pilot");
 		Element lastTag = secondPilot.last().children().last();
 		Element h2Ele = secondPilot.last().getElementsByTag("h2").last();
@@ -295,7 +295,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 			//setting h2 Content
 			if(h2Ele != null){
 				log.debug("h2 of list" + listNodeIterator.hasProperty("title"));
-				listNodeIterator.setProperty("title", h2Ele.html());
+				listNodeIterator.setProperty("title", h2Ele.text());
 			}else{
 				sb.append(Constants.NO_H2_ELEMENT_IN_LIST);
 			}
@@ -307,14 +307,14 @@ public class ArchitechtureVariation3 extends BaseAction{
 				if((lastTag.toString()).equals(ulEle.toString())){
 					//	ulEle = ulEles.last();
 					liEles = ulEle.getElementsByTag("li");
-					setListContentToNodes(liEles , elementNode);
+					setListContentToNodes(liEles , elementNode, urlMap);
 				}
 				else{
 					if(tableUlLists != null){
 						Element tableUllist = tableUlLists.last();
 						if((lastTag.toString()).equals(tableUllist.toString())){
 							liEles = tableUllist.getElementsByTag("li");
-							setListContentToNodes(liEles , elementNode);
+							setListContentToNodes(liEles , elementNode, urlMap);
 						}
 					}
 				}
@@ -330,7 +330,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 	// End of List Content Migration
 
 	//Start  of Setting List Content
-	private void setListContentToNodes(Elements liList, Node elementNode) {
+	private void setListContentToNodes(Elements liList, Node elementNode, Map<String, String> urlMap) {
 		try{
 			List<String> listAdd = new ArrayList<String>();
 			boolean openNewWindow = false;
@@ -354,15 +354,16 @@ public class ArchitechtureVariation3 extends BaseAction{
 					pdf = pdf
 							.substring(i, pdf.length() - 1);
 				}
-				// pdf = pdf.replace(")", "");
 				pdf = pdf.trim();
 				// end pdf
 
 				Elements aEle = li.getElementsByTag("a");
 				for(Element a : aEle){
+					String aURL = a.attr("href");
+					aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
 					JSONObject obj = new JSONObject();
 					obj.put("linktext", a.text());
-					obj.put("linkurl",a.attr("href"));
+					obj.put("linkurl",aURL);
 					obj.put("icon",pdfIcon);
 					obj.put("size",pdf);
 					obj.put("description","");
@@ -379,7 +380,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 	//End of Setting List Content
 
 	//Start of Right rail migration
-	private void migrateRightRailContent(Document doc, Node architectureRightNode) {
+	private void migrateRightRailContent(Document doc, Node architectureRightNode, Map<String, String> urlMap) {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select("div.c23-pilot");
@@ -414,7 +415,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 							for (Element rightListEle : rightRailList) {
 								if (tileIterator.hasNext()) {
 									listNode = (Node)tileIterator.next();
-									setRightRailContent(listNode, rightListEle);
+									setRightRailContent(listNode, rightListEle, urlMap);
 								}
 								else {
 									log.debug("Next node not found");								
@@ -426,7 +427,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 							for (Element rightListEle : rightRailList) {
 								if (tileIterator.hasNext()) {
 									listNode = (Node)tileIterator.next();
-									setRightRailContent(listNode, rightListEle);						}
+									setRightRailContent(listNode, rightListEle, urlMap);						}
 								else {
 									log.debug("Next node not found");
 									sb.append(Constants.RIGHT_RAIL_NODE_COUNT+nodeSize+Constants.RIGHT_RAIL_ELEMENT_COUNT+eleSize+"</li>");
@@ -439,7 +440,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 							for (Element rightListEle : rightRailList) {
 								if (tileIterator.hasNext()) {
 									listNode = (Node)tileIterator.next();
-									setRightRailContent(listNode, rightListEle);						}
+									setRightRailContent(listNode, rightListEle, urlMap);						}
 								else {
 									log.debug("Next node not found");
 								}
@@ -457,7 +458,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 	//End of right rail migration
 
 	//Start of setting Right rail Content
-	public void setRightRailContent (Node listNode, Element rightListEle) {
+	public void setRightRailContent (Node listNode, Element rightListEle, Map<String, String> urlMap) {
 		try {
 			Element title;
 			Element description;
@@ -474,10 +475,11 @@ public class ArchitechtureVariation3 extends BaseAction{
 			}
 
 			listNode.setProperty("title", title.text());
-			listNode.setProperty("description", description.html());
+			listNode.setProperty("description", description.text());
 
 			Element listtext = anchor.first();
-			Element listurl =anchor.first();
+			String listurl =listtext.attr("href");
+			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap);
 			String linkStringValue = null;
 			if(listNode.hasProperty("linktrigger")){
 				Property linkTrigger = listNode.getProperty("linktrigger");
@@ -492,7 +494,7 @@ public class ArchitechtureVariation3 extends BaseAction{
 				sb.append(Constants.LINK_IS_DISABLED_IN_RIGHT_RAIL);
 			}else{
 				listNode.setProperty("linktext", listtext.text());
-				listNode.setProperty("linkurl",listurl.attr("href"));
+				listNode.setProperty("linkurl",listurl);
 			}
 			log.debug("Updated title, descriptoin and linktext at "+listNode.getPath());
 		}
