@@ -164,9 +164,15 @@ public class OVWMigration {
 								.getCell(3).getStringCellValue() : "";
 						if (StringUtils.isNotBlank(type) && type.indexOf("-") != -1) {
 							String variationType =  type.substring(0, type.lastIndexOf("-"));
+							String variation =  type.substring(type.lastIndexOf("-") + 1);
+							log.debug("variation : " + variation);
 							log.debug("actual type : " + variationType);
 							String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-							pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
+							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
+								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
+							} else {
+								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
+							}
 							urlMap.put(gLink, pageUrl);
 						}
 
@@ -610,7 +616,7 @@ public class OVWMigration {
 															msg20 = msg20
 																	+ new RProductVariation1().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session, urlMap);
 															msg20 = msg20 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
