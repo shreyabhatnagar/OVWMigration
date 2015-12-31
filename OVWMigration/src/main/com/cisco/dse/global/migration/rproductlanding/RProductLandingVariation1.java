@@ -755,6 +755,12 @@ public class RProductLandingVariation1 extends BaseAction {
 															.select("ul.items");
 													Elements clearfixdivs = drawerPanelLiElement
 															.select("li.clearfix");
+													for(Element cFix : clearfixdivs){
+														Element div = cFix.getElementsByTag("div").first();
+														if(div.hasAttr("align")){
+															sb.append("<li>Extra link found aligned at centre found along with sub-drawers.</li>");
+														}
+													}
 
 													for (Element ss : subDrawerColl) {
 
@@ -790,6 +796,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																		if (siTitle != null) {
 																			Elements siATitles = siTitle
 																					.getElementsByTag("a");
+																			Element span =siTitle.getElementsByTag("span").first();
 																			if (siATitles != null) {
 																				Element siATitle = siATitles
 																						.first();
@@ -807,6 +814,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																							+ "\n");
 																					title = siATitle
 																							.text();
+																					if(span!=null){
+																						title = title+" "+span.outerHtml();
+																					}
 																					linkTitleUrl = siATitle
 																							.attr("href");
 																				} else {
@@ -1145,6 +1155,9 @@ public class RProductLandingVariation1 extends BaseAction {
 											&& anchorText != "") {
 										rightRailNode.setProperty("title",
 												title);
+										if(rightRailNode.hasProperty("filesize")){
+											rightRailNode.setProperty("filesize","");
+										}
 										rightRailNode.setProperty(
 												"description", desc);
 										Node ctaNode = rightRailNode
@@ -1198,14 +1211,14 @@ public class RProductLandingVariation1 extends BaseAction {
 					Node linkdata = null;
 					NodeIterator item = null;
 					Element indexlist = doc.select("div.n13-pilot").first();
+					listContainerNode = indexLowerRightNode
+							.hasNode("list_container") ? indexLowerRightNode
+							.getNode("list_container") : null;
 					if (indexlist != null) {
 						String indexlistTitleText = indexlist.getElementsByTag(
 								"h2").first() != null ? indexlist
 								.getElementsByTag("h2").first().text() : "";
 						Elements indexUlList = indexlist.getElementsByTag("ul");
-						listContainerNode = indexLowerRightNode
-								.hasNode("list_container") ? indexLowerRightNode
-								.getNode("list_container") : null;
 						if (listContainerNode != null) {
 							listContainerNode.setProperty("title",
 									indexlistTitleText);
@@ -1226,10 +1239,15 @@ public class RProductLandingVariation1 extends BaseAction {
 										log.debug("list items path is : "
 												+ listitems.getPath());
 										item = listitems.getNodes("item*");
+										int itemSize = (int)item.getSize();
 										
 												for (Element ele : indexUlList) {
 													Elements indexUlLiList = ele
 															.getElementsByTag("li");
+													int liSize = indexUlLiList.size();
+													if(itemSize!=liSize){
+														sb.append("<li>Mis-match of links in list of right rail.</li>");
+													}
 
 													for (Element li : indexUlLiList) {
 														Elements listItemAnchor = li
@@ -1268,7 +1286,9 @@ public class RProductLandingVariation1 extends BaseAction {
 						}
 
 					} else {
-						sb.append("<li>List component not found in right rail</li>");
+						if(listContainerNode!=null){
+						sb.append("<li>Extra List node found in right rail</li>");
+						}
 					}
 				} catch (Exception e) {
 					sb.append("<li>Unable to update index list component.\n</li>");
@@ -1278,9 +1298,14 @@ public class RProductLandingVariation1 extends BaseAction {
 				
 				//start of html blob
 				NodeIterator htmlBlob = indexUpperLeftNode.getNodes("htmlblob*");
+				NodeIterator letUsHelp = indexUpperLeftNode.getNodes("letushelp_*");
 				if(htmlBlob != null && htmlBlob.getSize() > 0){
+					int htmlBlobSize = (int)htmlBlob.getSize();
+					if(letUsHelp != null && letUsHelp.getSize() > 0){
+						htmlBlobSize=htmlBlobSize+(int)letUsHelp.getSize();
+					}
 //					sb.append("<li>Extra HTML blog content found on locale page</li>");
-					sb.append("<li>Mis-match of html blob components "+"web page has (0) and nodes are ("+htmlBlob.getSize()+") </li>");
+					sb.append("<li>Mis-match of html blob components "+"web page has (0) and nodes are ("+htmlBlobSize+") </li>");
 				}
 				
 				//end of html blob
