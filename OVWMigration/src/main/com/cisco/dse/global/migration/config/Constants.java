@@ -642,5 +642,31 @@ public class Constants {
     
     //TILE_BORDERED_COMPONENT_NOT_FOUND
     public static final  String  TILE_BORDERED_COMPONENT_NOT_FOUND="<li>tile bordered component not present in the web publisher page</li>";
+   
+
+    //MISMATCH_RIGHT_RAIL_LIST
+    public static final  String  MISMATCH_RIGHT_RAIL_LIST="<li>Mis-match of links in list of right rail.</li>";
+    
+    //RIGHT_RAIL_LIST_NOT_FOUND
+    public static final  String RIGHT_RAIL_LIST_NOT_FOUND="<li>List component not found in right rail</li>";
+    
+    //LIST_ITEM_NODE_NOT_FOUND
+      public static final  String LIST_ITEM_NODE_NOT_FOUND= "<li>List Item Node not found</li>";
+    
+     //EXTRA_LIST_NODE_RIGHT_RAIL
+     public static final  String EXTRA_LIST_NODE_RIGHT_RAIL="<li>Extra List node found in right rail</li>";
+     
+    //HERO_LARGE_COMPONENT_NOT_FOUND
+    public static final  String  HERO_LARGE_COMPONENT_NOT_FOUND= "<li>Hero Large component is not found on web publisher page</li>";
+
+  //DRAWERCONTAINER_TITLE_NOT_FOUND
+    public static final  String DRAWERCONTAINER_TITLE_NOT_FOUND="<li>title of drawer container doesn't exist</li>";
+    
+    //EXTRA_OVERVIEW_NODE_FOUND
+    public static final  String EXTRA_OVERVIEW_NODE_FOUND="<li>Extra Overview node found.</li>";
+    
+    //EXTRA_LINK_IN_SUBDRAWER
+    public static final  String EXTRA_LINK_IN_SUBDRAWER="<li>Extra link found aligned at centre found along with sub-drawers.</li>";
+  
 
 }
