@@ -6,6 +6,7 @@
 package com.cisco.dse.global.migration.rservicelisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -32,7 +33,7 @@ public class RServiceListingVariation1 extends BaseAction {
 	static Logger log = Logger.getLogger(RServiceListingVariation1.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		log.debug("In the translate method of RServiceListingVariation1");
@@ -142,14 +143,14 @@ public class RServiceListingVariation1 extends BaseAction {
 							Element pElement = ele.getElementsByTag("p")
 									.first();
 							if (pElement != null) {
-								descText.append(pElement.outerHtml());
+								descText.append(FrameworkUtils.extractHtmlBlobContent(pElement, "",locale, sb, urlMap));
 							} else {
 								sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 							}
 							Element ulElement = ele.getElementsByTag("ul")
 									.first();
 							if (ulElement != null) {
-								descText.append(ulElement.outerHtml());
+								descText.append(FrameworkUtils.extractHtmlBlobContent(ulElement, "",locale, sb, urlMap));
 							}
 							if (spotlightNodeIterator.hasNext()) {
 								Node spotlightNode = (Node) spotlightNodeIterator
@@ -175,6 +176,11 @@ public class RServiceListingVariation1 extends BaseAction {
 										if(aEle != null){
 											h3Text = aEle.text()+h3Element.ownText();
 											aHref = aEle.attr("href");
+											// Start extracting valid href
+											log.debug("Before linkTitleUrl" + aHref + "\n");
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											log.debug("after linkTitleUrl" + aHref + "\n");
+											// End extracting valid href
 										}else{
 											h3Text = h3Element.text();
 											sb.append(Constants.SPOTLIGHT_TITLELINK_NODE_NOT_FOUND);
@@ -183,10 +189,10 @@ public class RServiceListingVariation1 extends BaseAction {
 									} else {
 										sb.append(Constants.SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND);
 									}
-									Elements pElements = ele
-											.getElementsByTag("p");
+									Element pElements = ele
+											.getElementsByTag("p").first();
 									if (pElements != null) {
-										pText = pElements.html();
+										pText = FrameworkUtils.extractHtmlBlobContent(pElements, "",locale, sb, urlMap);
 									} else {
 										sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 									}
@@ -339,6 +345,11 @@ public class RServiceListingVariation1 extends BaseAction {
 													aText = aEle.text()+ownText;
 												}
 												aHref = aEle.attr("href");
+												// Start extracting valid href
+												log.debug("Before linkUrl" + aHref + "\n");
+												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+												log.debug("after linkUrl" + aHref + "\n");
+												// End extracting valid href
 												if (aText != null) {
 													listItemNode.setProperty(
 															"linktext", aText);
@@ -387,6 +398,11 @@ public class RServiceListingVariation1 extends BaseAction {
 											aText = aElements.first().text();
 										}
 										aHref = aElements.first().attr("href");
+										// Start extracting valid href
+										log.debug("Before linkUrl" + aHref + "\n");
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										log.debug("after linkUrl" + aHref + "\n");
+										// End extracting valid href
 										if (aText != null) {
 											listItemsNode.setProperty(
 													"linktext", aText);
