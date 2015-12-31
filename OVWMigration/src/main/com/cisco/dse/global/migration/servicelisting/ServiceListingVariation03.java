@@ -6,6 +6,7 @@
 package com.cisco.dse.global.migration.servicelisting;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +36,7 @@ public class ServiceListingVariation03 extends BaseAction {
 	static Logger log = Logger.getLogger(ServiceListingVariation03.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		log.debug("In the translate method of ServiceListingVariation03");
@@ -83,7 +84,9 @@ public class ServiceListingVariation03 extends BaseAction {
 					String textProp = "";
 					Elements textElements = doc.select("div.c00-pilot");
 					if (textElements != null) {
-						textProp = textElements.html();
+						for(Element textElement : textElements){
+						textProp = textProp+FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
+						}
 
 						Node textNode = serviceListingMidnode.hasNode("text") ? serviceListingMidnode
 								.getNode("text") : null;
@@ -145,7 +148,9 @@ public class ServiceListingVariation03 extends BaseAction {
 
 								Elements descriptionText = ele.getElementsByTag("p");
 								if (descriptionText != null) {
-									pText = descriptionText.html();
+									for(Element descText : descriptionText){
+										pText = FrameworkUtils.extractHtmlBlobContent(descText, "", locale, sb, urlMap);
+									}
 								} else {
 									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 								}
@@ -171,6 +176,11 @@ public class ServiceListingVariation03 extends BaseAction {
 								if (anchorText != null) {
 									aText = anchorText.text();
 									aHref = anchorText.attr("href");
+									// Start extracting valid href
+									log.debug("Before spotlight" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after spotlight" + aHref + "\n");
+									// End extracting valid href
 								} else {
 									sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 								}

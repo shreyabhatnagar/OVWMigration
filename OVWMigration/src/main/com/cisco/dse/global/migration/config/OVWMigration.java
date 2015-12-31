@@ -186,12 +186,14 @@ public class OVWMigration {
 												.getCell(2).getStringCellValue() : "";
 												String cattype = tempRow.getCell(3) != null ? tempRow
 														.getCell(3).getStringCellValue() : "";
+														String check = tempRow.getCell(4) != null ? tempRow
+																.getCell(4).getStringCellValue() : "";
 
 														log.debug("gLink : " + gLink);
 														log.debug("prod : " + prod);
 
 
-														if ("benefit-var1".equalsIgnoreCase(prod)) {
+														if ("benefit-var1".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
 															String msg1 = "";
 															msg1 = msg1 + "<tr>";
 															msg1 = msg1
@@ -204,7 +206,7 @@ public class OVWMigration {
 															sb.append(msg1);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("benefit-var2".equalsIgnoreCase(prod)) {
+														} else if ("benefit-var2".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
 															String msg2 = "";
 															msg2 = msg2 + "<tr>";
 															msg2 = msg2
@@ -217,7 +219,7 @@ public class OVWMigration {
 															sb.append(msg2);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("benefit-var3".equals(type)) {
+														} else if ("benefit-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg3 = "";
 															msg3 = msg3 + "<tr>";
 															msg3 = msg3
@@ -230,7 +232,7 @@ public class OVWMigration {
 															sb.append(msg3);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var1".equals(type)) {
+														} else if ("index-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg4 = "";
 															msg4 = msg4 + "<tr>";
 															msg4 = msg4
@@ -243,7 +245,7 @@ public class OVWMigration {
 															sb.append(msg4);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var3".equals(type)) {
+														} else if ("index-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg5 = "";
 															msg5 = msg5 + "<tr>";
 															msg5 = msg5
@@ -256,7 +258,7 @@ public class OVWMigration {
 															sb.append(msg5);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var9".equals(type)) {
+														} else if ("index-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg6 = "";
 															msg6 = msg6 + "<tr>";
 															msg6 = msg6
@@ -269,7 +271,7 @@ public class OVWMigration {
 															sb.append(msg6);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var5".equals(type)) {
+														} else if ("index-var5".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg7 = "";
 															msg7 = msg7 + "<tr>";
 															msg7 = msg7
@@ -282,7 +284,7 @@ public class OVWMigration {
 															sb.append(msg7);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var11".equals(type)) {
+														} else if ("index-var11".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg8 = "";
 															msg8 = msg8 + "<tr>";
 															msg8 = msg8
@@ -297,7 +299,7 @@ public class OVWMigration {
 															sb.append(msg8);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var10".equals(type)) {
+														} else if ("index-var10".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg9 = "";
 															msg9 = msg9 + "<tr>";
 															msg9 = msg9
@@ -312,7 +314,7 @@ public class OVWMigration {
 															sb.append(msg9);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var6".equals(type)) {
+														} else if ("index-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
@@ -325,7 +327,7 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("index-var8".equals(type)) {
+														} else if ("index-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																String msg8 = "";
 																msg8 = msg8 + "<tr>";
 																msg8 = msg8
@@ -341,7 +343,7 @@ public class OVWMigration {
 																sb.append("<tr><td colspan='3'>.</td></tr>");
 
 															
-														} else if ("index-var12".equals(type)) {
+														} else if ("index-var12".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg8 = "";
 															msg8 = msg8 + "<tr>";
 															msg8 = msg8
@@ -357,7 +359,7 @@ public class OVWMigration {
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
 														
-													}else if ("solution-listing-var2".equals(type)) {
+													}else if ("solution-listing-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg11 = "";
 															msg11 = msg11 + "<tr>";
 															msg11 = msg11
@@ -371,7 +373,7 @@ public class OVWMigration {
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
 														}
-														else if ("solution-listing-var11".equals(type)) {
+														else if ("solution-listing-var11".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg12 = "";
 															msg12 = msg12 + "<tr>";
 															msg12 = msg12
@@ -385,7 +387,7 @@ public class OVWMigration {
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
 														}
-														else if ("solution-listing-var8".equals(type)) {
+														else if ("solution-listing-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
@@ -398,7 +400,7 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("solution-listing-var12".equals(type)) {
+														} else if ("solution-listing-var12".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
@@ -411,7 +413,7 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														} else if ("product-listing-var4".equals(type)) {
+														} else if ("product-listing-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg14 = "";
 															msg14 = msg14 + "<tr>";
 															msg14 = msg14
@@ -424,7 +426,7 @@ public class OVWMigration {
 															log.debug("Msg14 value is "+msg14);
 															sb.append(msg14);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("product-listing-var3".equals(type)) {
+														}else if ("product-listing-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
@@ -437,7 +439,7 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														}else if ("product-listing-var7".equals(type)) {
+														}else if ("product-listing-var7".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
@@ -450,20 +452,20 @@ public class OVWMigration {
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														}else if ("service-listing-var3".equals(type)) {
+														}else if ("service-listing-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
 																	+ new ServiceListingVariation03().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session,urlMap);
 															msg10 = msg10 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 
-														}else if ("service-listing-var1".equals(type)) {
+														}else if ("service-listing-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg10 = "";
 															msg10 = msg10 + "<tr>";
 															msg10 = msg10
@@ -475,13 +477,13 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg10);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("service-listing-var2".equals(type)) {
+														}else if ("service-listing-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg13 = "";
 															msg13 = msg13 + "<tr>";
 															msg13 = msg13
 																	+ new ServiceListingVariation02().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session,urlMap);
 															msg13 = msg13 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
@@ -489,7 +491,7 @@ public class OVWMigration {
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
 
-														else if ("product-listing-var6".equals(type)) {
+														else if ("product-listing-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg15 = "";
 															msg15 = msg15 + "<tr>";
 															msg15 = msg15
@@ -502,7 +504,7 @@ public class OVWMigration {
 															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("product-listing-var5".equals(type)) {
+														else if ("product-listing-var5".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg15 = "";
 															msg15 = msg15 + "<tr>";
 															msg15 = msg15
@@ -514,7 +516,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("technology-var6".equals(type)) {
+														}else if ("technology-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg19 = "";
 															msg19 = msg19 + "<tr>";
 															msg19 = msg19
@@ -527,7 +529,7 @@ public class OVWMigration {
 															sb.append(msg19);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("solutions-listing-var9".equals(type)) {
+														else if ("solutions-listing-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg15 = "";
 															msg15 = msg15 + "<tr>";
 															msg15 = msg15
@@ -539,7 +541,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("architecture-var1".equals(type)) {
+														}else if ("collaboration-architecture-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg14 = "";
 															msg14 = msg14 + "<tr>";
 															msg14 = msg14
@@ -552,20 +554,20 @@ public class OVWMigration {
 															sb.append(msg14);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("benefits-var4".equals(type)) {
+														else if ("benefits-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg20 = "";
 															msg20 = msg20 + "<tr>";
 															msg20 = msg20
 																	+ new BenifitsVariation4().translate(
 																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
+																			sheet.getSheetName(), session,urlMap);
 															msg20 = msg20 + "</tr>";
 
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("architecture-var3".equals(type)) {
+														else if ("collaboration-architecture-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -578,7 +580,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("architecture-var4".equals(type)) {
+														else if ("collaboration-architecture-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -590,7 +592,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("product-listing-Rvar1".equals(type)) {
+														}else if ("rproduct-listing-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -602,7 +604,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rindex-var1".equals(type)) {
+														}else if ("rindex-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg20 = "";
 															msg20 = msg20 + "<tr>";
 															msg20 = msg20
@@ -617,7 +619,7 @@ public class OVWMigration {
 														}
 
 														
-														else if ("buyersguide-var1".equals(type)) {
+														else if ("buyersguide-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -630,7 +632,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("service-listing-Rvar1".equals(type)) {
+														else if ("service-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -643,7 +645,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("solution-listing-Rvar1".equals(type)) {
+														else if ("solution-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -656,7 +658,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("solution-listing-Rvar2".equals(type)) {
+														else if ("solution-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -668,7 +670,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rtechnology".equals(type)) {
+														}else if ("rtechnology".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -681,7 +683,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-													else if ("index-rvar2".equals(type)) {
+													else if ("index-rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -694,7 +696,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-													else if ("index-Rvar1".equals(type)) {
+													else if ("index-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 														String msg16 = "";
 														msg16 = msg16 + "<tr>";
 														msg16 = msg16
@@ -707,7 +709,7 @@ public class OVWMigration {
 														sb.append(msg16);
 														sb.append("<tr><td colspan='3'>.</td></tr>");
 													}
-													else if ("benefit-var2".equals(type)) {
+													else if ("benefit-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 														String msg16 = "";
 														msg16 = msg16 + "<tr>";
 														msg16 = msg16
@@ -720,7 +722,7 @@ public class OVWMigration {
 														sb.append(msg16);
 														sb.append("<tr><td colspan='3'>.</td></tr>");
 													}
-														 else if ("buyersguide-var2".equals(type)) {
+														 else if ("buyersguide-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -733,7 +735,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-													        else if ("buyersguide-var3".equals(type)) {
+													        else if ("buyersguide-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																String msg16 = "";
 																msg16 = msg16 + "<tr>";
 																msg16 = msg16

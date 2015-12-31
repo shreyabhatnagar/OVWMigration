@@ -195,6 +195,11 @@ public class ServiceListingVariation01 extends BaseAction {
 										Elements aElements = element.getElementsByTag("a");
 										String aText = aElements.text();
 										String aHref = aElements.attr("href");
+										// Start extracting valid href
+										log.debug("Before gd-left" + aHref + "\n");
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										log.debug("after gd-left" + aHref + "\n");
+										// End extracting valid href
 										String pdf = element.ownText();
 										if(StringUtils.isEmpty(pdf)){ 
 											Element pdfElement = element.select("nobr").first();
@@ -303,7 +308,7 @@ public class ServiceListingVariation01 extends BaseAction {
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
-										pText = pElement.outerHtml();
+										pText = FrameworkUtils.extractHtmlBlobContent(pElement, "", locale, sb, urlMap);
 										count = count + 1;
 									}
 									else {
@@ -322,6 +327,11 @@ public class ServiceListingVariation01 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									String aHref = aElements.attr("href");
+									// Start extracting valid href
+									log.debug("Before gd-mid" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after gd-mid" + aHref + "\n");
+									// End extracting valid href
 									obj.put("linktext", aText);
 									obj.put("linkurl", aHref);
 									obj.put("icon", "none");
@@ -418,7 +428,7 @@ public class ServiceListingVariation01 extends BaseAction {
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
-										pText = pElement.outerHtml();
+										pText = FrameworkUtils.extractHtmlBlobContent(pElement, "", locale, sb, urlMap);
 										count = count + 1;
 									}
 									else {
@@ -431,6 +441,11 @@ public class ServiceListingVariation01 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									String aHref = aElements.attr("href");
+									// Start extracting valid href
+									log.debug("Before gd-right" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after gd-right" + aHref + "\n");
+									// End extracting valid href
 									obj.put("linktext", aText);
 									obj.put("linkurl", aHref);
 									obj.put("icon", "none");
@@ -449,7 +464,7 @@ public class ServiceListingVariation01 extends BaseAction {
 							Elements gd_left_Elements = doc.select("div.gd23-pilot").select("div.gd-left");
 							if(gd_left_Elements.size() == 2){
 								Element gd_left_Element = gd_left_Elements.last();
-								text = gd_left_Element.html();
+								text = FrameworkUtils.extractHtmlBlobContent(gd_left_Element, "", locale, sb, urlMap);
 								flag = false;
 							}else{
 							sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
@@ -495,7 +510,9 @@ public class ServiceListingVariation01 extends BaseAction {
 										Node htmlBlob = gd23v1_mid_Node
 												.getNode("htmlblob");
 										if(flag){
-										text = gd_mid_Elements.html();
+											for(Element gd_mid_Element: gd_mid_Elements){
+											text = FrameworkUtils.extractHtmlBlobContent(gd_mid_Element, "", locale, sb, urlMap);
+											}
 										}
 										htmlBlob.setProperty(
 												"html",text);
