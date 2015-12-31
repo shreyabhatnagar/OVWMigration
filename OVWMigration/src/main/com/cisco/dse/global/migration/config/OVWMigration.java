@@ -539,7 +539,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("collaboration-architecture-var1".equals(type)) {
+														}else if ("architecture-var1".equals(type)) {
 															String msg14 = "";
 															msg14 = msg14 + "<tr>";
 															msg14 = msg14
@@ -565,7 +565,7 @@ public class OVWMigration {
 															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("collaboration-architecture-var3".equals(type)) {
+														else if ("architecture-var3".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -578,7 +578,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("collaboration-architecture-var4".equals(type)) {
+														else if ("architecture-var4".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -590,7 +590,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rproduct-listing-var1".equals(type)) {
+														}else if ("product-listing-Rvar1".equals(type)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16

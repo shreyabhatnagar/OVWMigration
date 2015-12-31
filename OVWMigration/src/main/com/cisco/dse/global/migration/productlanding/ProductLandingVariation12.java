@@ -705,10 +705,9 @@ public class ProductLandingVariation12 extends BaseAction {
 								NodeIterator elementList = null;
 								Node listNode = indexRightNode.hasNode("list")?
 										indexRightNode.getNode("list"):null;
-									log.debug("path of list node in right index node: "
-											+ listNode.getPath());
-
 									if (listNode != null) {
+										log.debug("path of list node in right index node: "
+												+ listNode.getPath());
 										if(StringUtils.isNotBlank(indexTitle)){
 											listNode.setProperty("title",								
 												indexTitle);
@@ -764,6 +763,8 @@ public class ProductLandingVariation12 extends BaseAction {
 											}
 										} 
 
+									}else{
+										sb.append(Constants.LIST_NODE_NOT_FOUND);
 									}
 					} else {
 						sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
