@@ -362,7 +362,8 @@ public class FrameworkUtils {
 		if (htmlBlobElement != null) {
 			Elements anchorElements = htmlBlobElement.getElementsByTag("a");
 			log.debug("&&&&&&&&&&&& null" + htmlBlobElement.outerHtml());
-			if (anchorElements != null) {
+//			if (anchorElements != null) {
+			if (!anchorElements.isEmpty()&&anchorElements!=null) {
 				log.debug("anchorPath not null");
 				for(Element anchorElement : anchorElements){
 					log.debug("anchorPath not null))))))))))))" + anchorElement.attr("href"));

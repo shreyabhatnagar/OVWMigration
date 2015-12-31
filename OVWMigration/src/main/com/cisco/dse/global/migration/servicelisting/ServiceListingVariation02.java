@@ -9,6 +9,7 @@ package com.cisco.dse.global.migration.servicelisting;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -43,7 +44,7 @@ public class ServiceListingVariation02 extends BaseAction {
 	static Logger log = Logger.getLogger(ServiceListingVariation02.class);
 
 	public String translate(String host,String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session,Map<String,String>urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -101,7 +102,7 @@ public class ServiceListingVariation02 extends BaseAction {
 				
 				// start of text component
 				try{
-					setText(doc, serviceListingMidNode);
+					setText(doc, serviceListingMidNode,locale,urlMap);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}	
@@ -119,14 +120,14 @@ public class ServiceListingVariation02 extends BaseAction {
 									if(spEleSize == spNodeSize){
 										for(Element ele : spotLightEle){
 											Node spotLightComponentNode = (Node) spotLightNodes.next();
-											setSpotlight(ele ,spotLightComponentNode,locale);
+											setSpotlight(ele ,spotLightComponentNode,locale,urlMap);
 										}
 									} 
 									else if(spEleSize > spNodeSize){
 										for(Element ele : spotLightEle){
 											if(spotLightNodes.hasNext()){
 												Node spotLightComponentNode = (Node) spotLightNodes.next();
-												setSpotlight(ele ,spotLightComponentNode,locale);
+												setSpotlight(ele ,spotLightComponentNode,locale,urlMap);
 											}
 										}
 										sb.append(Constants.SPOTLIGHT_NODE_COUNT+spNodeSize+Constants.SPOTLIGHT_ELEMENT_COUNT+spEleSize+"</li>");
@@ -134,7 +135,7 @@ public class ServiceListingVariation02 extends BaseAction {
 									else if(spEleSize < spNodeSize){
 										for(Element ele : spotLightEle){
 											Node spotLightComponentNode = (Node) spotLightNodes.next();
-											setSpotlight(ele ,spotLightComponentNode,locale);
+											setSpotlight(ele ,spotLightComponentNode,locale,urlMap);
 										}
 										sb.append(Constants.SPOTLIGHT_ELEMENT_COUNT+spEleSize+Constants.SPOTLIGHT_NODE_COUNT+spNodeSize+"</li>");
 									}
@@ -164,14 +165,14 @@ public class ServiceListingVariation02 extends BaseAction {
 								for(Element ele : listElements){
 									if(listNodeIterator.hasNext()){
 										Node listNode = (Node)listNodeIterator.next();
-										setList(ele , listNode);
+										setList(ele , listNode,urlMap);
 									}
 								}
 							}else if(listEleSize > listNodeSize){
 								for(Element ele : listElements){
 									if(listNodeIterator.hasNext()){
 										Node listNode = (Node)listNodeIterator.next();
-										setList(ele , listNode);
+										setList(ele , listNode,urlMap);
 									}else{
 										sb.append(Constants.MISMATCH_IN_LIST_ELEMENT+listEleSize+") "+ Constants.LIST_NODES_COUNT+listNodeSize+") </li>");
 									}
@@ -180,7 +181,7 @@ public class ServiceListingVariation02 extends BaseAction {
 							}else if(listEleSize < listNodeSize){
 								for(Element ele : listElements){
 									Node listNode = (Node)listNodeIterator.next();
-									setList(ele , listNode);
+									setList(ele , listNode,urlMap);
 								}
 
 							}else{
@@ -218,7 +219,13 @@ public class ServiceListingVariation02 extends BaseAction {
 									obj.put("icon",li.attr("class"));
 									Element a = li.getElementsByTag("a").first();
 									obj.put("linktext",a.attr("title"));
-									obj.put("linkurl",a.attr("href"));
+									String aHref = a.attr("href");
+									// Start extracting valid href
+									log.debug("Before followus" + aHref + "\n");
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									log.debug("after followus" + aHref + "\n");
+									// End extracting valid href
+									obj.put("linkurl",aHref);
 									list.add(obj.toString());
 								}
 								followUsNode.setProperty("links", list.toArray(new String[list.size()]));
@@ -252,7 +259,7 @@ public class ServiceListingVariation02 extends BaseAction {
 	}
 
 	//This method is for text component 
-	public void setText(Document doc, Node serviceListingMidNode)throws RepositoryException{
+	public void setText(Document doc, Node serviceListingMidNode,String locale, Map<String,String> urlMap)throws RepositoryException{
 		Elements textElements = doc.select("div.c00-pilot");
 		if(textElements.isEmpty()){
 			sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
@@ -262,11 +269,13 @@ public class ServiceListingVariation02 extends BaseAction {
 			NodeIterator textNodeIterator = serviceListingMidNode.hasNode("text")? serviceListingMidNode.getNodes("text"):null;
 			if(textNodeIterator != null){
 				int nodeSize = (int)textNodeIterator.getSize();
+				String text=null;
 				if(eleSize == nodeSize){
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
 							Node textNode = (Node)textNodeIterator.next();
-							textNode.setProperty("text", ele.html());	
+							text = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+							textNode.setProperty("text", text);	
 						}
 					}
 				}
@@ -274,7 +283,8 @@ public class ServiceListingVariation02 extends BaseAction {
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
 							Node textNode = (Node)textNodeIterator.next();
-							textNode.setProperty("text", ele.html());
+							text = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+							textNode.setProperty("text", text);
 						}
 						else{
 							sb.append(Constants.EXTRA_TEXT_ELEMENT_FOUND);
@@ -285,7 +295,8 @@ public class ServiceListingVariation02 extends BaseAction {
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
 							Node textNode = (Node)textNodeIterator.next();
-							textNode.setProperty("text", ele.html());							
+							text = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+							textNode.setProperty("text", text);							
 						}
 					}
 					sb.append(Constants.EXTRA_TEXT_NODE_FOUND);
@@ -298,7 +309,7 @@ public class ServiceListingVariation02 extends BaseAction {
 	}
 
 	//start setList
-	void setList(Element ele , Node listNode){
+	void setList(Element ele , Node listNode,Map<String,String> urlMap){
 		try{
 			Elements h2Ele = ele.getElementsByTag("h2");
 			Elements h3Ele = ele.getElementsByTag("h3");
@@ -336,7 +347,13 @@ public class ServiceListingVariation02 extends BaseAction {
 						JSONObject obj = new JSONObject();
 						String linkText = a.text();
 						obj.put("linktext", linkText);
-						obj.put("linkurl",a.attr("href"));
+						String aHref = a.attr("href");
+						// Start extracting valid href
+						log.debug("Before list" + aHref + "\n");
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						log.debug("after list" + aHref + "\n");
+						// End extracting valid href
+						obj.put("linkurl",aHref);
 						obj.put("icon","none");
 						obj.put("size","");
 						obj.put("description","");
@@ -374,7 +391,7 @@ public class ServiceListingVariation02 extends BaseAction {
 	//end setList
 
 	// This method to set content for spotlight
-	public void setSpotlight(Element ele, Node spotLightComponentNode,String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setSpotlight(Element ele, Node spotLightComponentNode,String locale,Map<String,String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		String title = "";
 		String pText = "";
 		String aText = "";
@@ -382,6 +399,11 @@ public class ServiceListingVariation02 extends BaseAction {
 		if (h2Ele != null) {
 			title = h2Ele.text();
 			String tLink = h2Ele.getElementsByTag("a").attr("href");
+			// Start extracting valid href
+			log.debug("Before spotlight" + tLink + "\n");
+			tLink = FrameworkUtils.getLocaleReference(tLink, urlMap);
+			log.debug("after spotlight" + tLink + "\n");
+			// End extracting valid href
 			spotLightComponentNode.setProperty("title",title);
 			Node titLink = spotLightComponentNode.hasNode("titlelink")?spotLightComponentNode.getNode("titlelink"):null;
 			if(tLink!=null && !tLink.equals("")){
@@ -416,14 +438,18 @@ public class ServiceListingVariation02 extends BaseAction {
 		}
 		// end image
 		Elements descriptionText = ele.getElementsByTag("p");
-		String ulText = ele.getElementsByTag("ul").outerHtml();
-
-		if(!ulText.equals("") && ulText!=null){
+		String ulText = "";
+		Element ulTextEle = ele.getElementsByTag("ul").first();
+//		ulText = FrameworkUtils.extractHtmlBlobContent(descriptionText.first(), "", locale, sb, urlMap);
+		if(ulTextEle!=null){
 			String pTagText = descriptionText.text();
+			ulText = FrameworkUtils.extractHtmlBlobContent(ulTextEle, "", locale, sb, urlMap);
 			spotLightComponentNode.setProperty("description", pTagText+ulText);
 		}
 		else if (descriptionText != null && !descriptionText.isEmpty()) {
-			pText = descriptionText.html();
+			for(Element descEle : descriptionText){
+				pText = FrameworkUtils.extractHtmlBlobContent(descEle, "", locale, sb, urlMap);
+			}
 			spotLightComponentNode.setProperty("description", pText);
 		}else{
 			sb.append(Constants.SPOTLIGHT_DESCRIPTION_TEXT_NOT_FOUND);
@@ -433,6 +459,11 @@ public class ServiceListingVariation02 extends BaseAction {
 		if (spotLightAnchor != null && !spotLightAnchor.isEmpty()) {
 			aText = spotLightAnchor.text();
 			String linkUrl = spotLightAnchor.attr("href");
+			// Start extracting valid href
+			log.debug("Before spotlight" + linkUrl + "\n");
+			linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+			log.debug("after spotlight" + linkUrl + "\n");
+			// End extracting valid href
 			spotLightComponentNode.setProperty("linktext", aText);
 			javax.jcr.Node ctaNode = spotLightComponentNode.hasNode("cta")?spotLightComponentNode.getNode("cta"):null;
 			if (ctaNode != null && linkUrl != null) {
