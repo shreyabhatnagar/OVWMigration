@@ -541,7 +541,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg15);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("collaboration-architecture-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+														}else if ("architecture-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg14 = "";
 															msg14 = msg14 + "<tr>";
 															msg14 = msg14
@@ -567,7 +567,7 @@ public class OVWMigration {
 															sb.append(msg20);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("collaboration-architecture-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+														else if ("architecture-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -580,7 +580,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-														else if ("collaboration-architecture-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
+														else if ("architecture-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -604,7 +604,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rindex-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+														}else if ("index-Rrootvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg20 = "";
 															msg20 = msg20 + "<tr>";
 															msg20 = msg20
@@ -670,7 +670,7 @@ public class OVWMigration {
 															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("rtechnology".equals(type)&&"YES".equalsIgnoreCase(check)) {
+														}else if ("technology-rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
@@ -683,7 +683,7 @@ public class OVWMigration {
 															sb.append(msg16);
 															sb.append("<tr><td colspan='3'>.</td></tr>");
 														}
-													else if ("index-rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+													else if ("index-Rrootvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
 															String msg16 = "";
 															msg16 = msg16 + "<tr>";
 															msg16 = msg16
