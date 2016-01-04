@@ -366,8 +366,10 @@ public class FrameworkUtils {
 			if (!anchorElements.isEmpty()&&anchorElements!=null) {
 				log.debug("anchorPath not null");
 				for(Element anchorElement : anchorElements){
-					log.debug("anchorPath not null))))))))))))" + anchorElement.attr("href"));
-					anchorPath.add(anchorElement.attr("href"));
+					log.debug("anchorPath::::" + anchorElement.attr("href"));
+					String absAnchorPath = anchorElement.absUrl("href");
+					log.debug("absolute anchorPath" + absAnchorPath);
+					anchorPath.add(absAnchorPath);
 				}
 			} else {
 				log.debug("anchorPath null");
