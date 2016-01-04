@@ -399,12 +399,6 @@ public class FrameworkUtils {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			if (urlMap.containsKey(primaryCTALinkUrl)) {
 				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
-			} else {
-				String primaryCTALinkUrlWithHost = "http://www.cisco.com" + primaryCTALinkUrl;
-				log.debug("primaryCTALinkUrlWithHost " + primaryCTALinkUrlWithHost + "\n");
-				if (urlMap.containsKey(primaryCTALinkUrlWithHost)) {
-					primaryCTALinkUrl = urlMap.get(primaryCTALinkUrlWithHost);
-				}
 			}
 		}
 		return primaryCTALinkUrl;
