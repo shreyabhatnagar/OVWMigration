@@ -204,7 +204,7 @@ public class SolutionListingVariation11 extends BaseAction {
 								Element anchorText = ele.getElementsByTag("a").first();
 								String ahref = "";
 								if (anchorText != null) {
-									ahref = anchorText.attr("href");
+									ahref = anchorText.absUrl("href");
 									// Start extracting valid href
 									log.debug("Before ahref" + ahref + "\n");
 									ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
