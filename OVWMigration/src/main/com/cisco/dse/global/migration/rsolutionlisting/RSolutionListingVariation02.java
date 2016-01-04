@@ -365,8 +365,11 @@ public class RSolutionListingVariation02 extends BaseAction{
 
 		Elements anchorText = ele.getElementsByTag("a");
 		if (anchorText != null) {
-			aText = anchorText.text();
+			Element lastAnchorText = ele.getElementsByTag("a").last();
+			if(lastAnchorText != null){
+			aText = lastAnchorText.text();
 			spotLightComponentNode.setProperty("ctaText",aText);
+			}
 		} else {
 			sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
 		}
@@ -374,13 +377,16 @@ public class RSolutionListingVariation02 extends BaseAction{
 		Elements anchorHref = ele.select("a[href]");
 		Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
 		if (anchorHref != null) {
-			aHref = anchorHref.attr("href");
+			Element lastAnchorHref = ele.select("a[href]").last();
+			if(lastAnchorHref != null){
+			aHref = lastAnchorHref.attr("href");
 			// Start extracting valid href
 			log.debug("Before aHref" + aHref + "\n");
 			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 			log.debug("after aHref" + aHref + "\n");
 			// End extracting valid href
 			spoLightNode.setProperty("url",aHref);
+			}
 		} else {
 			sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
 		}
