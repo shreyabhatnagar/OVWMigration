@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -337,17 +338,18 @@ public class FrameworkUtils {
 					outeHtmlText = outeHtmlText.replace(existingimagePath, updatedImgPath);
 				}
 			}
-			List<String> existingAnchorPaths = null;
+			Map<String, String> existingAnchorPaths = null;
 			String updatedAnchorPath = "";
 			existingAnchorPaths = extractAnchorLinks(htmlBlobElement, sb);
-			Iterator<String> anchorIterator = existingAnchorPaths.iterator();
+			Iterator anchorIterator = existingAnchorPaths.entrySet().iterator();
 			while(anchorIterator.hasNext()){
-				String existingAnchorPath = anchorIterator.next();
-				log.debug("Before anchorHref" + existingAnchorPath + "\n");
-				updatedAnchorPath = FrameworkUtils.getLocaleReference(existingAnchorPath, urlMap);
+				Map.Entry anchor = (Map.Entry)anchorIterator.next();
+				String existingAnchorPath = anchor.getValue().toString();
+				log.debug("Before anchorHref" + anchor.getKey().toString() + "\n");
+				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap);
 				log.debug("after anchorHref" + updatedAnchorPath + "\n");
 
-				log.debug(existingAnchorPath +" is updated to "+updatedAnchorPath);
+				log.debug(anchor.getKey().toString() +" is updated to "+updatedAnchorPath);
 				if(StringUtils.isNotBlank(existingAnchorPath) && StringUtils.isNotBlank(updatedAnchorPath)){
 					outeHtmlText = outeHtmlText.replace("\"" +existingAnchorPath + "\"", "\"" + updatedAnchorPath + "\"");
 				}
@@ -356,9 +358,9 @@ public class FrameworkUtils {
 		return outeHtmlText;
 	}
 	
-	private static List<String> extractAnchorLinks(Element htmlBlobElement,
+	private static Map<String, String> extractAnchorLinks(Element htmlBlobElement,
 			StringBuilder sb) {
-		List<String> anchorPath =new ArrayList<String>();
+		Map<String, String> anchorPath =new HashMap<String, String>();
 		if (htmlBlobElement != null) {
 			Elements anchorElements = htmlBlobElement.getElementsByTag("a");
 			log.debug("&&&&&&&&&&&& null" + htmlBlobElement.outerHtml());
@@ -369,7 +371,7 @@ public class FrameworkUtils {
 					log.debug("anchorPath::::" + anchorElement.attr("href"));
 					String absAnchorPath = anchorElement.absUrl("href");
 					log.debug("absolute anchorPath" + absAnchorPath);
-					anchorPath.add(absAnchorPath);
+					anchorPath.put(absAnchorPath, anchorElement.attr("href"));
 				}
 			} else {
 				log.debug("anchorPath null");
