@@ -1,5 +1,10 @@
 package com.cisco.dse.global.migration.rsolutionlisting;
 
+/* S.No			Name		Date		Description of change
+ * 1			Bhavya		21-Dec-15	Added the Java file to handle the migration of benifits variation 3 with 3url.
+ * 
+ * */
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -316,7 +321,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 				Elements anchorHref = ele.select("a[href]");
 				Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
 				if (anchorHref != null) {
-					aHref = anchorHref.attr("href");
+					aHref = anchorHref.last().absUrl("href");
 					// Start extracting valid href
 					log.debug("Before aHref" + aHref + "\n");
 					aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -379,7 +384,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 		if (anchorHref != null) {
 			Element lastAnchorHref = ele.select("a[href]").last();
 			if(lastAnchorHref != null){
-			aHref = lastAnchorHref.attr("href");
+			aHref = lastAnchorHref.absUrl("href");
 			// Start extracting valid href
 			log.debug("Before aHref" + aHref + "\n");
 			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -432,7 +437,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 			Elements anchorHref = ele.select("a[href]");
 			Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
 			if (anchorHref != null) {
-				aHref = anchorHref.attr("href");
+				aHref = anchorHref.last().absUrl("href");
 				// Start extracting valid href
 				log.debug("Before aHref" + aHref + "\n");
 				aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -473,7 +478,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					if(titleLink != null){
 						Elements aHref = anchorText.select("a[href]");
 						if (aHref != null) {
-							String anchorHref = aHref.attr("href");
+							String anchorHref = aHref.last().absUrl("href");
 							// Start extracting valid href
 							log.debug("Before anchorHref" + anchorHref + "\n");
 							anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);

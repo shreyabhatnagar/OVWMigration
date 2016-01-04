@@ -1,7 +1,11 @@
 package com.cisco.dse.global.migration.benefit;
 
+/* S.No			Name		Date		Description of change
+ * 1			Bhavya		28-Dec-15	Added the Java file to handle the migration of benifits variation 3 with 3url.
+ * 
+ * */
+
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -331,8 +335,8 @@ public class BenefitsVariation03 extends BaseAction {
 							if(!li.getElementsByTag("a").isEmpty()){
 								Element a = li.getElementsByTag("a").first();
 								// Start extracting valid href
-								log.debug("Before anchorHref" + a.attr("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(a.attr("href"), urlMap);
+								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
+								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								JSONObject obj = new JSONObject();
@@ -528,8 +532,8 @@ public class BenefitsVariation03 extends BaseAction {
 				Element listurl = anchor.first();
 				
 				// Start extracting valid href
-				log.debug("Before anchorHref" + listurl.attr("href") + "\n");
-				String anchorHref = FrameworkUtils.getLocaleReference(listurl.attr("href"), urlMap);
+				log.debug("Before anchorHref" + listurl.absUrl("href") + "\n");
+				String anchorHref = FrameworkUtils.getLocaleReference(listurl.absUrl("href"), urlMap);
 				log.debug("after anchorHref" + anchorHref + "\n");
 				// End extracting valid href
 				listNode.setProperty("linktext", listtext.text());

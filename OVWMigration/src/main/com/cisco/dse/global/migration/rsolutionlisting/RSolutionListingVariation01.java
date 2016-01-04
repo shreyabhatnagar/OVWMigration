@@ -1,5 +1,10 @@
 package com.cisco.dse.global.migration.rsolutionlisting;
 
+/* S.No			Name		Date		Description of change
+ * 1			Bhavya		21-Dec-15	Added the Java file to handle the migration of benifits variation 3 with 3url.
+ * 
+ * */
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -100,7 +105,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 		Element c100 = null;
 
 		if(rightElements != null){
-			c100Elements = rightElements.select("div.gd21v1-mid").select("div.c100-pilot");
+			c100Elements = rightElements.select("div.gd21v1-mid").select("div.c100-pilot,div.c100-dm");
 			cc00Elements = rightElements.select("div.cc00-pilot");
 			
 			if(!c100Elements.isEmpty()){

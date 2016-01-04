@@ -109,8 +109,8 @@ public class BenifitsVariation4 extends BaseAction {
 							Node heroNode = benifitsLeftNode.hasNode("hero_large")?benifitsLeftNode.getNode("hero_large").getNode("heropanel_0"):null;
 							if(heroNode!=null){
 								// Start extracting valid href
-								log.debug("Before anchorHref" + heroCtaText.attr("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(heroCtaText.attr("href"), urlMap);
+								log.debug("Before anchorHref" + heroCtaText.absUrl("href") + "\n");
+								String anchorHref = FrameworkUtils.getLocaleReference(heroCtaText.absUrl("href"), urlMap);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								heroNode.setProperty("title",heroTitle);
@@ -146,8 +146,8 @@ public class BenifitsVariation4 extends BaseAction {
 								Node ctaNode = spNode.hasNode("cta")?spNode.getNode("cta"):null;
 								if(ctaNode!=null){
 									// Start extracting valid href
-									log.debug("Before anchorHref" + aEle.attr("href") + "\n");
-									String anchorHref = FrameworkUtils.getLocaleReference(aEle.attr("href"), urlMap);
+									log.debug("Before anchorHref" + aEle.absUrl("href") + "\n");
+									String anchorHref = FrameworkUtils.getLocaleReference(aEle.absUrl("href"), urlMap);
 									log.debug("after anchorHref" + anchorHref + "\n");
 									// End extracting valid href
 									spNode.setProperty("url",anchorHref);
@@ -222,8 +222,8 @@ public class BenifitsVariation4 extends BaseAction {
 				tileNode.setProperty("linktext",aEle.text());
 				if(tileNode.hasProperty("linkurl")){
 					// Start extracting valid href
-					log.debug("Before anchorHref" + aEle.attr("href") + "\n");
-					String anchorHref = FrameworkUtils.getLocaleReference(aEle.attr("href"), urlMap);
+					log.debug("Before anchorHref" + aEle.absUrl("href") + "\n");
+					String anchorHref = FrameworkUtils.getLocaleReference(aEle.absUrl("href"), urlMap);
 					log.debug("after anchorHref" + anchorHref + "\n");
 					// End extracting valid href
 					tileNode.setProperty("linkurl",anchorHref);	
