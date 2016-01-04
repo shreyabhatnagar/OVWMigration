@@ -175,7 +175,7 @@ public class RServiceListingVariation1 extends BaseAction {
 										Element aEle = h3Element.getElementsByTag("a").first();
 										if(aEle != null){
 											h3Text = aEle.text()+h3Element.ownText();
-											aHref = aEle.attr("href");
+											aHref = aEle.absUrl("href");
 											// Start extracting valid href
 											log.debug("Before linkTitleUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -344,7 +344,7 @@ public class RServiceListingVariation1 extends BaseAction {
 												if (pElements.isEmpty()) {
 													aText = aEle.text()+ownText;
 												}
-												aHref = aEle.attr("href");
+												aHref = aEle.absUrl("href");
 												// Start extracting valid href
 												log.debug("Before linkUrl" + aHref + "\n");
 												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -397,7 +397,7 @@ public class RServiceListingVariation1 extends BaseAction {
 										if (pElements.isEmpty()) {
 											aText = aElements.first().text();
 										}
-										aHref = aElements.first().attr("href");
+										aHref = aElements.first().absUrl("href");
 										// Start extracting valid href
 										log.debug("Before linkUrl" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
