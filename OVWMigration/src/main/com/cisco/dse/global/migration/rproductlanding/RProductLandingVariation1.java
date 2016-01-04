@@ -250,9 +250,9 @@ public class RProductLandingVariation1 extends BaseAction {
 											+ primartCTANode.getPath());
 								}
 
-								if (primartCTANode.hasNode("linkurl")) {
+								if (primartCTANode.hasNode("cta")) {
 									javax.jcr.Node primartCTALinkUrlNode = primartCTANode
-											.getNode("linkurl");
+											.getNode("cta");
 									if (StringUtils
 											.isNotBlank(primaryCTALinkUrl)) {
 										primartCTALinkUrlNode.setProperty(
