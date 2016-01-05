@@ -188,6 +188,10 @@ public class FrameworkUtils {
 							imgRef = "/content/dam/global/" + locale + imagePath;
 						}
 					}
+					if(path.lastIndexOf("/")!=-1 && imgRef.lastIndexOf("/")!=-1){
+						String imageName = path.substring(path.lastIndexOf("/"), path.length());
+						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/"))+imageName;
+					}
 					newImagePath = setContentToDAM(path, imgRef);
 				} else if (!path.equalsIgnoreCase(imgRef)) {
 					return path;
@@ -205,7 +209,7 @@ public class FrameworkUtils {
 	}
 
 	public static String setContentToDAM(String path, String imgPath) {
-		log.debug("In the setContentToDAM to migrate : " + path);
+		log.debug("In the setContentToDAM method to migrate : " + path + " to " + imgPath);
 		
 		Properties prop = new Properties();
 		InputStream input = null;
