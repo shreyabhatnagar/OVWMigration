@@ -42,7 +42,7 @@ public class RServiceListingVariation2 extends BaseAction{
 			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-		log.debug("In the translate method of RServiceListingVariation1");
+		log.debug("In the translate method of RServiceListingVariation2");
 		log.debug("In the translate method, catType is :" + catType);
 
 		String pagePropertiesPath = "/content/<locale>/" + catType
