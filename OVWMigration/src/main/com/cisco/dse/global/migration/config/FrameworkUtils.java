@@ -414,6 +414,9 @@ public class FrameworkUtils {
 			String lightboxId = heroNode.hasProperty("lightboxid") ? heroNode.getProperty("lightboxid").getString() : "";
 			Node heroLargeNodeParent = heroNode.getParent().getParent();
 			NodeIterator heroPanelPopUpNodes = heroLargeNodeParent.getNodes("c26v4_popup_cq*");
+			if(heroPanelPopUpNodes.getSize() == 0){
+				heroPanelPopUpNodes = heroLargeNodeParent.getNodes("popup*");
+			}
 			while (heroPanelPopUpNodes.hasNext()) {
 				Node heroPanelPopUpNode = (Node) heroPanelPopUpNodes.next();
 				String lightboxPopUpId = heroPanelPopUpNode.hasProperty("lightboxId") ? heroPanelPopUpNode.getProperty("lightboxId").getString() : "";
