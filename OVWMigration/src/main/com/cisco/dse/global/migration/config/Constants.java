@@ -187,7 +187,7 @@ public class Constants {
 	public static final String UNABLE_TO_UPDATE_PRODUCTLISTING = "<li>Unable to update product listing page.</li>";
 
 	// TEXT_NODE_COUNT
-	public static final String TEXT_NODE_COUNT = "<li>Text Component node count is ";
+	public static final String TEXT_NODE_COUNT = "<li>Mismatch in taxt Node and text elements.Text Component node count is ";
 
 	// TEXT_ELEMENT_COUNT
 	public static final String TEXT_ELEMENT_COUNT = " and text elements on locale page is ";
@@ -600,73 +600,86 @@ public class Constants {
 	public static final String EXTRA_HTMLBLOB_ELEMENT_FOUND = " <li>Extra html blob found on locale page and respective Nodes not found.</li>";
 
 	public static final String HERO_NODE_NOT_AVAILABLE = "<li>Hero node not found</li>";
-	
+
 	//PRIMARY_CTA_TITLE_NOT_FOUND
-    public static final String PRIMARY_CTA_TITLE_NOT_FOUND = "<li>title of primary CTA doesn't exist</li>";
-                   
-    //PRIMARY_CTA_DESCRIPTION_NOT_FOUND
-    public static final String PRIMARY_CTA_DESCRIPTION_NOT_FOUND ="<li>description of primary CTA doesn't exist</li>";
-    
-    //PRIMARY_CTA_LINKTEXT_NOT_FOUND
-    public static final String PRIMARY_CTA_LINKTEXT_NOT_FOUND ="<li>link text of primary CTA doesn't exist</li>";
-    
-    //PRIMARY_CTA_LINKURL_NOT_FOUND
-    public static final String PRIMARY_CTA_LINKURL_NOT_FOUND ="<li>link url of primary CTA doesn't exist</li>";
-    
-    //PRIMARY_CTA_COMPONENT_INWEB_NOT_FOUND
-    public static final String PRIMARY_CTA_COMPONENT_INWEB_NOT_FOUND ="<li> Primary CTA component is not there in web publisher page.</li>";
-    
-    //MISMATCH_IN_HERO_SLIDES
-    public static final String MISMATCH_IN_HERO_SLIDES ="<li>Mismatch in the count of slides in the hero component </li>";
-    
-    //HERO_SLIDE_TITLE_NOT_FOUND
-    public static final String HERO_SLIDE_TITLE_NOT_FOUND="<li>title of hero slide doesn't exist</li>";
-    
-    //HERO_SLIDE_DESCRIPTION_NOT_FOUND
-    public static final String HERO_SLIDE_DESCRIPTION_NOT_FOUND="<li>description of hero slide doesn't exist</li>";
-    
-    //HERO_SLIDE_LINKTEXT_NOT_FOUND
-    public static final String HERO_SLIDE_LINKTEXT_NOT_FOUND="<li>link text of hero slide doesn't exist</li>";
-    
-    //HERO_SLIDE_LINKURL_NOT_FOUND
-    public static final String HERO_SLIDE_LINKURL_NOT_FOUND="<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>";
-    
-    //HERO_SLIDE_IMAGE_NODE_NOT_FOUND
-    public static final String HERO_SLIDE_IMAGE_NODE_NOT_FOUND="<li>hero image node doesn't exist</li>";
-    
-    //DRAWERCONTAINER_LINK_NOT_FOUND
-    public static final  String DRAWERCONTAINER_LINK_NOT_FOUND="<li>link of drawer container doesn't exist</li>";
-    
-    //MISMATCH_IN_INFOLINKS
-    public static final  String MISMATCH_IN_INFOLINKS="<li>Mismatch in count of infolinks in subdrawer panel.</li>";  
-    
-    //TILE_BORDERED_COMPONENT_NOT_FOUND
-    public static final  String  TILE_BORDERED_COMPONENT_NOT_FOUND="<li>tile bordered component not present in the web publisher page</li>";
-   
+	public static final String PRIMARY_CTA_TITLE_NOT_FOUND = "<li>title of primary CTA doesn't exist</li>";
 
-    //MISMATCH_RIGHT_RAIL_LIST
-    public static final  String  MISMATCH_RIGHT_RAIL_LIST="<li>Mis-match of links in list of right rail.</li>";
-    
-    //RIGHT_RAIL_LIST_NOT_FOUND
-    public static final  String RIGHT_RAIL_LIST_NOT_FOUND="<li>List component not found in right rail</li>";
-    
-    //LIST_ITEM_NODE_NOT_FOUND
-      public static final  String LIST_ITEM_NODE_NOT_FOUND= "<li>List Item Node not found</li>";
-    
-     //EXTRA_LIST_NODE_RIGHT_RAIL
-     public static final  String EXTRA_LIST_NODE_RIGHT_RAIL="<li>Extra List node found in right rail</li>";
-     
-    //HERO_LARGE_COMPONENT_NOT_FOUND
-    public static final  String  HERO_LARGE_COMPONENT_NOT_FOUND= "<li>Hero Large component is not found on web publisher page</li>";
+	//PRIMARY_CTA_DESCRIPTION_NOT_FOUND
+	public static final String PRIMARY_CTA_DESCRIPTION_NOT_FOUND ="<li>description of primary CTA doesn't exist</li>";
 
-  //DRAWERCONTAINER_TITLE_NOT_FOUND
-    public static final  String DRAWERCONTAINER_TITLE_NOT_FOUND="<li>title of drawer container doesn't exist</li>";
-    
-    //EXTRA_OVERVIEW_NODE_FOUND
-    public static final  String EXTRA_OVERVIEW_NODE_FOUND="<li>Extra Overview node found.</li>";
-    
-    //EXTRA_LINK_IN_SUBDRAWER
-    public static final  String EXTRA_LINK_IN_SUBDRAWER="<li>Extra link found aligned at centre found along with sub-drawers.</li>";
-  
+	//PRIMARY_CTA_LINKTEXT_NOT_FOUND
+	public static final String PRIMARY_CTA_LINKTEXT_NOT_FOUND ="<li>link text of primary CTA doesn't exist</li>";
+
+	//PRIMARY_CTA_LINKURL_NOT_FOUND
+	public static final String PRIMARY_CTA_LINKURL_NOT_FOUND ="<li>link url of primary CTA doesn't exist</li>";
+
+	//PRIMARY_CTA_COMPONENT_INWEB_NOT_FOUND
+	public static final String PRIMARY_CTA_COMPONENT_INWEB_NOT_FOUND ="<li> Primary CTA component is not there in web publisher page.</li>";
+
+	//MISMATCH_IN_HERO_SLIDES
+	public static final String MISMATCH_IN_HERO_SLIDES ="<li>Mismatch in the count of slides in the hero component </li>";
+
+	//HERO_SLIDE_TITLE_NOT_FOUND
+	public static final String HERO_SLIDE_TITLE_NOT_FOUND="<li>title of hero slide doesn't exist</li>";
+
+	//HERO_SLIDE_DESCRIPTION_NOT_FOUND
+	public static final String HERO_SLIDE_DESCRIPTION_NOT_FOUND="<li>description of hero slide doesn't exist</li>";
+
+	//HERO_SLIDE_LINKTEXT_NOT_FOUND
+	public static final String HERO_SLIDE_LINKTEXT_NOT_FOUND="<li>link text of hero slide doesn't exist</li>";
+
+	//HERO_SLIDE_LINKURL_NOT_FOUND
+	public static final String HERO_SLIDE_LINKURL_NOT_FOUND="<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>";
+
+	//HERO_SLIDE_IMAGE_NODE_NOT_FOUND
+	public static final String HERO_SLIDE_IMAGE_NODE_NOT_FOUND="<li>hero image node doesn't exist</li>";
+
+	//DRAWERCONTAINER_LINK_NOT_FOUND
+	public static final  String DRAWERCONTAINER_LINK_NOT_FOUND="<li>link of drawer container doesn't exist</li>";
+
+	//MISMATCH_IN_INFOLINKS
+	public static final  String MISMATCH_IN_INFOLINKS="<li>Mismatch in count of infolinks in subdrawer panel.</li>";  
+
+	//TILE_BORDERED_COMPONENT_NOT_FOUND
+	public static final  String  TILE_BORDERED_COMPONENT_NOT_FOUND="<li>tile bordered component not present in the web publisher page</li>";
+
+	//MISMATCH_RIGHT_RAIL_LIST
+	public static final  String  MISMATCH_RIGHT_RAIL_LIST="<li>Mis-match of links in list of right rail.</li>";
+
+	//RIGHT_RAIL_LIST_NOT_FOUND
+	public static final  String RIGHT_RAIL_LIST_NOT_FOUND="<li>List component not found in right rail</li>";
+
+	//LIST_ITEM_NODE_NOT_FOUND
+	public static final  String LIST_ITEM_NODE_NOT_FOUND= "<li>List Item Node not found</li>";
+
+	//EXTRA_LIST_NODE_RIGHT_RAIL
+	public static final  String EXTRA_LIST_NODE_RIGHT_RAIL="<li>Extra List node found in right rail</li>";
+
+	//HERO_LARGE_COMPONENT_NOT_FOUND
+	public static final  String  HERO_LARGE_COMPONENT_NOT_FOUND= "<li>Hero Large component is not found on web publisher page</li>";
+
+	//DRAWERCONTAINER_TITLE_NOT_FOUND
+	public static final  String DRAWERCONTAINER_TITLE_NOT_FOUND="<li>title of drawer container doesn't exist</li>";
+
+	//EXTRA_OVERVIEW_NODE_FOUND
+	public static final  String EXTRA_OVERVIEW_NODE_FOUND="<li>Extra Overview node found.</li>";
+
+	//EXTRA_LINK_IN_SUBDRAWER
+	public static final  String EXTRA_LINK_IN_SUBDRAWER="<li>Extra link found aligned at centre found along with sub-drawers.</li>";
+
+	//HERO_CONTENT_ANCHOR_LINK_NODE_NOT_FOUND
+	public static final String HERO_CONTENT_ANCHOR_LINK_NODE_NOT_FOUND = "<li>Hero content anchor link node not found.</li>";
+
+	//TILE_BORDERED_LINK_NODE_NOT_FOUND
+	public static final String TILE_BORDERED_LINK_NODE_NOT_FOUND = "<li>TileBordered link node not found.</li>";
+
+	//MISMATCH_IN_TILELINKS_ELEMENT	
+	public static final String MISMATCH_IN_TILELINKS_ELEMENT = "<li>MisMatch in TILELINKS components. Additional Link Elements found in Locale Page. Locale page has ( ";
+
+	//TILELINKS_NODES_COUNT
+	public static final String TILELINKS_NODES_COUNT = " )Elements and Available nodes are";
+
+	//MISMATCH_IN_TILELINKS_NODES	
+	public static final String MISMATCH_IN_TILELINKS_NODES = "<li>MisMatch in TILELINKS components. Additional Nodes found. Locale page has (";
 
 }
