@@ -49,6 +49,7 @@ import com.cisco.dse.global.migration.productlanding.ProductLandingVariation6;
 import com.cisco.dse.global.migration.productlanding.ProductLandingVariation9;
 import com.cisco.dse.global.migration.rroot.RProductVariation1;
 import com.cisco.dse.global.migration.rroot.RSolutionIndex;
+import com.cisco.dse.global.migration.rbenefit.RBenefitVariation1;
 import com.cisco.dse.global.migration.rproductlanding.RProductLandingVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation2;
