@@ -4,9 +4,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -154,7 +156,7 @@ public class OVWMigration {
 					String sheetName = sheet.getSheetName();
 					StringBuilder sb = new StringBuilder(1024);
 
-					sb.append("<html><head><meta charset='UTF-8'></head><body><table  border='1'>");
+					sb.append("<html><head><meta charset='UTF-16'></head><body><table  border='1'>");
 					// Start Map
 					Map<String, String> urlMap = new HashMap<String, String>();
 					for (Row tempRow : sheet) {
@@ -824,11 +826,18 @@ public class OVWMigration {
 							+ new Timestamp(date.getTime()).toString()
 							.replace(":", "-").replace(".", "-")
 							+ ".html");
-					FileWriter fileWriter = new FileWriter(file);
+					/*FileWriter fileWriter = new FileWriter(file);
 					BufferedWriter bwr = new BufferedWriter(fileWriter);
 					bwr.write(new String(sb.toString().getBytes("UTF-8")));
 					bwr.flush();
-					bwr.close();
+					bwr.close();*/
+					FileOutputStream fileOutputStream = new FileOutputStream( file );
+		            OutputStreamWriter outputStreamWriter = new OutputStreamWriter( fileOutputStream, "UTF-16" );
+		            BufferedWriter bufferedWriter = new BufferedWriter( outputStreamWriter );
+		            bufferedWriter.write(sb.toString());
+					
+					bufferedWriter.flush();
+		            bufferedWriter.close();
 
 				}
 				workbook.close();
