@@ -196,9 +196,9 @@ public class RTechnologyVariation1 extends BaseAction {
 				}
 
 				if(size > eleSize){
-					sb.append(Constants.TEXT_NODE_COUNT+size+Constants.TEXT_ELEMENT_COUNT+eleSize+".</li>");
+					sb.append(Constants.TEXT_NODE_MISMATCH+size+Constants.TEXT_ELEMENT_COUNT+eleSize+".</li>");
 				}else if(size < eleSize){
-					sb.append(Constants.TEXT_NODE_COUNT+size+Constants.TEXT_ELEMENT_COUNT+eleSize+".</li>");
+					sb.append(Constants.TEXT_NODE_MISMATCH+size+Constants.TEXT_ELEMENT_COUNT+eleSize+".</li>");
 				}
 			}else{
 				sb.append(Constants.TEXT_NODE_NOT_FOUND);
