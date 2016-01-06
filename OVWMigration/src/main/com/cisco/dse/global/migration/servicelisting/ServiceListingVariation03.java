@@ -175,7 +175,7 @@ public class ServiceListingVariation03 extends BaseAction {
 								Elements anchorText = ele.getElementsByTag("a");
 								if (anchorText != null) {
 									aText = anchorText.text();
-									aHref = anchorText.attr("href");
+									aHref = anchorText.first().absUrl("href");
 									// Start extracting valid href
 									log.debug("Before spotlight" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);

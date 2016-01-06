@@ -219,7 +219,7 @@ public class ServiceListingVariation02 extends BaseAction {
 									obj.put("icon",li.attr("class"));
 									Element a = li.getElementsByTag("a").first();
 									obj.put("linktext",a.attr("title"));
-									String aHref = a.attr("href");
+									String aHref = a.absUrl("href");
 									// Start extracting valid href
 									log.debug("Before followus" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -347,7 +347,7 @@ public class ServiceListingVariation02 extends BaseAction {
 						JSONObject obj = new JSONObject();
 						String linkText = a.text();
 						obj.put("linktext", linkText);
-						String aHref = a.attr("href");
+						String aHref = a.absUrl("href");
 						// Start extracting valid href
 						log.debug("Before list" + aHref + "\n");
 						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -398,7 +398,7 @@ public class ServiceListingVariation02 extends BaseAction {
 		Element h2Ele = ele.getElementsByTag("h2").first();
 		if (h2Ele != null) {
 			title = h2Ele.text();
-			String tLink = h2Ele.getElementsByTag("a").attr("href");
+			String tLink = h2Ele.getElementsByTag("a").first().absUrl("href");
 			// Start extracting valid href
 			log.debug("Before spotlight" + tLink + "\n");
 			tLink = FrameworkUtils.getLocaleReference(tLink, urlMap);
@@ -458,7 +458,7 @@ public class ServiceListingVariation02 extends BaseAction {
 		Elements spotLightAnchor = ele.select("a.cta");
 		if (spotLightAnchor != null && !spotLightAnchor.isEmpty()) {
 			aText = spotLightAnchor.text();
-			String linkUrl = spotLightAnchor.attr("href");
+			String linkUrl = spotLightAnchor.first().absUrl("href");
 			// Start extracting valid href
 			log.debug("Before spotlight" + linkUrl + "\n");
 			linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);

@@ -194,7 +194,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										JSONObject obj = new JSONObject();
 										Elements aElements = element.getElementsByTag("a");
 										String aText = aElements.text();
-										String aHref = aElements.attr("href");
+										String aHref = aElements.first().absUrl("href");
 										// Start extracting valid href
 										log.debug("Before gd-left" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -326,7 +326,7 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (aElements != null) {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
-									String aHref = aElements.attr("href");
+									String aHref = aElements.absUrl("href");
 									// Start extracting valid href
 									log.debug("Before gd-mid" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -440,7 +440,7 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (aElements != null) {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
-									String aHref = aElements.attr("href");
+									String aHref = aElements.absUrl("href");
 									// Start extracting valid href
 									log.debug("Before gd-right" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
