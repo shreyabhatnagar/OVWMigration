@@ -53,7 +53,7 @@ import com.cisco.dse.global.migration.rbenefit.RBenefitVariation1;
 import com.cisco.dse.global.migration.rproductlanding.RProductLandingVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation2;
-import com.cisco.dse.global.migration.rtechnology.RProductTechnology;
+import com.cisco.dse.global.migration.rtechnology.RTechnologyVariation1;
 import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation1;
 import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation2;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
@@ -159,31 +159,31 @@ public class OVWMigration {
 					for (Row tempRow : sheet) {
 						String gLink = tempRow.getCell(0) != null ? tempRow
 								.getCell(0).getStringCellValue() : "";
-						String prod = tempRow.getCell(1) != null ? tempRow
-								.getCell(1).getStringCellValue() : "";
-						String type = tempRow.getCell(2) != null ? tempRow
-								.getCell(2).getStringCellValue() : "";
-						String cattype = tempRow.getCell(3) != null ? tempRow
-								.getCell(3).getStringCellValue() : "";
-						if (StringUtils.isNotBlank(type) && type.indexOf("-") != -1) {
-							String variationType =  type.substring(0, type.lastIndexOf("-"));
-							String variation =  type.substring(type.lastIndexOf("-") + 1);
-							log.debug("variation : " + variation);
-							log.debug("actual type : " + variationType);
-							String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
-								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
-							} else {
-								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
-							}
-							urlMap.put(gLink, pageUrl);
-						}
+								String prod = tempRow.getCell(1) != null ? tempRow
+										.getCell(1).getStringCellValue() : "";
+										String type = tempRow.getCell(2) != null ? tempRow
+												.getCell(2).getStringCellValue() : "";
+												String cattype = tempRow.getCell(3) != null ? tempRow
+														.getCell(3).getStringCellValue() : "";
+														if (StringUtils.isNotBlank(type) && type.indexOf("-") != -1) {
+															String variationType =  type.substring(0, type.lastIndexOf("-"));
+															String variation =  type.substring(type.lastIndexOf("-") + 1);
+															log.debug("variation : " + variation);
+															log.debug("actual type : " + variationType);
+															String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
+															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
+															} else {
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
+															}
+															urlMap.put(gLink, pageUrl);
+														}
 
 					}
-					
+
 					for (String key : urlMap.keySet()) {
-				        log.debug("key:::" + key + "value::: " + urlMap.get(key));
-				    }
+						log.debug("key:::" + key + "value::: " + urlMap.get(key));
+					}
 					// End Map
 					for (Row tempRow : sheet) {
 
@@ -198,605 +198,605 @@ public class OVWMigration {
 														String check = tempRow.getCell(4) != null ? tempRow
 																.getCell(4).getStringCellValue() : "";
 
-														log.debug("gLink : " + gLink);
-														log.debug("prod : " + prod);
-
-
-														if ("benefit-var1".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
-															String msg1 = "";
-															msg1 = msg1 + "<tr>";
-															msg1 = msg1
-																	+ new UnifiedComputingBenefits().translate(
-																			host, gLink, prod, type,
-																			sheet.getSheetName(), session);
-															msg1 = msg1 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg1);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("benefit-var2".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
-															String msg2 = "";
-															msg2 = msg2 + "<tr>";
-															msg2 = msg2
-																	+ new ServiceProviderBenefits().translate(
-																			host, gLink, prod, type,
-																			sheet.getSheetName(), session);
-															msg2 = msg2 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg2);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("benefit-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg3 = "";
-															msg3 = msg3 + "<tr>";
-															msg3 = msg3
-																	+ new BenefitsVariation03().translate(host, gLink,
-																			prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg3 = msg3 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg3);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg4 = "";
-															msg4 = msg4 + "<tr>";
-															msg4 = msg4
-																	+ new ProductLandingVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg4 = msg4 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg4);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg5 = "";
-															msg5 = msg5 + "<tr>";
-															msg5 = msg5
-																	+ new ProductLandingVariation3().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg5 = msg5 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg5);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg6 = "";
-															msg6 = msg6 + "<tr>";
-															msg6 = msg6
-																	+ new ProductLandingVariation9().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg6 = msg6 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg6);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var5".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg7 = "";
-															msg7 = msg7 + "<tr>";
-															msg7 = msg7
-																	+ new ProductLandingVariation5().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg7 = msg7 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg7);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var11".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg8 = "";
-															msg8 = msg8 + "<tr>";
-															msg8 = msg8
-																	+ new ProductLandingVariation11()
-															.translate(host, gLink, prod, type,
-																	cattype,
-																	sheet.getSheetName(),
-																	session, urlMap);
-															msg8 = msg8 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg8);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var10".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg9 = "";
-															msg9 = msg9 + "<tr>";
-															msg9 = msg9
-																	+ new ProductLandingVariation10()
-															.translate(host, gLink, prod, type,
-																	cattype,
-																	sheet.getSheetName(),
-																	session, urlMap);
-															msg9 = msg9 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg9);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new ProductLandingVariation6().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("index-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
-																String msg8 = "";
-																msg8 = msg8 + "<tr>";
-																msg8 = msg8
-																		+ new ProductLandingVariation08()
-																.translate(host, gLink, prod, type,
-																		cattype,
-																		sheet.getSheetName(),
-																		session, urlMap);
-																msg8 = msg8 + "</tr>";
-
-																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																sb.append(msg8);
-																sb.append("<tr><td colspan='3'>.</td></tr>");
-
-															
-														} else if ("index-var12".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg8 = "";
-															msg8 = msg8 + "<tr>";
-															msg8 = msg8
-																	+ new ProductLandingVariation12()
-															.translate(host, gLink, prod, type,
-																	cattype,
-																	sheet.getSheetName(),
-																	session, urlMap);
-															msg8 = msg8 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg8);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														
-													}else if ("solution-listing-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg11 = "";
-															msg11 = msg11 + "<tr>";
-															msg11 = msg11
-																	+ new SolutionListingVariation2().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg11 = msg11 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg11);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														}
-														else if ("solution-listing-var11".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg12 = "";
-															msg12 = msg12 + "<tr>";
-															msg12 = msg12
-																	+ new SolutionListingVariation11().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg12 = msg12 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg12);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														}
-														else if ("solution-listing-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new SolutionListingVariation08().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("solution-listing-var12".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new SolutionListingVariation12().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														} else if ("product-listing-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg14 = "";
-															msg14 = msg14 + "<tr>";
-															msg14 = msg14
-																	+ new ProductListingVariation4().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg14 = msg14 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															log.debug("Msg14 value is "+msg14);
-															sb.append(msg14);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("product-listing-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new ProductListingVariation3().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														}else if ("product-listing-var7".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new ProductListingVariation7().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														}else if ("service-listing-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new ServiceListingVariation03().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session,urlMap);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-
-														}else if ("service-listing-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg10 = "";
-															msg10 = msg10 + "<tr>";
-															msg10 = msg10
-																	+ new ServiceListingVariation01().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg10 = msg10 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg10);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("service-listing-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg13 = "";
-															msg13 = msg13 + "<tr>";
-															msg13 = msg13
-																	+ new ServiceListingVariation02().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session,urlMap);
-															msg13 = msg13 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg13);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-
-														else if ("product-listing-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg15 = "";
-															msg15 = msg15 + "<tr>";
-															msg15 = msg15
-																	+ new ProductListingVariation6().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg15 = msg15 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg15);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("product-listing-var5".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg15 = "";
-															msg15 = msg15 + "<tr>";
-															msg15 = msg15
-																	+ new ProductListingVariation5().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg15 = msg15 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg15);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("technology-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg19 = "";
-															msg19 = msg19 + "<tr>";
-															msg19 = msg19
-																	+ new TechnologyVariation2().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg19 = msg19 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg19);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("solutions-listing-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg15 = "";
-															msg15 = msg15 + "<tr>";
-															msg15 = msg15
-																	+ new SolutionListingVariation09().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg15 = msg15 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg15);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("architecture-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg14 = "";
-															msg14 = msg14 + "<tr>";
-															msg14 = msg14
-																	+ new ArchitechtureVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg14 = msg14 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg14);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("benefits-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg20 = "";
-															msg20 = msg20 + "<tr>";
-															msg20 = msg20
-																	+ new BenifitsVariation4().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session,urlMap);
-															msg20 = msg20 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg20);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("architecture-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new ArchitechtureVariation3().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("architecture-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new ArchitectureVariation04().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("product-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RProductListingVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("product-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RProductListingVariation2().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("index-Rrootvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg20 = "";
-															msg20 = msg20 + "<tr>";
-															msg20 = msg20
-																	+ new RProductVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg20 = msg20 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg20);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-
-														
-														else if ("buyersguide-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new BuyersGuideVariation01().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("service-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RServiceListingVariation1().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session,urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("solution-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RSolutionListingVariation01().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-														else if ("solution-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RSolutionListingVariation02().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}else if ("technology-rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RProductTechnology().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-													else if ("index-Rrootvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new RSolutionIndex().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-													else if ("index-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-														String msg16 = "";
-														msg16 = msg16 + "<tr>";
-														msg16 = msg16
-																+ new RProductLandingVariation1().translate(
-																		host, gLink, prod, type, cattype,
-																		sheet.getSheetName(), session,urlMap);
-														msg16 = msg16 + "</tr>";
-
-														sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-														sb.append(msg16);
-														sb.append("<tr><td colspan='3'>.</td></tr>");
-													}
-													else if ("benefit-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-														String msg16 = "";
-														msg16 = msg16 + "<tr>";
-														msg16 = msg16
-																+ new BenifitsVariation2().translate(
-																		host, gLink, prod, type, cattype,
-																		sheet.getSheetName(), session,urlMap);
-														msg16 = msg16 + "</tr>";
-
-														sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-														sb.append(msg16);
-														sb.append("<tr><td colspan='3'>.</td></tr>");
-													}
-														 else if ("buyersguide-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-															String msg16 = "";
-															msg16 = msg16 + "<tr>";
-															msg16 = msg16
-																	+ new BuyersGuideVariation02().translate(
-																			host, gLink, prod, type, cattype,
-																			sheet.getSheetName(), session, urlMap);
-															msg16 = msg16 + "</tr>";
-
-															sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-															sb.append(msg16);
-															sb.append("<tr><td colspan='3'>.</td></tr>");
-														}
-													        else if ("buyersguide-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
-																String msg16 = "";
-																msg16 = msg16 + "<tr>";
-																msg16 = msg16
-																		+ new BuyersGuideVariation03().translate(
-																				host, gLink, prod, type, cattype,
-																				sheet.getSheetName(), session, urlMap);
-																msg16 = msg16 + "</tr>";
-
-																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																sb.append(msg16);
-																sb.append("<tr><td colspan='3'>.</td></tr>");
-															}else if ("benefit-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-																String msg16 = "";
-																msg16 = msg16 + "<tr>";
-																msg16 = msg16
-																		+ new RBenefitVariation1().translate(
-																				host, gLink, prod, type, cattype,
-																				sheet.getSheetName(), session, urlMap);
-																msg16 = msg16 + "</tr>";
-
-																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																sb.append(msg16);
-																sb.append("<tr><td colspan='3'>.</td></tr>");
-															}
-															else if ("service-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
-																String msg16 = "";
-																msg16 = msg16 + "<tr>";
-																msg16 = msg16
-																		+ new RServiceListingVariation2().translate(
-																				host, gLink, prod, type, cattype,
-																				sheet.getSheetName(), session, urlMap);
-																msg16 = msg16 + "</tr>";
-
-																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																sb.append(msg16);
-																sb.append("<tr><td colspan='3'>.</td></tr>");
-															}
-													
-										
-														
+																log.debug("gLink : " + gLink);
+																log.debug("prod : " + prod);
+
+
+																if ("benefit-var1".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
+																	String msg1 = "";
+																	msg1 = msg1 + "<tr>";
+																	msg1 = msg1
+																			+ new UnifiedComputingBenefits().translate(
+																					host, gLink, prod, type,
+																					sheet.getSheetName(), session);
+																	msg1 = msg1 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg1);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("benefit-var2".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
+																	String msg2 = "";
+																	msg2 = msg2 + "<tr>";
+																	msg2 = msg2
+																			+ new ServiceProviderBenefits().translate(
+																					host, gLink, prod, type,
+																					sheet.getSheetName(), session);
+																	msg2 = msg2 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg2);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("benefit-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg3 = "";
+																	msg3 = msg3 + "<tr>";
+																	msg3 = msg3
+																			+ new BenefitsVariation03().translate(host, gLink,
+																					prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg3 = msg3 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg3);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg4 = "";
+																	msg4 = msg4 + "<tr>";
+																	msg4 = msg4
+																			+ new ProductLandingVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg4 = msg4 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg4);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg5 = "";
+																	msg5 = msg5 + "<tr>";
+																	msg5 = msg5
+																			+ new ProductLandingVariation3().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg5 = msg5 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg5);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg6 = "";
+																	msg6 = msg6 + "<tr>";
+																	msg6 = msg6
+																			+ new ProductLandingVariation9().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg6 = msg6 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg6);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var5".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg7 = "";
+																	msg7 = msg7 + "<tr>";
+																	msg7 = msg7
+																			+ new ProductLandingVariation5().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg7 = msg7 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg7);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var11".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg8 = "";
+																	msg8 = msg8 + "<tr>";
+																	msg8 = msg8
+																			+ new ProductLandingVariation11()
+																	.translate(host, gLink, prod, type,
+																			cattype,
+																			sheet.getSheetName(),
+																			session, urlMap);
+																	msg8 = msg8 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg8);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var10".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg9 = "";
+																	msg9 = msg9 + "<tr>";
+																	msg9 = msg9
+																			+ new ProductLandingVariation10()
+																	.translate(host, gLink, prod, type,
+																			cattype,
+																			sheet.getSheetName(),
+																			session, urlMap);
+																	msg9 = msg9 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg9);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new ProductLandingVariation6().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("index-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg8 = "";
+																	msg8 = msg8 + "<tr>";
+																	msg8 = msg8
+																			+ new ProductLandingVariation08()
+																	.translate(host, gLink, prod, type,
+																			cattype,
+																			sheet.getSheetName(),
+																			session, urlMap);
+																	msg8 = msg8 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg8);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+
+																} else if ("index-var12".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg8 = "";
+																	msg8 = msg8 + "<tr>";
+																	msg8 = msg8
+																			+ new ProductLandingVariation12()
+																	.translate(host, gLink, prod, type,
+																			cattype,
+																			sheet.getSheetName(),
+																			session, urlMap);
+																	msg8 = msg8 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg8);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+
+																}else if ("solution-listing-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg11 = "";
+																	msg11 = msg11 + "<tr>";
+																	msg11 = msg11
+																			+ new SolutionListingVariation2().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg11 = msg11 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg11);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																}
+																else if ("solution-listing-var11".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg12 = "";
+																	msg12 = msg12 + "<tr>";
+																	msg12 = msg12
+																			+ new SolutionListingVariation11().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg12 = msg12 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg12);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																}
+																else if ("solution-listing-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new SolutionListingVariation08().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("solution-listing-var12".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new SolutionListingVariation12().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} else if ("product-listing-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg14 = "";
+																	msg14 = msg14 + "<tr>";
+																	msg14 = msg14
+																			+ new ProductListingVariation4().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session);
+																	msg14 = msg14 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	log.debug("Msg14 value is "+msg14);
+																	sb.append(msg14);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("product-listing-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new ProductListingVariation3().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																}else if ("product-listing-var7".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new ProductListingVariation7().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																}else if ("service-listing-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new ServiceListingVariation03().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																}else if ("service-listing-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg10 = "";
+																	msg10 = msg10 + "<tr>";
+																	msg10 = msg10
+																			+ new ServiceListingVariation01().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg10 = msg10 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg10);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("service-listing-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg13 = "";
+																	msg13 = msg13 + "<tr>";
+																	msg13 = msg13
+																			+ new ServiceListingVariation02().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg13 = msg13 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg13);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+
+																else if ("product-listing-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg15 = "";
+																	msg15 = msg15 + "<tr>";
+																	msg15 = msg15
+																			+ new ProductListingVariation6().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg15 = msg15 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg15);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("product-listing-var5".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg15 = "";
+																	msg15 = msg15 + "<tr>";
+																	msg15 = msg15
+																			+ new ProductListingVariation5().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg15 = msg15 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg15);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("technology-var6".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg19 = "";
+																	msg19 = msg19 + "<tr>";
+																	msg19 = msg19
+																			+ new TechnologyVariation2().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg19 = msg19 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg19);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("solutions-listing-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg15 = "";
+																	msg15 = msg15 + "<tr>";
+																	msg15 = msg15
+																			+ new SolutionListingVariation09().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg15 = msg15 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg15);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("architecture-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg14 = "";
+																	msg14 = msg14 + "<tr>";
+																	msg14 = msg14
+																			+ new ArchitechtureVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg14 = msg14 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg14);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("benefits-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg20 = "";
+																	msg20 = msg20 + "<tr>";
+																	msg20 = msg20
+																			+ new BenifitsVariation4().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg20 = msg20 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg20);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("architecture-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new ArchitechtureVariation3().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("architecture-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new ArchitectureVariation04().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("product-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RProductListingVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("product-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RProductListingVariation2().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("index-Rrootvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg20 = "";
+																	msg20 = msg20 + "<tr>";
+																	msg20 = msg20
+																			+ new RProductVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg20 = msg20 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg20);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+
+
+																else if ("buyersguide-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new BuyersGuideVariation01().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("service-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RServiceListingVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("solution-listing-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RSolutionListingVariation01().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("solution-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RSolutionListingVariation02().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("technology-rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RTechnologyVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("index-Rrootvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RSolutionIndex().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("index-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RProductLandingVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("benefit-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new BenifitsVariation2().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("buyersguide-var2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new BuyersGuideVariation02().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("buyersguide-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new BuyersGuideVariation03().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("benefit-Rvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RBenefitVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("service-listing-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RServiceListingVariation2().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+
+
+
 
 					}
 
