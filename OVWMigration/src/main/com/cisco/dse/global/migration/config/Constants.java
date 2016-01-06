@@ -685,4 +685,16 @@ public class Constants {
 	// TEXT_NODE_MISMATCH
 	public static final String TEXT_NODE_MISMATCH = "<li>Mismatch in text Node and text elements.Text Component node count is ";
 
+	//HERO_COMPONENT_CTA_NODE_NOT_FOUND
+	public static final String HERO_COMPONENT_CTA_NODE_NOT_FOUND = "<li>Hero component cta node not found.</li>";
+
+	//MIS_MATCH_IN_LINKS_OF_LIST
+	public static final String MIS_MATCH_IN_LINKS_OF_LIST = "<li>Mismatch in number of links in list component.Node count and element count respectively are:";
+
+	//LINK_DATA_NODE_FOR_LIST_NOT_FOUND
+	public static final String LINK_DATA_NODE_FOR_LIST_NOT_FOUND = "<li>Link data node not found for list component.</li>";
+
+	//POP_UP_ELEMENT_NOT_FOUND_FOR_TILE
+	public static final String POP_UP_ELEMENT_NOT_FOUND_FOR_TILE = "<li>Pop up element not found in locale page, link is there instead of pop up.</li>";
+  
 }

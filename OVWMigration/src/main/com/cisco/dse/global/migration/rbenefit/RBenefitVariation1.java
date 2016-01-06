@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
@@ -172,7 +173,7 @@ public class RBenefitVariation1 extends BaseAction {
 									ctaNode.setProperty("url", ctaLink);
 								}
 							} else {
-								sb.append("<li>Hero component cta node not found.</li>");
+								sb.append(Constants.HERO_COMPONENT_CTA_NODE_NOT_FOUND);
 							}
 							// start image
 							String heroImage = FrameworkUtils.extractImagePath(
@@ -416,7 +417,7 @@ public class RBenefitVariation1 extends BaseAction {
 								int nodeCount = (int) itemIterator.getSize();
 								int eleCount = aEle.size();
 								if (nodeCount != eleCount) {
-									sb.append("<li>Mismatch in number of links in list component.Node count and element count respectively are:"
+									sb.append(Constants.MIS_MATCH_IN_LINKS_OF_LIST
 											+ nodeCount
 											+ " and "
 											+ eleCount
@@ -453,16 +454,16 @@ public class RBenefitVariation1 extends BaseAction {
 												sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
 											}
 										} else {
-											sb.append("<li>Link data node not found.</li>");
+											sb.append(Constants.LINK_DATA_NODE_FOR_LIST_NOT_FOUND);
 										}
 
 									}
 								}
 							} else {
-								sb.append("<li>List items node not found</li>");
+								sb.append(Constants.LIST_ITEM_NODE_NOT_FOUND);
 							}
 						} else {
-							sb.append("<li>List container node not found</li>");
+							sb.append(Constants.LIST_HEADING_COMPONENT_NOT_FOUND);
 						}
 					} else {
 						sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
@@ -472,44 +473,47 @@ public class RBenefitVariation1 extends BaseAction {
 					log.error("Exception ", e);
 				}
 				// end of list component
-				//------------------------------------------------------------------------------------------------------
-				//start of tile bordered components
+				// ------------------------------------------------------------------------------------------------------
+				// start of tile bordered components
 				try {
 					String tileTitle = "";
 					String tileDesc = "";
 					String ctaText = "";
 					String ctaLink = "";
 					Node tilePopUpNode = null;
-					Elements tileEle = doc.select("div.gd-right").select("div.c23-pilot");
-					NodeIterator tileIterator = benefitRightNode.hasNodes()?benefitRightNode.getNodes("tile*"):null;
+					Elements tileEle = doc.select("div.gd-right").select(
+							"div.c23-pilot");
+					NodeIterator tileIterator = benefitRightNode.hasNodes() ? benefitRightNode
+							.getNodes("tile*") : null;
 					if (tileEle != null) {
-						if(tileIterator != null){
+						if (tileIterator != null) {
 							int nodeCount = (int) tileIterator.getSize();
 							int eleCount = tileEle.size();
 							if (nodeCount != eleCount) {
-								sb.append("<li>Mismatch in count of tile boreded.Node count and element count respectively are:"
-										+ nodeCount
-										+ " and "
-										+ eleCount
-										+ "</li>");
+								String message = Constants.TILE_BORDERED_ELEMENT_COUNT_MISMATCH;
+								message = message.replace("(<ele>)",
+										Integer.toString(eleCount));
+								message = message.replace("(<node>)",
+										Integer.toString(nodeCount));
+								sb.append(message);
 							}
-							for(Element ele:tileEle){
-								Element tileTitleEle = ele
-										.select("h2,h3").first();
+							for (Element ele : tileEle) {
+								Element tileTitleEle = ele.select("h2,h3")
+										.first();
 								if (tileTitleEle != null) {
 									tileTitle = tileTitleEle.text();
 								} else {
 									sb.append(Constants.TILE_BORDERED_TITLE_NOT_FOUND);
 								}
-								Element tileDescEle = ele
-										.getElementsByTag("p").first();
+								Element tileDescEle = ele.getElementsByTag("p")
+										.first();
 								if (tileDescEle != null) {
 									tileDesc = tileDescEle.text();
 								} else {
 									sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
 								}
-								Element tileCta = ele.getElementsByTag(
-										"a").first();
+								Element tileCta = ele.getElementsByTag("a")
+										.first();
 								if (tileCta != null) {
 									ctaText = tileCta.text();
 									ctaLink = tileCta.absUrl("href");
@@ -518,42 +522,58 @@ public class RBenefitVariation1 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before ctaLink" + ctaLink + "\n");
-								ctaLink = FrameworkUtils.getLocaleReference(ctaLink,
-										urlMap);
+								ctaLink = FrameworkUtils.getLocaleReference(
+										ctaLink, urlMap);
 								log.debug("after ctaLink" + ctaLink + "\n");
 								// End extracting valid href
-								if(tileIterator.hasNext()){
+								if (tileIterator.hasNext()) {
 									Node tileNode = (Node) tileIterator.next();
-									if(StringUtils.isNotEmpty(tileTitle)){
+									if (StringUtils.isNotEmpty(tileTitle)) {
 										tileNode.setProperty("title", tileTitle);
 									}
-									if(StringUtils.isNotEmpty(tileDesc)){
-										tileNode.setProperty("description", tileDesc);
+									if (StringUtils.isNotEmpty(tileDesc)) {
+										tileNode.setProperty("description",
+												tileDesc);
+									}
+									Property fileSize = tileNode
+											.hasProperty("filesize") ? tileNode
+											.getProperty("filesize") : null;
+									if (fileSize != null) {
+										log.debug(fileSize.getValue().toString());
+										if (!fileSize.getValue().toString()
+												.isEmpty()) {
+											tileNode.setProperty("filesize", "");
+										}
 									}
 									Node ctaNode = tileNode.hasNode("cta") ? tileNode
 											.getNode("cta") : null;
 									if (ctaNode != null) {
-										Elements lightBoxElements = ele.select("a.c26v4-lightbox");
-										if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
-											tilePopUpNode = FrameworkUtils.getHeroPopUpNode(ctaNode);
-											if (tilePopUpNode != null) {
-												tilePopUpNode.setProperty("header", tileTitle);
+										Elements lightBoxElements = ele
+												.select("a.c26v4-lightbox");
+										tilePopUpNode = FrameworkUtils
+												.getHeroPopUpNode(ctaNode);
+										if(tilePopUpNode != null){
+										if (lightBoxElements != null
+												&& !lightBoxElements.isEmpty()) {
+												tilePopUpNode.setProperty(
+														"header", tileTitle);
+											}else {
+												sb.append(Constants.POP_UP_ELEMENT_NOT_FOUND_FOR_TILE);
 											}
-										}else{
-											sb.append("<li>Pop up node not found for tile cta</li>");
 										}
 										if (StringUtils.isNotEmpty(ctaText)) {
-											ctaNode.setProperty("linktext", ctaText);
+											ctaNode.setProperty("linktext",
+													ctaText);
 										}
 										if (StringUtils.isNotEmpty(ctaLink)) {
 											ctaNode.setProperty("url", ctaLink);
 										}
 									} else {
-										sb.append("<li>Tile bordered Component link Node not found</li>");
+										sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
 									}
 								}
 							}
-						}else{
+						} else {
 							sb.append(Constants.TILE_BORDERED_NODES_NOT_FOUND);
 						}
 					} else {
@@ -563,7 +583,20 @@ public class RBenefitVariation1 extends BaseAction {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 					log.error("Exception ", e);
 				}
-				//end of tile bordered components
+				// end of tile bordered components
+				// ---------------------------------------------------------------------------------------------------------
+				// start of checking image
+				if (benefitLeftNode.hasNode("image")) {
+					sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
+				}
+				// end of checking image
+				// ---------------------------------------------------------------------------------------------------------
+				// start of checking text component
+				if (benefitLeftNode.hasNode("text_0")) {
+					sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+				}
+				// end of checking text component
+				// --------------------------------------------------------------------------------------------------------
 			} else {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
@@ -571,8 +604,6 @@ public class RBenefitVariation1 extends BaseAction {
 			log.error("Exception ", e);
 			sb.append(Constants.UNABLE_TO_MIGRATE_PAGE);
 		}
-		sb.append("<li>Image cannot be migrated.</li>");
-		sb.append("<li>Text cannot be migrated.</li>");
 		sb.append("</ul></td>");
 		session.save();
 		return sb.toString();
