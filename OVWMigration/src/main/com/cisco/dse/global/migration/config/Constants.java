@@ -187,7 +187,7 @@ public class Constants {
 	public static final String UNABLE_TO_UPDATE_PRODUCTLISTING = "<li>Unable to update product listing page.</li>";
 
 	// TEXT_NODE_COUNT
-	public static final String TEXT_NODE_COUNT = "<li>Mismatch in taxt Node and text elements.Text Component node count is ";
+	public static final String TEXT_NODE_COUNT = "<li>Text Component node count is ";
 
 	// TEXT_ELEMENT_COUNT
 	public static final String TEXT_ELEMENT_COUNT = " and text elements on locale page is ";
@@ -681,5 +681,8 @@ public class Constants {
 
 	//MISMATCH_IN_TILELINKS_NODES	
 	public static final String MISMATCH_IN_TILELINKS_NODES = "<li>MisMatch in TILELINKS components. Additional Nodes found. Locale page has (";
+
+	// TEXT_NODE_MISMATCH
+	public static final String TEXT_NODE_MISMATCH = "<li>Mismatch in text Node and text elements.Text Component node count is ";
 
 }
