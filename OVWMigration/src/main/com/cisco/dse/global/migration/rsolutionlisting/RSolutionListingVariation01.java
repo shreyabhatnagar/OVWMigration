@@ -1,8 +1,8 @@
 package com.cisco.dse.global.migration.rsolutionlisting;
 
 /* S.No			Name		Date		Description of change
- * 1			Bhavya		21-Dec-15	Added the Java file to handle the migration of benifits variation 3 with 3url.
- * 
+ * 1			Bhavya		21-Dec-15	Added the Java file to handle the migration of responsive solutionlisting variation 1 with 2url.
+ * 2			Bhavya		06-Dec-15	Added the Java file to handle the migration of Server Unified Computing Url.
  * */
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
-		log.debug("In the translate method");
+		log.debug("In the translate method RSolutionListingVariation01");
 		log.debug("In the translate method, catType is :" + catType);
 
 		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
@@ -74,6 +74,23 @@ public class RSolutionListingVariation01 extends BaseAction{
 
 				// end set page properties.
 
+				//Check for Hero Component
+				try {
+					Elements heroElements = doc.select("div.gd-right").select("div.c39");
+					if(!heroElements.isEmpty()){
+						sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
+						log.debug("hero content is there");
+					}
+					else
+					{
+						log.debug("hero content not there");
+					}
+				}
+				catch(Exception e){
+					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
+				}
+				//Check for Hero Component
+
 				//Start of text Element
 				try {
 					migrateTextContent(doc,solutionWideNode, locale, urlMap);
@@ -82,7 +99,6 @@ public class RSolutionListingVariation01 extends BaseAction{
 					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
 				}
 				//End of text Element
-
 
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
@@ -106,8 +122,8 @@ public class RSolutionListingVariation01 extends BaseAction{
 
 		if(rightElements != null){
 			c100Elements = rightElements.select("div.gd21v1-mid").select("div.c100-pilot,div.c100-dm");
-			cc00Elements = rightElements.select("div.cc00-pilot");
-			
+			cc00Elements = rightElements.select("div.cc00-pilot,div.c00-pilot");
+
 			if(!c100Elements.isEmpty()){
 				c100 = c100Elements.first();
 				Elements h2Tags = c100.getElementsByTag("h2");
@@ -126,9 +142,22 @@ public class RSolutionListingVariation01 extends BaseAction{
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
 			}
 		}
+
+
 		Node textNode = solutionWideNode.hasNode("text") ? solutionWideNode.getNode("text"):null;
+		Node headerNode = solutionWideNode.hasNode("header") ? solutionWideNode.getNode("header"):null;
+		Elements heroElements = doc.select("div.c39");
+
 		String html = "";
-		if(textNode != null){
+		if(headerNode != null){
+			if(setTitle != null){
+				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap);
+				headerNode.setProperty("title", html);
+			}else {
+				sb.append(Constants.TEXT_DOES_NOT_EXIST);
+			}
+		}
+		else if(textNode != null){
 			if(setTitle != null){
 				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap);
 				textNode.setProperty("text", html);
@@ -146,25 +175,57 @@ public class RSolutionListingVariation01 extends BaseAction{
 				if(gdv1 != null){
 					Element gdv1Element = gdv1.first();
 					if (gdv1Element != null) {
-					if(setTitle != null){
-				String textString = setTitle.toString();
-				html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap);
-				textNode0.setProperty("text", html.replace(textString, ""));
+						if(setTitle != null){
+							String textString = setTitle.toString();
+							html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap);
+							textNode0.setProperty("text", html.replace(textString, ""));
+						}
 					}
-				}
 				}
 			}else if(!rightElements.isEmpty()){
 				Element rightElement = rightElements.first();
 				if (rightElement != null) {
-				if(setTitle != null){
-					String textString = setTitle.toString();
-					html = FrameworkUtils.extractHtmlBlobContent(rightElement, "",locale, sb, urlMap);
-					textNode0.setProperty("text", html.replace(textString, ""));
+					if(setTitle != null){
+						String textString = setTitle.toString();
+						html = FrameworkUtils.extractHtmlBlobContent(rightElement, "",locale, sb, urlMap);
+						textNode0.setProperty("text", html.replace(textString, ""));
+					}
 				}
-			}
 			}else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
 			}
+		}
+		else if (textNode != null){
+			if(!c100Elements.isEmpty()){
+				Elements gdv1 = rightElements.select("div.gd21v1-mid");
+				if(gdv1 != null){
+					Element gdv1Element = gdv1.first();
+					if (gdv1Element != null) {
+						if(setTitle != null){
+							String textString = setTitle.toString();
+							html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap);
+							textNode.setProperty("text", html.replace(textString, ""));
+						}
+					}
+				}
+			}else if(!cc00Elements.isEmpty()){
+				Element cc00Element = cc00Elements.last();
+				if (cc00Element != null) {
+					if(setTitle != null){
+						String textString = setTitle.toString();
+						String heroElement = "";
+						if(!heroElements.isEmpty()){
+							heroElement = heroElements.toString();
+						}
+						heroElements.remove();
+						html = FrameworkUtils.extractHtmlBlobContent(cc00Element, "",locale, sb, urlMap);
+						textNode.setProperty("text", html.replace(textString, ""));
+					}
+				}
+			}else {
+				sb.append(Constants.TEXT_DOES_NOT_EXIST);
+			}
+
 		}else{
 			sb.append(Constants.TEXT_NODE_NOT_FOUND);
 		}
