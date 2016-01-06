@@ -140,8 +140,10 @@ public class RServiceListingVariation2 extends BaseAction{
 						for (Element ele : spotlightElements) {
 							Element h2Element = ele.getElementsByTag("h2")
 									.first();
+							
 							if (h2Element != null) {
 								h2Text = h2Element.text();
+								log.debug("h2element :" +h2Text);
 							} else {
 								sb.append(Constants.SPOTLIGHT_HEADING_ELEMENT_NOT_FOUND);
 							}
@@ -186,6 +188,8 @@ public class RServiceListingVariation2 extends BaseAction{
 											log.debug("Before linkTitleUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 											log.debug("after linkTitleUrl" + aHref + "\n");
+											
+											
 											// End extracting valid href
 										}else{
 											h3Text = h3Element.text();
@@ -311,6 +315,11 @@ public class RServiceListingVariation2 extends BaseAction{
 											&& leftListItemsNode.hasNodes()) {
 										NodeIterator listItemsIterator = leftListItemsNode
 												.getNodes("item*");
+										int nodeCount = (int) listItemsIterator.getSize();
+										int eleCount = aElements.size();
+										if (nodeCount != eleCount) {
+											sb.append(Constants.MIS_MATCH_IN_LINKS_OF_LIST+ nodeCount+ " and "+ eleCount+ "</li>");
+										}
 										for (Element aEle : aElements) {
 											if (listItemsIterator.hasNext()) {
 												Node listItemNode = (Node) listItemsIterator
@@ -411,7 +420,7 @@ public class RServiceListingVariation2 extends BaseAction{
 										} else {
 											sb.append(Constants.LINK_TEXT_NOT_FOUND_IN_LIST);
 										}
-										if (listNode.hasNode("text")) {
+									/*	if (listNode.hasNode("text")) {
 											listItemsNode = listNode.getNode("text");
 										}
 										if (listItemsNode != null) {
@@ -419,7 +428,7 @@ public class RServiceListingVariation2 extends BaseAction{
 											listItemsNode.setProperty(
 													"text",textEle );
 												
-											}
+											}*/
 										if (aHref != null) {
 											listItemsNode.setProperty("url",
 													aHref);
@@ -499,7 +508,7 @@ public class RServiceListingVariation2 extends BaseAction{
 			// end image
 
 			if (hText != null) {
-				spotlightNode.setProperty("title", hText);
+				spotlightNode.setProperty("title", new String(hText.getBytes("UTF-16")));
 			}
 			if (aHref != null && StringUtils.isNotEmpty("aHref")) {
 				if (spotlightNode.hasNode("titleLink")) {
