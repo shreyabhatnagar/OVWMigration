@@ -126,20 +126,16 @@ public class FrameworkUtils {
 								}
 								if (StringUtils.isNotBlank(pageTitle)) {
 									pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
-									String jcrTitle = "";
 									if (jcrNode.hasProperty("jcr:title")) {
-										jcrTitle = jcrNode.getProperty("jcr:title").getValue().getString();
-									}
-
-									log.debug("JCR Title in chard is "+jcrTitle);
-									if (StringUtils.isNotBlank(pageTitle) && (!pageTitle.trim().equalsIgnoreCase(jcrTitle))) {
-										log.debug("Page title and JCR title are not the same.");
-										jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
-									} else {
-										log.debug("<li>custom head title not set </li>");
+										jcrNode.setProperty("jcr:title",pageTitle);
+										if (jcrNode.hasProperty("cisco:customHeadTitle")) {
+											jcrNode.setProperty("cisco:customHeadTitle", "");
+										}else{
+											log.debug("Custom head title property not found");
+										}
 									}
 								} else {
-									sb.append("<li>custom head title not set </li>");
+									sb.append("<li>jcr title not set </li>");
 								}
 							} else {
 								log.debug("jcr node doesn't exist");
