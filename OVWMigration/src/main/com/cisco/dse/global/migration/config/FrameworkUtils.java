@@ -292,7 +292,7 @@ public class FrameworkUtils {
 			if (imageElements != null) {
 				Element imageElement = imageElements.first();
 				if (imageElement != null) {
-					imagePath =imageElement.attr("src");
+					imagePath =imageElement.absUrl("src");
 				} 
 			} 
 		}
