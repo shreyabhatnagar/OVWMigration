@@ -75,6 +75,7 @@ import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation
 import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation02;
 import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation03;
 import com.cisco.dse.global.migration.subcat.SubCatVariation1;
+import com.cisco.dse.global.migration.subcat.SubCatVariation2;
 
 public class OVWMigration {
 
@@ -181,7 +182,10 @@ public class OVWMigration {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events"))){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
-															} else {
+															} else if(StringUtils.isNotBlank(variation) && variation.startsWith("infrastructure")){
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/network-infrastructure");
+																log.debug("pageURL is: " + pageUrl);
+															}else {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
 															}
 															urlMap.put(gLink, pageUrl);
@@ -316,7 +320,21 @@ public class OVWMigration {
 																	sb.append(msg8);
 																	sb.append("<tr><td colspan='3'>.</td></tr>");
 
-																} else if ("index-var10".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																}else if ("index-infrastructure".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg4 = "";
+																	msg4 = msg4 + "<tr>";
+																	msg4 = msg4
+																			+ new SubCatVariation2().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg4 = msg4 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg4);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+
+																} 
+																else if ("index-var10".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																	String msg9 = "";
 																	msg9 = msg9 + "<tr>";
 																	msg9 = msg9
