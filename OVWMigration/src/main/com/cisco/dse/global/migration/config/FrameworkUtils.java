@@ -206,28 +206,28 @@ public class FrameworkUtils {
 
 	public static String setContentToDAM(String path, String imgPath) {
 		log.debug("In the setContentToDAM method to migrate : " + path + " to " + imgPath);
-		
+
 		Properties prop = new Properties();
 		InputStream input = null;
 		String host = "";
 		String domain = "";
 		try{
-		String filename = "config.properties";
-		input = OVWMigration.class.getClassLoader().getResourceAsStream(filename);
-		if (input == null) {
-			log.debug("input is null");
-		}
-		// load a properties file from class path, inside static method
-		prop.load(input);
-		host = StringUtils.isNotBlank(prop.getProperty("serverurl")) ? prop.getProperty("serverurl") : "";
-		domain = StringUtils.isNotBlank(prop.getProperty("domain")) ? prop.getProperty("domain") : "";
+			String filename = "config.properties";
+			input = OVWMigration.class.getClassLoader().getResourceAsStream(filename);
+			if (input == null) {
+				log.debug("input is null");
+			}
+			// load a properties file from class path, inside static method
+			prop.load(input);
+			host = StringUtils.isNotBlank(prop.getProperty("serverurl")) ? prop.getProperty("serverurl") : "";
+			domain = StringUtils.isNotBlank(prop.getProperty("domain")) ? prop.getProperty("domain") : "";
 		}catch(Exception e){
 			log.error("Exception : ",e);
 		}
 
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(host + "/bin/services/DAMMigration?imgPath="
-						+ path+"&imgRef="+imgPath);
+				+ path+"&imgRef="+imgPath);
 		Credentials defaultcreds = new UsernamePasswordCredentials("admin",
 				"admin");
 		AuthScope authscope = new AuthScope(domain, 4502,
@@ -248,7 +248,7 @@ public class FrameworkUtils {
 			log.debug(responseObj);
 			JSONObject resObj = null;
 			if(StringUtils.isNotBlank(responseObj)){
-			resObj = new JSONObject(responseObj);
+				resObj = new JSONObject(responseObj);
 			}
 			String newImagePath = "";
 			String error = "";
@@ -303,7 +303,7 @@ public class FrameworkUtils {
 	 * @param sb
 	 *       the StringBuilder
 	 */
-/*	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
+	/*	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb) {
 		log.debug("In the extractHtmlBlobContent method.");
 		String outeHtmlText = htmlBlobElement.outerHtml();
 		String existingimagePath = "";
@@ -357,14 +357,14 @@ public class FrameworkUtils {
 		}
 		return outeHtmlText;
 	}
-	
+
 	private static Map<String, String> extractAnchorLinks(Element htmlBlobElement,
 			StringBuilder sb) {
 		Map<String, String> anchorPath =new HashMap<String, String>();
 		if (htmlBlobElement != null) {
 			Elements anchorElements = htmlBlobElement.getElementsByTag("a");
 			log.debug("&&&&&&&&&&&& null" + htmlBlobElement.outerHtml());
-//			if (anchorElements != null) {
+			//			if (anchorElements != null) {
 			if (!anchorElements.isEmpty()&&anchorElements!=null) {
 				log.debug("anchorPath not null");
 				for(Element anchorElement : anchorElements){
@@ -384,9 +384,21 @@ public class FrameworkUtils {
 		List<String> imagePath =new ArrayList<String>();
 		if (element != null) {
 			Elements imageElements = element.getElementsByTag("img");
+			boolean check = true;
 			if (imageElements != null) {
-				for(Element imgEle : imageElements){
-					imagePath.add(imgEle.attr("src"));
+				for(int i=0 ; i<imageElements.size();i++){
+					check = true;
+					for(int j=i ; j<imageElements.size();j++){
+						if(i != j){
+							if(imageElements.get(i).attr("src").equals(imageElements.get(j).attr("src"))){
+								check = false;
+								break;
+							}
+						}
+					}
+					if(check){
+						imagePath.add(imageElements.get(i).attr("src"));
+					}
 				}
 			} 
 		}
@@ -394,7 +406,7 @@ public class FrameworkUtils {
 		return imagePath;
 	}
 	//anudeep
-	
+
 	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap) {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			if (urlMap.containsKey(primaryCTALinkUrl)) {
@@ -403,7 +415,7 @@ public class FrameworkUtils {
 		}
 		return primaryCTALinkUrl;
 	}
-	
+
 	public static Node getHeroPopUpNode(Node heroNode){
 		try {
 			log.debug("In the getPopUpNode method to get the pop up node for " + heroNode.getPath());
@@ -433,5 +445,5 @@ public class FrameworkUtils {
 		}
 		return null;
 	}
-	
+
 }

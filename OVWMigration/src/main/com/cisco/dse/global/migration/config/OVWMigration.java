@@ -35,6 +35,7 @@ import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation01;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation1;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation3;
 import com.cisco.dse.global.migration.architechture.ArchitectureVariation04;
+import com.cisco.dse.global.migration.partner.PartnerVariation1;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
@@ -176,6 +177,8 @@ public class OVWMigration {
 															String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
 															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
+															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events"))){
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
 															} else {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
 															}
@@ -797,18 +800,30 @@ public class OVWMigration {
 																	sb.append(msg16);
 																	sb.append("<tr><td colspan='3'>.</td></tr>");
 																}else if ("training-events-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
-																String msg16 = "";
-																msg16 = msg16 + "<tr>";
-																msg16 = msg16
-																		+ new TrainingAndEventsVariation1().translate(
-																				host, gLink, prod, type, cattype,
-																				sheet.getSheetName(), session, urlMap);
-																msg16 = msg16 + "</tr>";
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new TrainingAndEventsVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
 
-																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																sb.append(msg16);
-																sb.append("<tr><td colspan='3'>.</td></tr>");
-															}
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}else if ("partners-var1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new PartnerVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session, urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
 
 
 
@@ -832,12 +847,12 @@ public class OVWMigration {
 					bwr.flush();
 					bwr.close();*/
 					FileOutputStream fileOutputStream = new FileOutputStream( file );
-		            OutputStreamWriter outputStreamWriter = new OutputStreamWriter( fileOutputStream, "UTF-16" );
-		            BufferedWriter bufferedWriter = new BufferedWriter( outputStreamWriter );
-		            bufferedWriter.write(sb.toString());
-					
+					OutputStreamWriter outputStreamWriter = new OutputStreamWriter( fileOutputStream, "UTF-16" );
+					BufferedWriter bufferedWriter = new BufferedWriter( outputStreamWriter );
+					bufferedWriter.write(sb.toString());
+
 					bufferedWriter.flush();
-		            bufferedWriter.close();
+					bufferedWriter.close();
 
 				}
 				workbook.close();

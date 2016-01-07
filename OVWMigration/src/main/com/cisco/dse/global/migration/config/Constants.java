@@ -696,5 +696,21 @@ public class Constants {
 
 	//POP_UP_ELEMENT_NOT_FOUND_FOR_TILE
 	public static final String POP_UP_ELEMENT_NOT_FOUND_FOR_TILE = "<li>Pop up element not found in locale page, link is there instead of pop up.</li>";
-  
+
+	//MISMATCH_IN_HTMLBLOB_ELEMENT	
+	public static final String MISMATCH_IN_HTMLBLOB_ELEMENT = "<li>MisMatch in HTMLBLOB components. Additional HTMLBLOB Elements found in Locale Page. Locale page has ( ";
+
+	//HTMLBLOB_NODES_COUNT
+	public static final String HTMLBLOB_NODES_COUNT = " )Elements and Available nodes are";
+
+	//MISMATCH_IN_HTMLBLOB_NODES	
+	public static final String MISMATCH_IN_HTMLBLOB_NODES = "<li>MisMatch in HTMLBLOB components. Additional HTMLBLOB Nodes found. Locale page has (";
+	
+	//LINK_URL_OF_SUB_DRAWER_NOT_FOUND
+	public static final String LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS = "<li>link url of sub drawer infolink doesn't exist</li>";
+	
+	//MISMATCH_IN_RIGHT_LIST_COUNT	
+	public static final String MISMATCH_IN_RIGHT_LIST_COUNT = "<li>Mismatch of ul list count in right panel</li>";
+
+
 }
