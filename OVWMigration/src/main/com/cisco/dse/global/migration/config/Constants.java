@@ -638,7 +638,7 @@ public class Constants {
 	public static final  String DRAWERCONTAINER_LINK_NOT_FOUND="<li>link of drawer container doesn't exist</li>";
 
 	//MISMATCH_IN_INFOLINKS
-	public static final  String MISMATCH_IN_INFOLINKS="<li>Mismatch in count of infolinks in subdrawer panel.</li>";  
+	public static final  String MISMATCH_IN_INFOLINKS="<li>Mismatch in count of infolinks in one of the subdrawer panels of </li>";
 
 	//TILE_BORDERED_COMPONENT_NOT_FOUND
 	public static final  String  TILE_BORDERED_COMPONENT_NOT_FOUND="<li>tile bordered component not present in the web publisher page</li>";
