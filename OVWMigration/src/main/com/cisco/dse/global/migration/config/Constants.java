@@ -705,6 +705,12 @@ public class Constants {
 
 	//MISMATCH_IN_HTMLBLOB_NODES	
 	public static final String MISMATCH_IN_HTMLBLOB_NODES = "<li>MisMatch in HTMLBLOB components. Additional HTMLBLOB Nodes found. Locale page has (";
+	
+	//LINK_URL_OF_SUB_DRAWER_NOT_FOUND
+	public static final String LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS = "<li>link url of sub drawer infolink doesn't exist</li>";
+	
+	//MISMATCH_IN_RIGHT_LIST_COUNT	
+	public static final String MISMATCH_IN_RIGHT_LIST_COUNT = "<li>Mismatch of ul list count in right panel</li>";
 
 
 }

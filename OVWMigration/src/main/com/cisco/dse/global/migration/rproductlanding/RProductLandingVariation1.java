@@ -705,11 +705,16 @@ public class RProductLandingVariation1 extends BaseAction {
 																		.getNode("image");
 																Node drawersOverviewNode = drawersPanelNode.hasNode("overview")?
 																		drawersPanelNode.getNode("overview"):null;
-																		if(drawersOverviewNode!=null){
-																			if(drawersOverviewNode.hasProperty("linktext")){
-																				sb.append(Constants.EXTRA_OVERVIEW_NODE_FOUND);
-																			}
-																		}
+																		Property includeLink = drawersPanelNode.hasProperty("includeLink") ? drawersPanelNode.getProperty("includeLink") : null ;
+																										if(drawersOverviewNode!=null){
+																											if(drawersOverviewNode.hasProperty("linktext")){
+																												if(includeLink != null){
+																													if(includeLink.getValue().getString().equals("true")){
+																														sb.append(Constants.EXTRA_OVERVIEW_NODE_FOUND);
+																													}
+																												}
+																											}
+																										}
 																String fileReference = drawersImageNode
 																		.hasProperty("fileReference") ? drawersImageNode
 																		.getProperty(
@@ -942,25 +947,35 @@ public class RProductLandingVariation1 extends BaseAction {
 
 																			String linkText = "";
 																			String linkTextUrl = "";
-																			Elements linkTextElements = si
-																					.getElementsByTag("a");
-																			if (linkTextElements != null) {
-																				Element linkTextElement = linkTextElements
-																						.first();
-																				if (linkTextElement != null) {
-																					linkText = linkTextElement
-																							.text();
-																					linkTextUrl = linkTextElement
-																							.absUrl("href");
-																					// Start extracting valid href
-																					log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																					linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
-																					log.debug("after linkTextUrl" + linkTextUrl + "\n");
-																					// End extracting valid href
-																				
-																				} else {
-																					log.debug("<li>info links anchor element not found</li>");
-																				}
+																			boolean ownTextCheck = false;
+																											Elements linkTextElements = si
+																													.getElementsByTag("a");
+																											System.out
+																													.println("ownnn text" + si.ownText());
+																											if (linkTextElements != null) {
+																												Element linkTextElement = linkTextElements
+																														.first();
+																												if (linkTextElement != null) {
+																													linkText = linkTextElement
+																															.text();
+																													linkTextUrl = linkTextElement
+																															.absUrl("href");
+																													// Start extracting valid href
+																													log.debug("Before linkTextUrl" + linkTextUrl + "\n");
+																													linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																													log.debug("after linkTextUrl" + linkTextUrl + "\n");
+																													// End extracting valid href
+																													ownTextCheck = false;
+																												} else if(!si.ownText().isEmpty()){
+																													System.out
+																															.println("intoooo ownnn text");
+																													linkText = si.ownText();
+																													linkTextUrl = "";
+																													ownTextCheck = true;
+																												}else {
+																													log.debug("<li>info links anchor element not found</li>");
+																												}
+																											
 																			} else {
 																				log.debug("<li>info links anchor element section not found</li>");
 																			}
@@ -975,7 +990,10 @@ public class RProductLandingVariation1 extends BaseAction {
 																					.isNotBlank(linkTextUrl)) {
 																				list3.add(linkTextUrl);
 
-																			}
+																			}else if(ownTextCheck){
+																												list3.add(linkTextUrl);
+																												sb.append(Constants.LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS);
+																											}
 																		}
 																		log.debug("list2.size()"
 																				+ list2.size());
