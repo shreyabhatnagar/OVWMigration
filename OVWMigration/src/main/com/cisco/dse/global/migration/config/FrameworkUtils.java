@@ -335,7 +335,7 @@ public class FrameworkUtils {
 
 				log.debug(existingimagePath +" is updated to "+updatedImgPath);
 				if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
-					outeHtmlText = outeHtmlText.replace(existingimagePath, updatedImgPath);
+					outeHtmlText = outeHtmlText.replace("\"" +existingimagePath + "\"", "\"" + updatedImgPath + "\"");
 				}
 			}
 			Map<String, String> existingAnchorPaths = null;
@@ -384,21 +384,9 @@ public class FrameworkUtils {
 		List<String> imagePath =new ArrayList<String>();
 		if (element != null) {
 			Elements imageElements = element.getElementsByTag("img");
-			boolean check = true;
 			if (imageElements != null) {
-				for(int i=0 ; i<imageElements.size();i++){
-					check = true;
-					for(int j=i ; j<imageElements.size();j++){
-						if(i != j){
-							if(imageElements.get(i).attr("src").equals(imageElements.get(j).attr("src"))){
-								check = false;
-								break;
-							}
-						}
-					}
-					if(check){
-						imagePath.add(imageElements.get(i).attr("src"));
-					}
+				for(Element imgEle : imageElements){
+					imagePath.add(imgEle.attr("src"));
 				}
 			} 
 		}
