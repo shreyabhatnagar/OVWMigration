@@ -694,9 +694,6 @@ public class Constants {
 	//LINK_DATA_NODE_FOR_LIST_NOT_FOUND
 	public static final String LINK_DATA_NODE_FOR_LIST_NOT_FOUND = "<li>Link data node not found for list component.</li>";
 
-	//POP_UP_ELEMENT_NOT_FOUND_FOR_TILE
-	public static final String POP_UP_ELEMENT_NOT_FOUND_FOR_TILE = "<li>Pop up element not found in locale page, link is there instead of pop up.</li>";
-
 	//MISMATCH_IN_HTMLBLOB_ELEMENT	
 	public static final String MISMATCH_IN_HTMLBLOB_ELEMENT = "<li>MisMatch in HTMLBLOB components. Additional HTMLBLOB Elements found in Locale Page. Locale page has ( ";
 

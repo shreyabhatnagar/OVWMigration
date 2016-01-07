@@ -558,7 +558,10 @@ public class RBenefitVariation1 extends BaseAction {
 												tilePopUpNode.setProperty(
 														"header", tileTitle);
 											}else {
-												sb.append(Constants.POP_UP_ELEMENT_NOT_FOUND_FOR_TILE);
+												if (StringUtils.isNotEmpty(ctaText)) {
+													ctaNode.setProperty("linktype",
+															"Url");
+												}
 											}
 										}
 										if (StringUtils.isNotEmpty(ctaText)) {
