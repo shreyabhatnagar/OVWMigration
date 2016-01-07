@@ -238,12 +238,16 @@ public class RProductListingVariation2 extends BaseAction{
 								NodeIterator drawerPanelsIterator = gridNarrowWideNode
 										.getNodes("container*");
 								
+
 								Node drawersPanelNode = null;
 								Elements drawersPanelElements = doc.select("div.n21,ul.n21");
 
 								if (!drawersPanelElements.isEmpty()) {
 									int count = 0;
 									for (Element drawersPanelElement : drawersPanelElements) {
+										boolean infoLinksMisMatchFlag = false;
+										boolean linkUrlNotFoundFlag = false;
+										boolean imageSrcNotFoundFlag = false;
 										String panelTitle = "";
 										String panelDescription = "";
 										Elements drawerPanelLiElements = drawersPanelElement
@@ -305,7 +309,6 @@ public class RProductListingVariation2 extends BaseAction{
 															log.debug("<li>drawer panel para element not found</li>");
 														}
 														
-														Elements n21ImagesDiv = seriesElements.select("n21-images");
 														// start image
 														String drawerImage = FrameworkUtils
 																.extractImagePath(
@@ -347,8 +350,8 @@ public class RProductListingVariation2 extends BaseAction{
 																				"fileReference",
 																				drawerImage);
 															}
-															else if(!n21ImagesDiv.isEmpty()) {
-																sb.append("<li> Image(s) are not migrated from locale page as they are rendered from CSS.</li>");
+															else{
+																imageSrcNotFoundFlag = true;
 															}
 														}
 														// end image
@@ -511,6 +514,8 @@ public class RProductListingVariation2 extends BaseAction{
 																				.setProperty(
 																						"fileReference",
 																						subDrawerImage);
+																	}else{
+																		imageSrcNotFoundFlag = true;
 																	}
 																}
 																// end image
@@ -615,7 +620,7 @@ public class RProductListingVariation2 extends BaseAction{
 																					"url",
 																					linkTitleUrl);
 																} else {
-																	sb.append(Constants.LINK_URL_OF_SUB_DRAWER_NOT_FOUND+ " For "+ title.trim());
+																	linkUrlNotFoundFlag = true;
 																	log.debug("linkurl property is not set at "
 																			+ subdrawerpanel
 																					.getPath());
@@ -697,12 +702,12 @@ public class RProductListingVariation2 extends BaseAction{
 																		if (list2
 																			.size() != subdraweritems
 																			.getSize()) {
-																		sb.append(Constants.MISMATCH_IN_INFOLINKS+" "+title);
+																		infoLinksMisMatchFlag =  true;
 																	}
 																	}
-																} else {
+																} /*else {
 																	sb.append(Constants.INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND+" For "+ title);
-																}
+																}*/
 																
 															} else {
 																misMatchFlag = false;
@@ -714,6 +719,16 @@ public class RProductListingVariation2 extends BaseAction{
 												}
 												if (!misMatchFlag) {
 													sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT+" "+panelTitle);
+												}
+												
+												if(infoLinksMisMatchFlag){
+													sb.append(Constants.MISMATCH_IN_INFOLINKS+" "+panelTitle);
+												}
+												if(linkUrlNotFoundFlag){
+													sb.append(Constants.LINK_URL_OF_SUB_DRAWER_NOT_FOUND+" "+panelTitle);
+												}
+												if(imageSrcNotFoundFlag){
+													sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 												}
 											}
 

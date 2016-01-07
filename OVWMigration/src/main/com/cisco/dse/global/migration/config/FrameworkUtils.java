@@ -194,10 +194,10 @@ public class FrameworkUtils {
 				} else {
 					return "";
 				}
-			} else {
+			} /*else {
 				sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 				log.debug("image path is blank.");
-			}
+			}*/
 		} catch (Exception e) {
 			log.error("Exception : ", e);
 		}
