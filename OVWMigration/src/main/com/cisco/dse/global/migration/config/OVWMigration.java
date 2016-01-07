@@ -54,6 +54,7 @@ import com.cisco.dse.global.migration.rroot.RProductVariation1;
 import com.cisco.dse.global.migration.rroot.RSolutionIndex;
 import com.cisco.dse.global.migration.rbenefit.RBenefitVariation1;
 import com.cisco.dse.global.migration.rproductlanding.RProductLandingVariation1;
+import com.cisco.dse.global.migration.rproductlanding.RProductLandingVariation2;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation2;
 import com.cisco.dse.global.migration.rtechnology.RTechnologyVariation1;
@@ -728,6 +729,19 @@ public class OVWMigration {
 																	msg16 = msg16 + "<tr>";
 																	msg16 = msg16
 																			+ new RProductLandingVariation1().translate(
+																					host, gLink, prod, type, cattype,
+																					sheet.getSheetName(), session,urlMap);
+																	msg16 = msg16 + "</tr>";
+
+																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																	sb.append(msg16);
+																	sb.append("<tr><td colspan='3'>.</td></tr>");
+																}
+																else if ("index-Rvar2".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																	String msg16 = "";
+																	msg16 = msg16 + "<tr>";
+																	msg16 = msg16
+																			+ new RProductLandingVariation2().translate(
 																					host, gLink, prod, type, cattype,
 																					sheet.getSheetName(), session,urlMap);
 																	msg16 = msg16 + "</tr>";
