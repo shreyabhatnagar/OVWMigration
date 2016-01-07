@@ -136,7 +136,9 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 			String aHref = "";
 			Node heroPanelNode = null;
 			Elements heroElements = doc.select("div.c50-pilot");
-			//heroElements = heroElements.select("div.frame");
+			if(!heroElements.select("div.frame").isEmpty()){
+			heroElements = heroElements.select("div.frame");
+			}
 			Node heroNode = trainingAndEventsLeftNode.hasNode("hero_large") ? trainingAndEventsLeftNode.getNode("hero_large") : null;
 
 			if (heroNode != null) {
@@ -251,7 +253,17 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 	private void migrateRightList(Document doc,Node trainingAndEventsRightNode, Session session, String locale,Map<String, String> urlMap) throws RepositoryException {
 		Elements listElements = doc.select("div.n13-pilot");
-
+		
+		//Check for the follow us
+			Elements followUs = doc.select("div.s14-pilot");
+			if(!followUs.isEmpty()){
+				sb.append(Constants.FOLLOWUS_NODE_NOT_FOUND);
+			}
+			else{
+				log.debug("Follow us does not exists");
+			}
+		//end of check for follow us
+		
 		int eleSize = listElements.size();
 		NodeIterator listNodeIterator = trainingAndEventsRightNode.hasNodes() ? trainingAndEventsRightNode.getNodes("list*") : null;
 		if (listNodeIterator != null) {
@@ -302,8 +314,11 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 			// start of handling title of list component
 			if(!h2Ele.isEmpty()){
-				h2Text = h2Ele.text();
+				h2Text = h2Ele.first().text();
 				rightListNode.setProperty("title", h2Text);
+				if(h2Ele.size() >1){
+					sb.append(Constants.MISMATCH_IN_RIGHT_LIST_COUNT);
+				}
 			} else {
 				sb.append(Constants.LIST_HEADING_COMPONENT_NOT_FOUND);
 
@@ -344,6 +359,9 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 						sb.append(Constants.LIST_ELEMENTS_COUNT_MISMATCH + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 					}
 
+				}else {
+					sb.append(Constants.LIST_HEADING_COMPONENT_NOT_FOUND);
+					log.debug("h3 text is not avalable");
 				}
 			}else {
 				if(!h3Ele.isEmpty()){
@@ -419,6 +437,9 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 						}
 						ulnodeList.setProperty("listitems",listAdd.toArray(new String[listAdd.size()]));
 					}
+				}
+					if(ulNodeIterator.hasNext()){
+					sb.append(Constants.MISMATCH_IN_RIGHT_LIST_COUNT);
 				}
 			} else {
 				sb.append(Constants.NO_LIST_NODES_FOUND);
