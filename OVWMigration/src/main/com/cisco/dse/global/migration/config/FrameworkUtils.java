@@ -335,7 +335,7 @@ public class FrameworkUtils {
 
 				log.debug(existingimagePath +" is updated to "+updatedImgPath);
 				if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
-					outeHtmlText = outeHtmlText.replace("\"" +existingimagePath + "\"", "\"" + updatedImgPath + "\"");
+					outeHtmlText = outeHtmlText.replace("\"" + existingimagePath + "\"", "\"" + updatedImgPath + "\"");
 				}
 			}
 			Map<String, String> existingAnchorPaths = null;
