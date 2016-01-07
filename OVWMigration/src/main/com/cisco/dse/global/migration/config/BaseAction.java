@@ -17,7 +17,7 @@ public abstract class BaseAction {
 			log.debug("Inside the getConnection method.");
 			Connection connection = null;
 			for (int retry=0; retry<10; retry++) {
-				log.debug("Trying to establish connection. Connection retry count is : "+retry);
+				log.debug("Trying to establish connection to "+loc+". Connection retry count is : "+retry);
 				connection = Jsoup.connect(loc);
 				if (connection != null) {
 					try {

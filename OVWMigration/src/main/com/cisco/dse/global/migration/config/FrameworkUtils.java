@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -433,5 +435,149 @@ public class FrameworkUtils {
 		}
 		return null;
 	}
-
+	public static String UpdateHyperLinksInHtml(String htmlWEBContent,
+			String htmlWEMContent, Document doc, StringBuilder sb) {
+		log.debug("In the UpdateHyperLinksInHtml method");
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		Element wemElement = null;
+		if (doc != null) {
+			//-------------------------------------------------------------------------------------------------------------------------------
+			//start of Logic to retrieve all the hyper links text and url and save in a map.
+			
+			Element webElement = doc.html(htmlWEBContent);
+			String title = "";
+			Elements titleElements = webElement.select("h2.bdr-1");
+			Elements titleLinks = webElement.select("div.c00v0-pilot");
+			
+			
+			if(titleElements != null && !titleElements.isEmpty()){
+				Element titleElement = titleElements.first();
+				title = titleElement.ownText();
+			}else{
+				log.debug("No title found in web content with class 'bdr-1'");
+			}
+			
+			String aHeadingText = "";
+			String aHeadingLink = "";
+			if(titleLinks != null && !titleLinks.isEmpty()){
+				Element titleLink = titleLinks.first();
+				Elements aElements = titleLink.getElementsByTag("a");
+				if(aElements != null && !aElements.isEmpty()){
+					Element aElement = aElements.first();
+					aHeadingText = aElement.ownText();
+					aHeadingLink = aElement.attr("href");
+				}else{
+					log.debug("No links found in the heading section.");
+				}
+			}else{
+				log.debug("No links found in the heading section with in the class 'c00v0-pilot'.");
+			}
+			
+			Elements liElements = webElement.getElementsByTag("li");
+			if(liElements != null && !liElements.isEmpty()){
+				for(Element ele : liElements){
+					Elements aElements = ele.getElementsByTag("a");
+					if(aElements != null && !aElements.isEmpty()){
+						Element aElement = aElements.first();
+						String atext = aElement.ownText();
+						String aLink = aElement.attr("href");
+						if(StringUtils.isNotBlank(atext)){
+							if(StringUtils.isNotBlank(aLink)){
+								map.put(atext, aLink);
+							}else{
+								log.debug("link href is blank in the element : "+aElement.html());
+							}
+						}else{
+							log.debug("link text is blank in the element : "+aElement.html());
+						}
+					}else{
+						log.debug("No a elements found in source html content.");
+					}
+				}
+			}else{
+				log.debug("No li elements found in source html content.");
+			}
+			
+			//end of Logic to retrieve all the hyper links text and url and save in a map.
+			//-------------------------------------------------------------------------------------------------------------------------------
+			//start of logic to update all the links in the wem html content from the map.
+			wemElement = doc.html(htmlWEMContent);
+			Elements productContentElements = wemElement.select("div.product-content");
+			if(productContentElements != null && productContentElements.isEmpty()){
+				log.debug("'product-content' class not found, searching for li elements.");
+				productContentElements = wemElement.getElementsByTag("li");
+			}
+			
+			int i = 0;
+			if(i<productContentElements.size()){
+				Set<String> keys = map.keySet();
+				for(String key : keys){
+					String val = map.get(key);
+					Element productElement = productContentElements.get(i);
+					Elements anchorElements = productElement.getElementsByTag("a");
+					
+					if(anchorElements != null && !anchorElements.isEmpty()){
+						Element anchorElement = anchorElements.first();
+						anchorElement.attr("href", val);
+						anchorElement.text(key);
+					}else{
+						log.debug("No Anchor element found in WEM Content.");
+					}
+					i++;
+				}
+			}else{
+				log.debug("No elements found in the WEM Content with class 'product-content' or li tag.");
+			}
+			int webeleSize;
+			int wemeleSize;
+			if(( webeleSize = liElements.size())!=(wemeleSize = productContentElements.size())){
+				sb.append("<li>size of links miss match "+webeleSize+" not equal to "+wemeleSize+".</li>");
+			}
+			//end of logic to update all the links in the wem html content from the map.
+			//-------------------------------------------------------------------------------------------------------------------------------
+			//Start of log to update the title of the content.
+			
+			log.debug("Title of the web page content : "+title);
+			titleElements = wemElement.select("span.arrow");
+			if(titleElements != null && !titleElements.isEmpty() && StringUtils.isNotBlank(title)){
+				Element titleElement = titleElements.first();
+				titleElement.parent().text(title);
+			}else{
+				log.debug("No title foundin wem content with class 'arrow'");
+			}
+			
+			
+			log.debug("Title link text of the web page content : "+aHeadingText);
+			log.debug("Title link href of the web page content : "+aHeadingLink);
+			
+			Elements titleLinkElements = wemElement.select("span.view-all-link");
+			if(titleLinkElements != null && !titleLinkElements.isEmpty()){
+					Element titleLinkElement = titleLinkElements.first();
+					Elements titleaElements = titleLinkElement.getElementsByTag("a");
+					if(titleaElements != null && !titleaElements.isEmpty()){
+						Element titleaElement = titleaElements.first();
+						if(StringUtils.isNotBlank(aHeadingText)){
+							titleaElement.text(aHeadingText);
+						}else{
+							log.debug("No heading link text found in web content.");
+						}
+						if(StringUtils.isNotBlank(aHeadingLink)){
+							titleaElement.attr("href", aHeadingLink);
+						}else{
+							log.debug("No heading link found in web content.");
+						}
+						
+						
+					}else{
+						log.debug("no anchor links found in the wem content.");
+					}
+			}else{
+				log.debug("No element found with the class 'view-all-link' in wem content.");
+			}
+			//End of log to update the title of the content.
+		} else {
+			log.debug("doc is null.");
+		}
+		return wemElement.outerHtml();
+	}
 }
