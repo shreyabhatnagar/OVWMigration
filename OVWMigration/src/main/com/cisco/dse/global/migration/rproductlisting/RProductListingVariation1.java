@@ -129,7 +129,7 @@ public class RProductListingVariation1 extends BaseAction{
 					//	Element ele = hElements.first();
 						if (ele != null) {
 							log.debug("text property element is !: " + ele);
-								h2TagVal = ele.html();
+								h2TagVal = ele.outerHtml();
 								if(textNodeOne != null){
 									textNodeOne.setProperty("text", h2TagVal);
 								log.debug("h2TagVal property!: " + h2TagVal);
