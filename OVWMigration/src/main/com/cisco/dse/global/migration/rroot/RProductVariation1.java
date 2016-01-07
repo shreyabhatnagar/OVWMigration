@@ -14,6 +14,7 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
@@ -306,7 +307,18 @@ public class RProductVariation1 extends BaseAction {
 							Node twoThird = twoThirdNodes.nextNode();
 							Node htmlBlob = twoThird.hasNode("htmlblob")?twoThird.getNode("htmlblob"):null;
 							if(htmlBlob != null){
-								htmlBlob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i), "", locale, sb, urlMap)+FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i+1), "", locale, sb, urlMap));
+								String htmlWEBContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i), "", locale, sb, urlMap)+FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i+1), "", locale, sb, urlMap);
+								String htmlWEMContent = htmlBlob.hasProperty("html")?htmlBlob.getProperty("html").getString():"";
+								if(StringUtils.isNotBlank(htmlWEMContent)){
+									if(StringUtils.isNotBlank(htmlWEBContent)){
+										htmlWEBContent = FrameworkUtils.UpdateHyperLinksInHtml(htmlWEBContent, htmlWEMContent, doc, sb);//first parameter is source and second is target.
+									}else{
+										log.debug("html Content in WEB is blank.");
+									}
+								}else{
+									log.debug("html Content in WEM is blank at : "+htmlBlob.getPath());
+								}
+								htmlBlob.setProperty("html", htmlWEBContent);
 							}else{
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 							}
