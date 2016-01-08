@@ -143,13 +143,17 @@ public class RProductLandingVariation1 extends BaseAction {
 				String primaryCTALinkText = "";
 				String primaryCTALinkUrl = "";
 				try {
-					Elements primaryCTAElements = doc.select("div.c47-pilot");
+					Elements primaryCTAElements = doc.select("div.c47-pilot,div.ovt-in");
 					if (primaryCTAElements != null) {
-						Element primaryCTAElement = doc.select("div.c47-pilot")
+						Element primaryCTAElement = doc.select("div.c47-pilot,div.ovt-in")
 								.first();
 						if (primaryCTAElement != null) {
 							Elements titleElements = primaryCTAElement
 									.getElementsByTag("h3");
+							if(!titleElements.isEmpty()){
+								titleElements = primaryCTAElement
+										.getElementsByTag("h2");
+							}
 							if (titleElements != null) {
 								Element titleElement = titleElements.first();
 								if (titleElement != null) {
@@ -174,7 +178,8 @@ public class RProductLandingVariation1 extends BaseAction {
 							}
 							Elements ctaLinksElements = primaryCTAElement
 									.select("ul.cta-links");
-							if (ctaLinksElements != null) {
+							Elements ctaOvtLinkElements = doc.select("div.ovt-in");
+							if (!ctaLinksElements.isEmpty()) {
 								Elements ctaLiElements = ctaLinksElements
 										.select("li.cta");
 								if (ctaLiElements != null) {
@@ -210,7 +215,28 @@ public class RProductLandingVariation1 extends BaseAction {
 								} else {
 									log.debug("<li>Primary CTA Links not found </li>");
 								}
-							} else {
+							} else if(!ctaOvtLinkElements.isEmpty()){
+								Element ctaOvtLinkElement = ctaOvtLinkElements.last();
+								if(ctaOvtLinkElement != null){
+								Element anchorOvtElement = ctaOvtLinkElement.getElementsByTag("a").last();
+								if(anchorOvtElement != null){
+									primaryCTALinkText = anchorOvtElement
+											.text();
+									primaryCTALinkUrl = anchorOvtElement
+											.absUrl("href");
+									log.debug("primaryCTALinkUrl" + primaryCTALinkText + "\n");
+									// Start extracting valid href
+									log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+									primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+									log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
+									// End extracting valid href
+								}else {
+									log.debug("<li>Primary CTA Link anchor tag not found </li>");
+								}
+								}else {
+									log.debug("<li>Primary CTA Link anchor tag not found </li>");
+								}
+							}else {
 								log.debug("<li>Primary CTA Links section not found </li>");
 							}
 							log.debug("primaryCTATitle" + primaryCTATitle
@@ -973,7 +999,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																													linkTextUrl = "";
 																													ownTextCheck = true;
 																												}else {
-																													log.debug("<li>info links anchor element not found</li>");
+																													log.debug(Constants.LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS);
 																												}
 																											
 																			} else {
@@ -992,7 +1018,7 @@ public class RProductLandingVariation1 extends BaseAction {
 
 																			}else if(ownTextCheck){
 																												list3.add(linkTextUrl);
-																												sb.append(Constants.LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS);
+																												sb.append("LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS");
 																											}
 																		}
 																		log.debug("list2.size()"
