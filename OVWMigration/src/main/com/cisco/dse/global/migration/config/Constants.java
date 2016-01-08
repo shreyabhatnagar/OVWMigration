@@ -708,6 +708,12 @@ public class Constants {
 	
 	//MISMATCH_IN_RIGHT_LIST_COUNT	
 	public static final String MISMATCH_IN_RIGHT_LIST_COUNT = "<li>Mismatch of ul list count in right panel</li>";
+	
+	//EXTRA_ICON_FOUND_IN_RIGHT_LIST
+	public static final String EXTRA_ICON_FOUND_IN_LIST = "<li>Extra icon found in the list</li>";
+	
+	//EXTRA_LOCK_IMG_FOUND_IN_LIST
+	public static final String EXTRA_LOCK_IMG_FOUND_IN_LIST = "<li>Extra Lock image found in the list</li>";
 
 
 }
