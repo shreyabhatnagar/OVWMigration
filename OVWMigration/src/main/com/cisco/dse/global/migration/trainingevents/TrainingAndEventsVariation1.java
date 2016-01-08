@@ -418,6 +418,24 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 								sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
 								log.error("Exception : ", e);
 							}
+							
+							//fix for new win icon
+							Elements newwinCheck = li.select("span.newwin");
+							if(!newwinCheck.isEmpty()){
+								log.debug("extra new win icon found");
+								sb.append(Constants.EXTRA_ICON_FOUND_IN_LIST);
+							}
+							
+							//check for the lock icon
+							Elements imgInList = li.getElementsByTag("img");
+							if(!imgInList.isEmpty()){
+								String altImg = imgInList.attr("alt");
+								if(altImg.equals("lock_icon")){
+									log.debug("lock icon found in the list");
+									sb.append(Constants.EXTRA_LOCK_IMG_FOUND_IN_LIST);
+								}
+							}
+							
 							if(!li.getElementsByTag("a").isEmpty()){
 								Element a = li.getElementsByTag("a").first();
 								// Start extracting valid href
