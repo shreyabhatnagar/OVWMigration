@@ -212,7 +212,7 @@ public class SubCatVariation1 extends BaseAction {
 								if (heroPanelNode != null) {
 									Node heroPanelPopUpNode = null;
 									Elements lightBoxElements = ele.select(
-											"div.c50-image").select(
+											"p.cta-link").select(
 											"a.c26v4-lightbox");
 									if (StringUtils.isNotBlank(heroTitle)) {
 										heroPanelNode.setProperty("title",

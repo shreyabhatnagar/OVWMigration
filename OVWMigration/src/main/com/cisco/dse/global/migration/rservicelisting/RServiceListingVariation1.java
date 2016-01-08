@@ -207,7 +207,7 @@ public class RServiceListingVariation1 extends BaseAction {
 									}
 								} else if (sCount == 5) {
 									pText = spotlightElements.select("p")
-											.first().ownText();
+											.last().ownText();
 									sb.append("<li>paragarph " + pText
 											+ "extra in web page</li>");
 								}

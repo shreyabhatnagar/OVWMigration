@@ -96,7 +96,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						StringBuilder textContent = new StringBuilder();
 						List<String> list = new ArrayList<String>();
 						Elements divElements = doc.select("div.gd22v2-left")
-								.select("div.c00-pilot,div.c100-dm");
+								.select("div.c00-pilot,div.c100-dm,div.c100-pilot");
 						if(divElements.size()==1){
 							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
@@ -179,7 +179,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					try {
 						// getting middle content
 						Element listElements = doc.select("div.parbase")
-								.select("div.c00-pilot,div.c100-dm").last();
+								.select("div.c00-pilot,div.c100-dm,div.c100-pilot").last();
 						if (listElements != null) {
 							int childrenSize = listElements.children().size();
 							List<String> headerList = new ArrayList<String>();
@@ -325,7 +325,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					try {
 						String textProp = null;
 						Elements textElements = doc
-								.select("div.c00-pilot,div.c100-dm");
+								.select("div.c00-pilot,div.c100-dm,div.c100-pilot");
 						if (textElements != null) {
 							NodeIterator textNodeIterator = architectureLeftNode
 									.getNodes("text*");
@@ -525,9 +525,13 @@ public class ArchitectureVariation04 extends BaseAction {
 							.getNodes("tile_bordered*");
 					int nodeSize = (int) tileBorderedNodeIterator.getSize();
 					if (eleSize != nodeSize) {
-						sb.append(Constants.MIS_MATCH_OF_TILE_BORDERED_COMPONENTS);
-						log.debug("Could not migrate  tilebordered node. Count mis match");
-					}
+							String message = Constants.TILE_BORDERED_ELEMENT_COUNT_MISMATCH;
+							message = message.replace("(<ele>)",
+									Integer.toString(eleSize));
+							message = message.replace("(<node>)",
+									Integer.toString(nodeSize));
+							sb.append(message);
+						}
 					for (Element ele : tileBorderedElements) {
 						if (tileBorderedNodeIterator.hasNext()) {
 							Node tileNode = (Node) tileBorderedNodeIterator
