@@ -535,7 +535,7 @@ public class OVWMigration {
 																	sb.append(msg19);
 																	sb.append("<tr><td colspan='3'>.</td></tr>");
 																}
-																else if ("solutions-listing-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																else if ("solution-listing-var9".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																	String msg15 = "";
 																	msg15 = msg15 + "<tr>";
 																	msg15 = msg15
