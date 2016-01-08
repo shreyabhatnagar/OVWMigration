@@ -272,22 +272,37 @@ public class SubCatVariation2 extends BaseAction{
 					
 					String titeText = "";
 					String callText = "";
-					Element contactUsElements = doc.select("div.f-holder").first();
+					Element contactUsElement = doc.select("div.f-holder").first();
+					
+					
 					Node letUsHelpNode = topRightGridNode.hasNode("letushelp")?topRightGridNode.getNode("letushelp"):null;
 					
-					if(contactUsElements != null){
-						Elements titleElem = contactUsElements.getElementsByTag("h3");
-						Elements liElements = contactUsElements.getElementsByTag("li");
+					if(contactUsElement != null){
+						Elements titleElem = contactUsElement.getElementsByTag("h3");
+						Elements liElements = contactUsElement.getElementsByTag("li");
+						Elements imgElements = contactUsElement.getElementsByTag("img");
 						if(!titleElem.isEmpty()){
 							titeText = titleElem.text();
 						}
+						else{
+							sb.append("<li> Contact Us Element title not found on locale page.</li>");
+						}
+						log.debug("call text is : "+callText);
 						if(!liElements.isEmpty()){
-							callText = liElements.first().outerHtml();
-							
+							callText = liElements.first().html();
+							log.debug("call text is : "+callText);
+							if(liElements.size() > 1){
+								sb.append("<li> Contact Us Element has extra content(links/numbers) which cannot be migrated as English Page does not have.</li>");
+							}
 						}
 						else{
-							sb.append("<li> Contact Us Element title not found. </li>");
+							sb.append("<li> Contact Us Element Call text not found on locale page.</li>");
 						}
+						
+						if(!imgElements.isEmpty()){
+							sb.append("<li> Contact Us Element has extra image(s) which cannot be migrated as English Page does not have.</li>");
+						}
+						
 						
 					}else{
 						sb.append("<li> Contact Us Element Not Found on locale page. </li>");
@@ -295,6 +310,9 @@ public class SubCatVariation2 extends BaseAction{
 					if(letUsHelpNode != null){
 						letUsHelpNode.setProperty("title",titeText);
 						letUsHelpNode.setProperty("calltext",callText);
+						if(letUsHelpNode.hasProperty("timetext")){
+							sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
+						}
 					}
 					
 					
@@ -640,6 +658,7 @@ public class SubCatVariation2 extends BaseAction{
 
 				
 				try{
+					Node spotLightPopUpNode = null;
 					log.debug("Start of spotlight..");
 					Elements spElem = doc.select("div.c11-pilot");
 					Node spNode = bottomMostLeftGridNode.hasNode("spotlight_medium_0")?bottomMostLeftGridNode.getNode("spotlight_medium_0"):null;
@@ -649,6 +668,21 @@ public class SubCatVariation2 extends BaseAction{
 							Element pEle = sp.getElementsByTag("p").first();
 							Element aEle = sp.select("a.cta").first();
 								if(spNode != null){
+
+									Elements lightBoxElements = sp
+											.select("a.c26v4-lightbox");
+									spotLightPopUpNode = FrameworkUtils
+											.getHeroPopUpNode(spNode);
+									if (spotLightPopUpNode != null) {
+										if (lightBoxElements != null
+												&& !lightBoxElements.isEmpty()) {
+											spotLightPopUpNode.setProperty(
+													"popupHeader", h2Ele.text());
+										} else {
+											sb.append("<li>Pop up element not found in locale page for spotlight link</li>");
+										}
+									}
+								
 								spNode.setProperty("title",h2Ele.text());
 								spNode.setProperty("description",pEle.text());
 								// start image
@@ -668,12 +702,6 @@ public class SubCatVariation2 extends BaseAction{
 								// end image
 								if(aEle!=null){
 									spNode.setProperty("linktext",aEle.text());
-									Node spCta = spNode.hasNode("cta")?spNode.getNode("cta"):null;
-									if(spCta!=null){
-										spCta.setProperty("url",aEle.attr("href"));
-									}else{
-										sb.append(Constants.CTA_NOT_AVAILABLE);
-									}
 								}
 							}
 						}
