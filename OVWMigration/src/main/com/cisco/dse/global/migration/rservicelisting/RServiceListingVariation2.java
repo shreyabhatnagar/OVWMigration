@@ -37,6 +37,8 @@ public class RServiceListingVariation2 extends BaseAction{
 	Document doc;
 	StringBuilder sb = new StringBuilder(1024);
 	static Logger log = Logger.getLogger(RServiceListingVariation2.class);
+	
+	int noImageCount = 0;
 
 	public String translate(String host, String loc, String prod, String type,
 			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
@@ -170,6 +172,9 @@ public class RServiceListingVariation2 extends BaseAction{
 								sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 							}
 						}
+						if(noImageCount>=1){
+							sb.append(noImageCount+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+						}
 					} else {
 						int sCount = 1;
 						spotlightElements = doc.select("div.gd-right").select(
@@ -222,6 +227,9 @@ public class RServiceListingVariation2 extends BaseAction{
 											+ "extra in web page</li>");
 								}
 								sCount++;
+							}
+							if(noImageCount>=1){
+								sb.append(noImageCount+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 							}
 						} else {
 							sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
@@ -501,6 +509,8 @@ public class RServiceListingVariation2 extends BaseAction{
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference",
 							spotLightImage);
+				}else{
+					noImageCount++;
 				}
 			} else {
 				sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);

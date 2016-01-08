@@ -38,6 +38,8 @@ public class ServiceListingVariation02 extends BaseAction {
 	Document doc;
 
 	StringBuilder sb = new StringBuilder(1024);
+	
+	private int noImageCount = 0;
 
 	String footerLinks = "{\"linktext\":\"<aaa>\",\"linkurl\":\"<bbb>\"}";
 
@@ -116,7 +118,7 @@ public class ServiceListingVariation02 extends BaseAction {
 						NodeIterator spotLightNodes = serviceListingMidNode.hasNodes()?serviceListingMidNode.getNodes("spotlight_large*"):null;
 								if(spotLightNodes != null){
 									int spNodeSize = (int)spotLightNodes.getSize();
-
+									
 									if(spEleSize == spNodeSize){
 										for(Element ele : spotLightEle){
 											Node spotLightComponentNode = (Node) spotLightNodes.next();
@@ -138,6 +140,9 @@ public class ServiceListingVariation02 extends BaseAction {
 											setSpotlight(ele ,spotLightComponentNode,locale,urlMap);
 										}
 										sb.append(Constants.SPOTLIGHT_ELEMENT_COUNT+spEleSize+Constants.SPOTLIGHT_NODE_COUNT+spNodeSize+"</li>");
+									}
+									if(noImageCount>=1){
+										sb.append(noImageCount+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 									}
 								}
 								else{
@@ -431,6 +436,8 @@ public class ServiceListingVariation02 extends BaseAction {
 				log.debug("spotLightImage " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
+				}else{
+					noImageCount++;
 				}
 			} else {
 				sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);

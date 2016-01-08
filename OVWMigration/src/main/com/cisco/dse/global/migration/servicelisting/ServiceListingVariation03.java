@@ -134,6 +134,7 @@ public class ServiceListingVariation03 extends BaseAction {
 
 							}
 							// Copy of content
+							int noImageSize = 0;
 							for (Element ele : spotLightElements) {
 								if(spoLightNodeIterator.hasNext()){
 								Node spotLightComponentNode = (Node) spoLightNodeIterator
@@ -166,6 +167,8 @@ public class ServiceListingVariation03 extends BaseAction {
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
+										}else{
+											noImageSize++;
 										}
 									} else {
 										sb.append("<li>spotlight image node doesn't exist</li>");
@@ -199,6 +202,9 @@ public class ServiceListingVariation03 extends BaseAction {
 								} 
 
 							}
+							}
+							if(noImageSize>=1){
+								sb.append(noImageSize+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 							}
 						} else {
 							sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
