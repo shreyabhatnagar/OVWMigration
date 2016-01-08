@@ -76,6 +76,7 @@ import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation02;
 import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation03;
 import com.cisco.dse.global.migration.subcat.SubCatVariation1;
 import com.cisco.dse.global.migration.subcat.SubCatVariation2;
+import com.cisco.dse.global.migration.subcat.SubCatVariation3;
 
 public class OVWMigration {
 
@@ -861,6 +862,18 @@ public class OVWMigration {
 																msg16 = msg16 + "<tr>";
 																msg16 = msg16
 																		+ new SubCatVariation1().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}else if ("index-subcatvar3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new SubCatVariation3().translate(
 																				host, gLink, prod, type, cattype,
 																				sheet.getSheetName(), session, urlMap);
 																msg16 = msg16 + "</tr>";
