@@ -113,7 +113,7 @@ public class BuyersGuideVariation02 extends BaseAction{
 						
 						Elements tabSetElements = htmlBlobElements.select("div.tab");
 					
-						Elements elemts = htmlBlobElements.select("div.n12-pilot");
+						Elements elemts = htmlBlobElements.select("div.n12-pilot,div.item");
 						Element textDesc= htmlBlobElements.select("div.c00-pilot").last();
 						
 						int htmlEleSize = tabSetElements.size();
@@ -156,19 +156,62 @@ public class BuyersGuideVariation02 extends BaseAction{
 											
 											
 											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap);
-											
+										   // log.debug("rawhtml:"+elemts.get(2).html());
 											htmlblobNode.setProperty("html",rawHtml );
 											
 											i++;
 										}
 										Node textNode = parsysNode.hasNode("text")?parsysNode.getNode("text"):null;
 										if(textNode!=null){
+											
 											textNode.setProperty("text",pEle.text());
 										}
 									}
 								}
 							}
 													log.debug("After setBlob");
+						}
+						else{
+							log.debug("Next one");
+							int i=0;
+							for(Element ele : tabSetElements){
+								
+								Element aEle = ele.getElementsByTag("a").first();
+							//	Elements pEle = textDesc.getElementsByTag("p");
+								
+								//String tabId = ele.getElementsByTag("td").attr("id");
+								Node htmlNode = null;
+								if(htmlNodeIterator.hasNext()){
+									htmlNode = (Node)htmlNodeIterator.next();
+								
+									htmlNode.setProperty("tabTitle",aEle.text());
+									//htmlNode.setProperty("tabID",tabId);
+									
+									
+									
+									Node parsysNode = htmlNode.hasNode("c17v1-parsys-forTabContent")?htmlNode.getNode("c17v1-parsys-forTabContent"):null;
+									if(parsysNode!=null){
+										log.debug("inside second loop");
+										Node htmlblobNode = parsysNode.hasNode("htmlblob")?parsysNode.getNode("htmlblob"):null;
+										if(htmlblobNode!=null){
+											
+											
+											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap);
+											
+											htmlblobNode.setProperty("html",rawHtml );
+											
+											i++;
+										}
+										/*Node textNode = parsysNode.hasNode("text")?parsysNode.getNode("text"):null;
+										if(textNode!=null){
+											textNode.setProperty("text",pEle.text());
+										}*/
+									}
+								}
+							}
+													
+							sb.append("mismatch as Html blob size is:"+htmlEleSize +"and node size is:" +htmlNodeSize);
+							log.debug("After setBlob");
 						}
 						}
 						

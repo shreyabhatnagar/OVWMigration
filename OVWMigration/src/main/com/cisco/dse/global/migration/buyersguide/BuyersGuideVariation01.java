@@ -98,7 +98,7 @@ public class BuyersGuideVariation01 extends BaseAction {
 					log.debug("Started migrating HtmlBlob content.");
 					//Elements rawElements=doc.getElementsByTag("html");
 					//Elements images=doc.getElementsByTag("img");
-					Element tabElements = doc.select("div.gd01-pilot,div.sitecopy").first();
+					Element tabElements = doc.select("div.gd01-pilot,div.sitecopy,div.gd21-pilot").first();
 					
 					/*if (rawElements != null
 							&& !rawElements.isEmpty()) {

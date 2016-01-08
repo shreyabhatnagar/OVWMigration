@@ -87,13 +87,13 @@ public class BuyersGuideVariation03 extends BaseAction {
 						log.debug("Started migrating HtmlBlob content.");
 						
 						
-						Element htmlBlobLeftElement = doc.select("table#framework-base-content").first();
+						Element htmlBlobLeftElement = doc.select("div.gd12-pilot ").first();
 						
 						
 						if (htmlBlobLeftElement != null) {
 //						htmlBlobLeftElement = htmlBlobLeftElement.removeClass("div.clearfix");
-							htmlBlobLeftElement.select("div.clearfix").remove().first();
-							htmlBlobLeftElement.select("div#top_r,div.fw-cisco-assistant").remove().first();
+							/*htmlBlobLeftElement.select("div.clearfix").remove().first();
+							htmlBlobLeftElement.select("div#top_r,div.fw-cisco-assistant").remove().first();*/
 						 rawHtml1 = FrameworkUtils.extractHtmlBlobContent(htmlBlobLeftElement, "", locale, sb, urlMap);
 //					rawHtml1 = htmlBlobLeftElement.outerHtml();
 				
