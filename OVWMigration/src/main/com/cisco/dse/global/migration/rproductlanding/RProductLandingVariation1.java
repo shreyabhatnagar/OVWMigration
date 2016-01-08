@@ -999,7 +999,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																													linkTextUrl = "";
 																													ownTextCheck = true;
 																												}else {
-																													log.debug(Constants.LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS);
+																													log.debug("<li>info links anchor element not found</li>");
 																												}
 																											
 																			} else {
@@ -1018,7 +1018,7 @@ public class RProductLandingVariation1 extends BaseAction {
 
 																			}else if(ownTextCheck){
 																												list3.add(linkTextUrl);
-																												sb.append("LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS");
+																												sb.append(Constants.LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS);
 																											}
 																		}
 																		log.debug("list2.size()"
