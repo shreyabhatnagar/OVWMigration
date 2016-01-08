@@ -508,7 +508,7 @@ public class RServiceListingVariation2 extends BaseAction{
 			// end image
 
 			if (hText != null) {
-				spotlightNode.setProperty("title", new String(hText.getBytes("UTF-16")));
+				spotlightNode.setProperty("title",hText);
 			}
 			if (aHref != null && StringUtils.isNotEmpty("aHref")) {
 				if (spotlightNode.hasNode("titleLink")) {
