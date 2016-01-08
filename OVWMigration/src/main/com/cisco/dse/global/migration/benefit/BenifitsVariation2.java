@@ -171,6 +171,7 @@ public class BenifitsVariation2 extends BaseAction{
 						Node spNode = null;
 						log.debug("Spotlight Element size : "+spElem.size()+"Spotlight Node size : "+spNodeIterator.getSize());
 						if(!spElem.isEmpty()){
+							int noImageCount = 0;
 							for(Element sp : spElem){
 								Element h2Ele = sp.getElementsByTag("h2").first();
 								Element pEle = sp.getElementsByTag("p").first();
@@ -189,6 +190,8 @@ public class BenifitsVariation2 extends BaseAction{
 										log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											imageNode.setProperty("fileReference" , spotLightImage);
+										}else{
+											noImageCount++;
 										}
 									}else{
 										sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
@@ -204,6 +207,10 @@ public class BenifitsVariation2 extends BaseAction{
 										}
 									}
 								}
+							}
+							if(noImageCount>=1){
+								sb.append(noImageCount+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+								log.debug("image path is blank.");
 							}
 						}else{
 							sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
