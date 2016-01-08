@@ -25,12 +25,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.cisco.dse.global.migration.benefit.Benefits;
 import com.cisco.dse.global.migration.benefit.BenefitsVariation03;
 import com.cisco.dse.global.migration.benefit.BenifitsVariation2;
-import com.cisco.dse.global.migration.benefit.BenifitsVariation4;
-import com.cisco.dse.global.migration.benefit.ServiceProviderBenefits;
-import com.cisco.dse.global.migration.benefit.UnifiedComputingBenefits;
 import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation01;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation1;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation3;
@@ -214,33 +210,7 @@ public class OVWMigration {
 																log.debug("prod : " + prod);
 
 
-																if ("benefit-var1".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
-																	String msg1 = "";
-																	msg1 = msg1 + "<tr>";
-																	msg1 = msg1
-																			+ new UnifiedComputingBenefits().translate(
-																					host, gLink, prod, type,
-																					sheet.getSheetName(), session);
-																	msg1 = msg1 + "</tr>";
-
-																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																	sb.append(msg1);
-																	sb.append("<tr><td colspan='3'>.</td></tr>");
-
-																} else if ("benefit-var2".equalsIgnoreCase(prod)&&"YES".equalsIgnoreCase(check)) {
-																	String msg2 = "";
-																	msg2 = msg2 + "<tr>";
-																	msg2 = msg2
-																			+ new ServiceProviderBenefits().translate(
-																					host, gLink, prod, type,
-																					sheet.getSheetName(), session);
-																	msg2 = msg2 + "</tr>";
-
-																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																	sb.append(msg2);
-																	sb.append("<tr><td colspan='3'>.</td></tr>");
-
-																} else if ("benefit-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																 if ("benefit-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																	String msg3 = "";
 																	msg3 = msg3 + "<tr>";
 																	msg3 = msg3
@@ -589,19 +559,7 @@ public class OVWMigration {
 																	sb.append(msg14);
 																	sb.append("<tr><td colspan='3'>.</td></tr>");
 																}
-																else if ("benefits-var4".equals(type)&&"YES".equalsIgnoreCase(check)) {
-																	String msg20 = "";
-																	msg20 = msg20 + "<tr>";
-																	msg20 = msg20
-																			+ new BenifitsVariation4().translate(
-																					host, gLink, prod, type, cattype,
-																					sheet.getSheetName(), session,urlMap);
-																	msg20 = msg20 + "</tr>";
-
-																	sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
-																	sb.append(msg20);
-																	sb.append("<tr><td colspan='3'>.</td></tr>");
-																}
+																
 																else if ("architecture-var3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																	String msg16 = "";
 																	msg16 = msg16 + "<tr>";
