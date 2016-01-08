@@ -41,7 +41,7 @@ public class Constants {
 	public static final String SPOTLIGHT_NODE_COUNT = "<li>Spotlight Component node count is ";
 
 	//SPOTLIGHT_IMAGE_NOT_AVAILABLE
-	public static final String SPOTLIGHT_IMAGE_NOT_AVAILABLE = "<li>spotlight image doesn't exist</li>";
+	public static final String SPOTLIGHT_IMAGE_NOT_AVAILABLE = "<li>spotlight image(s) doesn't exist</li>";
 
 	//SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE
 	public static final String SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE = "<li>spotlight image node doesn't exist</li>";
@@ -495,7 +495,7 @@ public class Constants {
 	public static final String EXCEPTION_IN_FOLLOW_US_COMPONENT = "<li>Unable to update followus component.</li> ";
 
 	//HERO_IMAGE_NOT_AVAILABLE
-	public static final String HERO_IMAGE_NOT_AVAILABLE = "<li>Hero image doesn't exist</li>";
+	public static final String HERO_IMAGE_NOT_AVAILABLE = "<li>Hero image(s) doesn't exist</li>";
 
 	// SPECIAL_CHARACTER_FOUND_IN_LINK
 	public static final String SPECIAL_CHARACTER_FOUND_IN_LINK = "<li>Special Characters in the link. Need to migrate manually </li>";

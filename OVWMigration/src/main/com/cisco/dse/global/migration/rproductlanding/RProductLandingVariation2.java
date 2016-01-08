@@ -120,6 +120,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											.getNodes("hero_panel*").getSize()) {
 										sb.append(Constants.MISMATCH_IN_HERO_SLIDES);
 									}
+									int noImageCount = 0; 
 									for (Element ele : heroLargeFrameElements) {
 										String heroPanelTitle = "";
 										String heroPanelDescription = "";
@@ -256,11 +257,19 @@ public class RProductLandingVariation2 extends BaseAction {
 																			imageNode.setProperty(
 																					"fileReference",
 																					heroImage);
+																		}else{
+																			noImageCount++;
+																			/*sb.append(Constants.HERO_IMAGE_NOT_AVAILABLE);
+																			log.debug("image path is blank.");*/
 																		}
 											} else {
 												sb.append(Constants.HERO_SLIDE_IMAGE_NODE_NOT_FOUND);
 											}
 										}
+									}
+									if(noImageCount>=1){
+										sb.append(noImageCount+" "+Constants.HERO_IMAGE_NOT_AVAILABLE);
+										log.debug("image path is blank.");
 									}
 								} else {
 									log.debug("<li>Hero Large Frames/Panel Elements is not found</li>");
@@ -333,6 +342,7 @@ public class RProductLandingVariation2 extends BaseAction {
 						int spNodeSize = (int)spNodeItr.getSize();
 						if(spotLightEle!=null&&!spotLightEle.isEmpty()){
 							if(spNodeSize==spEleSize){
+								int noImageCount = 0;
 								for(Element spEle : spotLightEle){
 									Element h2Ele = spEle.getElementsByTag("h2").first();
 									Element pEle = spEle.getElementsByTag("p").first();
@@ -348,6 +358,10 @@ public class RProductLandingVariation2 extends BaseAction {
 											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												imageNode.setProperty("fileReference" , spotLightImage);
+											}else{
+												noImageCount++;
+												/*sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+												log.debug("image path is blank.");*/
 											}
 										}else{
 											sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
@@ -386,7 +400,12 @@ public class RProductLandingVariation2 extends BaseAction {
 										}
 									}
 								}
+								if(noImageCount>=1){
+									sb.append(noImageCount+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+									log.debug("image path is blank.");
+								}
 							}else{
+								int noImageCount=0;
 								for(Element spEle : spotLightEle){
 									Element h2Ele = spEle.getElementsByTag("h2").first();
 									Element pEle = spEle.getElementsByTag("p").first();
@@ -402,6 +421,10 @@ public class RProductLandingVariation2 extends BaseAction {
 											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												imageNode.setProperty("fileReference" , spotLightImage);
+											}else{
+												/*sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+												log.debug("image path is blank.");*/
+												noImageCount++;
 											}
 										}else{
 											sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
@@ -438,6 +461,10 @@ public class RProductLandingVariation2 extends BaseAction {
 											sb.append("<li>no cta link found in spotlight</li>");
 										}
 									}
+								}
+								if(noImageCount>=1){
+									sb.append(noImageCount+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+									log.debug("image path is blank.");
 								}
 								sb.append("<li>Mis-match in spotlight elements. Elements are ("+spEleSize+") and nodes are ("+spNodeSize+").</li>");
 							}
@@ -720,6 +747,10 @@ public class RProductLandingVariation2 extends BaseAction {
 											for(Element li : liEle){
 												Element aEle = li.getElementsByTag("a").first();
 												String linkText = aEle.text();
+												String ownText = li.ownText();
+												if(!ownText.equals("")){
+													linkText = linkText+" "+ownText;
+												}
 												String linkUrl =aEle.absUrl("href");
 												// Start extracting valid href
 												log.debug("Before spotlight" + linkUrl + "\n");
@@ -777,7 +808,7 @@ public class RProductLandingVariation2 extends BaseAction {
 		session.save();
 		return sb.toString();
 	}
-	public void setForHero(Elements heroElements, Node heroPanelLarge, String locale, Map<String, String> urlMap) {
+/*	public void setForHero(Elements heroElements, Node heroPanelLarge, String locale, Map<String, String> urlMap) {
 		try {
 			Value[] panelPropertiest = null;
 			Property panelNodesProperty = heroPanelLarge.hasProperty("panelNodes") ? heroPanelLarge.getProperty("panelNodes") : null;
@@ -839,6 +870,9 @@ public class RProductLandingVariation2 extends BaseAction {
 					log.debug("heroImage after migration : " + heroImage + "\n");
 					if (StringUtils.isNotBlank(heroImage)) {
 						imageNode.setProperty("fileReference" , heroImage);
+					}else{
+						sb.append(Constants.HERO_IMAGE_NOT_AVAILABLE);
+						log.debug("image path is blank.");mm
 					}
 				} else {
 					sb.append("<li>hero image node doesn't exist</li>");
@@ -862,7 +896,8 @@ public class RProductLandingVariation2 extends BaseAction {
 		}
 	}
 	//end setting of heropanel
-
+*/
+	
 	//start setting of selectorbar
 	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele,Map<String,String> urlMap) {
 
@@ -1066,6 +1101,11 @@ public class RProductLandingVariation2 extends BaseAction {
 								if(itemsSize==liSize){
 									for(Element li : liEle){
 										Element aEle = li.getElementsByTag("a").first();
+										String linkText = aEle.text();
+										String ownText = li.ownText();
+										if(!ownText.equals("")){
+											linkText = linkText+" "+ownText;
+										}
 										String aHref = aEle.absUrl("href");
 										// Start extracting valid href
 										log.debug("Before li" + aHref + "\n");
@@ -1083,7 +1123,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										if(item!=null){
 											Node linkData = item.hasNode("linkdata")?item.getNode("linkdata"):null;
 											if(linkData!=null){
-												linkData.setProperty("linktext",aEle.text());
+												linkData.setProperty("linktext",linkText);
 												linkData.setProperty("url",aHref);
 											}
 										}
@@ -1092,6 +1132,11 @@ public class RProductLandingVariation2 extends BaseAction {
 								}else{
 									for(Element li : liEle){
 										Element aEle = li.getElementsByTag("a").first();
+										String linkText = aEle.text();
+										String ownText = li.ownText();
+										if(!ownText.equals("")){
+											linkText = linkText+" "+ownText;
+										}
 										String aHref = aEle.absUrl("href");
 										// Start extracting valid href
 										log.debug("Before li" + aHref + "\n");
@@ -1109,7 +1154,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										if(item!=null){
 											Node linkData = item.hasNode("linkdata")?item.getNode("linkdata"):null;
 											if(linkData!=null){
-												linkData.setProperty("linktext",aEle.text());
+												linkData.setProperty("linktext",linkText);
 												linkData.setProperty("url",aHref);
 											}
 										}
