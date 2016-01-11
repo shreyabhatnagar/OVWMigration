@@ -402,7 +402,7 @@ public class ProductLandingVariation3 extends BaseAction {
 				try {
 					Elements htmlblobElements = doc.select("ul.n21");
 					String html = "";
-					if (htmlblobElements != null) {
+					if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 						// Element htmlblobElement = htmlblobElements.first();
 						for (Element htmlblobElement : htmlblobElements) {
 							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "", locale, sb, urlMap);
@@ -426,6 +426,15 @@ public class ProductLandingVariation3 extends BaseAction {
 				}
 				// end set html blob component content.
 				// --------------------------------------------------------------------------------------------------------------------------
+				//start of right rail html blob content.
+				//Since no web page is having html blob component but we have html blob node in wem.
+				//Hence generating the same in the report by checking whether node exists or not.
+				if(indexLowerRightNode.hasNode("htmlblob")){
+					sb.append("<li>Extra right rail html blob found in en page.</li>");
+				}
+				
+				//end of right rail html blob content.
+				//-----------------------------------------------------------------------------------------------------------------------------
 				// start of tile bordered components.
 				try {
 					Elements rightRail = doc.select("div.c23-pilot,div.cc23-pilot");

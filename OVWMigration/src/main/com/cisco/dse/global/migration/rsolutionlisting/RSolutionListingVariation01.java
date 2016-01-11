@@ -37,10 +37,6 @@ public class RSolutionListingVariation01 extends BaseAction{
 			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
-
-		log.debug("In the translate method RSolutionListingVariation01");
-		log.debug("In the translate method, catType is :" + catType);
-
 		String pagePropertiesPath = "/content/<locale>/"+catType+"/<prod>/solution-listing/jcr:content";
 		String solutionRight = "/content/<locale>/"+ catType+ "/<prod>/solution-listing/jcr:content/Grid/category/layout-category/narrowwide/NW-Wide-2";
 
@@ -51,10 +47,12 @@ public class RSolutionListingVariation01 extends BaseAction{
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
 
+		log.debug("In the translate method to migrate : '"+loc+"' to '"+pageUrl+"'");
+		
 		solutionRight = solutionRight.replace("<locale>", locale).replace("<prod>", prod);
 
-		javax.jcr.Node solutionWideNode = null;
-		javax.jcr.Node pageJcrNode = null;
+		Node solutionWideNode = null;
+		Node pageJcrNode = null;
 
 		try {
 			solutionWideNode = session.getNode(solutionRight);
@@ -104,7 +102,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		}catch(Exception e){
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			log.error("Exception : ",e);
 		}
 		sb.append("</ul></td>");
 		session.save();
