@@ -192,12 +192,12 @@ public class RProductListingVariation2 extends BaseAction{
 				// start set Hero Large component content.
 			try {
 				
-				Node htmlblobNode = gridNarrowWideNode.hasNode("htmlblob")?gridNarrowWideNode.getNode("htmlblob"):null;
+				/*Node htmlblobNode = gridNarrowWideNode.hasNode("htmlblob")?gridNarrowWideNode.getNode("htmlblob"):null;
 				
 				if(htmlblobNode != null){
 					sb.append("<li> Extra english content found on WEM page. </li>");
 				}
-				
+				*/
 				Elements drawerComponentHeaderElements = doc
 						.select("div.c00v0-pilot");
 				if (drawerComponentHeaderElements != null
@@ -237,7 +237,7 @@ public class RProductListingVariation2 extends BaseAction{
 							if (gridNarrowWideNode.hasNodes()) {
 								NodeIterator drawerPanelsIterator = gridNarrowWideNode
 										.getNodes("container*");
-								
+								NodeIterator htmlblobIterator = gridNarrowWideNode.getNodes("htmlblob*");
 
 								Node drawersPanelNode = null;
 								Elements drawersPanelElements = doc.select("div.n21,ul.n21");
@@ -245,6 +245,7 @@ public class RProductListingVariation2 extends BaseAction{
 								if (!drawersPanelElements.isEmpty()) {
 									int count = 0;
 									for (Element drawersPanelElement : drawersPanelElements) {
+										
 										boolean infoLinksMisMatchFlag = false;
 										boolean linkUrlNotFoundFlag = false;
 										boolean imageSrcNotFoundFlag = false;
@@ -254,25 +255,46 @@ public class RProductListingVariation2 extends BaseAction{
 												.getElementsByTag("li");
 										if (drawerPanelLiElements != null) {
 											for (Element drawerPanelLiElement : drawerPanelLiElements) {
-												boolean misMatchFlag = true;
+												
 												Elements iconBlock = drawerPanelLiElement
 														.select("div.series");
-												if (iconBlock.size() == 0) {
+												if (iconBlock.isEmpty()) {
 													log.debug("SERIES SIZE0");
 													continue;
 												}
-												count = count + 1;
-												if (drawerPanelsIterator.hasNext()) {
-
-													drawersPanelNode = drawerPanelsIterator
-															.nextNode();
-												}
+												
 												Elements seriesElements = drawerPanelLiElement
 														.select("div.series");
-												if (!seriesElements.isEmpty()) {
-													Element seriesElement = seriesElements
-															.first();
+												boolean misMatchFlag = true;
+												for(Element seriesElement: seriesElements){
+												count = count + 1;
+												if(count == 2 || count == 3){
+													String htmContent = drawerPanelLiElement.html();
+													if(htmlblobIterator.hasNext()){
+														Node htmlblobNode = (Node) htmlblobIterator.next();
+														if (htmlblobNode != null) {
+															log.debug("node path is : "+ htmlblobNode.getPath());
+															if (StringUtils
+																	.isNotBlank(htmContent)) {
+																htmlblobNode
+																		.setProperty(
+																				"html",
+																				htmContent);
+															} else {
+																sb.append(Constants.DRAWER_PANEL_TITLE_NOT_FOUND);
+															}
+														}
+													}
 													
+													
+												} 
+												else{
+													log.debug("count in else block" +  count);
+												if (drawerPanelsIterator.hasNext()) {
+
+													drawersPanelNode = (Node) drawerPanelsIterator
+															.next();
+												
 													if (seriesElement != null) {
 														Elements panelTitleElements = seriesElement
 																.getElementsByTag("h3");
@@ -356,6 +378,7 @@ public class RProductListingVariation2 extends BaseAction{
 														}
 														// end image
 														if (drawersPanelNode != null) {
+															log.debug("node path is : "+ drawersPanelNode.getPath());
 															if (StringUtils
 																	.isNotBlank(panelTitle)) {
 																drawersPanelNode
@@ -377,7 +400,7 @@ public class RProductListingVariation2 extends BaseAction{
 															}
 														}
 													}
-												}
+												}} }
 
 												// selecting sub drawer
 												// elements from document
@@ -730,12 +753,13 @@ public class RProductListingVariation2 extends BaseAction{
 												if(imageSrcNotFoundFlag){
 													sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 												}
+												
 											}
 
 										}
 									}
 									if (count != drawerPanelsIterator
-											.getSize())
+											.getSize()+htmlblobIterator.getSize())
 										sb.append(Constants.MIS_MATCH_IN_DRAWER_PANEL_COUNT);
 
 									// end new code
