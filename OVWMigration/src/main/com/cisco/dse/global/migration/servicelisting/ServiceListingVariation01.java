@@ -207,7 +207,7 @@ public class ServiceListingVariation01 extends BaseAction {
 											pdf = pdfElement.ownText();
 											}
 										}
-										String pdfIcon =null;
+										String pdfIcon ="none";
 										if(pdf.length()>0){											
 											if(pdf.toLowerCase().contains("pdf"))
 												pdfIcon = "pdf";
