@@ -169,6 +169,7 @@ public class FrameworkUtils {
 						&& path.indexOf("/content/dam") == -1
 						&& path.indexOf("/c/en/us") == -1
 						&& path.indexOf("/c/dam") == -1) {
+					log.debug("Path of the image is not a wem image path.");
 					if (path.indexOf("http:") == -1
 							&& path.indexOf("https:") == -1) {
 						log.debug("Adding domain to the image path.");
@@ -192,6 +193,10 @@ public class FrameworkUtils {
 					}
 					newImagePath = setContentToDAM(path, imgRef);
 				} else if (!path.equalsIgnoreCase(imgRef)) {
+					log.debug("Path of the image is wem image path."+path);
+					URL url = new URL(path);
+					path = url.getPath();
+					log.debug("getPath : "+path);
 					return path;
 				} else {
 					return "";

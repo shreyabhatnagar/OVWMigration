@@ -172,13 +172,13 @@ public class SolutionListingVariation08 extends BaseAction {
 												// start image
 												
 												String heroImage = FrameworkUtils.extractImagePath(ele, sb);
-												log.debug("heroImage " + heroImage + "\n");
+												log.debug("heroImage before migration : " + heroImage);
 												if (heroPanelNode != null) {
 													if (heroPanelNode.hasNode("image")) {
 														Node imageNode = heroPanelNode.getNode("image");
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
 														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
-														log.debug("heroImage " + heroImage + "\n");
+														log.debug("heroImage after migration : " + heroImage);
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
 														}
