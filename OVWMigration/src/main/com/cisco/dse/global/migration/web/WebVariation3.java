@@ -36,7 +36,7 @@ public class WebVariation3 extends BaseAction{
 	Document doc;
 	String title = null;
 	StringBuilder sb = new StringBuilder(1024);
-	static Logger log = Logger.getLogger(ProductLandingVariation1.class);
+	static Logger log = Logger.getLogger(WebVariation3.class);
 
 	public String translate(String host, String loc, String prod, String type,
 			String catType, String locale, Session session,
@@ -46,13 +46,13 @@ public class WebVariation3 extends BaseAction{
 		BasicConfigurator.configure();
 
 		// Repo node paths
-		String pagePropertiesPath = "/content/<locale>/" + catType + "/<prod>/midsize-overview/jcr:content";
-		String midSizeUpperLeft = "/content/<locale>/" + catType + "/<prod>/midsize-overview/jcr:content/content_parsys/overview/layout-overview/gd12v2_0/gd12v2-left";
-		String midSizeUpperRight = "/content/<locale>/" + catType + "/<prod>/midsize-overview/jcr:content/content_parsys/overview/layout-overview/gd12v2_0/gd12v2-right";
-		String midSizeLowerLeft = "/content/<locale>/" + catType + "/<prod>/midsize-overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
-		String midSizeLowerRight = "/content/<locale>/" + catType + "/<prod>/midsize-overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
-		String midSizeLowerMiddle = "/content/<locale>/" + catType + "/<prod>/midsize-overview/jcr:content/content_parsys/overview/layout-overview/gd11v1/gd11v1-mid";
-		String pageUrl = host + "/content/<locale>/" + catType + "/<prod>/midsize-overview.html";
+		String pagePropertiesPath = "/content/<locale>/" + catType + "/<prod>/overview/jcr:content";
+		String midSizeUpperLeft = "/content/<locale>/" + catType + "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
+		String midSizeUpperRight = "/content/<locale>/" + catType + "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
+		String midSizeLowerLeft = "/content/<locale>/" + catType + "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2_0/gd12v2-left";
+		String midSizeLowerRight = "/content/<locale>/" + catType + "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2_0/gd12v2-right";
+		String midSizeMiddle = "/content/<locale>/" + catType + "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd11v1/gd11v1-mid";
+		String pageUrl = host + "/content/<locale>/" + catType + "/<prod>/overview.html";
 
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
@@ -67,17 +67,20 @@ public class WebVariation3 extends BaseAction{
 		midSizeUpperRight = midSizeUpperRight.replace("<locale>", locale).replace("<prod>", prod);
 		midSizeLowerLeft = midSizeLowerLeft.replace("<locale>", locale).replace("<prod>", prod);
 		midSizeLowerRight = midSizeLowerRight.replace("<locale>", locale).replace("<prod>", prod);
+		midSizeMiddle = midSizeMiddle.replace("<locale>", locale).replace("<prod>", prod);
 
 		Node midSizeUpperLeftNode = null;
 		Node midSizeUpperRightNode = null;
 		Node midSizeLowerLeftNode = null;
 		Node midSizeLowerRightNode = null;
+		Node midSizeMiddleNode = null;
 		Node pageJcrNode = null;
 		try {
 			midSizeUpperLeftNode = session.getNode(midSizeUpperLeft);
 			midSizeUpperRightNode = session.getNode(midSizeUpperRight);
 			midSizeLowerLeftNode = session.getNode(midSizeLowerLeft);
 			midSizeLowerRightNode = session.getNode(midSizeLowerRight);
+			midSizeMiddleNode = session.getNode(midSizeMiddle);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = Jsoup.connect(loc).get();
@@ -91,12 +94,12 @@ public class WebVariation3 extends BaseAction{
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
-								// start set Hero Large component content.
+				// start set Hero Large component content.
 				try {
 					Node heroLargeNode = null;
 					Value[] panelPropertiest = null;
-					if (midSizeLowerLeftNode.hasNode("hero_large")) {
-						heroLargeNode = midSizeLowerLeftNode.getNode("hero_large");
+					if (midSizeUpperLeftNode.hasNode("hero_large")) {
+						heroLargeNode = midSizeUpperLeftNode.getNode("hero_large");
 						Property panelNodesProperty = heroLargeNode.hasProperty("panelNodes") ? heroLargeNode.getProperty("panelNodes") : null;
 						if (panelNodesProperty.isMultiple()) {
 							panelPropertiest = panelNodesProperty.getValues();
@@ -274,73 +277,100 @@ public class WebVariation3 extends BaseAction{
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 
 				// ---------------------------------------------------------------------------------------------------------------------------------------
-				// start of html blob components content.
+				// start of gd-right html blob components content.
 				try {
-					log.debug("Started Migrating html blob.");
-					String html = "";
-					Elements iconBlockElements = doc.select("div.icon-block");
-					// boolean test =
-					// doc.select("div.c23-pilot").contains("div.icon-block");
-					if (iconBlockElements.isEmpty()) {
-						log.debug("html blob content not found with class 'icon-block'");
-						iconBlockElements = doc.select("div.poly");
-						if (iconBlockElements != null) {
-							// Element htmlblobElement =
-							// iconBlockElements.first();
-							for (Element htmlblobElement : iconBlockElements) {
-								if (htmlblobElement.hasClass("c47-pilot")) {
-									continue;
-								}
-								if (htmlblobElement != null) {
-									Elements ulElements = htmlblobElement.getElementsByTag("ul");
-									if (ulElements.size() > 0) {
-										html = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "", locale, sb, urlMap);
+					log.debug("Started Migrating gd-right html blob.");
+					Elements gdRightElements = doc.select("div.gd-right");
+					if (!gdRightElements.isEmpty() && gdRightElements.size() > 0) {
+						int count = 1;
+						for (Element gdRightElement : gdRightElements) {
+							
+							if (gdRightElement != null) {
+								String html = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap);
+								if (count == 1) {
+									log.debug("Started Migrating upper gd-right html blob.");
+									if (midSizeUpperRightNode.hasNode("htmlblob")) {
+										Node htmlblobNode = midSizeUpperRightNode.getNode("htmlblob");
+										htmlblobNode.setProperty("html", html);
 									}
 								}
-							}
-						} else {
-							sb.append("<li>htmlblob component not found on publisher page </li>");
-						}
-					} else {
-						log.debug("html blob content found with class 'icon-block'");
-						if (iconBlockElements != null) {
-							// Element htmlblobElement =
-							// iconBlockElements.first();
-							for (Element htmlblobElement : iconBlockElements) {
-								if (htmlblobElement != null) {
-									// html = htmlblobElement.outerHtml();
-									Element htmlElement = htmlblobElement.parent();
-									html = FrameworkUtils.extractHtmlBlobContent(htmlElement, "", locale, sb, urlMap);
-									if (htmlblobElement.getElementsByTag("ul").size() > 0) {
-									} else {
-										Element iconBlockParent = htmlblobElement.parent();
-										if (iconBlockParent != null) {
-											Elements anchorTagEle = iconBlockParent.getElementsByTag("a");
-											if (anchorTagEle != null) {
-												for (Element aTagElement : anchorTagEle) {
-													html = html + aTagElement.outerHtml();
-													html = html + "<br>";
-												}
-											}
-										}
+								if (count == 2) {
+									log.debug("Started Migrating upper gd-right html blob.");
+									if (midSizeLowerRightNode.hasNode("htmlblob")) {
+										Node htmlblobNode = midSizeLowerRightNode.getNode("htmlblob");
+										htmlblobNode.setProperty("html", html);
 									}
-								} else {
-									sb.append("<li>htmlblob/icon-block Element section not found</li>");
-									log.debug("htmlblob/icon-block Element section not found");
 								}
+							} else {
+								sb.append("<li>gd-right htmlblob component not found on publisher page </li>");
 							}
+							count = count + 1 ;
 						}
 					}
-					// Elements iconBlockElements =
-					// doc.select("div.icon-block, div.poly");
 
 					
 
 				} catch (Exception e) {
 					log.debug("Excepiton : ", e);
 				}
-				// end set html blob component content.
+				// end set gd-right html blob component content.
+				// ---------------------------------------------------------------------------------------------------------------------------------------
+				// start of gd-mid html blob components content.
+				try {
+					log.debug("Started Migrating gd-mid html blob.");
+					String html = "";
+					Elements gdMidElements = doc.select("div.gd-mid");
+					if (!gdMidElements.isEmpty() && gdMidElements.size() > 0) {
+						Element gdMidElement = gdMidElements.first();
+						if (gdMidElement != null) {
+							html = FrameworkUtils.extractHtmlBlobContent(gdMidElement, "", locale, sb, urlMap);
+							if (midSizeMiddleNode.hasNode("htmlblob")) {
+								Node htmlblobNode = midSizeMiddleNode.getNode("htmlblob");
+								htmlblobNode.setProperty("html", html);
+							}
+						} else {
+							sb.append("<li>gd-mid htmlblob component not found on publisher page </li>");
+						}
+					}
 
+				} catch (Exception e) {
+					log.debug("Excepiton : ", e);
+				}
+				// end set gd-mid html blob component content.
+				// ---------------------------------------------------------------------------------------------------------------------------------------
+				// start of gd-left html blob components content.
+				try {
+					log.debug("Started Migrating gd-left html blob.");
+					Elements gdLeftElements = doc.select("div.gd-left");
+					if (!gdLeftElements.isEmpty() && gdLeftElements.size() > 0) {
+						int count = 0;
+						for (Element gdLeftElement : gdLeftElements) {
+							if (gdLeftElement != null) {
+								String html = FrameworkUtils.extractHtmlBlobContent(gdLeftElement, "", locale, sb, urlMap);
+								count = count + 1 ;
+								if (count == 1) {
+									log.debug("upper gd-left is found so skipping");
+									continue;
+								}
+								if (count == 2) {
+									log.debug("Started lower gd-left html blob.");
+									if (midSizeLowerLeftNode.hasNode("htmlblob")) {
+										Node htmlblobNode = midSizeLowerLeftNode.getNode("htmlblob");
+										htmlblobNode.setProperty("html", html);
+									}
+								}
+							} else {
+								sb.append("<li>gd-left htmlblob component not found on publisher page </li>");
+							}
+							
+						}
+					}
+
+				} catch (Exception e) {
+					log.debug("Excepiton : ", e);
+				}
+				// end set gd-left html blob component content.
+				// ---------------------------------------------------------------------------------------------------------------------------------------
 				session.save();
 			} else {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
