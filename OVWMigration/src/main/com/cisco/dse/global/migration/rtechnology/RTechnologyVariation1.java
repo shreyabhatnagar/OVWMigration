@@ -163,8 +163,8 @@ public class RTechnologyVariation1 extends BaseAction {
 					Element imageEle = textEle.getElementsByTag("img").first();
 					if(imageEle != null){
 						Node textImgaeNode = technologyLeftNode.hasNode("image")?technologyLeftNode.getNode("image"):null;
-						String textImage = FrameworkUtils.extractImagePath(imageEle, sb);
-						textImage = FrameworkUtils.migrateDAMContent(textImage, "", locale, sb);
+						String textImageEle = FrameworkUtils.extractImagePath(imageEle, sb);
+						String textImage = FrameworkUtils.migrateDAMContent(textImageEle, "", locale, sb);
 						if(textImage != ""){
 							Node imageNode = textImgaeNode.hasNode("image")?textImgaeNode.getNode("image"):null;
 							if(imageNode != null){
@@ -173,7 +173,11 @@ public class RTechnologyVariation1 extends BaseAction {
 								sb.append(Constants.IMAGE_LINK_NODE_NOT_FOUND);
 							}
 						}else{
+							if(textImageEle.isEmpty()){
 							sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
+							}else {
+								log.debug("image path returned is null but image exists in the both the pages");
+							}
 						}
 						imageEle.remove();
 					}else{
@@ -330,6 +334,13 @@ public class RTechnologyVariation1 extends BaseAction {
 								if(size == eleSize){
 									for(Element anchor : listEles){
 										Node itemNode = itemsNode.nextNode();
+										if(itemNode.hasProperty("icon")){
+											String lock = itemNode.getProperty("icon").getValue().getString();
+											if(lock.equals("lock")){
+												sb.append(Constants.EXTRA_LOCK_IMG_FOUND_IN_LIST);
+											}
+											
+										}
 										if(itemNode.hasNode("linkdata")){
 											Node linkdataNode = itemNode.getNode("linkdata");
 											String linkText = anchor.text();
