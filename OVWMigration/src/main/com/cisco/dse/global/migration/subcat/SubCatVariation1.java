@@ -286,6 +286,54 @@ public class SubCatVariation1 extends BaseAction {
 
 				// end of hero component
 				// --------------------------------------------------------------------------------------------------------
+				// start of letus help component
+				try {
+
+					String titeText = "";
+					String callText = "";
+					Element contactUsElement = doc.select("div.f-holder")
+							.first();
+					if (contactUsElement != null) {
+						Elements titleElem = contactUsElement
+								.getElementsByTag("h3");
+						Elements liElements = contactUsElement
+								.getElementsByTag("li");
+						Elements imgElements = contactUsElement
+								.getElementsByTag("img");
+						if (!titleElem.isEmpty()) {
+							titeText = titleElem.text();
+						} else {
+							sb.append("<li> Contact Us Element title not found on locale page.</li>");
+						}
+						log.debug("call text is : " + callText);
+						if (!liElements.isEmpty()) {
+							callText = liElements.first().html();
+							log.debug("call text is : " + callText);
+						} else {
+							sb.append("<li> Contact Us Element Call text not found on locale page.</li>");
+						}
+
+					} else {
+						sb.append("<li> Contact Us Element Not Found on locale page. </li>");
+					}
+					Node letUsHelpNode = subCatTopNode
+							.hasNode("gd22v2-right/letushelp") ? subCatTopNode
+							.getNode("gd22v2-right/letushelp") : null;
+					if (letUsHelpNode != null) {
+						letUsHelpNode.setProperty("title", titeText);
+						letUsHelpNode.setProperty("calltext", callText);
+						if (letUsHelpNode.hasProperty("timetext")) {
+							sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
+						}
+					}
+
+				} catch (Exception e) {
+					sb.append("<li>Unable to migrate let us help component</li>");
+					log.error("Exception", e);
+				}
+
+				// end of letus help component
+				// ----------------------------------------------------------------------------------------------------------
 				// start of follow us component
 				try {
 					String followUsTitle = "";
