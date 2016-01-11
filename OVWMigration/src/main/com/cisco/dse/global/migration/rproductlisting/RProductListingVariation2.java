@@ -191,13 +191,14 @@ public class RProductListingVariation2 extends BaseAction{
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start set Hero Large component content.
 			try {
+				boolean htmlBlobNodeExists = false;
+				Node htmlBlobNode = gridNarrowWideNode.hasNode("htmlblob")?gridNarrowWideNode.getNode("htmlblob"):null;
 				
-				/*Node htmlblobNode = gridNarrowWideNode.hasNode("htmlblob")?gridNarrowWideNode.getNode("htmlblob"):null;
-				
-				if(htmlblobNode != null){
-					sb.append("<li> Extra english content found on WEM page. </li>");
+				if(htmlBlobNode != null){
+					htmlBlobNodeExists = true;
+					//sb.append("<li> Extra english content found on WEM page. </li>");
 				}
-				*/
+				
 				Elements drawerComponentHeaderElements = doc
 						.select("div.c00v0-pilot");
 				if (drawerComponentHeaderElements != null
@@ -255,7 +256,7 @@ public class RProductListingVariation2 extends BaseAction{
 												.getElementsByTag("li");
 										if (drawerPanelLiElements != null) {
 											for (Element drawerPanelLiElement : drawerPanelLiElements) {
-												
+												boolean isHtmlBlob = false;
 												Elements iconBlock = drawerPanelLiElement
 														.select("div.series");
 												if (iconBlock.isEmpty()) {
@@ -266,20 +267,28 @@ public class RProductListingVariation2 extends BaseAction{
 												Elements seriesElements = drawerPanelLiElement
 														.select("div.series");
 												boolean misMatchFlag = true;
-												for(Element seriesElement: seriesElements){
+												Element seriesElement = seriesElements.first();
+												if	(seriesElements != null)	{
 												count = count + 1;
-												if(count == 2 || count == 3){
-													String htmContent = drawerPanelLiElement.html();
+												
+												if(count == 2 || count == 3 && htmlBlobNodeExists){
+													isHtmlBlob = true;
+													String htmContent = FrameworkUtils.extractHtmlBlobContent(drawerPanelLiElement, "", locale, sb, urlMap);
+													 
 													if(htmlblobIterator.hasNext()){
 														Node htmlblobNode = (Node) htmlblobIterator.next();
 														if (htmlblobNode != null) {
 															log.debug("node path is : "+ htmlblobNode.getPath());
+															String htmlContentPropertyValue = htmlblobNode.hasProperty("html")?htmlblobNode.getProperty("html").getString():"";
+															String modifiedHtml = FrameworkUtils.updateHtmlBlobContent(htmContent, htmlContentPropertyValue, loc, sb);
+															
+															log.debug("modified html is "+ modifiedHtml);
 															if (StringUtils
 																	.isNotBlank(htmContent)) {
 																htmlblobNode
 																		.setProperty(
 																				"html",
-																				htmContent);
+																				modifiedHtml);
 															} else {
 																sb.append(Constants.DRAWER_PANEL_TITLE_NOT_FOUND);
 															}
@@ -404,6 +413,7 @@ public class RProductListingVariation2 extends BaseAction{
 
 												// selecting sub drawer
 												// elements from document
+												if(!isHtmlBlob){
 												NodeIterator subDrawerIterator = drawersPanelNode
 														.getNode(
 																"subdrawer_parsys")
@@ -740,6 +750,7 @@ public class RProductListingVariation2 extends BaseAction{
 													}
 
 												}
+												
 												if (!misMatchFlag) {
 													sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT+" "+panelTitle);
 												}
@@ -754,7 +765,7 @@ public class RProductListingVariation2 extends BaseAction{
 													sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 												}
 												
-											}
+												}
 
 										}
 									}
@@ -764,7 +775,8 @@ public class RProductListingVariation2 extends BaseAction{
 
 									// end new code
 
-								} else {
+								} 
+									}else {
 									log.debug("<li>drawer panel elements section not found</li>");
 								}
 							} else {
