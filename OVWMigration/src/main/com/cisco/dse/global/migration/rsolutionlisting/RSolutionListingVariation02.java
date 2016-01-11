@@ -172,7 +172,8 @@ public class RSolutionListingVariation02 extends BaseAction{
 		// start set spotlight component.
 		Elements spotLightElements = doc.select("div.c11-pilot");
 		Elements spotLightTextElements = doc.select("div.cc00-pilot");
-
+		int spotLightMissedImageCount = 0;
+		
 		if (solutionWideNode != null) {
 			if(!spotLightElements.isEmpty()){
 				int eleSize = spotLightElements.size();
@@ -182,7 +183,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					for (Element ele : spotLightElements) {
 						spoLightNodeIterator.hasNext();
 						Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-						setSpotLightContent(ele,spotLightComponentNode, locale, urlMap);
+						spotLightMissedImageCount = setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
 					}
 				}
 
@@ -190,7 +191,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					for (Element ele : spotLightElements) {
 						if(spoLightNodeIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							setSpotLightContent(ele,spotLightComponentNode, locale, urlMap);
+							spotLightMissedImageCount = setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
 						}
 					}
 					sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
@@ -199,7 +200,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					for (Element ele : spotLightElements) {
 						spoLightNodeIterator.hasNext();
 						Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-						setSpotLightContent(ele,spotLightComponentNode, locale, urlMap);
+						spotLightMissedImageCount =	setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
 					}
 					sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 				}
@@ -236,7 +237,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 						for (Element ele : h3Tag) {
 							spoLightNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap);
+							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
 						}
 						for (Element ele : pTag) {
 							spoLightNodePTagIterator.hasNext();
@@ -254,7 +255,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 						for (Element ele : h3Tag) {
 							if(spoLightNodeIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap);
+							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
 							}
 						}
 						for (Element ele : pTag) {
@@ -275,7 +276,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 						for (Element ele : h3Tag) {
 							spoLightNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap);
+							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
 						}
 						for (Element ele : pTag) {
 							spoLightNodePTagIterator.hasNext();
@@ -293,6 +294,14 @@ public class RSolutionListingVariation02 extends BaseAction{
 			}
 			else {
 				sb.append(Constants.SPOTLIGHT_PARENT_DIV_NOT_FOUND);
+			}
+			
+			if(spotLightMissedImageCount > 0){
+				log.debug("missed image count is "+ spotLightMissedImageCount);
+				sb.append("<li>" + spotLightMissedImageCount + " spotlight image(s) doesn't exist " + "</li>");
+			}
+			else {
+				log.debug("all the images are migrated");
 			}
 		} else {
 			sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
@@ -340,13 +349,13 @@ public class RSolutionListingVariation02 extends BaseAction{
 	}
 
 	//Start Spotlight Set Method
-	private void setSpotLightContent(Element ele, Node spotLightComponentNode,String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private int setSpotLightContent(Element ele, Node spotLightComponentNode,String locale, Map<String, String> urlMap, int spotLightMissedImageCount) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		String h2Text = "";
 		String pText = "";
 		String aText = "";
 		String aHref = "";
 		String h3Text = "";
-
+		
 		Elements h2TagText = ele.getElementsByTag("h2");
 		Elements h3TagText = ele.getElementsByTag("h3");
 		if (!h2TagText.isEmpty()) {
@@ -407,13 +416,15 @@ public class RSolutionListingVariation02 extends BaseAction{
 				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
+				}else {
+					spotLightMissedImageCount = spotLightMissedImageCount +1;
 				}
 			} else {
 				sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 			}
 		}
 		// end image
-
+		return spotLightMissedImageCount;
 	}
 	//End of SpotLight Set Method
 
@@ -459,9 +470,9 @@ public class RSolutionListingVariation02 extends BaseAction{
 	//End of Spot Light text Content into Spotlight
 
 	//Start of Spot Light title Content into Spotlight
-	private void setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private int setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap, int spotLightMissedImageCount) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		String aText = "";
-
+		
 		Elements anchorText = ele.getElementsByTag("a");
 		Elements h3Text = ele.getElementsByTag("h3");
 		if(!h3Text.isEmpty()){
@@ -505,12 +516,15 @@ public class RSolutionListingVariation02 extends BaseAction{
 				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
+				}else {
+					spotLightMissedImageCount = spotLightMissedImageCount +1;
 				}
 			} else {
 				sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
 			}
 		}
 		// end image
+		return spotLightMissedImageCount;
 	}
 	//End of Spot Light title Content into Spotlight
 
