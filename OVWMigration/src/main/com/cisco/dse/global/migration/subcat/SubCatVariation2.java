@@ -291,17 +291,17 @@ public class SubCatVariation2 extends BaseAction{
 						if(!liElements.isEmpty()){
 							callText = liElements.first().html();
 							log.debug("call text is : "+callText);
-							if(liElements.size() > 1){
+							/*if(liElements.size() > 1){
 								sb.append("<li> Contact Us Element has extra content(links/numbers) which cannot be migrated as English Page does not have.</li>");
-							}
+							}*/
 						}
 						else{
 							sb.append("<li> Contact Us Element Call text not found on locale page.</li>");
 						}
 						
-						if(!imgElements.isEmpty()){
+						/*if(!imgElements.isEmpty()){
 							sb.append("<li> Contact Us Element has extra image(s) which cannot be migrated as English Page does not have.</li>");
-						}
+						}*/
 						
 						
 					}else{
