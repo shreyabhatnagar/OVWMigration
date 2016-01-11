@@ -32,6 +32,7 @@ import com.cisco.dse.global.migration.architechture.ArchitechtureVariation1;
 import com.cisco.dse.global.migration.architechture.ArchitechtureVariation3;
 import com.cisco.dse.global.migration.architechture.ArchitectureVariation04;
 import com.cisco.dse.global.migration.partner.PartnerVariation1;
+import com.cisco.dse.global.migration.web.WebVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation3;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation4;
 import com.cisco.dse.global.migration.productlisting.ProductListingVariation5;
@@ -66,7 +67,6 @@ import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
 import com.cisco.dse.global.migration.technology.TechnologyVariation2;
 import com.cisco.dse.global.migration.trainingevents.TrainingAndEventsVariation1;
-import com.cisco.dse.global.migration.web.WebVariation3;
 import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation01;
 import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation02;
 import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation02;
@@ -182,6 +182,10 @@ public class OVWMigration {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
 															} else if(StringUtils.isNotBlank(variation) && variation.startsWith("infrastructure")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/network-infrastructure");
+																log.debug("pageURL is: " + pageUrl);
+															}
+															else if(StringUtils.isNotBlank(variation) && variation.startsWith("videoscape")){
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/videoscape");
 																log.debug("pageURL is: " + pageUrl);
 															}else {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
@@ -828,7 +832,7 @@ public class OVWMigration {
 																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 																sb.append(msg16);
 																sb.append("<tr><td colspan='3'>.</td></tr>");
-															}else if ("index-subcatvar3".equals(type)&&"YES".equalsIgnoreCase(check)) {
+															}else if ("index-videoscapevar3".equals(type)&&"YES".equalsIgnoreCase(check)) {
 																String msg16 = "";
 																msg16 = msg16 + "<tr>";
 																msg16 = msg16
