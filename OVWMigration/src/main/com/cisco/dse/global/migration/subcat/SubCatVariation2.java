@@ -529,7 +529,7 @@ public class SubCatVariation2 extends BaseAction{
 				// start of html blob components content.
 				try {
 					String html = "";
-					StringBuilder htmlBlobContent = new StringBuilder();
+					//StringBuilder htmlBlobContent = new StringBuilder();
 					Elements htmlBlobElements = doc.select("div.gd22v2-right").select("div.htmlblob");
 					if (htmlBlobElements != null) {
 						for (Element htmlblobElement : htmlBlobElements) {
@@ -537,7 +537,7 @@ public class SubCatVariation2 extends BaseAction{
 								html = htmlblobElement.outerHtml();
 								html = FrameworkUtils.extractHtmlBlobContent(
 										htmlblobElement, "", locale, sb,urlMap);
-								htmlBlobContent.append(html);
+								//htmlBlobContent.append(html);
 							} else {
 								log.debug(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 							}
@@ -550,7 +550,7 @@ public class SubCatVariation2 extends BaseAction{
 						log.debug("htmlblobElement.outerHtml() " + html + "\n");
 						if (StringUtils.isNotBlank(html)) {
 							htmlBlobNode.setProperty("html",
-									htmlBlobContent.toString());
+									html);
 						} else {
 							sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 						}
@@ -808,13 +808,14 @@ public class SubCatVariation2 extends BaseAction{
 
 										for (Element li : indexLiList) {
 											JSONObject jsonObj = new JSONObject();
+											String ownText = li.ownText();
 											Elements listItemAnchor = li
 													.getElementsByTag("a");
 											Elements listItemSpan = li
 													.getElementsByTag("span");
 
 											String anchorText = listItemAnchor != null ? listItemAnchor
-													.text() : "";
+													.text()+ownText : "";
 											String anchorHref = listItemAnchor
 													.attr("href");
 											// Start extracting valid href
