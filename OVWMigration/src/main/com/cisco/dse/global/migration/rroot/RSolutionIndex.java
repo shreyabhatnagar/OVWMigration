@@ -33,6 +33,8 @@ public class RSolutionIndex extends BaseAction {
 	StringBuilder sb = new StringBuilder(1024);
 
 	static Logger log = Logger.getLogger(RSolutionIndex.class);
+	
+	private int noImageSize = 0;
 
 	public String translate(String host, String loc, String prod, String type, String catType,
 			String locale, Session session) throws IOException,
@@ -339,6 +341,9 @@ public class RSolutionIndex extends BaseAction {
 						sb.append(Constants.SPOTLIGHT_ELEMENT_MISMATCH + size + Constants.SPOTLIGHT_ELEMENT_COUNT + spSize +".</li>");
 					}
 				}
+				if(noImageSize>=1){
+					sb.append(noImageSize+" "+Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+				}
 			}else{
 				sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 			}
@@ -374,7 +379,8 @@ public class RSolutionIndex extends BaseAction {
 			if(fileReference != ""){
 				imageNode.setProperty("fileReference", fileReference);
 			}else{
-				sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+//				sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
+				noImageSize++;
 			}
 		}else{
 			sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
