@@ -82,6 +82,19 @@ public class SolutionListingVariation09 extends BaseAction {
 
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
+				//start of spotlight component
+				try{
+				Node spotlightNode = solutionListingMidnode.hasNode("spotlight_medium_v2") ? solutionListingMidnode
+						.getNode("spotlight_medium_v2") : null;
+				if(spotlightNode != null){
+					sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
+				}
+				}catch(Exception e){
+					sb.append(Constants.UNABLE_TO_UPDATE_SPOTLIGHT);
+					log.error("Exception :", e);
+				}
+				//end of spotlight component
+				//------------------------------------------------------------------------------------------------------------------------
 				// start of text component properties setting
 				try {
 					String textProp = "";
@@ -93,7 +106,7 @@ public class SolutionListingVariation09 extends BaseAction {
 					}else {
 							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
-					if(textDescriptionElements != null){
+					if(!textDescriptionElements.isEmpty()){
 						textContent.append(FrameworkUtils.extractHtmlBlobContent(textDescriptionElements.first(), "", locale, sb, urlMap));
 					}
 					textProp = textContent.toString();
@@ -107,7 +120,7 @@ public class SolutionListingVariation09 extends BaseAction {
 							sb.append(Constants.TEXT_NODE_NOT_FOUND);
 						}
 				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
 					log.error("Exception " , e);
 				}
 				// end of text component properties setting
