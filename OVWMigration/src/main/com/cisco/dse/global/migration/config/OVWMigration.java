@@ -191,6 +191,8 @@ public class OVWMigration {
 															else if(StringUtils.isNotBlank(variation) && variation.startsWith("videoscape")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/videoscape");
 																log.debug("pageURL is: " + pageUrl);
+															}else if(StringUtils.isNotBlank(variation) && variation.startsWith("ps")){
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/professional-services");
 															}else {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
 															}
@@ -872,7 +874,32 @@ public class OVWMigration {
 																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 																sb.append(msg16);
 																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}else if ("private-hybrid-solutions-webvar6".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation6().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}else if ("managed-cloud-services-pswebvar5".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation5().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
 															}
+
 
 
 
