@@ -78,6 +78,7 @@ import com.cisco.dse.global.migration.subcat.SubCatVariation2;
 import com.cisco.dse.global.migration.subcat.SubCatVariation3;
 import com.cisco.dse.global.migration.web.WebVariation2;
 import com.cisco.dse.global.migration.web.WebVariation1;
+import com.cisco.dse.global.migration.web.WebVariation7;
 import com.cisco.dse.global.migration.web.WebVariation9;
 
 public class OVWMigration {
@@ -920,6 +921,71 @@ public class OVWMigration {
 																msg16 = msg16 + "<tr>";
 																msg16 = msg16
 																		+ new WebVariation9().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+															else if ("energy-webvar7".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation7().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+															else if ("retail-webvar7".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation7().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+															else if ("government-webvar7".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation7().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+															else if ("manufacturing-webvar7".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation7().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+															else if ("financial-services-webvar7".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation7().translate(
 																				host, gLink, prod, type, cattype,
 																				sheet.getSheetName(), session, urlMap);
 																msg16 = msg16 + "</tr>";
