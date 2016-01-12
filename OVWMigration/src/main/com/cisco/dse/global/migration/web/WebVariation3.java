@@ -105,8 +105,8 @@ public class WebVariation3 extends BaseAction{
 							panelPropertiest = panelNodesProperty.getValues();
 						}
 					} else {
-						sb.append("<li>Node with name 'hero_large' doesn't exist under " + midSizeLowerLeftNode.getPath() + "</li>");
-						log.debug("Node with name 'hero_large' doesn't exist under " + midSizeLowerLeftNode.getPath());
+						log.debug("<li>Node with name 'hero_large' doesn't exist under " + midSizeUpperLeftNode.getPath() + "</li>");
+						log.debug("Node with name 'hero_large' doesn't exist under " + midSizeUpperLeftNode.getPath());
 					}
 
 					Elements heroLargeElements = doc.select("div.c50-pilot");
@@ -270,7 +270,7 @@ public class WebVariation3 extends BaseAction{
 						log.debug("No element found with class 'c50-pilot'");
 					}
 				} catch (Exception e) {
-					sb.append("<li>Unable to update hero_large component.</li>");
+					log.debug("<li>Unable to update hero_large component.</li>");
 					log.debug("Exception : ", e);
 				}
 				// end set Hero Large content.

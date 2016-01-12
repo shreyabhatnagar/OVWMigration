@@ -38,7 +38,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -585,4 +587,106 @@ public class FrameworkUtils {
 		}
 		return wemElement.outerHtml();
 	}
+	
+	public static String updateHtmlBlobContent(String htmlWEBContent,
+			String htmlWEMContent, String loc, StringBuilder sb) throws JSONException{
+
+		List<String> htmlList = new ArrayList<String>() {
+		};
+		Element wemElement = null;
+		Document doc = null;
+		
+				try {
+					doc = Jsoup.connect(loc).get();
+				} catch (IOException e) {
+				
+				}
+				log.debug("Connected to the provided URL");
+			//-------------------------------------------------------------------------------------------------------------------------------
+			//start of Logic to retrieve all the hyper links text and url and save in a map.
+				if (doc != null) {
+			Element webElement = doc.html(htmlWEBContent);
+			String title = "";
+			String paragraph = "";
+			Elements titleElements = webElement.select("h3");
+			Elements paragraphElements = webElement.select("p");
+			if(titleElements != null && !titleElements.isEmpty()){
+				Element titleElement = titleElements.first();
+				title = titleElement.text();
+				log.debug("title******* : "+title);
+			}else{
+				log.debug("No title found in web content with class 'bdr-1'");
+			}
+			if(paragraphElements != null && !paragraphElements.isEmpty()){
+				Element pElement = paragraphElements.first();
+				paragraph = pElement.text();
+				log.debug("link href is blank in the element : "+paragraph);
+			}else{
+				log.debug("No p tag found in web content with class 'bdr-1'");
+			}
+			Elements liElements = webElement.select("li.clearfix");
+			String subDrawerContentStr = "";
+			if(liElements != null && !liElements.isEmpty()){
+				for(Element ele : liElements){
+					 subDrawerContentStr = ele.html();
+							if(StringUtils.isNotBlank(subDrawerContentStr)){
+						htmlList.add(subDrawerContentStr);
+							}else{
+								log.debug("link href is blank in the element : "+ele.html());
+				}
+				}
+				//log.debug("subdrawer cotnendkeddsm"+ liElements.);
+			}
+			
+			
+			//end of Logic to retrieve all the hyper links text and url and save in a map.
+			//-------------------------------------------------------------------------------------------------------------------------------
+			//start of logic to update all the links in the wem html content from the map.
+			wemElement = doc.html(htmlWEMContent);
+			Elements dmcDrawerContentElements = wemElement.select("div.dmc-drawer-content");
+			int ele=0; 
+			for(Element dmcDrawerContentElement : dmcDrawerContentElements ){
+				
+				if(ele <= htmlList.size()){
+					log.debug("actual content"+htmlList.get(ele));
+					dmcDrawerContentElement.html(htmlList.get(ele));
+					ele++;
+				}
+				
+			}
+		//	dmcDrawerContentElements.html(liElements.outerHtml());
+			//end of logic to update all the links in the wem html content from the map.
+			//-------------------------------------------------------------------------------------------------------------------------------
+			//Start of log to update the title of the content.
+			
+			log.debug("Title of the web page content : "+title);
+			titleElements = wemElement.select("h3");
+			if(titleElements != null && !titleElements.isEmpty() && StringUtils.isNotBlank(title)){
+				Element titleElement = titleElements.first();
+				titleElement.text(title);
+			}else{
+				log.debug("No title foundin wem content with class 'arrow'");
+			}
+			
+			paragraphElements = wemElement.select("p");
+			if(paragraphElements != null && !paragraphElements.isEmpty() && StringUtils.isNotBlank(paragraph)){
+				Element paraElement = paragraphElements.first();
+				paraElement.text(paragraph);
+			}else{
+				log.debug("No title foundin wem content with class 'arrow'");
+			}
+			
+			log.debug("Title text of the web page content : "+title);
+			log.debug("Title p href of the web page content : "+paragraph);
+			
+			//End of log to update the title of the content.
+		}else {
+			log.debug("doc is null.");
+		}
+	
+
+		return wemElement.outerHtml();
+		}
+
+
 }

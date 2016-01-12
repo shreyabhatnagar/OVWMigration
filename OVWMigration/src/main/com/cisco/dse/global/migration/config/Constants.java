@@ -113,21 +113,39 @@ public class Constants {
 
 	//HERO_CONTENT_ANCHOR_LINK_IS_BLANK
 	public static final String HERO_CONTENT_ANCHOR_LINK_IS_BLANK = "<li>Hero content anchor link/href is blank.</li>";
+	
+	//HERO_CONTENT_IMAGE_LINK_IS_BLANK
+	public static final String HERO_CONTENT_IMAGE_LINK_IS_BLANK = "<li>Hero content image link is blank.</li>";
 
 	//HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND
 	public static final String HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND = "<li>Hero content panel element not found.</li>";
+	
+	//HERO_CONTENT_PANEL_TEXT_ELEMENT_NOT_FOUND
+	public static final String HERO_CONTENT_PANEL_TEXT_ELEMENT_NOT_FOUND = "<li>Hero content panel text element not found.</li>";
 
+	//HERO_CONTENT_PANEL_IMAGE_ELEMENT_NOT_FOUND
+	public static final String HERO_CONTENT_PANEL_IMAGE_ELEMENT_NOT_FOUND = "<li>Hero content panel image element not found.</li>";
+	
 	//HERO_CONTENT_COUNT_MISMATCH
 	public static final String HERO_CONTENT_COUNT_MISMATCH = "<li>Hero content count mismatch elements (<ele>) not equal to Nodes (<node>)</li>";
 
 	//HERO_CONTENT_NODE_NOT_FOUND
 	public static final String HERO_CONTENT_NODE_NOT_FOUND = "<li>Hero content node not found.</li>";
+	
+	//HERO_CONTENT_IMAGE_NODE_NOT_FOUND
+	public static final String HERO_CONTENT_IMAGE_NODE_NOT_FOUND = "<li>Hero content image node not found.</li>";
+	
+	//HERO_CONTENT_ANCHOR_NODE_NOT_FOUND
+	public static final String HERO_CONTENT_ANCHOR_NODE_NOT_FOUND = "<li>Hero content anchor node not found.</li>";
 
 	//EXCEPTOIN_IN_UPDATING_HERO_CONTENT
 	public static final String EXCEPTOIN_IN_UPDATING_HERO_CONTENT = "<li>Unable to update hero content.</li>";
 
 	//EXCEPTION_IN_SOLUTION_LISTING_CONTENT_UPDATE
 	public static final String EXCEPTION_IN_SOLUTION_LISTING_CONTENT_UPDATE = "<li>Unable to update the solution listing content.</li>";
+	
+	//GRID_ELEMENT_NOT_FOUND
+	public static final String GRID_ELEMENT_NOT_FOUND = "<li>Grid element not found.</li>";
 
 	//LEFT_GRID_ELEMENT_NOT_FOUND
 	public static final String LEFT_GRID_ELEMENT_NOT_FOUND = "<li>Left grid element not found.</li>";
@@ -714,6 +732,18 @@ public class Constants {
 	
 	//EXTRA_LOCK_IMG_FOUND_IN_LIST
 	public static final String EXTRA_LOCK_IMG_FOUND_IN_LIST = "<li>Extra Lock image found in the list</li>";
+
+	//CONTACTUS_ELEMENT_NOT_FOUND
+	public static final String CONTACTUS_ELEMENT_NOT_FOUND = "<li>CONTACTUS Element not Found in locale page.</li>";
+
+	//UNABLE_TO_UPDATE_CONTACTUS
+	public static final String UNABLE_TO_UPDATE_CONTACTUS = "<li>Unable to update CONTACTUS.</li>";
+
+	//CONTACTUS_TITLE_NOT_FOUND
+	public static final String CONTACTUS_TITLE_NOT_FOUND = "<li>No Title found for CONTACTUS.</li>";
+
+	//CONTACTUS_NODE_NOT_FOUND
+	public static final String CONTACTUS_NODE_NOT_FOUND = "<li>CONTACTUS Node not Found.</li>";
 
 
 }
