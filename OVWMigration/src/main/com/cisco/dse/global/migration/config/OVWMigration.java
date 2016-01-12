@@ -77,6 +77,8 @@ import com.cisco.dse.global.migration.subcat.SubCatVariation1;
 import com.cisco.dse.global.migration.subcat.SubCatVariation2;
 import com.cisco.dse.global.migration.subcat.SubCatVariation3;
 import com.cisco.dse.global.migration.web.WebVariation2;
+import com.cisco.dse.global.migration.web.WebVariation1;
+import com.cisco.dse.global.migration.web.WebVariation9;
 
 public class OVWMigration {
 
@@ -181,7 +183,7 @@ public class OVWMigration {
 															String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
 															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
-															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events"))){
+															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about"))){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
 															} else if(StringUtils.isNotBlank(variation) && variation.startsWith("infrastructure")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/network-infrastructure");
@@ -900,7 +902,33 @@ public class OVWMigration {
 																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 																sb.append(msg16);
 																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}else if ("about-webvar1".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation1().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
 															}
+															else if ("featured-case-studies-webvar9".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation9().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+
 
 
 
