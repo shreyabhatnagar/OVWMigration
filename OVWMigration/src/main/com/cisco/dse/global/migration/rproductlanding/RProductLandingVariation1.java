@@ -105,11 +105,11 @@ public class RProductLandingVariation1 extends BaseAction {
 		indexLowerRght = indexLowerRght.replace("<locale>", locale).replace(
 				"<prod>", prod);
 
-		javax.jcr.Node indexUpperLeftNode = null;
-		javax.jcr.Node indexUpperRightNode = null;
-		javax.jcr.Node indexLowerLeftNode = null;
-		javax.jcr.Node indexLowerRightNode = null;
-		javax.jcr.Node pageJcrNode = null;
+		Node indexUpperLeftNode = null;
+		Node indexUpperRightNode = null;
+		Node indexLowerLeftNode = null;
+		Node indexLowerRightNode = null;
+		Node pageJcrNode = null;
 		try {
 			indexUpperLeftNode = session.nodeExists(indexUpperLeft) ? session
 					.getNode(indexUpperLeft) : session.getNode(indexUpperLft);
@@ -719,77 +719,34 @@ public class RProductLandingVariation1 extends BaseAction {
 																log.debug("<li>drawer panel para element not found</li>");
 															}
 															// start image
-															String drawerImage = FrameworkUtils
-																	.extractImagePath(
-																			seriesElement,
-																			sb);
-															log.debug("drawerImage "
-																	+ drawerImage
-																	+ "\n");
+															String drawerImage = FrameworkUtils.extractImagePath(seriesElement, sb);
+															log.debug("drawerImage " + drawerImage);
 															if (drawersPanelNode != null) {
-																Node drawersImageNode = drawersPanelNode
-																		.getNode("image");
-																Node drawersOverviewNode = drawersPanelNode.hasNode("overview")?
-																		drawersPanelNode.getNode("overview"):null;
-																		Property includeLink = drawersPanelNode.hasProperty("includeLink") ? drawersPanelNode.getProperty("includeLink") : null ;
-																										if(drawersOverviewNode!=null){
-																											if(drawersOverviewNode.hasProperty("linktext")){
-																												if(includeLink != null){
-																													if(includeLink.getValue().getString().equals("true")){
-																														sb.append(Constants.EXTRA_OVERVIEW_NODE_FOUND);
-																													}
-																												}
-																											}
-																										}
-																String fileReference = drawersImageNode
-																		.hasProperty("fileReference") ? drawersImageNode
-																		.getProperty(
-																				"fileReference")
-																		.getString()
-																		: "";
-																drawerImage = FrameworkUtils
-																		.migrateDAMContent(
-																				drawerImage,
-																				fileReference,
-																				locale,
-																				sb);
-																log.debug("drawerImage "
-																		+ drawerImage
-																		+ "\n");
-																if (StringUtils
-																		.isNotBlank(drawerImage)) {
-																	drawersImageNode
-																			.setProperty(
-																					"fileReference",
-																					drawerImage);
+																Node drawersImageNode = drawersPanelNode.getNode("image");
+																String fileReference = drawersImageNode.hasProperty("fileReference") ? drawersImageNode.getProperty("fileReference").getString() : "";
+																drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale, sb);
+																log.debug("drawerImage " + drawerImage);
+																if (StringUtils.isNotBlank(drawerImage)) {
+																	drawersImageNode.setProperty("fileReference", drawerImage);
 																}
 															}
 															// end image
 															if (drawersPanelNode != null) {
-																if (StringUtils
-																		.isNotBlank(panelTitle)) {
-																	drawersPanelNode
-																			.setProperty(
-																					"title",
-																					panelTitle);
+																Node drawersOverviewNode = drawersPanelNode.hasNode("overview")? drawersPanelNode.getNode("overview"):null;
+																if (StringUtils.isNotBlank(panelTitle)) {
+																	drawersPanelNode.setProperty("title", panelTitle);
+																	drawersOverviewNode.setProperty("linktext", panelTitle);
 																} else {
 																	sb.append(Constants.DRAWER_PANEL_TITLE_NOT_FOUND);
 																}
-																if (StringUtils
-																		.isNotBlank(linkUrl)) {
-																	drawersPanelNode
-																			.setProperty(
-																					"linkUrl",
-																					linkUrl);
+																if (StringUtils.isNotBlank(linkUrl)) {
+																	drawersPanelNode.setProperty("linkUrl", linkUrl);
+																	drawersOverviewNode.setProperty("url", linkUrl);
 																} else {
 																	sb.append(Constants.DRAWER_PANEL_LINK_TITLE_NOT_FOUND);
 																}
-																if (StringUtils
-																		.isNotBlank(panelDescription)) {
-																	drawersPanelNode
-																			.setProperty(
-																					"description",
-																					panelDescription);
+																if (StringUtils.isNotBlank(panelDescription)) {
+																	drawersPanelNode.setProperty("description", panelDescription);
 																} else {
 																	sb.append(Constants.DRAWER_PANEL_DESC_NOT_FOUND);
 																}
@@ -799,16 +756,10 @@ public class RProductLandingVariation1 extends BaseAction {
 
 													// selecting sub drawer
 													// elements from document
-													NodeIterator subDrawerIterator = drawersPanelNode
-															.getNode(
-																	"subdrawer_parsys")
-															.getNodes(
-																	"content_product*");
+													NodeIterator subDrawerIterator = drawersPanelNode.getNode("subdrawer_parsys").getNodes("content_product*");
 													javax.jcr.Node subdrawerpanel = null;
-													Elements subDrawerColl = drawerPanelLiElement
-															.select("ul.items");
-													Elements clearfixdivs = drawerPanelLiElement
-															.select("li.clearfix");
+													Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
+													Elements clearfixdivs = drawerPanelLiElement.select("li.clearfix");
 													for(Element cFix : clearfixdivs){
 														Element div = cFix.getElementsByTag("div").first();
 														if(div.hasAttr("align")){
@@ -817,39 +768,29 @@ public class RProductLandingVariation1 extends BaseAction {
 													}
 
 													for (Element ss : subDrawerColl) {
-
 														String title = "";
 														String linkTitleUrl = "";
 
-														Elements subItems = ss
-																.select("div.prodinfo");
+														Elements subItems = ss.select("div.prodinfo");
 
 														if (subItems != null) {
-
 															for (Element subItem : subItems) {
-																if ((clearfixdivs
-																		.size() != subDrawerIterator
-																		.getSize())) {
+																if ((clearfixdivs.size() != subDrawerIterator.getSize())) {
 																	misMatchFlag = false;
 																}
 																List<String> list1 = new ArrayList<String>();
 																List<String> list2 = new ArrayList<String>();
 																List<String> list3 = new ArrayList<String>();
-																if (subDrawerIterator
-																		.hasNext()) {
-																	subdrawerpanel = subDrawerIterator
-																			.nextNode();
+																if (subDrawerIterator.hasNext()) {
+																	subdrawerpanel = subDrawerIterator.nextNode();
 																}
 																if (subItem != null) {
 
-																	Elements siTitles = subItem
-																			.getElementsByTag("h4");
+																	Elements siTitles = subItem.getElementsByTag("h4");
 																	if (siTitles != null) {
-																		Element siTitle = siTitles
-																				.first();
+																		Element siTitle = siTitles.first();
 																		if (siTitle != null) {
-																			Elements siATitles = siTitle
-																					.getElementsByTag("a");
+																			Elements siATitles = siTitle.getElementsByTag("a");
 																			Element span =siTitle.getElementsByTag("span").first();
 																			if (siATitles != null) {
 																				Element siATitle = siATitles
