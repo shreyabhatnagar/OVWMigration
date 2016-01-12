@@ -325,8 +325,7 @@ public class ProductLandingVariation1 extends BaseAction {
 										sb.append("<li>No heropanel Node found.</li>");
 										log.debug("No list panelProperties found for the hero compoent order.");
 									}
-									
-									int imageSrcEmptyCount = 0;
+
 									if (heroPanelNode != null) {
 										Node heroPanelPopUpNode = null;
 										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
@@ -364,7 +363,6 @@ public class ProductLandingVariation1 extends BaseAction {
 											sb.append("<li>link url of hero slide doesn't exist / found video as link url for the slide on web publisher page </li>");
 											log.debug("Link url doesn't exists with in the class 'frame' of the div.");
 										}
-										
 										if (heroPanelNode.hasNode("image")) {
 											Node imageNode = heroPanelNode.getNode("image");
 											String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString() : "";
@@ -372,18 +370,12 @@ public class ProductLandingVariation1 extends BaseAction {
 											log.debug("heroImage : " + heroImage);
 											if (StringUtils.isNotBlank(heroImage)) {
 												imageNode.setProperty("fileReference", heroImage);
-											}else{
-												imageSrcEmptyCount++;
-												
 											}
 										} else {
 											sb.append("<li>hero image node doesn't exist</li>");
 											log.debug("'image' node doesn't exists in " + heroPanelNode.getPath());
 										}
-										if(imageSrcEmptyCount > 0){
-											sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on locale page for hero panel </li>");
-										}
-									} 
+									}
 								}
 							} else {
 								log.debug("<li>Hero Large Frames/Panel Elements is not found</li>");
@@ -432,7 +424,7 @@ public class ProductLandingVariation1 extends BaseAction {
 									if (StringUtils.isNotBlank(drawerComponentHeaderTitle)) {
 										drawersContainerNode.setProperty("title", drawerComponentHeaderTitle);
 									} else {
-										sb.append("<li>title of drawer container doesn't exist for "+drawerComponentHeaderTitle+"</li>");
+										sb.append("<li>title of drawer container doesn't exist</li>");
 										log.debug("Drawer component title is blank.");
 									}
 									Elements hTextElements = doc.getElementsByAttribute("data-config-hidetext");
@@ -442,10 +434,11 @@ public class ProductLandingVariation1 extends BaseAction {
 											drawersContainerNode.setProperty("closetext", hText.attr("data-config-hidetext"));
 											drawersContainerNode.setProperty("opentext", hText.attr("data-config-showtext"));
 										} else {
-											sb.append("<li>data-config-hidetext not found for "+drawerComponentHeaderTitle+"</li>");
+											sb.append("<li>data-config-hidetext not found</li>");
 											log.debug("No first attribute found with name 'data-config-hidetext' in the doc.");
 										}
 									} else {
+										sb.append("<li>showtext and hidetext links doesn't exist</li>");
 										log.debug("No attribute found with name 'data-config-hidetext' in the doc.");
 									}
 									Element drawerHeaderLinksElement = drawerComponentHeader.select("div.clearfix").first();
@@ -465,13 +458,15 @@ public class ProductLandingVariation1 extends BaseAction {
 												log.debug("anchorHref after migration : " + anchorHref);
 												// End extracting valid href
 											} else {
+												sb.append("<li>drawerComponent link Element not found.</li>");
 												log.debug("anchor first element not found within the class 'clearfix' of div.");
 											}
 										} else {
+											sb.append("<li>drawerComponent link Element section not found</li>");
 											log.debug("anchor element not found within the class 'clearfix' of div.");
 										}
 										if (anchorElements.size() > 1) {
-											sb.append("<li>extra link found in drawer container header for "+drawerComponentHeaderTitle+"</li>");
+											sb.append("<li>extra link found in drawer container header</li>");
 										}
 										jsonObj.put("linktext", anchorText);
 										jsonObj.put("linkurl", anchorHref);
@@ -484,7 +479,9 @@ public class ProductLandingVariation1 extends BaseAction {
 												session.save();
 											}
 											drawersContainerNode.setProperty("headerlinks", jsonObj.toString());
-										} 
+										} else {
+											sb.append("<li>link of drawer container doesn't exist</li>");
+										}
 									}
 								}
 								if (drawersContainerNode != null && drawersContainerNode.hasNodes()) {
@@ -497,11 +494,6 @@ public class ProductLandingVariation1 extends BaseAction {
 										// start new code
 										int count = 0;
 										for (Element drawersPanelElement : drawersPanelElements) {
-											boolean infoLinksMisMatchFlag = false;
-											boolean linkUrlNotFoundFlag = false;
-											boolean imageSrcNotFoundFlag = false;
-											boolean subdrawerTitleNotFoundFlag = false;
-											boolean subdrawerHighlightsNotFoundFlag = false;
 											Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 											if (drawerPanelLiElements != null) {
 												log.debug("li elements size" + drawerPanelLiElements.size());
@@ -542,9 +534,11 @@ public class ProductLandingVariation1 extends BaseAction {
 																	}
 																	log.debug("panel title : " + panelTitle);
 																} else {
+																	sb.append("<li>drawer panel anchor element not found</li>");
 																	log.debug("h3 first element not found with in the class 'series' of div.");
 																}
 															} else {
+																sb.append("<li>drawer panel title element not found</li>");
 																log.debug("h3 element not found with in the class 'series' of div.");
 															}
 															Elements panelParaElements = seriesElement.getElementsByTag("p");
@@ -552,6 +546,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																Element panelDescriptionElement = panelParaElements.first();
 																panelDescription = panelDescriptionElement.text();
 															} else {
+																sb.append("<li>drawer panel para element not found</li>");
 																log.debug("p tag not found with in the 'series' class of the div.");
 															}
 															// start image
@@ -567,7 +562,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																		drawersImageNode.setProperty("fileReference", drawerImage);
 																	}
 																} else {
-																	sb.append("<li>drawer image node doesn't exist for "+drawerComponentHeaderTitle+"</li>");
+																	sb.append("<li>drawer image node doesn't exist</li>");
 																	log.debug("'drawers-image' node not found with in the node : " + drawersPanelNode.getPath());
 																}
 															}
@@ -579,19 +574,19 @@ public class ProductLandingVariation1 extends BaseAction {
 																if (StringUtils.isNotBlank(panelTitle)) {
 																	drawersPanelNode.setProperty("title", panelTitle);
 																} else {
-																	sb.append("<li>title of drawer panel doesn't exist </li>");
+																	sb.append("<li>title of drawer panel doesn't exist</li>");
 																	log.debug("Title is blank for one of the panel.");
 																}
 																if (StringUtils.isNotBlank(linkUrl)) {
 																	drawersPanelNode.setProperty("linkurl", linkUrl);
 																} else {
-																	sb.append("<li>Title Link of drawer panel doesn't exist for "+ panelTitle+" </li>");
+																	sb.append("<li>link of the title of drawer panel doesn't exist</li>");
 																	log.debug("link url is blank for thr one of the panel.");
 																}
 																if (StringUtils.isNotBlank(panelDescription)) {
 																	drawersPanelNode.setProperty("description", panelDescription);
 																} else {
-																	sb.append("<li>Description of drawer panel doesn't exist </li>");
+																	sb.append("<li>description of drawer panel doesn't exist</li>");
 																	log.debug("description is blank for one of the panel.");
 																}
 															}
@@ -637,16 +632,20 @@ public class ProductLandingVariation1 extends BaseAction {
 																					log.debug("after linkTitleUrl" + linkTitleUrl);
 																					// End extracting valid href
 																				} else {
+																					sb.append("<li>sub series title Element anchor not found</li>");
 																					log.debug("h4 tag first element not found with in the class 'prodinfo' of div.");
 																				}
 																			} else {
+																				sb.append("<li>sub series title Element anchor Section not found</li>");
 																				log.debug("h4 tag element not found with in the class 'prodinfo' of div.");
 																			}
 																		} else {
+																			sb.append("<li>sub series title Element not found</li>");
 																			log.debug("h4 tag element not found with in the class 'prodinfo' of div.");
 																		}
 
 																	} else {
+																		sb.append("<li>sub series title Elements section not found</li>");
 																		log.debug("h4 tag not found with in the class 'prodinfo' of div");
 																	}
 																	// start image
@@ -660,11 +659,9 @@ public class ProductLandingVariation1 extends BaseAction {
 																			log.debug("subDrawerImage after migration : " + subDrawerImage);
 																			if (StringUtils.isNotBlank(subDrawerImage)) {
 																				subDrawersImageNode.setProperty("fileReference", subDrawerImage);
-																			}else{
-																				imageSrcNotFoundFlag = true;
 																			}
 																		} else {
-																			
+																			sb.append("<li>subdrawer image node doesn't exist</li>");
 																			log.debug("'subdrawers-image' node not found with the node : " + subdrawerpanel.getPath());
 																		}
 																	}
@@ -681,12 +678,15 @@ public class ProductLandingVariation1 extends BaseAction {
 																					list1.add(jsonObj.toString());
 																				}
 																			} else {
+																				sb.append("<li>li elements in details Element not found</li>");
 																				log.debug("No li element found with in the class 'details' of ul tag.");
 																			}
 																		} else {
+																			sb.append("<li>details Element not found</li>");
 																			log.debug("first element not found with in the class 'subdrawerpanel' of ul tag.");
 																		}
 																	} else {
+																		sb.append("<li>details Element section not found</li>");
 																		log.debug("element not found with in the class 'subdrawerpanel' of ul tag.");
 																	}
 
@@ -711,9 +711,11 @@ public class ProductLandingVariation1 extends BaseAction {
 																					log.debug("after linkTextUrl" + linkTextUrl);
 																					// End extracting valid href
 																				} else {
+																					sb.append("<li>info links anchor element not found</li>");
 																					log.debug("No first anchor tag found with in the 'li' of 'details' class of ul tag.");
 																				}
 																			} else {
+																				sb.append("<li>info links anchor element section not found</li>");
 																				log.debug("No anchor tag found with in the 'li' of 'details' class of ul tag.");
 																			}
 																			if (StringUtils.isNotBlank(linkText)) {
@@ -731,13 +733,13 @@ public class ProductLandingVariation1 extends BaseAction {
 																	if (StringUtils.isNotBlank(title)) {
 																		subdrawerpanel.setProperty("title", title);
 																	} else {
-																		subdrawerTitleNotFoundFlag = true;
+																		sb.append("<li>title of sub drawer doesn't exist</li>");
 																		log.debug("Title of the sub drawer doesn't exists.");
 																	}
 																	if (StringUtils.isNotBlank(linkTitleUrl)) {
 																		subdrawerpanel.setProperty("linkurl", linkTitleUrl);
 																	} else {
-																		linkUrlNotFoundFlag = true;
+																		sb.append("<li>link url of sub drawer doesn't exist</li>");
 																		log.debug("linkurl property is not set at : " + subdrawerpanel.getPath());
 																	}
 																	if (list1.size() > 0) {
@@ -748,7 +750,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																		}
 																		subdrawerpanel.setProperty("highlights", list1.toArray(new String[list1.size()]));
 																	} else {
-																		subdrawerHighlightsNotFoundFlag = true;
+																		sb.append("<li>highlights of sub drawer doesn't exist</li>");
 																		log.debug("hightlights of sub drawer doesn't exists.");
 																	}
 																	if (list2.size() > 0) {
@@ -759,7 +761,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																		}
 																		subdrawerpanel.setProperty("infolinks", list2.toArray(new String[list2.size()]));
 																	} else {
-																		infoLinksMisMatchFlag = true;
+																		sb.append("<li>infolinks of sub drawer doesn't exist</li>");
 																		log.debug("infolinks of sub drawer doesn't exists.");
 																	}
 																} else {
@@ -767,26 +769,9 @@ public class ProductLandingVariation1 extends BaseAction {
 																}
 															}
 														}
-														
 													}
 													if (!misMatchFlag) {
 														sb.append("<li>Mis Match of subdrawers count in drawer panel " + panelTitle + "</li>");
-													}
-													
-													if(infoLinksMisMatchFlag){
-														sb.append(Constants.MISMATCH_IN_INFOLINKS+" "+panelTitle);
-													}
-													if(linkUrlNotFoundFlag){
-														sb.append(Constants.LINK_URL_OF_SUB_DRAWER_NOT_FOUND+" "+panelTitle);
-													}
-													if(imageSrcNotFoundFlag){
-														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
-													}
-													if(subdrawerHighlightsNotFoundFlag){
-														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
-													}
-													if(subdrawerTitleNotFoundFlag){
-														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 													}
 												}
 											}

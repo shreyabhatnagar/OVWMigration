@@ -201,7 +201,6 @@ public class ProductLandingVariation9 extends BaseAction{
 										sb.append("<li>Hero Component count mis match. Elements on page are: "+eleSize+" Node Count is: "+nodeSize+"</li>");
 									}
 									int i = 0;
-									int imageSrcEmptyCount = 0;
 									for (Element ele : heroElements) {
 										Node heroPanelNode = null;
 										if(panelPropertiest != null && i<=panelPropertiest.length){
@@ -263,8 +262,6 @@ public class ProductLandingVariation9 extends BaseAction{
 													log.debug("heroImage after migration : " + heroImage + "\n");
 													if (StringUtils.isNotBlank(heroImage)) {
 														imageNode.setProperty("fileReference", heroImage);
-													}else{
-														imageSrcEmptyCount++;
 													}
 											} else {
 												sb.append("<li>hero image node doesn't exist</li>");
@@ -285,10 +282,7 @@ public class ProductLandingVariation9 extends BaseAction{
 										
 										
 
-									}if(imageSrcEmptyCount > 0){
-										sb.append("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
 									}
-	
 
 								}
 
@@ -486,7 +480,6 @@ public class ProductLandingVariation9 extends BaseAction{
 							// NodeIterator spoLightNodeIterator =
 							// spotLightNode.getNodes();
 							int nodeSize = (int) spoLightNodeIterator.getSize();
-							int imageSrcEmptyCount = 0;
 							if (eleSize == nodeSize) {
 								for (Element ele : spotLightElements) {
 									spoLightNodeIterator.hasNext();
@@ -526,8 +519,6 @@ public class ProductLandingVariation9 extends BaseAction{
 											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												spotLightImageNode.setProperty("fileReference" , spotLightImage);
-											}else{
-												imageSrcEmptyCount++;
 											}
 										} else {
 											sb.append("<li>spotlight image node doesn't exist</li>");
@@ -542,9 +533,6 @@ public class ProductLandingVariation9 extends BaseAction{
 									spotLightComponentNode.setProperty("linktext",
 											aText);
 
-								}
-								if(imageSrcEmptyCount > 0){
-									sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 								}
 							}
 
@@ -592,8 +580,6 @@ public class ProductLandingVariation9 extends BaseAction{
 												log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 												if (StringUtils.isNotBlank(spotLightImage)) {
 													spotLightImageNode.setProperty("fileReference" , spotLightImage);
-												}else{
-													imageSrcEmptyCount++;
 												}
 											} else {
 												sb.append("<li>spotlight image node doesn't exist</li>");
@@ -613,8 +599,6 @@ public class ProductLandingVariation9 extends BaseAction{
 										sb.append("<li>Unable to migrate one spotlight component. Count MisMatch.</li>");
 										log.debug("Could not migrate one spotlight large node.");
 									}
-								}if(imageSrcEmptyCount > 0){
-									sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 								}
 
 							}

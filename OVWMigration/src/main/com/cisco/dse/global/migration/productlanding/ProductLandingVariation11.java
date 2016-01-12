@@ -126,7 +126,6 @@ public class ProductLandingVariation11 extends BaseAction {
 											.getNodes("heropanel*");
 									int nodeSize = (int) heroPanelNodeIterator.getSize();
 									int i = 0;
-									int imageSrcEmptyCount = 0;
 									for (Element ele : heroElements) {
 										Node heroPanelNode = null;
 										if(panelPropertiest != null && i<=panelPropertiest.length){
@@ -181,8 +180,6 @@ public class ProductLandingVariation11 extends BaseAction {
 												log.debug("heroImage " + heroImage + "\n");
 												if (StringUtils.isNotBlank(heroImage)) {
 													imageNode.setProperty("fileReference" , heroImage);
-												}else{
-													imageSrcEmptyCount++;
 												}
 											} else {
 												sb.append("<li>hero image node doesn't exist</li>");
@@ -207,9 +204,6 @@ public class ProductLandingVariation11 extends BaseAction {
 										}
 										// end image
 										
-									}
-									if(imageSrcEmptyCount > 0){
-										sb.append("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
 									}
 									if (nodeSize != eleSize) {
 										sb.append("<li>Unable to Migrate Hero component. Element Count is "
@@ -288,7 +282,6 @@ public class ProductLandingVariation11 extends BaseAction {
 							// NodeIterator spoLightNodeIterator =
 							// spotLightNode.getNodes();
 							int nodeSize = (int) spoLightNodeIterator.getSize();
-							int imageSrcEmptyCount = 0;
 							for (Element ele : spotLightElements) {
 								spoLightNodeIterator.hasNext();
 								Node spotLightComponentNode = (Node) spoLightNodeIterator
@@ -326,10 +319,7 @@ public class ProductLandingVariation11 extends BaseAction {
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
-										}else{
-											imageSrcEmptyCount++;
 										}
-											
 									} else {
 										sb.append("<li>spotlight image node doesn't exist</li>");
 									}
@@ -340,9 +330,6 @@ public class ProductLandingVariation11 extends BaseAction {
 										pText);
 								spotLightComponentNode.setProperty("linktext",
 										aText);
-							}
-							if(imageSrcEmptyCount > 0){
-								sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 							}
 
 							if (nodeSize != eleSize) {

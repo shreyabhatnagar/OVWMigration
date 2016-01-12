@@ -283,8 +283,6 @@ public class ProductLandingVariation5 extends BaseAction {
 													log.debug("heroImage " + heroImage + "\n");
 													if (StringUtils.isNotBlank(heroImage)) {
 														imageNode.setProperty("fileReference" , heroImage);
-													}else{
-															sb.append("<li> image is not found on locale page's hero element. </li>");
 													}
 												} else {
 													sb.append("<li>hero image node doesn't exist</li>");
