@@ -226,6 +226,7 @@ public class ProductLandingVariation3 extends BaseAction {
 									sb.append("<li>Mismatch in Hero Panels count.</li>");
 								}
 								int i = 0;
+								int imageSrcEmptyCount = 0;
 								for (Element ele : heroLargeFrameElements) {
 									String heroPanelTitle = "";
 									String heroPanelDescription = "";
@@ -305,6 +306,8 @@ public class ProductLandingVariation3 extends BaseAction {
 											log.debug("heroImage after migration : " + heroImage);
 											if (StringUtils.isNotBlank(heroImage)) {
 												imageNode.setProperty("fileReference", heroImage);
+											}else{
+												imageSrcEmptyCount++;
 											}
 										} else {
 											sb.append("<li>hero image node doesn't exist</li>");
@@ -353,6 +356,8 @@ public class ProductLandingVariation3 extends BaseAction {
 											log.debug("linkurl property is not set at " + heroPanelNode.getPath());
 										}
 									}
+								}if(imageSrcEmptyCount > 0){
+									sb.append("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
 								}
 							} else {
 								sb.append("<li>Hero Large Frames/Panel Elements is not found</li>");
