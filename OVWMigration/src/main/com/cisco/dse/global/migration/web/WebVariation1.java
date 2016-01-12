@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -91,192 +92,57 @@ public class WebVariation1 extends BaseAction{
 
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
-				// start of hero component
+				// start set hero medium component properties.			
 				try {
-					Node heroMediumNode = null;
-					Value[] panelPropertiest = null;
-					String heroTitle = "";
-					String heroDescription = "";
-					String heroLinkText = "";
-					String herolinkUrl = "";
-					heroMediumNode = webNode
-							.hasNode("gd12v2-left/hero_medium") ? webNode
-							.getNode("gd12v2-left/hero_medium") : null;
-					if (heroMediumNode != null) {
-						Property panelNodesProperty = heroMediumNode
-								.hasProperty("panelNodes") ? heroMediumNode
-								.getProperty("panelNodes") : null;
-						if (panelNodesProperty.isMultiple()) {
-							panelPropertiest = panelNodesProperty.getValues();
-						}
-					} else {
-						sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
-						log.debug("Node with name 'hero_medium' doesn't exist under");
-					}
+					log.debug("Start of Hero component");
+					Elements heroElements = doc.select("div.c50-pilot");
+					int eleSize = heroElements.select("div.frame").size();
+					Node heroNode = webNode.hasNode("gd12v2-left/hero_medium") ? webNode.getNode("gd12v2-left/hero_medium") : null;
 
-					Element heroMediumElement = doc.select("div.c50-pilot")
-							.first();
-					if (heroMediumElement != null) {
-						Elements heroMediumFrameElements = heroMediumElement
-								.select("div.frame");
-						Node heroPanelNode = null;
-						if (heroMediumFrameElements != null) {
-							if (heroMediumFrameElements.size() != heroMediumNode
-									.getNodes("heropanel*").getSize()) {
-								sb.append(Constants.MISMATCH_IN_HERO_SLIDES);
-							}
-							int i = 0;
-							for (Element ele : heroMediumFrameElements) {
-								Element heroTitleElement = ele
-										.getElementsByTag("h2").first();
-								if (heroTitleElement != null) {
-									heroTitle = heroTitleElement.text();
-								} else {
-									sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
-									log.debug("No h2 first element found with in the class 'frame' of div.");
-								}
-								Element heroDescriptionElement = ele
-										.getElementsByTag("p").first();
-								if (heroDescriptionElement != null) {
-									heroDescription = heroDescriptionElement
-											.text();
-								} else {
-									sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
-									log.debug("No p frist element found with in the class 'frame' of div.");
-								}
-								Element heroPanelLinkTextElement = ele
-										.getElementsByTag("b").first();
-								if (heroPanelLinkTextElement != null) {
-									heroLinkText = heroPanelLinkTextElement
-											.text();
-								} else {
-									sb.append(Constants.HERO_CONTENT_ANCHOR_TEXT_IS_BLANK);
-									log.debug("No b tags first elemtn found with in the class 'frame' of div.");
-								}
-								Element heroPanelLinkUrlElement = ele
-										.getElementsByTag("a").first();
-								if (heroPanelLinkUrlElement != null) {
-									herolinkUrl = heroPanelLinkUrlElement
-											.absUrl("href");
-									// Start extracting valid href
-									log.debug("heroPanellinkUrl before migration : "
-											+ herolinkUrl);
-									herolinkUrl = FrameworkUtils
-											.getLocaleReference(herolinkUrl,
-													urlMap);
-									log.debug("heroPanellinkUrl after migration : "
-											+ herolinkUrl);
-									// End extracting valid href
-								} else {
-									sb.append("<li>Hero Panel element not having any linkurl in it </li>");
-									log.debug("No anchor first element found with in the class 'frame' of div.");
-								}
-								String heroImage = FrameworkUtils
-										.extractImagePath(ele, sb);
-								log.debug("heroImage path : " + heroImage);
-								if (panelPropertiest != null
-										&& i <= panelPropertiest.length) {
-									String propertyVal = panelPropertiest[i]
-											.getString();
-									if (StringUtils.isNotBlank(propertyVal)) {
-										JSONObject jsonObj = new JSONObject(
-												propertyVal);
-										if (jsonObj.has("panelnode")) {
-											String panelNodeProperty = jsonObj
-													.get("panelnode")
-													.toString();
-											heroPanelNode = heroMediumNode
-													.hasNode(panelNodeProperty) ? heroMediumNode
-													.getNode(panelNodeProperty)
-													: null;
-										}
-									}
-									i++;
-								}
-								if (heroPanelNode != null) {
-									Node heroPanelPopUpNode = null;
-									Elements lightBoxElements = ele.select(
-											"p.cta-link").select(
-											"a.c26v4-lightbox");
-									if (StringUtils.isNotBlank(heroTitle)) {
-										heroPanelNode.setProperty("title",
-												heroTitle);
-										if (lightBoxElements != null
-												&& !lightBoxElements.isEmpty()) {
-											heroPanelPopUpNode = FrameworkUtils
-													.getHeroPopUpNode(heroPanelNode);
-											if (heroPanelPopUpNode != null) {
-												heroPanelPopUpNode.setProperty(
-														"popupHeader",
-														heroTitle);
-											} else {
-												sb.append("<li>Hero content video pop up node not found.</li>");
-												log.debug("No pop-up node found for the hero panel node "
-														+ heroPanelNode
-																.getPath());
-											}
-										}
-									}
-									if (StringUtils.isNotBlank(heroDescription)) {
-										heroPanelNode.setProperty(
-												"description", heroDescription);
-									}
-									if (StringUtils.isNotBlank(heroLinkText)) {
-										heroPanelNode.setProperty("linktext",
-												heroLinkText);
-									}
-									if (StringUtils.isNotBlank(herolinkUrl)) {
-										heroPanelNode.setProperty("linkurl",
-												herolinkUrl);
-									}
-									if (heroPanelNode.hasNode("image")) {
-										Node imageNode = heroPanelNode
-												.getNode("image");
-										String fileReference = imageNode
-												.hasProperty("fileReference") ? imageNode
-												.getProperty("fileReference")
-												.getString() : "";
-										heroImage = FrameworkUtils
-												.migrateDAMContent(heroImage,
-														fileReference, locale,
-														sb);
-										log.debug("heroImage : " + heroImage);
-										if (StringUtils.isNotBlank(heroImage)) {
-											imageNode.setProperty(
-													"fileReference", heroImage);
-										} else {
-											sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
-										}
-									} else {
-										sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
-										log.debug("'image' node doesn't exists in "
-												+ heroPanelNode.getPath());
-									}
-								}
-							}
-						} else {
-							log.debug(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
-							log.debug("No div found with class 'frame'");
+					if (heroNode != null) {
+						log.debug("hero node found: "+ heroNode.getPath());
+						if (heroElements.isEmpty()) {
+							log.debug("No hero element found with div class name frame.");
+							sb.append("<li>Hero component with class name 'frame' does not exist on locale page.</li>");
 						}
-					} else {
-						;
-						sb.append(Constants.HERO_LARGE_COMPONENT_NOT_FOUND);
-						log.debug("No element found with class 'c50-pilot'");
+						else {
+//							int eleSize = heroElements.size();
+							log.debug("hero node element size: "+ eleSize);
+							NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
+							int nodeSize = (int)heroPanelNodeIterator.getSize();
+							log.debug("hero node nodeSize : "+ nodeSize);
+							if(eleSize == nodeSize){
+								setForHero(heroElements,heroNode,locale,urlMap);
+							}
+							else if(nodeSize < eleSize){
+								setForHero(heroElements,heroNode,locale,urlMap);
+								sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+							}
+							else if (nodeSize > eleSize) {
+								setForHero(heroElements,heroNode,locale,urlMap);
+								sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
+							}
+						}
 					}
+					else {
+						log.debug("No hero node found at "+webNode);
+						sb.append("<li>Node for hero large component does not exist.</li>");
+					}
+					log.debug("End of Hero component");
+
 				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
-					log.debug("Exception : ", e);
-				}
+					sb.append("<li>Unable to update hero large component.</li>");
+				}		
 
-				// end of hero component
-				// --------------------------------------------------------------------------------------------------------
+				// end set Hero Large component properties
+				//-------------------------------------------------------------
 				// start of htmlblob component
 				try {
 					String htmlBlobContent = "";
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Elements htmlBlobElements = doc.select("div.gd-left").select("div.gd23-pilot,div.c00-pilot");
+					Elements htmlBlobElements = doc.select("div.gd-left").select("div.c00-pilot");
 					if (htmlBlobElements != null) {
 						htmlBlobContent = htmlBlobElements.outerHtml();
 					}
@@ -308,7 +174,7 @@ public class WebVariation1 extends BaseAction{
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Element htmlBlobElements = doc.select("div.gd-right").last();
+					Elements htmlBlobElements = doc.select("div.gd-right");
 					if (htmlBlobElements != null) {
 						htmlBlobContent = htmlBlobElements.outerHtml();
 					}
@@ -350,7 +216,93 @@ public class WebVariation1 extends BaseAction{
 		return sb.toString();
 
 	}
+	//start setting of heropanel
+		public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale,Map<String,String> urlMap) {
 
+			try {			
+				String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").first().text():"";
+				String desc = ele.getElementsByTag("p")!=null?ele.getElementsByTag("p").first().text():"";
+
+				Element anchor = ele.getElementsByTag("a").first();		
+				String anchorText = anchor!=null?anchor.text():"";
+				String anchorHref = anchor.attr("href");
+				// Start extracting valid href
+				log.debug("Before heroPanelLinkUrl" + anchorHref + "\n");
+				anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+				log.debug("after heroPanelLinkUrl" + anchorHref + "\n");
+				// End extracting valid href
+
+				// start image
+				String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+				log.debug("heroImage before migration : " + heroImage + "\n");
+				if (heroPanelNode != null) {
+					Node heroPanelPopUpNode = null;
+					Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+					if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+						Element lightBoxElement = lightBoxElements.first();
+						heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+					}
+					if (heroPanelNode.hasNode("image")) {
+						Node imageNode = heroPanelNode.getNode("image");
+						String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
+						heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
+						log.debug("heroImage after migration : " + heroImage + "\n");
+						if (StringUtils.isNotBlank(heroImage)) {
+							imageNode.setProperty("fileReference" , heroImage);
+						}
+					} else {
+						sb.append("<li>hero image node doesn't exist</li>");
+					}
+					
+					if(heroPanelPopUpNode != null){
+						heroPanelPopUpNode.setProperty("popupHeader", title);
+					}else{
+						sb.append("<li>Hero content video pop up node not found.</li>");
+					}
+					
+					heroPanelNode.setProperty("title", title);
+					heroPanelNode.setProperty("description", desc);
+					heroPanelNode.setProperty("linktext", anchorText);
+					heroPanelNode.setProperty("linkurl", anchorHref);
+				}
+				// end image
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void setForHero(Elements heroElements, Node heroPanelMedium, String locale, Map<String, String> urlMap) {
+			try {
+				Value[] panelPropertiest = null;
+				Property panelNodesProperty = heroPanelMedium.hasProperty("panelNodes") ? heroPanelMedium.getProperty("panelNodes") : null;
+				if (panelNodesProperty.isMultiple()) {
+					panelPropertiest = panelNodesProperty.getValues();
+				}
+				int i = 0;
+				Node heroPanelNode = null;
+				for (Element ele : heroElements) {
+					if (panelPropertiest != null && i <= panelPropertiest.length) {
+						String propertyVal = panelPropertiest[i].getString();
+						if (StringUtils.isNotBlank(propertyVal)) {
+							JSONObject jsonObj = new JSONObject(propertyVal);
+							if (jsonObj.has("panelnode")) {
+								String panelNodeProperty = jsonObj.get("panelnode").toString();
+								heroPanelNode = heroPanelMedium.hasNode(panelNodeProperty) ? heroPanelMedium.getNode(panelNodeProperty) : null;
+							}
+						}
+						i++;
+					} else {
+						sb.append("<li>No heropanel Node found.</li>");
+					}
+					heroPanelTranslate(heroPanelNode, ele, locale, urlMap);
+				}
+			} catch (Exception e) {
+			}
+		}
+		
+		//end setting of heropanel
+		
 }
 
 					
