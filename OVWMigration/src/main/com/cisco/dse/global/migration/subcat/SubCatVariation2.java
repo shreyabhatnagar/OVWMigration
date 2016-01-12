@@ -272,7 +272,7 @@ public class SubCatVariation2 extends BaseAction{
 					
 					String titeText = "";
 					String callText = "";
-					Element contactUsElement = doc.select("div.f-holder").first();
+					Element contactUsElement = doc.select("div.f-holder, div.feature-holder").first();
 					
 					
 					Node letUsHelpNode = topRightGridNode.hasNode("letushelp")?topRightGridNode.getNode("letushelp"):null;

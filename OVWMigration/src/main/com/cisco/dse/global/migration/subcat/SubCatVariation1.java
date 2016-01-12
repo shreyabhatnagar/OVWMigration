@@ -286,6 +286,41 @@ public class SubCatVariation1 extends BaseAction {
 
 				// end of hero component
 				// --------------------------------------------------------------------------------------------------------
+				// start of htmlblob component
+				
+				try {
+					String html = "";
+					Elements htmlBlobElements = doc.select("div.gd22v2-right");
+					for (Element htmlBlobElement : htmlBlobElements) {
+						if (htmlBlobElement.select("div.htmlblob").size() == 0) {
+							log.debug("upper gd22v2-right encountered without htmlblob meanes image");
+							Elements anchorElements = htmlBlobElement.getElementsByTag("a");
+							if (anchorElements != null) {
+								Element anchorElement = anchorElements.first();
+								if (anchorElement != null) {
+									 html = FrameworkUtils.extractHtmlBlobContent(
+											 anchorElement, "", locale, sb,urlMap);
+								} else {
+									log.debug(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+								}
+							}
+						}
+					}
+					Node htmlBlobNode = subCatTopNode
+							.hasNode("gd22v2-right/htmlblob") ? subCatTopNode
+							.getNode("gd22v2-right/htmlblob") : null;
+					if (htmlBlobNode != null) {
+						if (StringUtils.isNotBlank(html)) {
+							log.debug("htmlblob new### " + html);
+							htmlBlobNode.setProperty("html", html);
+						}
+						
+					}
+				} catch (Exception e) {
+					log.error("Exception ", e);
+				}
+				// end of htmlblob component
+				// --------------------------------------------------------------------------------------------------------
 				// start of letus help component
 				try {
 
