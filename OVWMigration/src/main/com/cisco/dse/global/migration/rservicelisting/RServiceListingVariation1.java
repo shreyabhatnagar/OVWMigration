@@ -210,6 +210,12 @@ public class RServiceListingVariation1 extends BaseAction {
 									} else {
 										sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 									}
+									Elements pTagElements = ele.getElementsByTag("p");
+									for (Element pTagElement : pTagElements) {
+										if (pTagElement.getElementsByTag("a").size() > 0) {
+											sb.append("<li>link of spotlight is not migrated as spotlight component in WEM is not having link property</li>");
+										}
+									}
 								} else if (sCount == 5) {
 									pText = spotlightElements.select("p")
 											.last().ownText();
@@ -417,7 +423,7 @@ public class RServiceListingVariation1 extends BaseAction {
 											sb.append(Constants.LINK_TEXT_NOT_FOUND_IN_LIST);
 										}
 										if (aHref != null) {
-											listItemsNode.setProperty("ulr",
+											listItemsNode.setProperty("url",
 													aHref);
 										} else {
 											sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
