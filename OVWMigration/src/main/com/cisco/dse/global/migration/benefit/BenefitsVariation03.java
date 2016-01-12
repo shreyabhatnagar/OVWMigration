@@ -314,7 +314,7 @@ public class BenefitsVariation03 extends BaseAction {
 												"video")) {
 											pdfIcon = "video";
 										}
-										if ("tr_tr".equals(locale)) {
+										if (ownPdfText.length() > 25) {
 											for (int j = 0; j < ownPdfText.length(); j++) {
 												char character = ownPdfText.charAt(j);
 												if (character == '(') {
@@ -339,6 +339,7 @@ public class BenefitsVariation03 extends BaseAction {
 												break;
 											}
 										}
+										
 										pdfSize = ownPdfText.substring(i,
 												ownPdfText.length() - 1);
 										pdfSize = pdfSize.replace(")", "");
