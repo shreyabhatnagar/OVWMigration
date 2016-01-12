@@ -533,12 +533,12 @@ public class ProductLandingVariation10 extends BaseAction {
 	}
 
 	//start setting of heropanel
-	public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale,Map<String,String> urlMap) {
+	public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale,Map<String,String> urlMap, int imageSrcEmptyCount) {
 
 		try {			
 			String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").text():"";
 			String desc = ele.getElementsByTag("p")!=null?ele.getElementsByTag("p").first().text():"";
-
+			
 			Elements anchor = ele.getElementsByTag("a");		
 			String anchorText = anchor!=null?anchor.text():"";
 			String anchorHref = anchor.attr("href");
@@ -565,6 +565,8 @@ public class ProductLandingVariation10 extends BaseAction {
 					log.debug("heroImage after migration : " + heroImage + "\n");
 					if (StringUtils.isNotBlank(heroImage)) {
 						imageNode.setProperty("fileReference" , heroImage);
+					}else{
+						imageSrcEmptyCount ++;
 					}
 				} else {
 					sb.append("<li>hero image node doesn't exist</li>");
@@ -582,7 +584,9 @@ public class ProductLandingVariation10 extends BaseAction {
 				heroPanelNode.setProperty("linkurl", anchorHref);
 			}
 			// end image
-			
+			if(imageSrcEmptyCount > 0){
+				sb.append("<li> "+imageSrcEmptyCount +" image(s) are not found on hero elements on locale page.</li>");
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -611,7 +615,8 @@ public class ProductLandingVariation10 extends BaseAction {
 				} else {
 					sb.append("<li>No heropanel Node found.</li>");
 				}
-				heroPanelTranslate(heroPanelNode, ele, locale, urlMap);
+				int imageSrcEmptyCount = 0;
+				heroPanelTranslate(heroPanelNode, ele, locale, urlMap, imageSrcEmptyCount);
 			}
 		} catch (Exception e) {
 		}
@@ -716,6 +721,8 @@ public class ProductLandingVariation10 extends BaseAction {
 					log.debug("spotLightImage " + spotLightImage + "\n");
 					if (StringUtils.isNotBlank(spotLightImage)) {
 						spotLightImageNode.setProperty("fileReference" , spotLightImage);
+					}else{
+						sb.append("<li> Image not found for spot light component on locale page. </li>");
 					}
 				} else {
 					sb.append("<li>spotlight image node doesn't exist</li>");
