@@ -71,7 +71,7 @@ public class WebVariation2 extends BaseAction {
 				.replace("<prod>", prod);
 		String rightHtmlblobNodePath = "/content/<locale>/"
 				+ catType
-				+ "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2_0/gd12v2-left";
+				+ "/<prod>/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2_0/gd12v2-right";
 		rightHtmlblobNodePath = rightHtmlblobNodePath.replace("<locale>",
 				locale).replace("<prod>", prod);
 
@@ -208,19 +208,26 @@ public class WebVariation2 extends BaseAction {
 									if (StringUtils.isNotBlank(heroTitle)) {
 										heroPanelNode.setProperty("title",
 												heroTitle);
-										if (lightBoxElements != null
-												&& !lightBoxElements.isEmpty()) {
-											heroPanelPopUpNode = FrameworkUtils
-													.getHeroPopUpNode(heroPanelNode);
-											if (heroPanelPopUpNode != null) {
+										heroPanelPopUpNode = FrameworkUtils
+												.getHeroPopUpNode(heroPanelNode);
+										if (heroPanelPopUpNode != null) {
+											if (lightBoxElements != null
+													&& !lightBoxElements
+															.isEmpty()) {
 												heroPanelPopUpNode.setProperty(
 														"popupHeader",
 														heroTitle);
 											} else {
-												sb.append("<li>Hero content video pop up node not found.</li>");
+												sb.append("<li>Hero content video pop up elements not found in locale page.</li>");
 												log.debug("No pop-up node found for the hero panel node "
 														+ heroPanelNode
 																.getPath());
+											}
+										} else {
+											if (lightBoxElements != null
+													&& !lightBoxElements
+															.isEmpty()) {
+												sb.append("<li>Hero content video pop up node not found.</li>");
 											}
 										}
 									}
@@ -355,7 +362,7 @@ public class WebVariation2 extends BaseAction {
 					// getting data
 					Elements htmlEle = doc.select("div.gd-left");
 					for (Element ele : htmlEle) {
-						log.debug("gd-left "+ele);
+						log.debug("gd-left Elements " + count + " " + ele);
 						if (count == 2) {
 
 							if (ele != null) {
@@ -389,22 +396,18 @@ public class WebVariation2 extends BaseAction {
 				// Start of right html blob
 				try {
 					String htmlContent = "";
-					int count = 1;
 					// getting data
-					Elements htmlEle = doc.select("div.gd-right");
-					for (Element ele : htmlEle) {
-						log.debug("gd-right "+ele);
-						if (count == 2) {
-							if (ele != null) {
-								htmlContent = FrameworkUtils
-										.extractHtmlBlobContent(ele, "",
-												locale, sb, urlMap);
-							} else {
-								sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
-							}
-						}
-						count++;
+					Element htmlEle = doc.select("div.gd-right").last();
+					if (htmlEle != null) {
+					htmlEle.select("div.c47-pilot").remove();
+					htmlEle.select("div.s12-pilot").remove();
+					log.debug("gd-right " + htmlEle);
+						htmlContent = FrameworkUtils.extractHtmlBlobContent(
+								htmlEle, "", locale, sb, urlMap);
+					} else {
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 					}
+
 					// setting data
 					Node htmlNode = rightHtmlblobNode.hasNode("htmlblob") ? rightHtmlblobNode
 							.getNode("htmlblob") : null;
@@ -422,7 +425,6 @@ public class WebVariation2 extends BaseAction {
 					log.error("Exception ", e);
 				}
 				// end of right html blob
-
 			} else {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}

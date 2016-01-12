@@ -744,6 +744,12 @@ public class Constants {
 
 	//CONTACTUS_NODE_NOT_FOUND
 	public static final String CONTACTUS_NODE_NOT_FOUND = "<li>CONTACTUS Node not Found.</li>";
+	
+	//EXTRA_IMG_FOUND_IN_RIGHT_PANEL
+	public static final String EXTRA_IMG_FOUND_IN_RIGHT_PANEL = "<li>Extra image found in the right panel</li>";
+
+	//LINK_URL_NOT_FOUND_IN_RIGHT_RAIL
+	public static final String LINK_URL_NOT_FOUND_IN_RIGHT_RAIL = "<li>link url doesn't exist for the link in the right rail</li>";
 
 
 }

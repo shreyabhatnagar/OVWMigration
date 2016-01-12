@@ -111,7 +111,14 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 					log.error("Exception : ", e);
 				}
 				//End of migration of Right List Component
-
+				
+				//Check for optin Banner
+				Element optinBanner = doc.getElementById("optinbanner");
+				if(optinBanner != null){
+					sb.append(Constants.EXTRA_IMG_FOUND_IN_RIGHT_PANEL);
+				}
+				//Check for optin Banner
+				
 
 			} else {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
@@ -263,6 +270,19 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 				log.debug("Follow us does not exists");
 			}
 		//end of check for follow us
+			
+		//Check for image
+			Element listEle = listElements.first();
+			if(listEle != null){
+				Element sibling = listEle.nextElementSibling();
+				if(sibling != null){
+					Elements image = sibling.getElementsByTag("img");
+					if(!image.isEmpty()){
+					sb.append(Constants.EXTRA_IMG_FOUND_IN_RIGHT_PANEL);
+					}
+				}
+			}
+		//end of check for image
 		
 		int eleSize = listElements.size();
 		NodeIterator listNodeIterator = trainingAndEventsRightNode.hasNodes() ? trainingAndEventsRightNode.getNodes("list*") : null;
