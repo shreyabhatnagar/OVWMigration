@@ -715,5 +715,17 @@ public class Constants {
 	//EXTRA_LOCK_IMG_FOUND_IN_LIST
 	public static final String EXTRA_LOCK_IMG_FOUND_IN_LIST = "<li>Extra Lock image found in the list</li>";
 
+	//CONTACTUS_ELEMENT_NOT_FOUND
+	public static final String CONTACTUS_ELEMENT_NOT_FOUND = "<li>CONTACTUS Element not Found in locale page.</li>";
+
+	//UNABLE_TO_UPDATE_CONTACTUS
+	public static final String UNABLE_TO_UPDATE_CONTACTUS = "<li>Unable to update CONTACTUS.</li>";
+
+	//CONTACTUS_TITLE_NOT_FOUND
+	public static final String CONTACTUS_TITLE_NOT_FOUND = "<li>No Title found for CONTACTUS.</li>";
+
+	//CONTACTUS_NODE_NOT_FOUND
+	public static final String CONTACTUS_NODE_NOT_FOUND = "<li>CONTACTUS Node not Found.</li>";
+
 
 }
