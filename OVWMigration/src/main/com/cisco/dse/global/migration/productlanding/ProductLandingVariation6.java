@@ -224,6 +224,8 @@ public class ProductLandingVariation6 extends BaseAction {
 														log.debug("heroImage " + heroImage + "\n");
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
+														}else{
+																sb.append("<li> image is not found on locale page's hero element. </li>");
 														}
 													} else {
 														sb.append("<li>hero image node doesn't exist</li>");
@@ -782,6 +784,7 @@ public class ProductLandingVariation6 extends BaseAction {
 					if (gd14v1_left_Elements != null) {
 						Elements slp_Elements = gd14v1_left_Elements
 								.select("div.tile_slp_small");
+						int imageSrcEmptyCount = 0;
 						if (slp_Elements != null) {
 
 							for (Element slp_Element : slp_Elements) {
@@ -854,6 +857,8 @@ public class ProductLandingVariation6 extends BaseAction {
 												log.debug("spotLightImage " + spotLightImage + "\n");
 												if (StringUtils.isNotBlank(spotLightImage)) {
 													imageNode.setProperty("fileReference" , spotLightImage);
+												}else{
+													imageSrcEmptyCount++;
 												}
 											} else {
 												sb.append("<li>hero image node doesn't exist</li>");
@@ -863,7 +868,10 @@ public class ProductLandingVariation6 extends BaseAction {
 										sb.append("<li>'tile_slp_small' Node doesn't exist.</li>");
 									}
 								}
+							}if(imageSrcEmptyCount > 0){
+									sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 							}
+	
 						} else {
 							sb.append("<li>Second grid element not found.</li>");
 						}

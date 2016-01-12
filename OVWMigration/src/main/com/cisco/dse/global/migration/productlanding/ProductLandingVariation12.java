@@ -151,6 +151,7 @@ public class ProductLandingVariation12 extends BaseAction {
 							
 							int nodeSize = (int) heroPanelNodeIterator.getSize();
 							int i = 0;
+							int imageSrcEmptyCount = 0;
 							for (Element ele : heroElements) {
 								String h2Text = "";
 								String pText = "";
@@ -185,7 +186,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 								Node heroPanelNode = null;
 								if (heroPanelNodeIterator.hasNext()) {
-									if(panelPropertiest != null && i<=panelPropertiest.length){
+									if(panelPropertiest != null && i<panelPropertiest.length){
 										String propertyVal = panelPropertiest[i].getString();
 										if(StringUtils.isNotBlank(propertyVal)){
 											JSONObject jsonObj = new JSONObject(propertyVal);
@@ -195,9 +196,9 @@ public class ProductLandingVariation12 extends BaseAction {
 											}
 										}
 										i++;
-									}else{
+									}/*else{
 										sb.append("<li>No heropanel Node found.</li>");
-									}
+									}*/
 									// start image
 									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 									log.debug("heroImage " + heroImage + "\n");
@@ -220,6 +221,8 @@ public class ProductLandingVariation12 extends BaseAction {
 												imageNode.setProperty(
 														"fileReference",
 														heroImage);
+											}else{
+												imageSrcEmptyCount++;
 											}
 										} else {
 											sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
@@ -244,6 +247,9 @@ public class ProductLandingVariation12 extends BaseAction {
 									// end image
 									
 								}
+							}
+							if(imageSrcEmptyCount > 0){
+								sb.append("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
 							}
 							if (nodeSize != eleSize) {
 								sb.append("<li>Unable to Migrate Hero component. Element Count is "
@@ -547,6 +553,7 @@ public class ProductLandingVariation12 extends BaseAction {
 							NodeIterator spoLightNodeIterator = indexBottomLeftNode
 									.getNodes("spotlight_large*");
 							int nodeSize = (int) spoLightNodeIterator.getSize();
+							int imageSrcEmptyCount = 0;
 							for (Element ele : spotLightElements) {
 								Node spotLightComponentNode = null;
 								String h2Text = "";
@@ -599,6 +606,8 @@ public class ProductLandingVariation12 extends BaseAction {
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
+										}else{
+											imageSrcEmptyCount++;
 										}
 									} else {
 										sb.append(Constants.SPOTLIGHT_IMAGE_NOT_AVAILABLE);
@@ -616,6 +625,9 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 							}
 							}
+							if(imageSrcEmptyCount > 0){
+								sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
+														}
 							if (nodeSize != eleSize) {
 								sb.append("<li>Could not migrate  SpotLight node. Count mis match as Element Count is "
 										+ eleSize

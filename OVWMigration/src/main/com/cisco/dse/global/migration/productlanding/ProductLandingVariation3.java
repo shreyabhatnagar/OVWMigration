@@ -226,6 +226,7 @@ public class ProductLandingVariation3 extends BaseAction {
 									sb.append("<li>Mismatch in Hero Panels count.</li>");
 								}
 								int i = 0;
+								int imageSrcEmptyCount = 0;
 								for (Element ele : heroLargeFrameElements) {
 									String heroPanelTitle = "";
 									String heroPanelDescription = "";
@@ -305,6 +306,8 @@ public class ProductLandingVariation3 extends BaseAction {
 											log.debug("heroImage after migration : " + heroImage);
 											if (StringUtils.isNotBlank(heroImage)) {
 												imageNode.setProperty("fileReference", heroImage);
+											}else{
+												imageSrcEmptyCount++;
 											}
 										} else {
 											sb.append("<li>hero image node doesn't exist</li>");
@@ -353,6 +356,8 @@ public class ProductLandingVariation3 extends BaseAction {
 											log.debug("linkurl property is not set at " + heroPanelNode.getPath());
 										}
 									}
+								}if(imageSrcEmptyCount > 0){
+									sb.append("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
 								}
 							} else {
 								sb.append("<li>Hero Large Frames/Panel Elements is not found</li>");
@@ -402,7 +407,7 @@ public class ProductLandingVariation3 extends BaseAction {
 				try {
 					Elements htmlblobElements = doc.select("ul.n21");
 					String html = "";
-					if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
+					if (htmlblobElements != null) {
 						// Element htmlblobElement = htmlblobElements.first();
 						for (Element htmlblobElement : htmlblobElements) {
 							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "", locale, sb, urlMap);
@@ -426,15 +431,6 @@ public class ProductLandingVariation3 extends BaseAction {
 				}
 				// end set html blob component content.
 				// --------------------------------------------------------------------------------------------------------------------------
-				//start of right rail html blob content.
-				//Since no web page is having html blob component but we have html blob node in wem.
-				//Hence generating the same in the report by checking whether node exists or not.
-				if(indexLowerRightNode.hasNode("htmlblob")){
-					sb.append("<li>Extra right rail html blob found in en page.</li>");
-				}
-				
-				//end of right rail html blob content.
-				//-----------------------------------------------------------------------------------------------------------------------------
 				// start of tile bordered components.
 				try {
 					Elements rightRail = doc.select("div.c23-pilot,div.cc23-pilot");
