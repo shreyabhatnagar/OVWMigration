@@ -101,6 +101,18 @@ public class SubCatVariation3 extends BaseAction {
 				}
 				//End Hero Migration
 
+				//start Let Us Help migration
+				try{
+					log.debug("start Let Us Help migration");
+					Element contactUsElement = doc.select("div.f-holder").first();
+					migrateContactUsElement(contactUsElement , spRightNode, locale , urlMap);
+					log.debug("Let Us Help Element Migrated");
+				}catch(Exception e){
+					sb.append(Constants.UNABLE_TO_UPDATE_CONTACTUS);
+					log.debug("Exception in Let Us Help Element Migration"+e);
+				}
+				//end Let Us Help migration
+
 				//start Top Right migration
 				try{
 					log.debug("start Top Right migration");
@@ -116,7 +128,7 @@ public class SubCatVariation3 extends BaseAction {
 				//start Text Migration
 				try{
 					log.debug("start Text Migration");
-					Elements textEles = doc.select("div.gd21-pilot");
+					Elements textEles = doc.select("div.gd21v1-mid");
 					Element textEle = textEles.first().getElementsByClass("c00-pilot").first();
 					if(textEle == null){
 						textEle = textEles.get(1).getElementsByClass("c00-pilot").first();
@@ -161,6 +173,7 @@ public class SubCatVariation3 extends BaseAction {
 		log.debug("Msg returned is "+sb.toString());
 		return sb.toString();
 	}
+
 
 	private void migrateHero(Element heroElement, Node spLeftNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException, JSONException {
 		if(heroElement != null){
@@ -235,6 +248,45 @@ public class SubCatVariation3 extends BaseAction {
 			sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 		}
 
+	}
+
+	private void migrateContactUsElement(Element contactUsElement,
+			Node spRightNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+		if(contactUsElement != null){
+			String titleText = "";
+			String callText = "";
+			Node letUsHelpNode = spRightNode.hasNode("letushelp")?spRightNode.getNode("letushelp"):null;
+			if(letUsHelpNode != null){
+				Elements titleElem = contactUsElement.getElementsByTag("h3");
+				Elements liElements = contactUsElement.getElementsByTag("li");
+				if(!titleElem.isEmpty()){
+					titleText = titleElem.text();
+				}
+				else{
+					sb.append(Constants.CONTACTUS_TITLE_NOT_FOUND);
+				}
+				log.debug("call text is : "+callText);
+				if(!liElements.isEmpty()){
+					callText = liElements.first().html();
+					log.debug("call text is : "+callText);
+					/*if(liElements.size() > 1){
+					sb.append("<li> Contact Us Element has extra content(links/numbers) which cannot be migrated as English Page does not have.</li>");
+				}*/
+				}
+				else{
+					sb.append("<li> Contact Us Element Call text not found on locale page.</li>");
+				}
+				letUsHelpNode.setProperty("title",titleText);
+				letUsHelpNode.setProperty("calltext",callText);
+				if(letUsHelpNode.hasProperty("timetext")){
+					sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
+				}
+			}else{
+				sb.append(Constants.CONTACTUS_NODE_NOT_FOUND);
+			}
+		}else{
+			sb.append(Constants.CONTACTUS_ELEMENT_NOT_FOUND);
+		}
 	}
 
 	private void migrateRightRail(Element listEle, Node spRightNode,
