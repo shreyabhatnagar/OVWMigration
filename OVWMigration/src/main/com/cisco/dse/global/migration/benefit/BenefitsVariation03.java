@@ -298,6 +298,8 @@ public class BenefitsVariation03 extends BaseAction {
 							pdfIcon = "";
 							pdfSize = "";
 							boolean openNewWindow = false;
+							boolean flag = false;
+							String text = "";
 							// pdf content
 							try {
 								ownPdfText = li.ownText();
@@ -312,6 +314,21 @@ public class BenefitsVariation03 extends BaseAction {
 												"video")) {
 											pdfIcon = "video";
 										}
+										if ("tr_tr".equals(locale)) {
+											for (int j = 0; j < ownPdfText.length(); j++) {
+												char character = ownPdfText.charAt(j);
+												if (character == '(') {
+													flag = true;
+												}
+												if (flag == true) {
+													text = text + character;
+												}
+												if (character == ')') {
+													flag = false;
+													break;
+												}
+											}
+										} else {
 										int i = 0;
 										for (; i < ownPdfText.length(); i++) {
 											char character = ownPdfText
@@ -326,12 +343,19 @@ public class BenefitsVariation03 extends BaseAction {
 												ownPdfText.length() - 1);
 										pdfSize = pdfSize.replace(")", "");
 										pdfSize = pdfSize.trim();
+										
+										}
+									}else {
+										text = li.ownText();
+										pdfIcon = "";
+										pdfSize = "";
 									}
 								}
 							} catch (Exception e) {
 								sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
 								log.error("Exception : ", e);
 							}
+							JSONObject obj = new JSONObject();
 							if(!li.getElementsByTag("a").isEmpty()){
 								Element a = li.getElementsByTag("a").first();
 								// Start extracting valid href
@@ -339,14 +363,23 @@ public class BenefitsVariation03 extends BaseAction {
 								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
-								JSONObject obj = new JSONObject();
-								obj.put("linktext", a.text());
+								obj.put("linktext", a.text()+ " "+text);
 								obj.put("linkurl", anchorHref);
 								obj.put("icon", pdfIcon);
 								obj.put("size", pdfSize);
 								obj.put("description", "");
 								obj.put("openInNewWindow", openNewWindow);
 								listAdd.add(obj.toString());
+							} else {if(!li.ownText().isEmpty()){
+								obj.put("linktext", li.ownText());
+								obj.put("linkurl", "");
+								obj.put("icon", "");
+								obj.put("size", "");
+								obj.put("description", "");
+								obj.put("openInNewWindow", openNewWindow);
+								listAdd.add(obj.toString());
+								sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
+							}
 							}
 						}
 						Property listitems = ulnodeList
@@ -386,8 +419,7 @@ public class BenefitsVariation03 extends BaseAction {
 			for (Element ele : titleElements) {
 				String textEleHtml = null;
 				if (count == 1) {
-					textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
-					architectureListNode.setProperty("title", textEleHtml);
+					architectureListNode.setProperty("title", ele.text());
 				} else if (count == 2) {
 					if (("unified-communications").equals(prod)) {
 						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
@@ -526,18 +558,22 @@ public class BenefitsVariation03 extends BaseAction {
 			String descriptionHtml = FrameworkUtils.extractHtmlBlobContent(description, "",locale, sb,urlMap);
 			listNode.setProperty("title", title.text());
 			listNode.setProperty("description", descriptionHtml);
-
+			String text = rightListEle.ownText();
+			
 			if(!anchor.isEmpty()){
 				Element listtext = anchor.first();
 				Element listurl = anchor.first();
-				
+
 				// Start extracting valid href
 				log.debug("Before anchorHref" + listurl.absUrl("href") + "\n");
 				String anchorHref = FrameworkUtils.getLocaleReference(listurl.absUrl("href"), urlMap);
 				log.debug("after anchorHref" + anchorHref + "\n");
 				// End extracting valid href
-				listNode.setProperty("linktext", listtext.text());
+				listNode.setProperty("linktext", listtext.text()+text);
 				listNode.setProperty("linkurl", anchorHref);
+			}else if (!rightListEle.ownText().isEmpty()){
+				listNode.setProperty("linktext", rightListEle.ownText());
+				sb.append(Constants.LINK_URL_NOT_FOUND_IN_RIGHT_RAIL);
 			}
 			log.debug("Updated title, descriptoin and linktext at "
 					+ listNode.getPath());
