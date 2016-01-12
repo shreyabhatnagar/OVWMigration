@@ -132,6 +132,7 @@ public class SolutionListingVariation08 extends BaseAction {
 					String aHref = "";
 					int eleSize;
 					int nodeSize;
+					int imgSrcNotFoundCount = 0;
 					Value[] panelPropertiest = null;
 					javax.jcr.Node heroPanelNode = null;
 					Elements heroElements = doc.select("div.frame");
@@ -181,6 +182,8 @@ public class SolutionListingVariation08 extends BaseAction {
 														log.debug("heroImage after migration : " + heroImage);
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
+														}else{
+															imgSrcNotFoundCount++;
 														}
 													} else {
 														sb.append("<li>hero image node doesn't exist</li>");
@@ -254,6 +257,9 @@ public class SolutionListingVariation08 extends BaseAction {
 												}
 											
 										}
+												if(imgSrcNotFoundCount > 0){
+													sb.append("<li> "+imgSrcNotFoundCount+" image(s) are not found on locale page for hero panel </li>");
+												}
 										}
 								} else {
 									isHero = false;//No Hero Content Node Found.
@@ -313,6 +319,7 @@ public class SolutionListingVariation08 extends BaseAction {
 				// start set spotlight medium component properties.
 
 				try {
+					int imageSrcEmptyCount = 0;
 					Elements spotLightElements = doc.select("div.c11-pilot");
 					if (spotLightElements == null || spotLightElements.isEmpty()) {
 						Elements ulSpotLightElements = doc.select("div.nn12-pilot");
@@ -373,6 +380,8 @@ public class SolutionListingVariation08 extends BaseAction {
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
+										}else{
+											imageSrcEmptyCount++;
 										}
 									} else {
 										sb.append("<li>spotlight image node doesn't exist</li>");
@@ -398,6 +407,9 @@ public class SolutionListingVariation08 extends BaseAction {
 								} else {
 									sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 								}
+							}
+							if(imageSrcEmptyCount > 0){
+								sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 							}
 						}
 						if (eleSize != nodeSize) {

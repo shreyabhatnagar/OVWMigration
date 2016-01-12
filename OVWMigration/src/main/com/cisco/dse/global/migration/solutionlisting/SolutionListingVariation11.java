@@ -170,6 +170,7 @@ public class SolutionListingVariation11 extends BaseAction {
 				try {
 					String h2Text = "";
 					String pText = "";
+					int imageSrcEmptyCount = 0;
 					boolean extraAnchorTagExists = false;
 					Elements spotLightElements = doc.select("div.c11-pilot");
 					Node spotLightComponentNode = null;				
@@ -242,6 +243,8 @@ public class SolutionListingVariation11 extends BaseAction {
 											log.debug("spotLightImage " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												spotLightImageNode.setProperty("fileReference" , spotLightImage);
+											}else{
+												imageSrcEmptyCount++;
 											}
 										} else {
 											sb.append("<li>spotlight image node doesn't exist</li>");
@@ -264,6 +267,9 @@ public class SolutionListingVariation11 extends BaseAction {
 									}
 
 								}
+							}
+							if(imageSrcEmptyCount > 0){
+								sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 							}
 							if(extraAnchorTagExists){
 								sb.append("<li>Extra link found in spotlight component on locale page. Hence cannot be migrated.</li>");
