@@ -301,20 +301,20 @@ public class SubCatVariation2 extends BaseAction{
 						/*if(!imgElements.isEmpty()){
 							sb.append("<li> Contact Us Element has extra image(s) which cannot be migrated as English Page does not have.</li>");
 						}*/
-						
+						if(letUsHelpNode != null){
+							letUsHelpNode.setProperty("title",titeText);
+							letUsHelpNode.setProperty("calltext",callText);
+							if(letUsHelpNode.hasProperty("timetext")){
+								sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
+							}
+						}else{
+							sb.append(Constants.CONTACTUS_NODE_NOT_FOUND);
+						}
 						
 					}else{
 						sb.append(Constants.CONTACTUS_ELEMENT_NOT_FOUND);
 					} 
-					if(letUsHelpNode != null){
-						letUsHelpNode.setProperty("title",titeText);
-						letUsHelpNode.setProperty("calltext",callText);
-						if(letUsHelpNode.hasProperty("timetext")){
-							sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
-						}
-					}else{
-						sb.append(Constants.CONTACTUS_NODE_NOT_FOUND);
-					}
+					
 					
 					
 					

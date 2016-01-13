@@ -351,19 +351,19 @@ public class SubCatVariation1 extends BaseAction {
 						} else {
 							sb.append("<li> Contact Us Element Call text not found on locale page.</li>");
 						}
+						Node letUsHelpNode = subCatTopNode
+								.hasNode("gd22v2-right/letushelp") ? subCatTopNode
+								.getNode("gd22v2-right/letushelp") : null;
+						if (letUsHelpNode != null) {
+							letUsHelpNode.setProperty("title", titeText);
+							letUsHelpNode.setProperty("calltext", callText);
+							if (letUsHelpNode.hasProperty("timetext")) {
+								sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
+							}
+						}
 
 					} else {
 						sb.append("<li> Contact Us Element Not Found on locale page. </li>");
-					}
-					Node letUsHelpNode = subCatTopNode
-							.hasNode("gd22v2-right/letushelp") ? subCatTopNode
-							.getNode("gd22v2-right/letushelp") : null;
-					if (letUsHelpNode != null) {
-						letUsHelpNode.setProperty("title", titeText);
-						letUsHelpNode.setProperty("calltext", callText);
-						if (letUsHelpNode.hasProperty("timetext")) {
-							sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
-						}
 					}
 
 				} catch (Exception e) {
