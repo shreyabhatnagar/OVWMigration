@@ -273,7 +273,12 @@ public class ProductLandingVariation12 extends BaseAction {
 				// start set selectorbar large component properties.
 
 				try {
-					
+					/*Elements flagDivElements = doc.select("body.cdc-fw").select("div.ciscoFlagDiv");
+					int falgDivSize = flagDivElements.size();
+					log.debug("falgDivSize:***************** "+ falgDivSize);
+					if(!flagDivElements.isEmpty()){
+						sb.append("<li> Flag symbol upon on hover of selector bar links cannot be migrated as there is no corresponding proeporty. </li>");
+					}*/
 					Elements selectorBarLargeElements = doc
 							.select("div.panel");
 					log.debug("selector component found indexMidLeftNode: "
@@ -769,7 +774,7 @@ public class ProductLandingVariation12 extends BaseAction {
 																.size()]));
 												log.debug("Updated listitems at "+ eleNode.getPath());
 												}else{
-													sb.append(Constants.LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
+													sb.append(Constants.LIST_NODE_NOT_FOUND);
 												}
 														
 											}
@@ -835,7 +840,7 @@ public class ProductLandingVariation12 extends BaseAction {
 				// end set benefit list.
 				
 				
-				// start set ENTERPRISE NETWORK INDEX list.
+				// start set Service provider right rail list list.
 				try {
 					NodeIterator listNodeIterator = indexRightRailNode
 							.getNodes("list*");
@@ -868,6 +873,35 @@ public class ProductLandingVariation12 extends BaseAction {
 
 								for (Element li : indexLiList) {
 									JSONObject jsonObj = new JSONObject();
+									boolean openNewWindow = false;
+									
+									String pdfIcon = null;
+									String pdf = li.ownText().trim();
+									log.debug("pdf text is: "+ pdf);
+									try{
+										
+										log.debug(pdf);
+										if (pdf.length() > 0) {
+											if (pdf.toLowerCase().contains("pdf"))
+												pdfIcon = "pdf";
+											log.debug("pdfIcon text is: "+ pdfIcon);
+											int i = 0;
+											for (; i < pdf.length(); i++) {
+												char character = pdf.charAt(i);
+												boolean isDigit = Character.isDigit(character);
+												if (isDigit) {
+													break;
+												}
+											}
+											pdf = pdf.substring(i, pdf.length() - 1);
+										}
+										pdf = pdf.trim();
+										log.debug("final pdf text is: "+ pdf);
+										// end pdf
+									}catch(Exception e){
+										sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
+										log.error("Exception : ",e);
+									}
 									Elements listItemAnchor = li
 											.getElementsByTag("a");
 									Elements listItemSpan = li
@@ -890,8 +924,8 @@ public class ProductLandingVariation12 extends BaseAction {
 
 									jsonObj.put("linktext", anchorText);
 									jsonObj.put("linkurl", anchorHref);
-									jsonObj.put("icon", listIcon);
-									jsonObj.put("size", "");// Need to get the
+									jsonObj.put("icon", pdfIcon);
+									jsonObj.put("size", pdf);// Need to get the
 															// size
 									// from the list element
 									// text.
@@ -964,7 +998,7 @@ public class ProductLandingVariation12 extends BaseAction {
 														+ eleNode.getPath());
 											}
 										} else {
-											sb.append(Constants.LEFT_GRID_ELEMENT_LIST_NODE_NOT_FOUND);
+											sb.append(Constants.LIST_NODE_NOT_FOUND);
 										}
 
 									}
@@ -986,7 +1020,7 @@ public class ProductLandingVariation12 extends BaseAction {
 
 						}
 						} else {
-						sb.append(Constants.LIST_NOT_FOUND_IN_RIGHT_RAIL);
+						sb.append(Constants.LIST_NODE_NOT_FOUND);
 					}
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_UPDATING_LIST_COMPONENT);
