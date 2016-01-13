@@ -153,14 +153,6 @@ public class SubCatVariation3 extends BaseAction {
 				}
 				//End secondText Migration
 
-				//Extra list items
-				Element listEle = doc.getElementsByClass("hll").first();
-				if(listEle != null){
-					sb.append(Constants.LIST_NODE_NOT_FOUND);
-				}
-				//Added into Report
-
-
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
