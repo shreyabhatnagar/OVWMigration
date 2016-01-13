@@ -67,6 +67,7 @@ import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
 import com.cisco.dse.global.migration.technology.TechnologyVariation2;
 import com.cisco.dse.global.migration.trainingevents.TrainingAndEventsVariation1;
+import com.cisco.dse.global.migration.web.WebVariation4;
 import com.cisco.dse.global.migration.web.WebVariation5;
 import com.cisco.dse.global.migration.web.WebVariation6;
 import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation01;
@@ -199,6 +200,8 @@ public class OVWMigration {
 																log.debug("pageURL is: " + pageUrl);
 															}else if(StringUtils.isNotBlank(variation) && variation.startsWith("ps")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/professional-services");
+															}else if(StringUtils.isNotBlank(variation) && variation.startsWith("fs")){
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/find-solutions");
 															}else {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod);
 															}
@@ -1000,6 +1003,19 @@ public class OVWMigration {
 																msg16 = msg16 + "<tr>";
 																msg16 = msg16
 																		+ new WebVariation8().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}
+															else if ("products-fsvar4".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation4().translate(
 																				host, gLink, prod, type, cattype,
 																				sheet.getSheetName(), session, urlMap);
 																msg16 = msg16 + "</tr>";
