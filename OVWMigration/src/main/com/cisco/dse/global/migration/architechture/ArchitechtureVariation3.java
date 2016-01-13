@@ -21,6 +21,7 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.nodes.Document;
@@ -429,7 +430,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select(
-					"div.c23-pilot");
+					"div.c23-pilot,div.cc23-pilot");
 
 			if (!rightRailList.isEmpty() && rightRailList != null) {
 				int eleSize = rightRailList.size();
@@ -519,21 +520,27 @@ public class ArchitechtureVariation3 extends BaseAction {
 			Element title;
 			Element description;
 			Elements anchor = rightListEle.getElementsByTag("a");
-			Elements headElements = rightListEle.getElementsByTag("h3");
+			Elements headElements = rightListEle.select("h3,h2");
 
 			if (headElements.size() > 1) {
-				title = rightListEle.getElementsByTag("h3").last();
+				title = headElements.last();
 				description = rightListEle.getElementsByTag("p").last();
 			} else {
-				title = rightListEle.getElementsByTag("h3").first();
+				title = headElements.first();
 				description = rightListEle.getElementsByTag("p").first();
 			}
-
+			if(StringUtils.isNotEmpty(title.text())){
 			listNode.setProperty("title", title.text());
+			}else{
+				sb.append(Constants.TILE_BORDERED_TITLE_ELEMENT_NOT_FOUND);
+			}
+			if(StringUtils.isNotEmpty(title.text())){
 			listNode.setProperty("description", description.text());
-
+			}else{
+				sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
+			}
 			Element listtext = anchor.first();
-			String listurl = listtext.attr("href");
+			String listurl = listtext.absUrl("href");
 			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap);
 			String linkStringValue = null;
 			if (listNode.hasProperty("linktrigger")) {
@@ -548,6 +555,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 			if (linkStringValue.equals("none")) {
 				sb.append(Constants.LINK_IS_DISABLED_IN_RIGHT_RAIL);
 			} else {
+				log.debug("link Text:"+listtext);
+				log.debug("link Url:"+listurl);
 				listNode.setProperty("linktext", listtext.text());
 				listNode.setProperty("linkurl", listurl);
 			}

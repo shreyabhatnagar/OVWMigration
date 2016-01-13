@@ -400,7 +400,11 @@ public class WebVariation2 extends BaseAction {
 					Element htmlEle = doc.select("div.gd-right").last();
 					if (htmlEle != null) {
 					htmlEle.select("div.c47-pilot").remove();
-					htmlEle.select("div.s12-pilot").remove();
+					Elements s12Ele = htmlEle.select("div.s12-pilot");
+					if(s12Ele != null && !s12Ele.isEmpty()){
+						sb.append("<li>Extra Component found with  class s12-pilot and that can't be migrated.</li>");
+						htmlEle.select("div.s12-pilot").remove();
+					}
 					log.debug("gd-right " + htmlEle);
 						htmlContent = FrameworkUtils.extractHtmlBlobContent(
 								htmlEle, "", locale, sb, urlMap);

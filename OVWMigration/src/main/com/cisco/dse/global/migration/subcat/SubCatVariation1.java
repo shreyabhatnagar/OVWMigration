@@ -209,6 +209,7 @@ public class SubCatVariation1 extends BaseAction {
 									}
 									i++;
 								}
+								int imageSrcEmptyCount = 0;
 								if (heroPanelNode != null) {
 									Node heroPanelPopUpNode = null;
 									Elements lightBoxElements = ele.select(
@@ -261,12 +262,15 @@ public class SubCatVariation1 extends BaseAction {
 											imageNode.setProperty(
 													"fileReference", heroImage);
 										} else {
-											sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
+											imageSrcEmptyCount++;
 										}
 									} else {
 										sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
 										log.debug("'image' node doesn't exists in "
 												+ heroPanelNode.getPath());
+									}
+									if(imageSrcEmptyCount > 0){
+									sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 									}
 								}
 							}
