@@ -139,19 +139,24 @@ public class WebVariation1 extends BaseAction{
 				// start of htmlblob component
 				try {
 					String htmlBlobContent = "";
+					StringBuilder oldImage = new StringBuilder();
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
 					Elements htmlBlobElements = doc.select("div.gd-left").select("div.c00-pilot");
 					if (htmlBlobElements != null) {
-						htmlBlobContent = htmlBlobElements.outerHtml();
+						for(Element ele : htmlBlobElements )
+						{
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+						oldImage.append(htmlBlobContent);
+						}
 					}
 					//End of getContent
 					//Start of set content
 					if (webNode.hasNode("gd12v2-left/htmlblob")) {
 						Node htmlBlobNode = webNode.getNode("gd12v2-left/htmlblob");
 						if (!StringUtils.isEmpty(htmlBlobContent)) {
-							htmlBlobNode.setProperty("html",htmlBlobContent);
+							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
@@ -171,19 +176,24 @@ public class WebVariation1 extends BaseAction{
 			//start of htmlblob Component
 				try {
 					String htmlBlobContent = "";
+					StringBuilder oldImage = new StringBuilder();
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
 					Elements htmlBlobElements = doc.select("div.gd-right");
 					if (htmlBlobElements != null) {
-						htmlBlobContent = htmlBlobElements.outerHtml();
+						for(Element ele : htmlBlobElements )
+						{
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+							oldImage.append(htmlBlobContent);
+						}
 					}
 					//End of getContent
 					//Start of set content
 					if (webNode.hasNode("gd12v2-right/htmlblob")) {
 						Node htmlBlobNode = webNode.getNode("gd12v2-right/htmlblob");
 						if (!StringUtils.isEmpty(htmlBlobContent)) {
-							htmlBlobNode.setProperty("html",htmlBlobContent);
+							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
