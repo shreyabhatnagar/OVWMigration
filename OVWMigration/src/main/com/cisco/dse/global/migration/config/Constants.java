@@ -365,7 +365,7 @@ public class Constants {
 	public static final String LIST_ELEMENT_LIST_NODE_NOT_FOUND = "<li>Element_list node not found for list node</li>";
 
 	//LIST_NODE_NOT_FOUND
-	public static final String LIST_NODE_NOT_FOUND = "<li>Extra link found in web publisher page. As there is no node to map it, that link is not migrated</li>";
+	public static final String LIST_NODE_NOT_FOUND = "<li>Extra list elemnt found in web publisher page right rail. As there is no node to map it, that list is not migrated</li>";
 
 	//TITLE_OF_LIST_ELEMENT_NOT_FOUND
 	public static final String TITLE_OF_LIST_ELEMENT_NOT_FOUND = "<li>Title element of list component not found</li>";

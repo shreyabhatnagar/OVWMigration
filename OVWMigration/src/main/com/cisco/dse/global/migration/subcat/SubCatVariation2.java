@@ -280,12 +280,11 @@ public class SubCatVariation2 extends BaseAction{
 					if(contactUsElement != null){
 						Elements titleElem = contactUsElement.getElementsByTag("h3");
 						Elements liElements = contactUsElement.getElementsByTag("li");
-						Elements imgElements = contactUsElement.getElementsByTag("img");
 						if(!titleElem.isEmpty()){
 							titeText = titleElem.text();
 						}
 						else{
-							sb.append("<li> Contact Us Element title not found on locale page.</li>");
+							sb.append(Constants.CONTACTUS_TITLE_NOT_FOUND);
 						}
 						log.debug("call text is : "+callText);
 						if(!liElements.isEmpty()){
@@ -305,7 +304,7 @@ public class SubCatVariation2 extends BaseAction{
 						
 						
 					}else{
-						sb.append("<li> Contact Us Element Not Found on locale page. </li>");
+						sb.append(Constants.CONTACTUS_ELEMENT_NOT_FOUND);
 					} 
 					if(letUsHelpNode != null){
 						letUsHelpNode.setProperty("title",titeText);
@@ -313,11 +312,16 @@ public class SubCatVariation2 extends BaseAction{
 						if(letUsHelpNode.hasProperty("timetext")){
 							sb.append("<li> Extra text(Time Text) in Contact Us element found on WEM page. </li>");
 						}
+					}else{
+						sb.append(Constants.CONTACTUS_NODE_NOT_FOUND);
 					}
 					
 					
 					
 				}catch(Exception e){
+					sb.append("<li> Contact US Component not migrated.  </li>" );
+					
+					log.debug("Exception in contact us element : ", e);
 					
 				}
 				
