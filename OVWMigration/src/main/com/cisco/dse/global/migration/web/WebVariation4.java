@@ -102,7 +102,9 @@ public class WebVariation4 extends BaseAction {
 				
 				for (Element rightListElement : rightListElements) {
 					log.debug("right list element is ["+rightListElement+"]");
-					rightListContent.add(FrameworkUtils.extractHtmlBlobContent(rightListElement, "", locale, sb, urlMap));
+					Element rightListEle = rightListElement.children().first();
+					log.debug("right list element to be migrated is ["+rightListEle+"]");
+					rightListContent.add(FrameworkUtils.extractHtmlBlobContent(rightListEle, "", locale, sb, urlMap));
 				}
 				
 				String backToTopContent = "";
