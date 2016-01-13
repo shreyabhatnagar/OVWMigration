@@ -98,7 +98,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 				try {
 					migrateTextAndHtmlBlob(doc, trainingAndEventsLeftNode,locale, urlMap);
 				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.debug(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
 				}
 				//End of migration of HTMLBLOB Component
@@ -107,7 +107,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 				try {
 					migrateRightList(doc, trainingAndEventsRightNode,session, locale, urlMap);
 				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.debug(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
 				}
 				//End of migration of Right List Component
@@ -143,87 +143,92 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 			String aHref = "";
 			Node heroPanelNode = null;
 			Elements heroElements = doc.select("div.c50-pilot");
-			if(!heroElements.select("div.frame").isEmpty()){
-			heroElements = heroElements.select("div.frame");
-			}
-			Node heroNode = trainingAndEventsLeftNode.hasNode("hero_large") ? trainingAndEventsLeftNode.getNode("hero_large") : null;
-
-			if (heroNode != null) {
-				NodeIterator heroPanelNodeIterator = heroNode.hasNode("heropanel_0") ? heroNode.getNodes("heropanel*") : null;
-				if(heroPanelNodeIterator != null){
-					if(heroElements != null){
-						int eleSize = heroElements.size();
-						int nodeSize = (int) heroPanelNodeIterator.getSize();
-						if(eleSize != nodeSize){
-							log.debug("Hero component node count mismatch!");
-							sb.append("<li>Hero Component count mis match. Elements on page are: "+eleSize+" Node Count is: "+nodeSize+"</li>");
-						}
-						for (Element ele : heroElements) {
-							if (heroPanelNodeIterator.hasNext()) {
-								heroPanelNode = (Node) heroPanelNodeIterator.next();
-								Elements h2TagText = ele.getElementsByTag("h2");
-								if (h2TagText != null) {
-									h2Text = h2TagText.text();
-									heroPanelNode.setProperty("title", h2Text);
-								} else {
-									sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
-								}
-
-								Elements descriptionText = ele.getElementsByTag("p");
-								if (descriptionText != null) {
-									pText = descriptionText.first().text();
-									heroPanelNode.setProperty("description", pText);
-								} else {
-									sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
-								}
-
-								Elements anchorText = ele.getElementsByTag("a");
-								if (!anchorText.isEmpty()) {
-									aText = anchorText.text();
-									aHref = anchorText.attr("href");
-									// Start extracting valid href
-									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
-									log.debug("after heroPanelLinkUrl" + aHref + "\n");
-									// End extracting valid href
-									heroPanelNode.setProperty("linktext", aText);
-									heroPanelNode.setProperty("linkurl", aHref);
-								} else {
-									sb.append(Constants.HERO_CONTENT_ANCHOR_TEXT_IS_BLANK);
-								}
-
-								// start image
-								String heroImage = FrameworkUtils.extractImagePath(ele, sb);
-								log.debug("heroImage before migration : " + heroImage + "\n");
-								if (heroPanelNode.hasNode("image")) {
-									Node imageNode = heroPanelNode.getNode("image");
-									String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
-									heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
-									log.debug("heroImage after migration : " + heroImage + "\n");
-									if (StringUtils.isNotBlank(heroImage)) {
-										imageNode.setProperty("fileReference", heroImage);
-									}
-								} else {
-									sb.append("<li>hero image node doesn't exist</li>");
-								}
-								// end image
+			if (heroElements.size() > 0) {
+			
+				if(!heroElements.select("div.frame").isEmpty()){
+				heroElements = heroElements.select("div.frame");
+				}
+				Node heroNode = trainingAndEventsLeftNode.hasNode("hero_large") ? trainingAndEventsLeftNode.getNode("hero_large") : null;
+	
+				if (heroNode != null) {
+					NodeIterator heroPanelNodeIterator = heroNode.hasNode("heropanel_0") ? heroNode.getNodes("heropanel*") : null;
+					if(heroPanelNodeIterator != null){
+						if(heroElements != null){
+							int eleSize = heroElements.size();
+							int nodeSize = (int) heroPanelNodeIterator.getSize();
+							if(eleSize != nodeSize){
+								log.debug("Hero component node count mismatch!");
+								sb.append("<li>Hero Component count mis match. Elements on page are: "+eleSize+" Node Count is: "+nodeSize+"</li>");
 							}
+							for (Element ele : heroElements) {
+								if (heroPanelNodeIterator.hasNext()) {
+									heroPanelNode = (Node) heroPanelNodeIterator.next();
+									Elements h2TagText = ele.getElementsByTag("h2");
+									if (h2TagText != null) {
+										h2Text = h2TagText.text();
+										heroPanelNode.setProperty("title", h2Text);
+									} else {
+										sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
+									}
+	
+									Elements descriptionText = ele.getElementsByTag("p");
+									if (descriptionText != null) {
+										pText = descriptionText.first().text();
+										heroPanelNode.setProperty("description", pText);
+									} else {
+										sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
+									}
+	
+									Elements anchorText = ele.getElementsByTag("a");
+									if (!anchorText.isEmpty()) {
+										aText = anchorText.text();
+										aHref = anchorText.attr("href");
+										// Start extracting valid href
+										log.debug("Before heroPanelLinkUrl" + aHref + "\n");
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										log.debug("after heroPanelLinkUrl" + aHref + "\n");
+										// End extracting valid href
+										heroPanelNode.setProperty("linktext", aText);
+										heroPanelNode.setProperty("linkurl", aHref);
+									} else {
+										sb.append(Constants.HERO_CONTENT_ANCHOR_TEXT_IS_BLANK);
+									}
+	
+									// start image
+									String heroImage = FrameworkUtils.extractImagePath(ele, sb);
+									log.debug("heroImage before migration : " + heroImage + "\n");
+									if (heroPanelNode.hasNode("image")) {
+										Node imageNode = heroPanelNode.getNode("image");
+										String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
+										heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
+										log.debug("heroImage after migration : " + heroImage + "\n");
+										if (StringUtils.isNotBlank(heroImage)) {
+											imageNode.setProperty("fileReference", heroImage);
+										}
+									} else {
+										sb.append("<li>hero image node doesn't exist</li>");
+									}
+									// end image
+								}
+							}
+						}else {		
+							sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 						}
-					}else {		
-						sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
+					}else {
+						log.debug("hero panel node is not found");
 					}
-				}else {
-					log.debug("hero panel node is not found");
 				}
-			}
-			else{
-				if(heroElements.isEmpty()){
-					log.debug("Hero Large node and elements are not found");
+				else{
+					if(heroElements.isEmpty()){
+						log.debug("Hero Large node and elements are not found");
+					}
+					else {
+						sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
+					}
 				}
-				else {
-					sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
-				}
-			}
+		 } else {
+			 sb.append("<li>Hero component not found in web url</li>");
+		 }
 		} catch (Exception e) {
 			sb.append(Constants.EXCEPTOIN_IN_UPDATING_HERO_CONTENT);
 			log.error("hero Error" + e);
@@ -232,30 +237,65 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 	}
 
 	private void migrateTextAndHtmlBlob(Document doc,Node trainingAndEventsLeftNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
-		Elements htmlBlobElements = doc.select("div.gd-left").first().getElementsByTag("table");
+		Elements htmlBlobElements = null;
+		
 		Node htmlBlobNode = trainingAndEventsLeftNode.hasNode("htmlblob_0") ? trainingAndEventsLeftNode.getNode("htmlblob_0") : null;
-		if(htmlBlobElements.isEmpty()){
-			htmlBlobElements = doc.select("div.c00-pilot");
-		}
-		if(htmlBlobNode != null){
-			if(!htmlBlobElements.isEmpty()){
-				Element htmlBlobEle = htmlBlobElements.first();
-				String html = FrameworkUtils.extractHtmlBlobContent(htmlBlobEle, "",locale, sb, urlMap);
-				htmlBlobNode.setProperty("html", html);
+		if (locale.equals("en_au")) {
+			String html = "";
+			Elements gd21PilotElements = doc.select("div.gd21-pilot");
+			if (gd21PilotElements != null) {
+				for (Element gd21PilotElement : gd21PilotElements) {
+					if (gd21PilotElement.select("div.c50-pilot ").size() > 0) {
+						gd21PilotElement.select("div.c50-pilot ").remove();
+					}
+					html = html + FrameworkUtils.extractHtmlBlobContent(gd21PilotElement, "",locale, sb, urlMap);
+				}
+			}
+			Elements gd22PilotElements = doc.select("div.gd22-pilot");
+			if (gd22PilotElements != null) {
+				for (Element gd22PilotElement : gd22PilotElements) {
+					html = html + FrameworkUtils.extractHtmlBlobContent(gd22PilotElement, "",locale, sb, urlMap);
+				}
+			}
+			if(htmlBlobNode != null){
+				if (StringUtils.isNotBlank(html)) {
+					htmlBlobNode.setProperty("html", html);
+				}
+			} 
+		} else {
+			Elements gdLeftElements = doc.select("div.gd-left");
+			if (gdLeftElements != null) {
+				Element gdLeftElement = gdLeftElements.first();
+				if (gdLeftElement != null) {
+					htmlBlobElements = gdLeftElement.getElementsByTag("table");
+				}
+			}
+			
+			if(htmlBlobElements == null){
+				htmlBlobElements = doc.select("div.c00-pilot");
+			}
+	     
+		if(htmlBlobElements != null && htmlBlobElements.size() > 0){
+			if(htmlBlobNode != null){
+				
+					Element htmlBlobEle = htmlBlobElements.first();
+					String html = FrameworkUtils.extractHtmlBlobContent(htmlBlobEle, "",locale, sb, urlMap);
+					htmlBlobNode.setProperty("html", html);
+				
 			}
 			else {
-				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+				if(!htmlBlobElements.isEmpty()){
+					sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST);
+					log.debug("html blob element exists but node does not exists");
+				}
+				else {
+					log.debug("htmlblob element and node does not exists");
+				}
 			}
-		}
-		else {
-			if(!htmlBlobElements.isEmpty()){
-				sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST);
-				log.debug("html blob element exists but node does not exists");
-			}
-			else {
-				log.debug("htmlblob element and node does not exists");
-			}
-		}
+		} else {
+			sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+	}
+	}
 	}
 
 	private void migrateRightList(Document doc,Node trainingAndEventsRightNode, Session session, String locale,Map<String, String> urlMap) throws RepositoryException {
@@ -274,6 +314,14 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 		//Check for image
 			Element listEle = listElements.first();
 			if(listEle != null){
+				Elements imgElements = listEle.getElementsByTag("img");
+				if (imgElements != null && imgElements.size() > 0) {
+					int count = 0;
+					for (Element imgElement : imgElements) {
+						count = count + 1;
+					}
+					sb.append("<li>" +""+count +" extra images found in the right List</li>");
+				}
 				Element sibling = listEle.nextElementSibling();
 				if(sibling != null){
 					Elements image = sibling.getElementsByTag("img");
@@ -283,41 +331,49 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 				}
 			}
 		//end of check for image
-		
-		int eleSize = listElements.size();
-		NodeIterator listNodeIterator = trainingAndEventsRightNode.hasNodes() ? trainingAndEventsRightNode.getNodes("list*") : null;
-		if (listNodeIterator != null) {
-			int nodeSize = (int) listNodeIterator.getSize();
-			log.debug("node Size" + nodeSize + "ele Size" + eleSize);
-			if (eleSize == nodeSize) {
-				Node listNode = null;
-				for (Element ele : listElements) {
-					listNode = (Node) listNodeIterator.next();
-					setListElements(ele, listNode, session, locale, urlMap);
+		if (listElements.size() > 0) {
+			int count = 0;
+			for (Element listElement : listElements) {
+				if (listElement.parent().hasClass("gd-right")) {
+					count = count + 1;
 				}
-			} else if (nodeSize < eleSize) {
-				Node listNode;
-				for (Element ele : listElements) {
-					if (listNodeIterator.hasNext()) {
+			}
+			NodeIterator listNodeIterator = trainingAndEventsRightNode.hasNodes() ? trainingAndEventsRightNode.getNodes("list*") : null;
+			if (listNodeIterator != null) {
+				int nodeSize = (int) listNodeIterator.getSize();
+				log.debug("node Size" + nodeSize + "ele Size" + count);
+				if (count == nodeSize) {
+					Node listNode = null;
+					for (Element ele : listElements) {
 						listNode = (Node) listNodeIterator.next();
 						setListElements(ele, listNode, session, locale, urlMap);
 					}
+				} else if (nodeSize < count) {
+					Node listNode;
+					for (Element ele : listElements) {
+						if (listNodeIterator.hasNext()) {
+							listNode = (Node) listNodeIterator.next();
+							setListElements(ele, listNode, session, locale, urlMap);
+						}
+					}
+					sb.append(Constants.MISMATCH_IN_LIST_NODES + count
+							+ Constants.LIST_NODES_COUNT + nodeSize);
 				}
-				sb.append(Constants.MISMATCH_IN_LIST_NODES + eleSize
-						+ Constants.LIST_NODES_COUNT + nodeSize);
-			}
-
-			else if (nodeSize > eleSize) {
-				Node listNode;
-				for (Element ele : listElements) {
-					listNode = (Node) listNodeIterator.next();
-					setListElements(ele, listNode, session, locale, urlMap);
+	
+				else if (nodeSize > count) {
+					Node listNode;
+					for (Element ele : listElements) {
+						listNode = (Node) listNodeIterator.next();
+						setListElements(ele, listNode, session, locale, urlMap);
+					}
+					sb.append(Constants.MISMATCH_IN_LIST_NODES + count
+							+ Constants.LIST_NODES_COUNT + nodeSize);
 				}
-				sb.append(Constants.MISMATCH_IN_LIST_NODES + eleSize
-						+ Constants.LIST_NODES_COUNT + nodeSize);
+			} else {
+				sb.append(Constants.LIST_NODE_NOT_FOUND);
 			}
 		} else {
-			sb.append(Constants.LIST_NODE_NOT_FOUND);
+			sb.append("<li>List component not found in web url</li>");
 		}
 	}
 
