@@ -760,4 +760,10 @@ public class Constants {
 	//LI_TAG_CLOSE
 	public static final String LI_TAG_CLOSE = ".</li>";
 	
+	//RIGHT_PANEL_ELEMENT_NOT_FOUND
+	public static final String RIGHT_PANEL_ELEMENT_NOT_FOUND = "<li>Right panel element not found</li>";
+
+	//RIGHT_PANEL_NODE_NOT_FOUND
+	public static final String RIGHT_PANEL_NODE_NOT_FOUND = "<li>Right panel node not found</li>";
+
 }
