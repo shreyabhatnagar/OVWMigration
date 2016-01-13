@@ -751,5 +751,13 @@ public class Constants {
 	//LINK_URL_NOT_FOUND_IN_RIGHT_RAIL
 	public static final String LINK_URL_NOT_FOUND_IN_RIGHT_RAIL = "<li>link url doesn't exist for the link in the right rail</li>";
 
-
+	//HTMLBLOB_COUNT_MISMATCH
+	public static final String HTMLBLOB_COUNT_MISMATCH = "<li>MisMatch in HTMLBLOB components. Locale page has ";
+	
+	//HTMLBLOB_COUNT_MISMATCH_END
+	public static final String HTMLBLOB_COUNT_MISMATCH_END = " elements and nodes available are ";
+	
+	//LI_TAG_CLOSE
+	public static final String LI_TAG_CLOSE = ".</li>";
+	
 }
