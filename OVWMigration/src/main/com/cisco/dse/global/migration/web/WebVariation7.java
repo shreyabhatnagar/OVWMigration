@@ -60,6 +60,10 @@ public class WebVariation7 extends BaseAction{
 				log.debug("financial-services-webvar7");
 				pagePropertiesPath = pagePropertiesPath+"/financial-services/jcr:content/";
 				pageUrl = pageUrl +"financial-services.html";
+			}else if(type.equals("iot-products-webvar7")){
+				log.debug("iot-products-webvar7");
+				pagePropertiesPath = pagePropertiesPath+"/iot-products/jcr:content/";
+				pageUrl = pageUrl +"iot-products.html";
 			}
 			pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 			pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
@@ -97,12 +101,17 @@ public class WebVariation7 extends BaseAction{
 					// ------------------------------------------------------------------------------------------------------------------------------------------
 
 					//------------------ (start gd-left) ---------------//
-					if(type.equals("energy-webvar7") || type.equals("retail-webvar7")){
+					if(type.equals("energy-webvar7") || type.equals("retail-webvar7") || type.equals("iot-products-webvar7")){
 						log.debug("energy-webvar7 || retail-webvar7");
 						try{
-							log.debug("start of mid..");
-							Element gdMidEle = doc.select("div.gd-mid").first();
+							log.debug("start of mid..$$");
+							Element gdMidEle = doc.select("div.gd-mid,div.gd-right").first();
+							if(gdMidEle.hasClass("gd-right")){
+								log.debug("hasClass...##");
+								gdMidEle=gdMidEle.select("div.gd-left").last();
+							}
 							if(gdMidEle==null){
+								log.debug("gdMidEle==null----S");
 								gdMidEle = doc.select("div.sitecopy_hs").first();
 								gdMidEle.select("c46-pilot").remove();
 							}
@@ -127,12 +136,12 @@ public class WebVariation7 extends BaseAction{
 					}else if(type.equals("government-webvar7") || type.equals("manufacturing-webvar7")){
 						log.debug("government-webvar7 || manufacturing-webvar7");
 						try{
-							log.debug("start of mid..");
+							log.debug("start of mid..@@");
 							Element gdMidEle1 = doc.select("div.gd-mid").select("div.c50-pilot").first();
 							NodeIterator leftBlobIterator = indLeftNode.hasNodes()?indLeftNode.getNodes("htmlblob*"):null;
 
 							if(gdMidEle1!=null){
-								log.debug("in gdMid");
+								log.debug("in gdMid@@@@");
 								//							gdMidEle.html()
 								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap);
 								if(!gdMid.equals("")&& gdMid!=null){
@@ -256,7 +265,10 @@ public class WebVariation7 extends BaseAction{
 
 					try{
 						log.debug("start of right rail..");
-						Element gdRightEle = doc.select("td#framework-column-right").first();
+						Element gdRightEle = doc.select("div.gd-right").last();
+						if(gdRightEle==null){
+							gdRightEle = doc.select("td#framework-column-right").first();
+						}
 						if(gdRightEle!=null){
 							//							String gdRight = gdRightEle.html();
 							String gdRight = FrameworkUtils.extractHtmlBlobContent(gdRightEle, "",locale, sb, urlMap);
