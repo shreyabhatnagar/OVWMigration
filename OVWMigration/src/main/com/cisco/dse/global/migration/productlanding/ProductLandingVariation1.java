@@ -497,15 +497,16 @@ public class ProductLandingVariation1 extends BaseAction {
 										// start new code
 										int count = 0;
 										for (Element drawersPanelElement : drawersPanelElements) {
-											boolean infoLinksMisMatchFlag = false;
-											boolean linkUrlNotFoundFlag = false;
-											boolean imageSrcNotFoundFlag = false;
-											boolean subdrawerTitleNotFoundFlag = false;
-											boolean subdrawerHighlightsNotFoundFlag = false;
+											
 											Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 											if (drawerPanelLiElements != null) {
 												log.debug("li elements size" + drawerPanelLiElements.size());
 												for (Element drawerPanelLiElement : drawerPanelLiElements) {
+													boolean infoLinksMisMatchFlag = false;
+													boolean linkUrlNotFoundFlag = false;
+													boolean imageSrcNotFoundFlag = false;
+													boolean subdrawerTitleNotFoundFlag = false;
+													boolean subdrawerHighlightsNotFoundFlag = false;
 													boolean misMatchFlag = true;
 													String panelTitle = "";
 													Elements iconBlock = drawerPanelLiElement.select("div.series");

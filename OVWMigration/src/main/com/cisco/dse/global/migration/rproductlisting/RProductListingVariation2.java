@@ -247,15 +247,16 @@ public class RProductListingVariation2 extends BaseAction{
 									int count = 0;
 									for (Element drawersPanelElement : drawersPanelElements) {
 										
-										boolean infoLinksMisMatchFlag = false;
-										boolean linkUrlNotFoundFlag = false;
-										boolean imageSrcNotFoundFlag = false;
+										
 										String panelTitle = "";
 										String panelDescription = "";
 										Elements drawerPanelLiElements = drawersPanelElement
 												.getElementsByTag("li");
 										if (drawerPanelLiElements != null) {
 											for (Element drawerPanelLiElement : drawerPanelLiElements) {
+												boolean infoLinksMisMatchFlag = false;
+												boolean linkUrlNotFoundFlag = false;
+												boolean imageSrcNotFoundFlag = false;
 												boolean isHtmlBlob = false;
 												Elements iconBlock = drawerPanelLiElement
 														.select("div.series");
@@ -576,16 +577,16 @@ public class RProductListingVariation2 extends BaseAction{
 																	log.debug("<li>details Element section not found</li>");
 																}
 
-																Element subItemUlInfoLink = subItem
-																		.siblingElements()
-																		.first(); // subItemUlInfoLinks.first();
+																Element subItemUlInfoLink = subItem.parent().children().last();
+																		//.siblingElements()
+																		//.first(); // subItemUlInfoLinks.first();
 																log.debug("Info Links Elements -----------"
 																		+ subItemUlInfoLink);
 																log.debug("--------------------------------");
 																if (subItemUlInfoLink != null) {
 																	Elements subItemInfoLinks = subItemUlInfoLink
 																			.getElementsByTag("li");
-
+																	if(subItemInfoLinks != null){
 																	for (Element si : subItemInfoLinks) {
 																		JSONObject jsonObj = new JSONObject();
 																		log.debug("\t\t FeatureSubInfoLinks Text :::::::::::::::"
@@ -629,6 +630,7 @@ public class RProductListingVariation2 extends BaseAction{
 																			list3.add(linkTextUrl);
 
 																		}
+																	}
 																	}
 																	log.debug("list2.size()"
 																			+ list2.size());

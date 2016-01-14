@@ -604,7 +604,9 @@ public class FrameworkUtils {
 				log.debug("Connected to the provided URL");
 			//-------------------------------------------------------------------------------------------------------------------------------
 			//start of Logic to retrieve all the hyper links text and url and save in a map.
-				if (doc != null) {
+				try{
+					if (doc != null) {
+				
 			Element webElement = doc.html(htmlWEBContent);
 			String title = "";
 			String paragraph = "";
@@ -644,12 +646,17 @@ public class FrameworkUtils {
 			//start of logic to update all the links in the wem html content from the map.
 			wemElement = doc.html(htmlWEMContent);
 			Elements dmcDrawerContentElements = wemElement.select("div.dmc-drawer-content");
+			if(liElements != null && dmcDrawerContentElements != null){
+				if(liElements.size() != dmcDrawerContentElements.size()){
+					log.debug("liElements.size() content"+liElements.size()+ "::: "+dmcDrawerContentElements.size());
+				sb.append("<li> Mismatch in the count of sub drawer panels for "+title+" drawer </li>");
+				}}
 			int ele=0; 
 			for(Element dmcDrawerContentElement : dmcDrawerContentElements ){
 				
-				if(ele <= htmlList.size()){
+				if(ele < htmlList.size()){
 					log.debug("actual content"+htmlList.get(ele));
-					dmcDrawerContentElement.html(htmlList.get(ele));
+					dmcDrawerContentElement.html(htmlList.get(ele)+"<div style=\"clear:both;\"></div>");
 					ele++;
 				}
 				
@@ -680,12 +687,16 @@ public class FrameworkUtils {
 			log.debug("Title p href of the web page content : "+paragraph);
 			
 			//End of log to update the title of the content.
+			return wemElement.outerHtml();
 		}else {
 			log.debug("doc is null.");
 		}
+					}catch(Exception e){
+						log.debug("doc is null.");
+					}
 	
 
-		return wemElement.outerHtml();
+		return null;
 		}
 
 
