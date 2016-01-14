@@ -96,7 +96,15 @@ public class BuyersGuideVariation03 extends BaseAction {
 							htmlBlobLeftElement.select("div#top_r,div.fw-cisco-assistant").remove().first();*/
 						 rawHtml1 = FrameworkUtils.extractHtmlBlobContent(htmlBlobLeftElement, "", locale, sb, urlMap);
 //					rawHtml1 = htmlBlobLeftElement.outerHtml();
-				
+						 if (buyersTopNode.hasNode("htmlblob")) {
+								Node htmlBlobNode = buyersTopNode.getNode("htmlblob");
+								if (StringUtils.isNotBlank(rawHtml1)) {
+									htmlBlobNode.setProperty("html",rawHtml1);
+									log.debug("HtmlBlob Content migrated is done.");
+								}
+							} else {
+								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+							}
 			}
 						else {
 							sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
@@ -105,15 +113,7 @@ public class BuyersGuideVariation03 extends BaseAction {
 						
 						// End get content.
 						// Start set content.
-						if (buyersTopNode.hasNode("htmlblob")) {
-							Node htmlBlobNode = buyersTopNode.getNode("htmlblob");
-							if (StringUtils.isNotBlank(rawHtml1)) {
-								htmlBlobNode.setProperty("html",rawHtml1);
-								log.debug("HtmlBlob Content migrated is done.");
-							}
-						} else {
-							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
-						}
+						
 						// End get content.
 					} catch (Exception e) {
 						log.error("Exception : ", e);
