@@ -264,11 +264,11 @@ public class WebVariation1 extends BaseAction{
 						sb.append("<li>hero image node doesn't exist</li>");
 					}
 					
-					if(heroPanelPopUpNode != null){
+					/*if(heroPanelPopUpNode != null){
 						heroPanelPopUpNode.setProperty("popupHeader", title);
 					}else{
 						sb.append("<li>Hero content video pop up node not found.</li>");
-					}
+					}*/
 					
 					heroPanelNode.setProperty("title", title);
 					heroPanelNode.setProperty("description", desc);
