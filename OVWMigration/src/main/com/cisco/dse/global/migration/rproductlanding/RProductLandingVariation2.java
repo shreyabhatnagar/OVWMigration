@@ -546,7 +546,7 @@ public class RProductLandingVariation2 extends BaseAction {
 								if (titleElements != null) {
 									Element titleElement = titleElements.first();
 									if (titleElement != null) {
-										primaryCTATitle = titleElement.text();
+										primaryCTATitle = titleElement.html();
 									} else {
 										log.debug("<li>Primary CTA Heding element not having title</li>");
 									}

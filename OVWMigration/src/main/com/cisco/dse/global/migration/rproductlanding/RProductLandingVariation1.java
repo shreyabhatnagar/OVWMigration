@@ -657,13 +657,14 @@ public class RProductLandingVariation1 extends BaseAction {
 										for (Element drawersPanelElement : drawersPanelElements) {
 											Elements drawerPanelLiElements = drawersPanelElement
 													.getElementsByTag("li");
-											boolean infoLinksMisMatchFlag = false;
-											boolean linkUrlNotFoundFlag = false;
-											boolean imageSrcNotFoundFlag = false;
-											boolean subdrawerTitleNotFoundFlag = false;
-											boolean subdrawerHighlightsNotFoundFlag = false;
+											
 											if (drawerPanelLiElements != null) {
 												for (Element drawerPanelLiElement : drawerPanelLiElements) {
+													boolean infoLinksMisMatchFlag = false;
+													boolean linkUrlNotFoundFlag = false;
+													boolean imageSrcNotFoundFlag = false;
+													boolean subdrawerTitleNotFoundFlag = false;
+													boolean subdrawerHighlightsNotFoundFlag = false;
 													String panelTitle = "";
 													boolean misMatchFlag = true;
 													Elements iconBlock = drawerPanelLiElement
@@ -760,7 +761,10 @@ public class RProductLandingVariation1 extends BaseAction {
 																}
 																if (StringUtils.isNotBlank(linkUrl)) {
 																	drawersPanelNode.setProperty("linkUrl", linkUrl);
+																	drawersPanelNode.setProperty("includeLink", "true");
 																	drawersOverviewNode.setProperty("url", linkUrl);
+																	drawersOverviewNode.setProperty("linktype", "Url");
+																	
 																} 
 																if (StringUtils.isNotBlank(panelDescription)) {
 																	drawersPanelNode.setProperty("description", panelDescription);
@@ -1385,6 +1389,13 @@ public class RProductLandingVariation1 extends BaseAction {
 						Node htmlblobNode = indexUpperLeftNode.getNode("htmlblob_0");
 						if (StringUtils.isNotBlank(html)) {
 							htmlblobNode.setProperty("html", html);
+						}
+					} else {
+						if (indexUpperLeftNode.hasNode("htmlblob")) {
+							Node htmlblobNode = indexUpperLeftNode.getNode("htmlblob");
+							if (StringUtils.isNotBlank(html)) {
+								htmlblobNode.setProperty("html", html);
+							}
 						}
 					}
 					sb.append("<li>Mis-match of html blob components "+"web page has (1) and nodes are ("+htmlBlobSize+") </li>");
