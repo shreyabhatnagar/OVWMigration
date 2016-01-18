@@ -150,7 +150,7 @@ public class RProductLandingVariation1 extends BaseAction {
 						if (primaryCTAElement != null) {
 							Elements titleElements = primaryCTAElement
 									.getElementsByTag("h3");
-							if(!titleElements.isEmpty()){
+							if(titleElements.isEmpty()){
 								titleElements = primaryCTAElement
 										.getElementsByTag("h2");
 							}
@@ -393,6 +393,10 @@ public class RProductLandingVariation1 extends BaseAction {
 										if (heroPanelLinkUrlElement != null) {
 											heroPanellinkUrl = heroPanelLinkUrlElement
 													.absUrl("href");
+											if (StringUtils.isBlank(heroPanellinkUrl)) {
+												heroPanellinkUrl = heroPanelLinkUrlElement
+														.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
 											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
@@ -401,6 +405,13 @@ public class RProductLandingVariation1 extends BaseAction {
 									
 										} else {
 											log.debug("<li>Hero Panel element not having any linkurl in it </li>");
+										}
+										Element ctaLinkElement = ele.select("p.cta-link").first(); 
+										Elements ctaLinkAnchorElements = ctaLinkElement
+												.getElementsByTag("a");
+										log.debug("ctaLinkAnchorElements.size() :::::: " + ctaLinkAnchorElements.size());
+										if (ctaLinkAnchorElements.size() > 1) {
+											sb.append("<li>Some extra text found in hero panel </li>");
 										}
 									} else {
 										log.debug("<li>Hero Panel link url element not found </li>");
@@ -646,8 +657,14 @@ public class RProductLandingVariation1 extends BaseAction {
 										for (Element drawersPanelElement : drawersPanelElements) {
 											Elements drawerPanelLiElements = drawersPanelElement
 													.getElementsByTag("li");
+											boolean infoLinksMisMatchFlag = false;
+											boolean linkUrlNotFoundFlag = false;
+											boolean imageSrcNotFoundFlag = false;
+											boolean subdrawerTitleNotFoundFlag = false;
+											boolean subdrawerHighlightsNotFoundFlag = false;
 											if (drawerPanelLiElements != null) {
 												for (Element drawerPanelLiElement : drawerPanelLiElements) {
+													String panelTitle = "";
 													boolean misMatchFlag = true;
 													Elements iconBlock = drawerPanelLiElement
 															.select("div.series");
@@ -667,7 +684,7 @@ public class RProductLandingVariation1 extends BaseAction {
 													if (seriesElements != null) {
 														Element seriesElement = seriesElements
 																.first();
-														String panelTitle = "";
+														
 														String linkUrl = "";
 														String panelDescription = "";
 														if (seriesElement != null) {
@@ -728,6 +745,8 @@ public class RProductLandingVariation1 extends BaseAction {
 																log.debug("drawerImage " + drawerImage);
 																if (StringUtils.isNotBlank(drawerImage)) {
 																	drawersImageNode.setProperty("fileReference", drawerImage);
+																}else{
+																	imageSrcNotFoundFlag = true;
 																}
 															}
 															// end image
@@ -742,9 +761,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																if (StringUtils.isNotBlank(linkUrl)) {
 																	drawersPanelNode.setProperty("linkUrl", linkUrl);
 																	drawersOverviewNode.setProperty("url", linkUrl);
-																} else {
-																	sb.append(Constants.DRAWER_PANEL_LINK_TITLE_NOT_FOUND);
-																}
+																} 
 																if (StringUtils.isNotBlank(panelDescription)) {
 																	drawersPanelNode.setProperty("description", panelDescription);
 																} else {
@@ -867,6 +884,8 @@ public class RProductLandingVariation1 extends BaseAction {
 																					.setProperty(
 																							"fileReference",
 																							subDrawerImage);
+																		}else{
+																			imageSrcNotFoundFlag = true;
 																		}
 																	}
 																	// end image
@@ -933,6 +952,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																													log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																													// End extracting valid href
 																													ownTextCheck = false;
+																													if(StringUtils.isNotBlank(si.ownText())) {
+																														linkText = linkText + si.ownText();
+																													}
 																												} else if(!si.ownText().isEmpty()){
 																													System.out
 																															.println("intoooo ownnn text");
@@ -959,7 +981,7 @@ public class RProductLandingVariation1 extends BaseAction {
 
 																			}else if(ownTextCheck){
 																												list3.add(linkTextUrl);
-																												sb.append(Constants.LINK_URL_NOT_FOUND_IN_SUBDRAWER_INFOLINKS);
+																												linkUrlNotFoundFlag = true;
 																											}
 																		}
 																		log.debug("list2.size()"
@@ -976,7 +998,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																						"title",
 																						title);
 																	} else {
-																		sb.append(Constants.TITLE_SUB_DRAWER_NOT_FOUND);
+																		subdrawerTitleNotFoundFlag = true;
 																	}
 																	if (StringUtils
 																			.isNotBlank(linkTitleUrl)) {
@@ -985,7 +1007,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																						"linkTitleUrl",
 																						linkTitleUrl);
 																	} else {
-																		sb.append(Constants.LINK_URL_OF_SUB_DRAWER_NOT_FOUND);
+																		linkUrlNotFoundFlag = true;
 																		log.debug("linkurl property is not set at "
 																				+ subdrawerpanel
 																						.getPath());
@@ -1007,7 +1029,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																								.size()]));
 
 																	} else {
-																		sb.append(Constants.HIGHLIGHTS_OF_SUB_DRAWER_NOT_FOUND);
+																		subdrawerHighlightsNotFoundFlag = true;
 																	}
 																	NodeIterator subdraweritems = null;
 																	if (list2
@@ -1063,14 +1085,13 @@ public class RProductLandingVariation1 extends BaseAction {
 																			}
 
 																		}
-																	} else {
-																		sb.append(Constants.INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND);
-																	}
+																	} 
 																	if (list2
 																			.size() != subdraweritems
 																			.getSize()) {
-																		sb.append(Constants.MISMATCH_IN_INFOLINKS);
+																		infoLinksMisMatchFlag = true;
 																	}
+																	
 																} else {
 																	misMatchFlag = false;
 																}
@@ -1081,6 +1102,21 @@ public class RProductLandingVariation1 extends BaseAction {
 													}
 													if (!misMatchFlag) {
 														sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT);
+													}
+													if(infoLinksMisMatchFlag){
+														sb.append(Constants.MISMATCH_IN_INFOLINKS+" "+panelTitle);
+													}
+													if(linkUrlNotFoundFlag){
+														sb.append(Constants.LINK_URL_OF_SUB_DRAWER_NOT_FOUND+" "+panelTitle);
+													}
+													if(imageSrcNotFoundFlag){
+														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
+													}
+													if(subdrawerHighlightsNotFoundFlag){
+														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
+													}
+													if(subdrawerTitleNotFoundFlag){
+														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 													}
 												}
 
@@ -1146,6 +1182,10 @@ public class RProductLandingVariation1 extends BaseAction {
 									title = ele.getElementsByTag("h3") != null ? ele
 											.getElementsByTag("h3").text() : "";
 								}
+								Elements imgElements = ele.getElementsByTag("img");
+								if (imgElements != null && imgElements.size() > 0) {
+									sb.append("<li> extra image found in right rail tile bordered component </li>");
+								}
 								String desc = ele.getElementsByTag("p") != null ? ele
 										.getElementsByTag("p").text() : "";
 								Elements anchor = ele.getElementsByTag("a");
@@ -1156,7 +1196,7 @@ public class RProductLandingVariation1 extends BaseAction {
 									countOfTileBorderedElements++;
 								}
 								String anchorText = anchor != null ? anchor
-										.text() : "";
+										.first().text() : "";
 								String anchorHref = anchor != null ? anchor
 										.first().absUrl("href") : "";
 										// Start extracting valid href
@@ -1164,6 +1204,9 @@ public class RProductLandingVariation1 extends BaseAction {
 										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
 										log.debug("after anchorHref" + anchorHref + "\n");
 										// End extracting valid href
+								if (anchor != null && anchor.size() > 1) {
+									sb.append("<li> extra anchor (url) is found in right rail tile bordered component </li>");
+								}
 								if (titleBorderNodes.hasNext()) {
 									rightRailNode = (Node) titleBorderNodes
 											.next();
@@ -1325,17 +1368,29 @@ public class RProductLandingVariation1 extends BaseAction {
 				// end set benefit list.
 				
 				//start of html blob
+				int htmlBlobSize = 0;
 				NodeIterator htmlBlob = indexUpperLeftNode.getNodes("htmlblob*");
 				NodeIterator letUsHelp = indexUpperLeftNode.getNodes("letushelp_*");
 				if(htmlBlob != null && htmlBlob.getSize() > 0){
-					int htmlBlobSize = (int)htmlBlob.getSize();
+					htmlBlobSize = (int)htmlBlob.getSize();
 					if(letUsHelp != null && letUsHelp.getSize() > 0){
 						htmlBlobSize=htmlBlobSize+(int)letUsHelp.getSize();
 					}
-//					sb.append("<li>Extra HTML blog content found on locale page</li>");
+					
+				}
+				if (doc.select("div.c42-pilot").size() > 0) {
+					Element htmlBlobElement =  doc.select("div.c42-pilot").first();
+					String html = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
+					if (indexUpperLeftNode.hasNode("htmlblob_0")) {
+						Node htmlblobNode = indexUpperLeftNode.getNode("htmlblob_0");
+						if (StringUtils.isNotBlank(html)) {
+							htmlblobNode.setProperty("html", html);
+						}
+					}
+					sb.append("<li>Mis-match of html blob components "+"web page has (1) and nodes are ("+htmlBlobSize+") </li>");
+				} else {
 					sb.append("<li>Mis-match of html blob components "+"web page has (0) and nodes are ("+htmlBlobSize+") </li>");
 				}
-				
 				//end of html blob
 				
 				
