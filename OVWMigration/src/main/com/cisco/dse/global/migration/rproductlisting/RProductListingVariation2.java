@@ -449,6 +449,7 @@ public class RProductListingVariation2 extends BaseAction{
 																	.getSize())) {
 																misMatchFlag = false;
 															}
+															boolean isMultiple = false;
 															List<String> list1 = new ArrayList<String>();
 															List<String> list2 = new ArrayList<String>();
 															List<String> list3 = new ArrayList<String>();
@@ -461,6 +462,7 @@ public class RProductListingVariation2 extends BaseAction{
 
 																Elements siTitles = subItem
 																		.getElementsByTag("h4");
+																
 																if (siTitles != null) {
 																	Element siTitle = siTitles
 																			.first();
@@ -484,6 +486,7 @@ public class RProductListingVariation2 extends BaseAction{
 																								.attr("href")
 																						+ "\n");
 																				if(siATitles.size() > 1){
+																					isMultiple = true;
 																					title = siTitle.outerHtml();
 																				}else{
 																				title = siATitle.text();
@@ -646,15 +649,23 @@ public class RProductListingVariation2 extends BaseAction{
 																			.setProperty(
 																					"title",
 																					title);
+																	if(isMultiple){
+																		log.debug("anchor tags are multiplee ************************");
+																		titleLinkNode.setProperty("url", "");
+																	}
 																} else {
 																	sb.append(Constants.TITLE_SUB_DRAWER_NOT_FOUND+" For "+ panelTitle.trim());
 																}
 																if (StringUtils
 																		.isNotBlank(linkTitleUrl) && titleLinkNode!=null) {
+																	if(!isMultiple){
 																	titleLinkNode
 																			.setProperty(
 																					"url",
 																					linkTitleUrl);
+																	titleLinkNode.setProperty("linktype", "Url");
+																	log.debug("anchor tags are NOTTTTT multiplee ************************");
+																	}
 																} else {
 																	linkUrlNotFoundFlag = true;
 																	log.debug("linkurl property is not set at "
