@@ -132,11 +132,11 @@ public class FrameworkUtils {
 									pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
 									if (jcrNode.hasProperty("jcr:title")) {
 										jcrNode.setProperty("jcr:title",pageTitle);
-										if (jcrNode.hasProperty("cisco:customHeadTitle")) {
-											jcrNode.setProperty("cisco:customHeadTitle", "");
-										}else{
-											log.debug("Custom head title property not found");
-										}
+									}
+									if (jcrNode.hasProperty("cisco:customHeadTitle")) {
+										jcrNode.setProperty("cisco:customHeadTitle", pageTitle);
+									}else{
+										log.debug("Custom head title property not found");
 									}
 								} else {
 									sb.append("<li>jcr title not set </li>");
