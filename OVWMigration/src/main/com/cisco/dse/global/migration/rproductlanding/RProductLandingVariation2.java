@@ -17,6 +17,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.poi.util.StringUtil;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -231,9 +232,17 @@ public class RProductLandingVariation2 extends BaseAction {
 											}
 											if (StringUtils
 													.isNotBlank(heroPanellinkUrl)) {
-												heroPanelNode
-												.setProperty("linkurl",
+												Node heroCta = heroPanelNode.hasNode("cta")?heroPanelNode.getNode("cta"):null;
+												if(heroCta!=null){
+													if(!heroPanelLinkText.equals("")&&heroPanelLinkText!=null&&!heroPanellinkUrl.equals("")&&heroPanellinkUrl!=null){
+														String linkType = heroCta.getProperty("linktype").getString();
+														if(!linkType.equals("Url")){
+															heroCta.setProperty("linktype","Url");
+														}
+													}
+												heroCta.setProperty("url",
 														heroPanellinkUrl);
+												}
 											} else {
 												sb.append(Constants.HERO_SLIDE_LINKURL_NOT_FOUND);
 											}
@@ -476,6 +485,18 @@ public class RProductLandingVariation2 extends BaseAction {
 					}
 					//End of Spotlight
 
+					//start drawer
+					try{
+						Elements drEle = doc.select("ul.n21");
+						if(!drEle.isEmpty()){
+							sb.append("<li>Extra drawer(s) component found in locale page.</li>");
+						}
+					}catch(Exception e){
+						log.error("Exception in drawer : ",e);
+					}
+					
+					//end drawer
+					
 					//start of text
 					try{
 						Elements textEle = doc.select("div.gd-left").select("div.c00-pilot,div.cc00-pilot");
@@ -759,6 +780,10 @@ public class RProductLandingVariation2 extends BaseAction {
 												// End extracting valid href
 												if(itemsItr.hasNext()){
 													Node item = (Node)itemsItr.next();
+													if(item.hasProperty("size")){
+														log.debug("hasProperty size in spotlight");
+														sb.append("<li>Extra pdf size property is found in right rail list of WEM page.</li>");
+													}
 													Node linkDataNode = item.hasNode("linkdata")?item.getNode("linkdata"):null;
 													if(linkDataNode!=null){
 														linkDataNode.setProperty("linktext",linkText);
@@ -1117,7 +1142,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											item = (Node)items.next();
 											if(item.hasProperty("size")){
 												log.debug("hasProperty size.");
-												item.setProperty("size","");
+												sb.append("<li>Extra pdf size property is found in right rail list of WEM page.</li>");
 											}
 										}
 										if(item!=null){
@@ -1138,6 +1163,9 @@ public class RProductLandingVariation2 extends BaseAction {
 											linkText = linkText+" "+ownText;
 										}
 										String aHref = aEle.absUrl("href");
+										if (StringUtils.isBlank(aHref)) {
+											aHref = aEle.attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before li" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
