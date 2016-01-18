@@ -77,6 +77,7 @@ import com.cisco.dse.global.migration.buyersguide.BuyersGuideVariation03;
 import com.cisco.dse.global.migration.subcat.SubCatVariation1;
 import com.cisco.dse.global.migration.subcat.SubCatVariation2;
 import com.cisco.dse.global.migration.subcat.SubCatVariation3;
+import com.cisco.dse.global.migration.web.WebVariation10;
 import com.cisco.dse.global.migration.web.WebVariation11;
 import com.cisco.dse.global.migration.web.WebVariation2;
 import com.cisco.dse.global.migration.web.WebVariation1;
@@ -188,7 +189,7 @@ public class OVWMigration {
 															String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
 															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
-															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about") || variationType.equals("industries"))){
+															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about") || variation.startsWith("sWebVar10"))){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
 															} else if(StringUtils.isNotBlank(variation) && variation.startsWith("infrastructure")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/network-infrastructure");
@@ -869,6 +870,18 @@ public class OVWMigration {
 																msg17 = msg17 + "<tr>";
 																msg17 = msg17
 																		+ new WebVariation3().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg17 = msg17 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg17);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															}else if ("overview-sWebVar10".equals(type) && "YES".equalsIgnoreCase(check)) {
+																String msg17 = "";
+																msg17 = msg17 + "<tr>";
+																msg17 = msg17
+																		+ new WebVariation10().translate(
 																				host, gLink, prod, type, cattype,
 																				sheet.getSheetName(), session, urlMap);
 																msg17 = msg17 + "</tr>";
