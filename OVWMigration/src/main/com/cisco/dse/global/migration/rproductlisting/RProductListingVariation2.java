@@ -191,13 +191,7 @@ public class RProductListingVariation2 extends BaseAction{
 				// ------------------------------------------------------------------------------------------------------------------------------------------
 				// start set Hero Large component content.
 			try {
-				boolean htmlBlobNodeExists = false;
-				Node htmlBlobNode = gridNarrowWideNode.hasNode("htmlblob")?gridNarrowWideNode.getNode("htmlblob"):null;
 				
-				if(htmlBlobNode != null){
-					htmlBlobNodeExists = true;
-					//sb.append("<li> Extra english content found on WEM page. </li>");
-				}
 				
 				Elements drawerComponentHeaderElements = doc
 						.select("div.c00v0-pilot");
@@ -238,8 +232,15 @@ public class RProductListingVariation2 extends BaseAction{
 							if (gridNarrowWideNode.hasNodes()) {
 								NodeIterator drawerPanelsIterator = gridNarrowWideNode
 										.getNodes("container*");
-								NodeIterator htmlblobIterator = gridNarrowWideNode.getNodes("htmlblob*");
-
+								
+								boolean htmlBlobNodeExists = false;
+								Node htmlBlobNode = gridNarrowWideNode.hasNode("htmlblob")?gridNarrowWideNode.getNode("htmlblob"):null;
+								NodeIterator htmlblobIterator = null;
+								if(htmlBlobNode != null){
+									htmlblobIterator = gridNarrowWideNode.getNodes("htmlblob*");
+									htmlBlobNodeExists = true;
+									//sb.append("<li> Extra english content found on WEM page. </li>");
+								}
 								Node drawersPanelNode = null;
 								Elements drawersPanelElements = doc.select("div.n21,ul.n21");
 
@@ -272,10 +273,10 @@ public class RProductListingVariation2 extends BaseAction{
 												if	(seriesElements != null)	{
 												count = count + 1;
 												
-												if(count == 2 || count == 3 && htmlBlobNodeExists){
+												if((count == 2 || count == 3) && htmlBlobNodeExists){
 													isHtmlBlob = true;
 													String htmContent = FrameworkUtils.extractHtmlBlobContent(drawerPanelLiElement, "", locale, sb, urlMap);
-													 
+													 log.debug("htmlblobl exists for : "+ gridNarrowWideNodePath);
 													if(htmlblobIterator.hasNext()){
 														Node htmlblobNode = (Node) htmlblobIterator.next();
 														if (htmlblobNode != null) {
@@ -771,7 +772,7 @@ public class RProductListingVariation2 extends BaseAction{
 
 										}
 									}
-									if (count != drawerPanelsIterator
+									if (htmlblobIterator != null && count != drawerPanelsIterator
 											.getSize()+htmlblobIterator.getSize())
 										sb.append(Constants.MIS_MATCH_IN_DRAWER_PANEL_COUNT);
 
@@ -780,6 +781,7 @@ public class RProductListingVariation2 extends BaseAction{
 								} 
 									}else {
 									log.debug("<li>drawer panel elements section not found</li>");
+									sb.append(Constants.DRAWER_PANEL_ELEMENTS_NOT_FOUND);
 								}
 							} else {
 								log.debug("<li>drawers_container node is not found</li>");
