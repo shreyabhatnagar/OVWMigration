@@ -79,6 +79,7 @@ import com.cisco.dse.global.migration.subcat.SubCatVariation2;
 import com.cisco.dse.global.migration.subcat.SubCatVariation3;
 import com.cisco.dse.global.migration.web.WebVariation10;
 import com.cisco.dse.global.migration.web.WebVariation11;
+import com.cisco.dse.global.migration.web.WebVariation13;
 import com.cisco.dse.global.migration.web.WebVariation2;
 import com.cisco.dse.global.migration.web.WebVariation1;
 import com.cisco.dse.global.migration.web.WebVariation7;
@@ -188,6 +189,8 @@ public class OVWMigration {
 															log.debug("actual type : " + variationType);
 															String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
 															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
+																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
+															}else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about") || variation.startsWith("sWebVar10"))){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
@@ -1091,7 +1094,20 @@ public class OVWMigration {
 																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 																sb.append(msg16);
 																sb.append("<tr><td colspan='3'>.</td></tr>");
-															}
+															}else if ("index-WebVar13".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg16 = "";
+																msg16 = msg16 + "<tr>";
+																msg16 = msg16
+																		+ new WebVariation13().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session, urlMap);
+																msg16 = msg16 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg16);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+															} 
+
 
 
 
