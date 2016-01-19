@@ -63,21 +63,13 @@ public class WebVariation1 extends BaseAction{
 		String webNodePath = "/content/<locale>/"
 				+ catType
 				+ "/jcr:content/content_parsys/generic/layout-generic/gd12v2";
-		//String webBottomNodePath = "/content/<locale>/"
-				//+ catType
-			//	+ "/<prod>//content/en/us/solutions/test-wp-on-wem/about/jcr:content/content_parsys/generic/layout-generic/gd12v2/gd12v2-right";
-
 		webNodePath = webNodePath.replace("<locale>",
 				locale).replace("<prod>", prod);
-		/*webBottomNodePath = webBottomNodePath.replace("<locale>",
-				locale).replace("<prod>", prod);*/
 		javax.jcr.Node webNode = null;
-	//	javax.jcr.Node webBottomNode = null;
 		javax.jcr.Node pageJcrNode = null;
 		try {
 
 			webNode = session.getNode(webNodePath);
-		//	webBottomNode = session.getNode(webBottomNodePath);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = getConnection(loc);
@@ -95,8 +87,7 @@ public class WebVariation1 extends BaseAction{
 				// start set hero medium component properties.			
 				try {
 					log.debug("Start of Hero component");
-					Elements heroElements = doc.select("div.c50-pilot");
-					int eleSize = heroElements.select("div.frame").size();
+					Elements heroElements = doc.select("div.frame");
 					Node heroNode = webNode.hasNode("gd12v2-left/hero_medium") ? webNode.getNode("gd12v2-left/hero_medium") : null;
 
 					if (heroNode != null) {
@@ -106,11 +97,10 @@ public class WebVariation1 extends BaseAction{
 							sb.append("<li>Hero component with class name 'frame' does not exist on locale page.</li>");
 						}
 						else {
-//							int eleSize = heroElements.size();
+						int eleSize = heroElements.size();
 							log.debug("hero node element size: "+ eleSize);
 							NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
 							int nodeSize = (int)heroPanelNodeIterator.getSize();
-							log.debug("hero node nodeSize : "+ nodeSize);
 							if(eleSize == nodeSize){
 								setForHero(heroElements,heroNode,locale,urlMap);
 							}
@@ -246,12 +236,7 @@ public class WebVariation1 extends BaseAction{
 				String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 				log.debug("heroImage before migration : " + heroImage + "\n");
 				if (heroPanelNode != null) {
-					Node heroPanelPopUpNode = null;
-					Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
-					if(lightBoxElements != null && !lightBoxElements.isEmpty()){
-						Element lightBoxElement = lightBoxElements.first();
-						heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
-					}
+					
 					if (heroPanelNode.hasNode("image")) {
 						Node imageNode = heroPanelNode.getNode("image");
 						String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
@@ -263,13 +248,6 @@ public class WebVariation1 extends BaseAction{
 					} else {
 						sb.append("<li>hero image node doesn't exist</li>");
 					}
-					
-					/*if(heroPanelPopUpNode != null){
-						heroPanelPopUpNode.setProperty("popupHeader", title);
-					}else{
-						sb.append("<li>Hero content video pop up node not found.</li>");
-					}*/
-					
 					heroPanelNode.setProperty("title", title);
 					heroPanelNode.setProperty("description", desc);
 					heroPanelNode.setProperty("linktext", anchorText);
