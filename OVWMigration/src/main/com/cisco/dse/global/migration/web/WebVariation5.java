@@ -189,6 +189,18 @@ public class WebVariation5 extends BaseAction{
 								}
 
 								// start image
+								Node heroPanelPopUpNode = null;
+								Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+								if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+									Element lightBoxElement = lightBoxElements.first();
+									heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+									if(heroPanelPopUpNode != null){
+										heroPanelPopUpNode.setProperty("popupHeader", h2Text);
+									}else{
+										sb.append("<li>Hero content video pop up node not found.</li>");
+									}
+								}
+								
 								String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 								log.debug("heroImage before migration : " + heroImage + "\n");
 								if (heroPanelNode.hasNode("image")) {
