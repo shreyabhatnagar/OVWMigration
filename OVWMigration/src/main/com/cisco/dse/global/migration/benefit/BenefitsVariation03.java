@@ -570,7 +570,8 @@ public class BenefitsVariation03 extends BaseAction {
 				String anchorHref = FrameworkUtils.getLocaleReference(listurl.absUrl("href"), urlMap);
 				log.debug("after anchorHref" + anchorHref + "\n");
 				// End extracting valid href
-				listNode.setProperty("linktext", listtext.text()+text);
+
+				listNode.setProperty("linktext", listtext.text()+" " +text);
 				listNode.setProperty("linkurl", anchorHref);
 			}else if (!rightListEle.ownText().isEmpty()){
 				listNode.setProperty("linktext", rightListEle.ownText());

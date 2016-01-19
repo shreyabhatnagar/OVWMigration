@@ -175,6 +175,7 @@ public class FrameworkUtils {
 					if (path.indexOf("http:") == -1
 							&& path.indexOf("https:") == -1) {
 						log.debug("Adding domain to the image path.");
+						path = path.trim();
 						path = "http://www.cisco.com" + path;
 					}
 					if (StringUtils.isNotBlank(imgRef)) {
