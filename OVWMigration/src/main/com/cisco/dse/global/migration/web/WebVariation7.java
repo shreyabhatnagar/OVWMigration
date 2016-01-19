@@ -106,16 +106,16 @@ public class WebVariation7 extends BaseAction{
 						try{
 							log.debug("start of mid..$$");
 							Element gdMidEle = doc.select("div.gd-mid,div.gd-right").first();
-							if(gdMidEle.hasClass("gd-right")){
-								log.debug("hasClass...##");
-								gdMidEle=gdMidEle.select("div.gd-left").last();
-							}
 							if(gdMidEle==null){
 								log.debug("gdMidEle==null----S");
 								gdMidEle = doc.select("div.sitecopy_hs").first();
 								gdMidEle.select("c46-pilot").remove();
 							}
 							if(gdMidEle!=null){
+								if(gdMidEle.hasClass("gd-right")){
+									log.debug("hasClass...##");
+									gdMidEle=gdMidEle.select("div.gd-left").last();
+								}
 								log.debug("in gdMid");
 								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle, "",locale, sb, urlMap);
 								if(!gdMid.equals("")&& gdMid!=null){
@@ -144,6 +144,7 @@ public class WebVariation7 extends BaseAction{
 								log.debug("in gdMid@@@@");
 								//							gdMidEle.html()
 								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap);
+								log.debug("---------My log----------"+gdMid);
 								if(!gdMid.equals("")&& gdMid!=null){
 									Node leftBlob1 =null; 
 									if(leftBlobIterator.hasNext()){
@@ -182,9 +183,9 @@ public class WebVariation7 extends BaseAction{
 							Element gdMidEle3=null;
 							gdMidEle3 = gdMidElem.select("div.c00-pilot").last();
 							if(gdMidEle3==null){
-									gdMidEle3 = doc.select("div.gd42-pilot").first();	
+								gdMidEle3 = doc.select("div.gd42-pilot").first();	
 							}
-							
+
 
 							if(gdMidEle3!=null){
 								//							gdMidEle.html()
@@ -266,18 +267,32 @@ public class WebVariation7 extends BaseAction{
 					try{
 						log.debug("start of right rail..");
 						Element gdRightEle = doc.select("div.gd-right").last();
+
 						if(gdRightEle==null){
 							gdRightEle = doc.select("td#framework-column-right").first();
 						}
 						if(gdRightEle!=null){
 							//							String gdRight = gdRightEle.html();
-							String gdRight = FrameworkUtils.extractHtmlBlobContent(gdRightEle, "",locale, sb, urlMap);
-							Node rightBlob = indRightNode.hasNode("htmlblob")?indRightNode.getNode("htmlblob"):null;
-							if(rightBlob!=null){
-								rightBlob.setProperty("html",gdRight);
+							Element gdParent = gdRightEle.parent();
+							if(gdParent.className().equals("gd-mid")){
+								gdRightEle=null;
+							}
+							if(gdRightEle==null){
+								gdRightEle = doc.select("td#framework-column-right").first();
+							}
+
+							if(gdRightEle!=null){	
+								String gdRight = FrameworkUtils.extractHtmlBlobContent(gdRightEle, "",locale, sb, urlMap);
+								Node rightBlob = indRightNode.hasNode("htmlblob")?indRightNode.getNode("htmlblob"):null;
+								if(rightBlob!=null){
+									rightBlob.setProperty("html",gdRight);
+								}else{
+									log.debug("html blob node not found.");
+									sb.append("<li>html blob node not found.</li>");
+								}
 							}else{
-								log.debug("html blob node not found.");
-								sb.append("<li>html blob node not found.</li>");
+								sb.append("<li>no gd-right content found</li>");
+								log.debug("no gd-right content found");
 							}
 						}else{
 							sb.append("<li>no gd-right content found</li>");

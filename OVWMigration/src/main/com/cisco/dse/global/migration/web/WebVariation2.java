@@ -361,8 +361,13 @@ public class WebVariation2 extends BaseAction {
 					int count = 1;
 					// getting data
 					Elements htmlEle = doc.select("div.gd-left");
+					if(htmlEle.size() == 1 && htmlEle != null){
+						htmlEle.first().select("div.c50-pilot").remove();
+							htmlContent = FrameworkUtils
+									.extractHtmlBlobContent(htmlEle.first(), "",
+											locale, sb, urlMap);
+					}else{
 					for (Element ele : htmlEle) {
-						log.debug("gd-left Elements " + count + " " + ele);
 						if (count == 2) {
 
 							if (ele != null) {
@@ -374,6 +379,7 @@ public class WebVariation2 extends BaseAction {
 							}
 						}
 						count++;
+					}
 					}
 					// setting data
 					Node htmlNode = leftHtmlblobNode.hasNode("htmlblob") ? leftHtmlblobNode
