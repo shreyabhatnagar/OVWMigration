@@ -276,7 +276,12 @@ public class WebVariation10 extends BaseAction{
 						}
 						if(midHtmlBlobElement != null && !isFirstBlob){
 							String htmlContent = FrameworkUtils.extractHtmlBlobContent(midHtmlBlobElement, "", locale, sb, urlMap);
+							if(midNodeItemsList.size() == 3){
+								leftNodeItemsList.add(htmlContent);
+							}
+							else{
 							midNodeItemsList.add(htmlContent);
+							}
 						}
 						if(rightHtmlBlobElement != null && !isFirstBlob){
 							String htmlContent = FrameworkUtils.extractHtmlBlobContent(rightHtmlBlobElement, "", locale, sb, urlMap);
