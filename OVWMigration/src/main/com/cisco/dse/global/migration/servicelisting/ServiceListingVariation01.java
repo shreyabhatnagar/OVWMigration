@@ -251,6 +251,11 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (StringUtils.isNotBlank(h2Text)) {
 									listNode.setProperty("title", h2Text);
 								}
+								if (listNode.hasNode("intro")) {
+									Node introNode = listNode.getNode("intro");
+									if (introNode.hasProperty("paragraph_rte") && StringUtils.isNotBlank(introNode.getProperty("paragraph_rte").getValue().getString()))
+										sb.append("paragraph text in list not found in web publisher page but found in WEM page.");
+								}
 								if (listNode.hasNode("element_list_0")) {
 									Node element_list_0 = listNode
 											.getNode("element_list_0");

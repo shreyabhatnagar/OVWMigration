@@ -136,7 +136,10 @@ public class ProductLandingVariation1 extends BaseAction {
 											Element anchorElement = anchorElements.first();
 											if (anchorElement != null) {
 												primaryCTALinkText = anchorElement.text();
-												primaryCTALinkUrl = anchorElement.attr("href");
+												primaryCTALinkUrl = anchorElement.absUrl("href");
+												if (StringUtils.isBlank(primaryCTALinkUrl)) {
+													primaryCTALinkUrl = anchorElement.attr("href");
+												}
 												log.debug("primaryCTALinkUrl before migration : " + primaryCTALinkUrl);
 												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
 												log.debug("primaryCTALinkUrl after migration : " + primaryCTALinkUrl);
