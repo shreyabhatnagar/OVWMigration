@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -206,6 +207,9 @@ public class SolutionListingVariation11 extends BaseAction {
 								String ahref = "";
 								if (anchorText != null) {
 									ahref = anchorText.absUrl("href");
+									if(StringUtil.isBlank(ahref)){
+										ahref = anchorText.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before ahref" + ahref + "\n");
 									ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);

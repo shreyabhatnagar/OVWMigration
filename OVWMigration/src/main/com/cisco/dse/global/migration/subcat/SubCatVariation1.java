@@ -19,6 +19,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -174,6 +175,9 @@ public class SubCatVariation1 extends BaseAction {
 								if (heroPanelLinkUrlElement != null) {
 									herolinkUrl = heroPanelLinkUrlElement
 											.absUrl("href");
+									if(StringUtil.isBlank(herolinkUrl)){
+										herolinkUrl = heroPanelLinkUrlElement.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("heroPanellinkUrl before migration : "
 											+ herolinkUrl);
@@ -397,7 +401,10 @@ public class SubCatVariation1 extends BaseAction {
 							if (aElements != null) {
 								Element aElement = aElements.first();
 								String title = aElement.attr("title");
-								String href = aElement.attr("href");
+								String href = aElement.absUrl("href");
+								if(StringUtil.isBlank(href)){
+									href = aElement.attr("href");
+								}
 								// Start extracting valid href
 								log.debug("Before pilotLinkUrl" + href + "\n");
 								href = FrameworkUtils.getLocaleReference(href,
@@ -600,6 +607,9 @@ public class SubCatVariation1 extends BaseAction {
 						if (spotLightCta != null) {
 							ctaText = spotLightCta.text();
 							ctaLink = spotLightCta.absUrl("href");
+							if(StringUtil.isBlank(ctaLink)){
+								ctaLink = spotLightCta.attr("href");
+							}
 						} else {
 							sb.append(Constants.SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND);
 						}

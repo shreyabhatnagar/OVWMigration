@@ -25,6 +25,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -225,6 +226,9 @@ public class ServiceListingVariation02 extends BaseAction {
 									Element a = li.getElementsByTag("a").first();
 									obj.put("linktext",a.attr("title"));
 									String aHref = a.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = a.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before followus" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -353,6 +357,9 @@ public class ServiceListingVariation02 extends BaseAction {
 						String linkText = a.text();
 						obj.put("linktext", linkText);
 						String aHref = a.absUrl("href");
+						if(StringUtil.isBlank(aHref)){
+							aHref = a.attr("href");
+						}
 						// Start extracting valid href
 						log.debug("Before list" + aHref + "\n");
 						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -404,6 +411,9 @@ public class ServiceListingVariation02 extends BaseAction {
 		if (h2Ele != null) {
 			title = h2Ele.text();
 			String tLink = h2Ele.getElementsByTag("a").first().absUrl("href");
+			if(StringUtil.isBlank(tLink)){
+				tLink = h2Ele.getElementsByTag("a").first().attr("href");
+			}
 			// Start extracting valid href
 			log.debug("Before spotlight" + tLink + "\n");
 			tLink = FrameworkUtils.getLocaleReference(tLink, urlMap);
@@ -466,6 +476,9 @@ public class ServiceListingVariation02 extends BaseAction {
 		if (spotLightAnchor != null && !spotLightAnchor.isEmpty()) {
 			aText = spotLightAnchor.text();
 			String linkUrl = spotLightAnchor.first().absUrl("href");
+			if(StringUtil.isBlank(linkUrl)){
+				linkUrl = spotLightAnchor.first().attr("href");
+			}
 			// Start extracting valid href
 			log.debug("Before spotlight" + linkUrl + "\n");
 			linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);

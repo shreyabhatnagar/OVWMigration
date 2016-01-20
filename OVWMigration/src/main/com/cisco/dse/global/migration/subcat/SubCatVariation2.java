@@ -27,6 +27,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -172,10 +173,13 @@ public class SubCatVariation2 extends BaseAction{
 									sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
 								}
 
-								Elements anchorText = ele.getElementsByTag("a");
+								Element anchorText = ele.getElementsByTag("a").first();
 								if (anchorText != null) {
 									aText = anchorText.text();
-									aHref = anchorText.attr("href");
+									aHref = anchorText.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = anchorText.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -351,15 +355,18 @@ public class SubCatVariation2 extends BaseAction{
 
 										for (Element li : indexLiList) {
 											JSONObject jsonObj = new JSONObject();
-											Elements listItemAnchor = li
-													.getElementsByTag("a");
+											Element listItemAnchor = li
+													.getElementsByTag("a").first();
 											Elements listItemSpan = li
 													.getElementsByTag("span");
 
 											String anchorText = listItemAnchor != null ? listItemAnchor
 													.text() : "";
 											String anchorHref = listItemAnchor
-													.attr("href");
+													.absUrl("href");
+											if(StringUtil.isBlank(anchorHref)){
+												anchorHref = listItemAnchor.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before ListLinkUrl" + anchorHref + "\n");
 											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
@@ -491,7 +498,10 @@ public class SubCatVariation2 extends BaseAction{
 								if (aElements != null) {
 									Element aElement = aElements.first();
 									String title = aElement.attr("title");
-									String href = aElement.attr("href");
+									String href = aElement.absUrl("href");
+									if(StringUtil.isBlank(href)){
+										href = aElement.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before followusLinkUrl" + href + "\n");
 									href = FrameworkUtils.getLocaleReference(href, urlMap);
@@ -813,15 +823,18 @@ public class SubCatVariation2 extends BaseAction{
 										for (Element li : indexLiList) {
 											JSONObject jsonObj = new JSONObject();
 											String ownText = li.ownText();
-											Elements listItemAnchor = li
-													.getElementsByTag("a");
+											Element listItemAnchor = li
+													.getElementsByTag("a").first();
 											Elements listItemSpan = li
 													.getElementsByTag("span");
 
 											String anchorText = listItemAnchor != null ? listItemAnchor
 													.text()+ownText : "";
 											String anchorHref = listItemAnchor
-													.attr("href");
+													.absUrl("href");
+											if(StringUtil.isBlank(anchorHref)){
+												anchorHref = listItemAnchor.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before ListLinkUrl" + anchorHref + "\n");
 											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
@@ -993,7 +1006,10 @@ public class SubCatVariation2 extends BaseAction{
 				
 				if (spotLightAnchor != null) {
 					String linkText = spotLightAnchor.text();
-					String linkUrl = spotLightAnchor.attr("href");
+					String linkUrl = spotLightAnchor.absUrl("href");
+					if(StringUtil.isBlank(linkUrl)){
+						linkUrl = spotLightAnchor.attr("href");
+					}
 					// Start extracting valid href
 					log.debug("Before spotlight LinkUrl" + linkUrl + "\n");
 					linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
@@ -1017,7 +1033,10 @@ public class SubCatVariation2 extends BaseAction{
 					else {
 						Element spotLightLinkEle = spotLightLink.first();
 						String slLinkText = spotLightLinkEle.text();
-						String slLinkUrl = spotLightLinkEle.attr("href");
+						String slLinkUrl = spotLightLinkEle.absUrl("href");
+						if(StringUtil.isBlank(slLinkUrl)){
+							slLinkUrl = spotLightLinkEle.attr("href");
+						}
 						// Start extracting valid href
 						log.debug("Before spotlight LinkUrl" + slLinkUrl + "\n");
 						slLinkUrl = FrameworkUtils.getLocaleReference(slLinkUrl, urlMap);
