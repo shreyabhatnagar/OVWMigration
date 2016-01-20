@@ -102,11 +102,11 @@ public class WebVariation13 extends BaseAction {
 					if (doc.select("div.guest").size() > 0) {
 						Element guestElement = doc.select("div.guest").first();
 						if (guestElement != null) {
-							Elements popUpContainer = guestElement.select("div.popUpContainer");
+							/*Elements popUpContainer = guestElement.select("div.popUpContainer");
 							if (popUpContainer.size() > 0) {
 								Element containerElement = popUpContainer.first();
 								containerElement.remove();
-							}
+							}*/
 							Element id21Element = guestElement.getElementById("col3");
 							if (id21Element != null) {
 								id21Element.remove();

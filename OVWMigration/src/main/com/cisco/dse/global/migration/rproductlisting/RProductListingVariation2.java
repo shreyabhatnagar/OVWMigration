@@ -259,6 +259,7 @@ public class RProductListingVariation2 extends BaseAction{
 												boolean linkUrlNotFoundFlag = false;
 												boolean imageSrcNotFoundFlag = false;
 												boolean isHtmlBlob = false;
+												boolean infoLinksNotFound = false;
 												Elements iconBlock = drawerPanelLiElement
 														.select("div.series");
 												if (iconBlock.isEmpty()) {
@@ -667,10 +668,14 @@ public class RProductListingVariation2 extends BaseAction{
 																	log.debug("anchor tags are NOTTTTT multiplee ************************");
 																	}
 																} else {
-																	linkUrlNotFoundFlag = true;
-																	log.debug("linkurl property is not set at "
-																			+ subdrawerpanel
-																					.getPath());
+																	if(!isMultiple && titleLinkNode.hasProperty("url")){
+																		linkUrlNotFoundFlag = true;
+																		log.debug("linkurl property is not set at "
+																				+ subdrawerpanel
+																						.getPath());
+																		log.debug("anchor tags are/not multiplee while settingg inside ifff");
+																	}
+																	log.debug("anchor tags are/not multiplee while settingg");
 																}
 																if (list1
 																		.size() > 0) {
@@ -692,8 +697,8 @@ public class RProductListingVariation2 extends BaseAction{
 																	sb.append(Constants.HIGHLIGHTS_OF_SUB_DRAWER_NOT_FOUND+" For "+title.trim());
 																}
 																NodeIterator subdraweritems = null;
-																if (list2.size() > 0) {
-																	
+																Node subDrawerItemLink = null;
+																
 																	Node subdrawerlinks = subdrawerpanel
 																			.hasNode("links") ? subdrawerpanel
 																			.getNode("links")
@@ -704,6 +709,7 @@ public class RProductListingVariation2 extends BaseAction{
 																				.hasNodes() ? subdrawerlinks
 																				.getNodes("item*")
 																				: null;
+																	if (list2.size() > 0) {		
 																		for (int loop = 0; loop < list2
 																				.size(); loop++) {
 																			log.debug("Loop "
@@ -712,17 +718,17 @@ public class RProductListingVariation2 extends BaseAction{
 																					.hasNext()) {
 																				Node subDrawerinfo = subdraweritems
 																						.nextNode();
-																				Node subDrawerItemLink = subDrawerinfo
+																					subDrawerItemLink = subDrawerinfo
 																						.hasNode("link") ? subDrawerinfo
 																						.getNode("link")
 																						: null;
 																				if (subDrawerItemLink
-																						.hasProperty("linktext")) {
-																					Property p = subDrawerItemLink
-																							.getProperty("linktext");
-																					p.remove();
-																					session.save();
-																				}
+																							.hasProperty("linktext")) {
+																						Property p = subDrawerItemLink
+																								.getProperty("linktext");
+																						p.remove();
+																						session.save();
+																					}
 																				if (subDrawerItemLink
 																						.hasProperty("url")) {
 																					Property url = subDrawerItemLink
@@ -742,19 +748,25 @@ public class RProductListingVariation2 extends BaseAction{
 																			}
 
 																		}
-
+																		if(subdraweritems != null && list2 != null){
+																			if (list2
+																				.size() != subdraweritems
+																				.getSize()) {
+																			infoLinksMisMatchFlag =  true;
+																		}
 																		
 																		}
-																	if(subdraweritems != null && list2 != null){
-																		if (list2
-																			.size() != subdraweritems
-																			.getSize()) {
-																		infoLinksMisMatchFlag =  true;
+																		
+																		}
+																	else if(subdraweritems != null && subdraweritems.getSize() > 0){
+																		Node subDrawerItem = (Node) subdraweritems.next();
+																		subDrawerItemLink = subDrawerItem.getNode("link");
+																		if(subDrawerItemLink.hasProperty("url") && subDrawerItemLink.hasProperty("linktext")){
+																			infoLinksNotFound = true;
+																		}
 																	}
-																	}
-																} /*else {
-																	sb.append(Constants.INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND+" For "+ title);
-																}*/
+																	
+																} 
 																
 															} else {
 																misMatchFlag = false;
@@ -777,6 +789,9 @@ public class RProductListingVariation2 extends BaseAction{
 												}
 												if(imageSrcNotFoundFlag){
 													sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
+												}
+												if(infoLinksNotFound){
+													sb.append(Constants.INFO_LINKS_OF_SUB_DRAWER_NOT_FOUND+" "+panelTitle);
 												}
 												
 												}
