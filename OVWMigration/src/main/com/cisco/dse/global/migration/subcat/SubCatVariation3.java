@@ -22,6 +22,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -206,7 +207,11 @@ public class SubCatVariation3 extends BaseAction {
 											if(aHero.hasAttr("id")){
 												heroPanelNode.setProperty("lightboxid", aHero.attr("id"));
 											}else{
-												heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHero.absUrl("href"), urlMap));
+												String aHref = aHero.absUrl("href");
+												if(StringUtil.isBlank(aHref)){
+													aHref = aHero.attr("href");
+												}
+												heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap));
 											}
 										}else{
 											sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
@@ -300,6 +305,9 @@ public class SubCatVariation3 extends BaseAction {
 						String aURL = null;
 						for(Element anchor : links){
 							aURL = anchor.absUrl("href");
+							if(StringUtil.isBlank(aURL)){
+								aURL = anchor.attr("href");
+							}
 							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
 							JSONObject obj = new JSONObject();
 							obj.put("linktext", anchor.text());
@@ -342,7 +350,12 @@ public class SubCatVariation3 extends BaseAction {
 					if (aElement != null) {
 						obj.put("icon", icon);
 						obj.put("linktext", aElement.attr("title"));
-						obj.put("linkurl", aElement.attr("href"));
+						String aHref = aElement.absUrl("href");
+						if(StringUtil.isBlank(aHref)){
+							aHref = aElement.attr("href");
+						}
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						obj.put("linkurl",aHref );
 						list.add(obj.toString());
 					} else {
 						sb.append(Constants.FOLLOW_US_ANCHOR_ELEMENT_NOT_FOUND);
@@ -429,6 +442,9 @@ public class SubCatVariation3 extends BaseAction {
 					}
 					if(link != null){
 						String aURL = link.absUrl("href");
+						if(StringUtil.isBlank(aURL)){
+							aURL = link.attr("href");
+						}
 						aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
 						spotLightNode.setProperty("linktext", link.text());
 						Node linkNode = spotLightNode.hasNode("cta")?spotLightNode.getNode("cta"):null;
@@ -480,6 +496,9 @@ public class SubCatVariation3 extends BaseAction {
 							String aURL = null;
 							for(Element anchor : links){
 								aURL = anchor.absUrl("href");
+								if(StringUtil.isBlank(aURL)){
+									aURL = anchor.attr("href");
+								}
 								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", anchor.text());

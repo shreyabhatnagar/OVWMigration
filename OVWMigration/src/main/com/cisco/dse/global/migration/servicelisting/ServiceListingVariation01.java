@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -195,6 +196,9 @@ public class ServiceListingVariation01 extends BaseAction {
 										Elements aElements = element.getElementsByTag("a");
 										String aText = aElements.text();
 										String aHref = aElements.first().absUrl("href");
+										if(StringUtil.isBlank(aHref)){
+											aHref = aElements.first().attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before gd-left" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -332,6 +336,9 @@ public class ServiceListingVariation01 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									String aHref = aElements.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = aElements.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before gd-mid" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -446,6 +453,9 @@ public class ServiceListingVariation01 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									String aHref = aElements.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = aElements.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before gd-right" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);

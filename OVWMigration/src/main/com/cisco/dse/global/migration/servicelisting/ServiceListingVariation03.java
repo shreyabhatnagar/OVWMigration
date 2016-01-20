@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -179,6 +180,9 @@ public class ServiceListingVariation03 extends BaseAction {
 								if (anchorText != null) {
 									aText = anchorText.text();
 									aHref = anchorText.first().absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = anchorText.first().attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before spotlight" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);

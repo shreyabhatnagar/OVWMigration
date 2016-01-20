@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -173,7 +174,10 @@ public class ProductListingVariation6 extends BaseAction {
 																	Elements anchorTag = panelTitleElement.getElementsByTag("a");
 																	if (anchorTag.size() > 0) {
 																		panelTitle = anchorTag.first().text();
-																		linkUrl = anchorTag.first().attr("href");
+																		linkUrl = anchorTag.first().absUrl("href");
+																		if(StringUtil.isBlank(linkUrl)){
+																			linkUrl = anchorTag.first().attr("href");
+																		}
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl + "\n");
 																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
@@ -269,7 +273,10 @@ public class ProductListingVariation6 extends BaseAction {
 																						Element siATitle = siATitles.first();
 																						if (siATitle != null) {
 																							title = siATitle.text() +" "+ownText;
-																							linkTitleUrl = siATitle.attr("href");
+																							linkTitleUrl = siATitle.absUrl("href");
+																							if(StringUtil.isBlank(linkTitleUrl)){
+																								linkTitleUrl = siATitle.attr("href");
+																							}
 																							// Start extracting valid href
 																							log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
 																							linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
@@ -337,7 +344,10 @@ public class ProductListingVariation6 extends BaseAction {
 																						Element linkTextElement = linkTextElements.first();
 																						if (linkTextElement != null) {
 																							linkText = linkTextElement.text();
-																							linkTextUrl = linkTextElement.attr("href");
+																							linkTextUrl = linkTextElement.absUrl("href");
+																							if(StringUtil.isBlank(linkTextUrl)){
+																								linkTextUrl = linkTextElement.attr("href");
+																							}
 																							// Start extracting valid href
 																							log.debug("Before linkTextUrl" + linkTextUrl + "\n");
 																							linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);

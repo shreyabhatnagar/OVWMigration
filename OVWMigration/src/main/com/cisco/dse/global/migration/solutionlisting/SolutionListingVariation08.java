@@ -19,6 +19,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -228,6 +229,9 @@ public class SolutionListingVariation08 extends BaseAction {
 												if (anchorText != null) {
 													aText = anchorText.text();
 													aHref = anchorText.first().absUrl("href");
+													if(StringUtil.isBlank(aHref)){
+														aHref = anchorText.first().attr("href");
+													}
 													// Start extracting valid href
 													log.debug("Before aHref" + aHref + "\n");
 													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -346,7 +350,10 @@ public class SolutionListingVariation08 extends BaseAction {
 										Element aElement = aElements.first();
 										if (aElement != null) {
 											aText = aElement.text();
-											aHref = aElement.attr("href");
+											aHref = aElement.absUrl("href");
+											if(StringUtil.isBlank(aHref)){
+												aHref = aElement.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);

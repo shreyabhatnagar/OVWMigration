@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -293,7 +294,10 @@ public class ProductListingVariation5 {
 																									log.debug("siATitle.text() " + siATitle.text() + "\n");
 																									log.debug("siATitle.text() " + siATitle.attr("href") + "\n");
 																									title = siATitle.text();
-																									linkTitleUrl = siATitle.attr("href");
+																									linkTitleUrl = siATitle.absUrl("href");
+																									if(StringUtil.isBlank(linkTitleUrl)){
+																										linkTitleUrl = siATitle.attr("href");
+																									}
 																									// Start extracting valid href
 																									log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
 																									linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
@@ -367,7 +371,10 @@ public class ProductListingVariation5 {
 																									Element linkTextElement = linkTextElements.first();
 																									if (linkTextElement != null) {
 																										linkText = linkTextElement.text();
-																										linkTextUrl = linkTextElement.attr("href");
+																										linkTextUrl = linkTextElement.absUrl("href");
+																										if(StringUtil.isBlank(linkTextUrl)){
+																											linkTextUrl = linkTextElement.attr("href");
+																										}
 																										// Start extracting valid href
 																										log.debug("Before linkTextUrl" + linkTextUrl + "\n");
 																										linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
