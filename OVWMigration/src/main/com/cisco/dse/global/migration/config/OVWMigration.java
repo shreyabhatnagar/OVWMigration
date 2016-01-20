@@ -187,7 +187,7 @@ public class OVWMigration {
 															String variation =  type.substring(type.lastIndexOf("-") + 1);
 															log.debug("variation : " + variation);
 															log.debug("actual type : " + variationType);
-															String pageUrl = host + "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
+															String pageUrl = "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
 															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 															}else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
