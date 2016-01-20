@@ -122,10 +122,14 @@ public class WebVariation10 extends BaseAction{
 					Element htmlBlobElement = doc.select("div.gd-left").select("div.c00-pilot").first();
 					Element htmlBlobHeadElement = doc.select("div.gd-left").select("div.compact").first();
 					if (htmlBlobElement != null) {
-						htmlBlobContent = htmlBlobElement.outerHtml();
-						htmlBlobContent = htmlBlobContent +htmlBlobHeadElement.outerHtml() ;
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
+						String htmlBlobHeadHtml = "";
+						if(htmlBlobHeadElement != null){
+							htmlBlobHeadHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlobHeadElement, "", locale, sb, urlMap);
+						}
+						htmlBlobContent = htmlBlobContent + htmlBlobHeadHtml;
 						log.debug("htmlBlobContent is :"+ htmlBlobContent);
-					}
+					
 					//End of getContent
 					//Start of set content
 					if (firstRowLeftNode.hasNode("htmlblob")) {
@@ -136,6 +140,9 @@ public class WebVariation10 extends BaseAction{
 						}
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+					}
+					}else{
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" in top left rail.</li>");
 					}
 				}	
 				catch (Exception e) {
@@ -163,16 +170,15 @@ public class WebVariation10 extends BaseAction{
 						Element midHtmlblobElement = htmlBlobElement.select("div.gd-mid").first();
 						Element rightHtmlblobElement = htmlBlobElement.select("div.gd-right").first();
 						if(leftHtmlblobElement != null){
-							leftHtmlBlobContent = leftHtmlblobElement.outerHtml();
+							leftHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(leftHtmlblobElement, "", locale, sb, urlMap);
 						}
 						log.debug("htmlblobl leftttt element for first list kind: "+leftHtmlblobElement );
 						if(midHtmlblobElement != null){
-							midHtmlBlobContent = midHtmlblobElement.outerHtml();
+							midHtmlBlobContent =  FrameworkUtils.extractHtmlBlobContent(midHtmlblobElement, "", locale, sb, urlMap);
 						}
 						if(rightHtmlblobElement != null){
-							rightHtmlBlobContent = rightHtmlblobElement.outerHtml();
+							rightHtmlBlobContent =  FrameworkUtils.extractHtmlBlobContent(rightHtmlblobElement, "", locale, sb, urlMap);
 						}
-					}
 					//End of getContent
 					//Start of set content
 					if (secondRowLeftNode.hasNode("htmlblob")) {
@@ -202,6 +208,9 @@ public class WebVariation10 extends BaseAction{
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
+					}else{
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" in left mid rail.</li>");
+					}
 				}
 				catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -217,8 +226,8 @@ public class WebVariation10 extends BaseAction{
 					// Start get content.
 					Element htmlBlobHeadElement = doc.select("div.c00v0-alt1-pilot").last();
 					if (htmlBlobHeadElement != null) {
-						htmlBlobContent = htmlBlobHeadElement.outerHtml();
-					}
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobHeadElement, "", locale, sb, urlMap);
+					
 					//End of getContent
 					//Start of set content
 					if (thirdRowHeadingNode.hasNode("htmlblob")) {
@@ -229,6 +238,9 @@ public class WebVariation10 extends BaseAction{
 						}
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+					}
+					}else{
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" at the middle of the page..</li>");
 					}
 				}
 				catch (Exception e) {
@@ -290,7 +302,7 @@ public class WebVariation10 extends BaseAction{
 						
 						}
 					}
-				}
+				
 					//End of getContent
 					//Start of set content
 					
@@ -337,7 +349,11 @@ public class WebVariation10 extends BaseAction{
 							}
 						}
 					}
+					}else{
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+					}
 				}
+					
 					catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.error("Exception " , e);
@@ -377,7 +393,11 @@ public class WebVariation10 extends BaseAction{
 					
 					if (!extraTextExists) {
 						fHolderElement = htmlBlobElement.select("div#t-col-2").first();
+						if(fHolderElement != null){
 						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(fHolderElement, "", locale, sb, urlMap);
+						}else{
+							sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" in right rail.</li>");
+						}
 						gdRightElement = doc.select("div.poly").first();
 						if(gdRightElement != null){
 						htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap);
@@ -397,7 +417,9 @@ public class WebVariation10 extends BaseAction{
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
-				}
+					}else{
+						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" in right rail.</li>");
+					}
 				}
 				catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
