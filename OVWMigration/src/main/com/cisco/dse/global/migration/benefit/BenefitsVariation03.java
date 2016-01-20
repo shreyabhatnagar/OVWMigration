@@ -24,6 +24,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -359,9 +360,13 @@ public class BenefitsVariation03 extends BaseAction {
 							JSONObject obj = new JSONObject();
 							if(!li.getElementsByTag("a").isEmpty()){
 								Element a = li.getElementsByTag("a").first();
+								String aHref = a.absUrl("href");
 								// Start extracting valid href
 								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap);
+								if(StringUtil.isBlank(aHref)){
+									aHref = a.attr("href");
+								}
+								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								obj.put("linktext", a.text()+ " "+text);
@@ -564,10 +569,13 @@ public class BenefitsVariation03 extends BaseAction {
 			if(!anchor.isEmpty()){
 				Element listtext = anchor.first();
 				Element listurl = anchor.first();
-
+				String listHref = listurl.absUrl("href");
+				if(StringUtil.isBlank(listHref)){
+					listHref = listurl.attr("href");
+				}
 				// Start extracting valid href
 				log.debug("Before anchorHref" + listurl.absUrl("href") + "\n");
-				String anchorHref = FrameworkUtils.getLocaleReference(listurl.absUrl("href"), urlMap);
+				String anchorHref = FrameworkUtils.getLocaleReference(listHref, urlMap);
 				log.debug("after anchorHref" + anchorHref + "\n");
 				// End extracting valid href
 

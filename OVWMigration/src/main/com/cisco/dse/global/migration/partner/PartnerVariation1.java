@@ -15,6 +15,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -202,7 +203,10 @@ public class PartnerVariation1 extends BaseAction {
 			Element aHero = heroEle.getElementsByTag("p").last().getElementsByTag("a").first();
 			if(aHero != null){
 				heroPanelNode.setProperty("linktext", aHero.text());
-				heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHero.absUrl("href"), urlMap));
+				String aHref = aHero.absUrl("href");
+				if(StringUtil.isBlank(aHref)){
+					aHref = aHero.attr("href");				}
+				heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap));
 			}else{
 				sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 			}

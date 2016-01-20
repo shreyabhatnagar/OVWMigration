@@ -22,6 +22,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -405,7 +406,10 @@ public class ArchitectureVariation04 extends BaseAction {
 									Element aElements = liEle.select("a").first();
 									if (aElements != null) {
 										aText = aElements.text();
-										linkurl = aElements.attr("href");
+										linkurl = aElements.absUrl("href");
+										if(StringUtil.isBlank(linkurl)){
+											linkurl = aElements.attr("href");	
+										}
 										linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap);
 									} else {
 										aText = liEle.html();
@@ -551,10 +555,13 @@ public class ArchitectureVariation04 extends BaseAction {
 								sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
 							}
 
-							Elements anchorText = ele.getElementsByTag("a");
+							Element anchorText = ele.getElementsByTag("a").first();
 							if (anchorText != null) {
 								aText = anchorText.text();
-								aHref = anchorText.attr("href");
+								aHref = anchorText.absUrl("href");
+								if(StringUtil.isBlank(aHref)){
+									aHref = anchorText.attr("href");	
+								}
 								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 							} else {
 								sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
@@ -600,9 +607,12 @@ public class ArchitectureVariation04 extends BaseAction {
 					Elements aElements = listElements.select("li");
 					for (Element ele : aElements) {
 						JSONObject obj = new JSONObject();
-						Elements aEle = ele.getElementsByTag("a");
+						Element aEle = ele.getElementsByTag("a").first();
 						String aText = aEle.text();
-						String aHref = aEle.attr("href");
+						String aHref = aEle.absUrl("href");
+						if(StringUtil.isBlank(aHref)){
+							aHref = aEle.attr("href");	
+						}
 						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 						obj.put("linktext", aText);
 						obj.put("linkurl", aHref);
@@ -676,7 +686,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					Elements aElements = listElements.select("li");
 					for (Element ele : aElements) {
 						JSONObject obj = new JSONObject();
-						Elements aEle = ele.getElementsByTag("a");
+						Element aEle = ele.getElementsByTag("a").first();
 						String pdf = ele.ownText();
 						String pdfIcon = null;
 						if (pdf.length() > 0) {
@@ -697,7 +707,10 @@ public class ArchitectureVariation04 extends BaseAction {
 						// pdf = pdf.replace(")", "");
 						pdf = pdf.trim();
 						String aText = aEle.text();
-						String aHref = aEle.attr("href");
+						String aHref = aEle.absUrl("href");
+						if(StringUtil.isBlank(aHref)){
+							aHref = aEle.attr("href");
+						}
 						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 						obj.put("linktext", aText);
 						obj.put("linkurl", aHref);

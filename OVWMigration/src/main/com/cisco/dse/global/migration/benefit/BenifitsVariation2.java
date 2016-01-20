@@ -15,6 +15,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -201,7 +202,12 @@ public class BenifitsVariation2 extends BaseAction{
 										spNode.setProperty("linktext",aEle.text());
 										Node spCta = spNode.hasNode("cta")?spNode.getNode("cta"):null;
 										if(spCta!=null){
-											spCta.setProperty("url",aEle.attr("href"));
+											String aHref = aEle.absUrl("href");
+											if(StringUtil.isBlank(aHref)){
+												aHref = aEle.attr("href");
+											}
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											spCta.setProperty("url",aHref);
 										}else{
 											sb.append(Constants.CTA_NOT_AVAILABLE);
 										}
@@ -255,12 +261,12 @@ public class BenifitsVariation2 extends BaseAction{
 						NodeIterator tileNodeIterator = benifitsRightNode.hasNode("tile_bordered")?benifitsRightNode.getNodes("tile_bordered*"):null;
 						int tileNodeSize = (int)tileNodeIterator.getSize();
 						if(tileEleSize==tileNodeSize){
-							setTile(tileEle, tileNodeIterator);
+							setTile(tileEle, tileNodeIterator,urlMap);
 						}else if(tileEleSize>tileNodeSize){
-							setTile(tileEle, tileNodeIterator);
+							setTile(tileEle, tileNodeIterator,urlMap);
 							sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}else if(tileEleSize<tileNodeSize){
-							setTile(tileEle, tileNodeIterator);
+							setTile(tileEle, tileNodeIterator,urlMap);
 							sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}
 						log.debug("end of right rail..");
@@ -286,7 +292,7 @@ public class BenifitsVariation2 extends BaseAction{
 		session.save();
 		return sb.toString();
 	}
-	public void setTile(Elements tileEle,NodeIterator tileNodeIterator) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setTile(Elements tileEle,NodeIterator tileNodeIterator,Map<String,String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		if(tileEle!=null){
 			for(Element tile : tileEle){
 				Element tTitleEle = tile.getElementsByTag("h2").first();
@@ -303,7 +309,12 @@ public class BenifitsVariation2 extends BaseAction{
 					tileNode.setProperty("description",tDesc);
 					tileNode.setProperty("linktext",aEle.text());
 					if(tileNode.hasProperty("linkurl")){
-						tileNode.setProperty("linkurl",aEle.attr("href"));	
+						String aHref = aEle.absUrl("href");
+						if(StringUtil.isBlank(aHref)){
+							aHref = aEle.attr("href");
+						}
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						tileNode.setProperty("linkurl",aHref);	
 					}
 				}
 				log.debug("tile updated..");

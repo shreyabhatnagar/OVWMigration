@@ -24,6 +24,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -402,7 +403,10 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 				Elements aEle = li.getElementsByTag("a");
 				for (Element a : aEle) {
-					String aURL = a.attr("href");
+					String aURL = a.absUrl("href");
+					if(StringUtil.isBlank(aURL)){
+						aURL = a.attr("href");
+					}
 					aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
 					JSONObject obj = new JSONObject();
 					obj.put("linktext", a.text()+text);
@@ -541,6 +545,9 @@ public class ArchitechtureVariation3 extends BaseAction {
 			}
 			Element listtext = anchor.first();
 			String listurl = listtext.absUrl("href");
+			if(StringUtil.isBlank(listurl)){
+				listurl = listtext.attr("href");
+			}
 			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap);
 			String linkStringValue = null;
 			if (listNode.hasProperty("linktrigger")) {
