@@ -311,7 +311,7 @@ public class ProductListingVariation6 extends BaseAction {
 																						for (Element indItem : indItems) {
 																							String ownText = indItem.ownText();
 																							JSONObject jsonObj = new JSONObject();
-																							jsonObj.put("linktext", indItem.html()+" "+ownText);
+																							jsonObj.put("linktext", indItem.html());
 																							list1.add( jsonObj.toString());
 																						}
 																					} else {
