@@ -197,6 +197,10 @@ public class FrameworkUtils {
 					newImagePath = setContentToDAM(path, imgRef);
 				} else if (!path.equalsIgnoreCase(imgRef)) {
 					log.debug("Path of the image is wem image path."+path);
+					if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
+						log.debug("Adding domain to the image path.");
+						path = "http://www.cisco.com" + path;
+					}
 					URL url = new URL(path);
 					path = url.getPath();
 					log.debug("getPath : "+path);
@@ -373,7 +377,7 @@ public class FrameworkUtils {
 		Map<String, String> anchorPath =new HashMap<String, String>();
 		if (htmlBlobElement != null) {
 			Elements anchorElements = htmlBlobElement.getElementsByTag("a");
-			log.debug("&&&&&&&&&&&& null" + htmlBlobElement.outerHtml());
+			log.debug("html outer html : " + htmlBlobElement.outerHtml());
 			//			if (anchorElements != null) {
 			if (!anchorElements.isEmpty()&&anchorElements!=null) {
 				log.debug("anchorPath not null");
