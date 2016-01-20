@@ -17,6 +17,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -299,7 +300,10 @@ public class ArchitechtureVariation1 extends BaseAction{
 									log.error("Exception : ",e);
 								}
 								Element a = li.getElementsByTag("a").first();
-								String aURL = a.attr("href");
+								String aURL = a.absUrl("href");
+								if(StringUtil.isBlank(aURL)){
+									aURL = a.attr("href");
+								}
 								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", a.text());
@@ -434,7 +438,10 @@ public class ArchitechtureVariation1 extends BaseAction{
 			}
 
 			Element listtext = anchor.first();
-			String listurl =listtext.attr("href");
+			String listurl =listtext.absUrl("href");
+			if(StringUtil.isBlank(listurl)){
+				listurl = listtext.attr("href");
+			}
 			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap);
 			listNode.setProperty("linktext", listtext.text()+rightListEle.ownText());
 			listNode.setProperty("linkurl",listurl);
