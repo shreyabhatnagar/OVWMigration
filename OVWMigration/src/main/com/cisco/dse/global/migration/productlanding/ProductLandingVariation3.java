@@ -19,6 +19,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -128,7 +129,10 @@ public class ProductLandingVariation3 extends BaseAction {
 											Element anchorElement = anchorElements.first();
 											if (anchorElement != null) {
 												primaryCTALinkText = anchorElement.text();
-												primaryCTALinkUrl = anchorElement.attr("href");
+												primaryCTALinkUrl = anchorElement.absUrl("href");
+												if(StringUtil.isBlank(primaryCTALinkUrl)){
+													primaryCTALinkUrl = anchorElement.attr("href");
+												}
 												// Start extracting valid href
 												log.debug("primaryCTALinkUrl before migration : " + primaryCTALinkUrl);
 												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
@@ -269,7 +273,10 @@ public class ProductLandingVariation3 extends BaseAction {
 									if (heroPanelLinkUrlElements != null) {
 										Element heroPanelLinkUrlElement = heroPanelLinkUrlElements.first();
 										if (heroPanelLinkUrlElement != null) {
-											heroPanellinkUrl = heroPanelLinkUrlElement.attr("href");
+											heroPanellinkUrl = heroPanelLinkUrlElement.absUrl("href");
+											if(StringUtil.isBlank(heroPanellinkUrl)){
+												heroPanellinkUrl = heroPanelLinkUrlElement.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl);
 											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
@@ -464,9 +471,12 @@ public class ProductLandingVariation3 extends BaseAction {
 									title = ele.getElementsByTag("h3") != null ? ele.getElementsByTag("h3").text() : "";
 								}
 								String desc = ele.getElementsByTag("p") != null ? ele.getElementsByTag("p").text() : "";
-								Elements anchor = ele.getElementsByTag("a");
+								Element anchor = ele.getElementsByTag("a").first();
 								String anchorText = anchor != null ? anchor.text() : "";
-								String anchorHref = anchor.attr("href");
+								String anchorHref = anchor.absUrl("href");
+								if(StringUtil.isBlank(anchorHref)){
+									anchorHref = anchor.attr("href");
+								}
 								// Start extracting valid href
 								log.debug("Before tileborderedLinkUrl" + anchorHref);
 								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);

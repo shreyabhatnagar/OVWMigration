@@ -21,6 +21,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -199,7 +200,10 @@ public class ProductLandingVariation6 extends BaseAction {
 													Element aElement = aElements.first();
 													if (aElement != null) {
 														String aText = aElement.text();
-														String ahref = aElement.attr("href");
+														String ahref = aElement.absUrl("href");
+														if(StringUtil.isBlank(ahref)){
+															ahref = aElement.attr("href");
+														}
 														// Start extracting valid href
 														log.debug("Before heroPanelLinkUrl" + ahref + "\n");
 														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
@@ -318,7 +322,10 @@ public class ProductLandingVariation6 extends BaseAction {
 									Element aTagElement = aTagElements.first();
 									if (aTagElement != null) {
 										aText = aTagElement.text();
-										aHref = aTagElement.attr("href");
+										aHref = aTagElement.absUrl("href");
+										if(StringUtil.isBlank(aHref)){
+											aHref = aTagElement.attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -363,7 +370,10 @@ public class ProductLandingVariation6 extends BaseAction {
 									if (aElements != null) {
 										Element aElement = aElements.first();
 										String title = aElement.attr("title");
-										String href = aElement.attr("href");
+										String href = aElement.absUrl("href");
+										if(StringUtil.isBlank(href)){
+											href = aElement.attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before rightrailsocialLinkUrl" + href + "\n");
 										href = FrameworkUtils.getLocaleReference(href, urlMap);
@@ -652,7 +662,10 @@ public class ProductLandingVariation6 extends BaseAction {
 											for (Element ele : aTagElements) {
 												JSONObject obj = new JSONObject();
 												String aText = ele.text();
-												String aLink = ele.attr("href");
+												String aLink = ele.absUrl("href");
+												if(StringUtil.isBlank(aLink)){
+													aLink = ele.attr("href");
+												}
 												// Start extracting valid href
 												log.debug("Before listLinkUrl" + aLink + "\n");
 												aLink = FrameworkUtils.getLocaleReference(aLink, urlMap);
@@ -812,7 +825,10 @@ public class ProductLandingVariation6 extends BaseAction {
 										.getElementsByTag("a");
 								if (aElements != null) {
 									Element aElement = aElements.first();
-									aHref = aElement.attr("href");
+									aHref = aElement.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = aElement.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before gridtwoLinkUrl" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -927,7 +943,10 @@ public class ProductLandingVariation6 extends BaseAction {
 								Element aElement = aElements.first();
 								if (aElement != null) {
 									aText = aElement.text();
-									aHref = aElement.attr("href");
+									aHref = aElement.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = aElement.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before gridThreeLinkUrl" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -1068,7 +1087,10 @@ public class ProductLandingVariation6 extends BaseAction {
 								Element aElement = aElements.first();
 								if (aElement != null) {
 									aText = aElement.text();
-									aHref = aElement.attr("href");
+									aHref = aElement.absUrl("href");
+									if(StringUtil.isBlank(aHref)){
+										aHref = aElement.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before gridFourLinkUrl" + aHref + "\n");
 									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -1164,7 +1186,10 @@ public class ProductLandingVariation6 extends BaseAction {
 									Element aElement = aElements.first();
 									if (aElement != null) {
 										aText = aElement.text();
-										aHref = aElement.attr("href");
+										aHref = aElement.absUrl("href");
+										if(StringUtil.isBlank(aHref)){
+											aHref = aElement.attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before rightGridLinkUrl" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);

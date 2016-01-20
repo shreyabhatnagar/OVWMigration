@@ -21,6 +21,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -143,7 +144,10 @@ public class ProductLandingVariation5 extends BaseAction {
 												.first();
 										if (aTagElement != null) {
 											aText = aTagElement.text();
-											aHref = aTagElement.attr("href");
+											aHref = aTagElement.absUrl("href");
+											if(StringUtil.isBlank(aHref)){
+												aHref = aTagElement.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before heroPanelLinkUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -386,7 +390,10 @@ public class ProductLandingVariation5 extends BaseAction {
 												.first();
 										if (aTagElement != null) {
 											aText = aTagElement.text();
-											aHref = aTagElement.attr("href");
+											aHref = aTagElement.absUrl("href");
+											if(StringUtil.isBlank(aHref)){
+												aHref = aTagElement.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -432,7 +439,10 @@ public class ProductLandingVariation5 extends BaseAction {
 													.first();
 											String title = aElement
 													.attr("title");
-											String href = aElement.attr("href");
+											String href = aElement.absUrl("href");
+											if(StringUtil.isBlank(href)){
+												href = aElement.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before rightrailsocialLinkUrl" + href + "\n");
 											href = FrameworkUtils.getLocaleReference(href, urlMap);

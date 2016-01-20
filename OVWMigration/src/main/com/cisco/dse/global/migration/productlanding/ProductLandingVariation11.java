@@ -21,6 +21,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -158,10 +159,13 @@ public class ProductLandingVariation11 extends BaseAction {
 											sb.append("<li>Hero Component description element not having any title in it ('p' is blank)</li>");
 										}
 
-										Elements anchorText = ele.getElementsByTag("a");
+										Element anchorText = ele.getElementsByTag("a").first();
 										if (anchorText != null) {
 											aText = anchorText.text();
-											aHref = anchorText.attr("href");
+											aHref = anchorText.absUrl("href");
+											if(StringUtil.isBlank(aHref)){
+												aHref = anchorText.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before heropanelLinkUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -407,10 +411,13 @@ public class ProductLandingVariation11 extends BaseAction {
 								sb.append("<li>TileBordered Component description element not having any title in it ('p' is blank)</li>");
 							}
 
-							Elements anchorText = ele.getElementsByTag("a");
+							Element anchorText = ele.getElementsByTag("a").first();
 							if (anchorText != null) {
 								aText = anchorText.text();
-								aHref = anchorText.attr("href");
+								aHref = anchorText.absUrl("href");
+								if(StringUtil.isBlank(aHref)){
+									aHref = anchorText.attr("href");
+								}
 								// Start extracting valid href
 								log.debug("Before tileborderedLinkUrl" + aHref + "\n");
 								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -467,14 +474,17 @@ public class ProductLandingVariation11 extends BaseAction {
 
 								for (Element li : indexLiList) {
 									JSONObject jsonObj = new JSONObject();
-									Elements listItemAnchor = li
-											.getElementsByTag("a");
+									Element listItemAnchor = li
+											.getElementsByTag("a").first();
 									Elements listItemSpan = li
 											.getElementsByTag("span");
 
 									String anchorText = listItemAnchor != null ? listItemAnchor
 											.text() : "";
-											String anchorHref = listItemAnchor.attr("href");
+											String anchorHref = listItemAnchor.absUrl("href");
+											if(StringUtil.isBlank(anchorHref)){
+												anchorHref = listItemAnchor.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before listItemLinkUrl" + anchorHref + "\n");
 											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
@@ -601,7 +611,10 @@ public class ProductLandingVariation11 extends BaseAction {
 								if (aElements != null) {
 									Element aElement = aElements.first();
 									String title = aElement.attr("title");
-									String href = aElement.attr("href");
+									String href = aElement.absUrl("href");
+									if(StringUtil.isBlank(href)){
+										href = aElement.attr("href");
+									}
 									// Start extracting valid href
 									log.debug("Before followusLinkUrl" + href + "\n");
 									href = FrameworkUtils.getLocaleReference(href, urlMap);
