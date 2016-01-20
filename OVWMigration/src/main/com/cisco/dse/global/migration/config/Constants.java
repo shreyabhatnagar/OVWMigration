@@ -765,5 +765,17 @@ public class Constants {
 
 	//RIGHT_PANEL_NODE_NOT_FOUND
 	public static final String RIGHT_PANEL_NODE_NOT_FOUND = "<li>Right panel node not found</li>";
+	
+	//NO_ANCHORS_FOUND_IN_WEM_HTML_CONTENT
+	public static final String NO_ANCHORS_FOUND_IN_WEM_HTML_CONTENT = "<li>No Anchors found in the wem html content.</li>";
+	
+	//NO_ANCHOS_FOUND_IN_WEB_HTML_CONTENT
+	public static final String NO_ANCHOS_FOUND_IN_WEB_HTML_CONTENT = "<li>No Anchor found in the web html content.</li>";
+	
+	//EXTRA_ANCHOR_LINK_FOUND_IN_WEB_HTML_CONTENT
+	public static final String EXTRA_ANCHOR_LINK_FOUND_IN_WEB_HTML_CONTENT = "<li>Extra link found in web page : </li>";
+	
+	//NO_HTML_CONTET_FOUND_IN_WEM
+	public static final String NO_HTML_CONTET_FOUND_IN_WEM = "<li>No html content found in wem.</li>";
 
 }
