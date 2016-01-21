@@ -25,6 +25,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -179,10 +180,13 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 										sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
 									}
 	
-									Elements anchorText = ele.getElementsByTag("a");
-									if (!anchorText.isEmpty()) {
+									Element anchorText = ele.getElementsByTag("a").first();
+									if (anchorText!=null) {
 										aText = anchorText.text();
-										aHref = anchorText.attr("href");
+										aHref = anchorText.absUrl("href");
+										if(StringUtil.isBlank(aHref)){
+											aHref = anchorText.attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before heroPanelLinkUrl" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -514,9 +518,13 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 							
 							if(!li.getElementsByTag("a").isEmpty()){
 								Element a = li.getElementsByTag("a").first();
+								String aHref = a.absUrl("href");
+								if(StringUtil.isBlank(aHref)){
+									aHref = a.attr("href");
+								}
 								// Start extracting valid href
 								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap);
+								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								JSONObject obj = new JSONObject();
