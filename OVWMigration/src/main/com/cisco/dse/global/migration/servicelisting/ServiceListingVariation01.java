@@ -314,6 +314,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										.select("p");
 								Element aElements = gd_mid_Elements
 										.select("a").first();
+								String linkTextTobeAdded = "";
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
@@ -325,8 +326,8 @@ public class ServiceListingVariation01 extends BaseAction {
 											text  = pElement.ownText();
 										}
 										else{
-										pText = pText + "<br>";
-										pText = pText + pElement.ownText();
+										//pText = pText + "<br>";
+										linkTextTobeAdded = pElement.ownText();
 										break;
 										}
 									}
@@ -335,6 +336,13 @@ public class ServiceListingVariation01 extends BaseAction {
 								if (aElements != null) {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
+									if (StringUtils.isNotBlank(linkTextTobeAdded)) {
+										aText =  linkTextTobeAdded + "" + aText ;
+										if (aText.indexOf(".") != -1) {
+											aText = aText.replace(".", "");
+											aText = aText + ".";											
+										}
+									}
 									String aHref = aElements.absUrl("href");
 									if(StringUtil.isBlank(aHref)){
 										aHref = aElements.attr("href");
@@ -437,6 +445,7 @@ public class ServiceListingVariation01 extends BaseAction {
 								Element aElements = gd_mid_Elements
 										.select("a").first();
 								pText = pElements.first().text();
+								String linkTextTobeAdded = "";
 								int count = 0;
 								for (Element pElement : pElements) {
 									if (count == 0) {
@@ -444,14 +453,22 @@ public class ServiceListingVariation01 extends BaseAction {
 										count = count + 1;
 									}
 									else {
-										pText = pText + "<br>";
-										pText = pText + pElement.ownText();
+										//pText = pText + "<br>";
+										//pText = pText + pElement.ownText();
+										linkTextTobeAdded = pElement.ownText();
 										break;
 									}
 								}	
 								if (aElements != null) {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
+									if (StringUtils.isNotBlank(linkTextTobeAdded)) {
+										aText =  linkTextTobeAdded + "" + aText ;
+										if (aText.indexOf(".") != -1) {
+											aText = aText.replace(".", "");
+											aText = aText + ".";											
+										}
+									}
 									String aHref = aElements.absUrl("href");
 									if(StringUtil.isBlank(aHref)){
 										aHref = aElements.attr("href");
