@@ -165,6 +165,9 @@ public class WebVariation2 extends BaseAction {
 								if (heroPanelLinkUrlElement != null) {
 									herolinkUrl = heroPanelLinkUrlElement
 											.absUrl("href");
+									if(StringUtils.isBlank(herolinkUrl)){
+										herolinkUrl = heroPanelLinkUrlElement.attr("href");
+							          }
 									// Start extracting valid href
 									log.debug("heroPanellinkUrl before migration : "
 											+ herolinkUrl);
@@ -310,11 +313,14 @@ public class WebVariation2 extends BaseAction {
 							sb.append(Constants.PRIMARY_CTA_DESCRIPTION_ELEMENT_NOT_FOUND);
 						}
 
-						Elements anchorText = primaryCtaElements
-								.getElementsByTag("a");
+						Element anchorText = primaryCtaElements
+								.getElementsByTag("a").first();
 						if (anchorText != null) {
 							aText = anchorText.text();
-							aHref = anchorText.attr("href");
+							aHref = anchorText.absUrl("href");
+							if(StringUtils.isBlank(aHref)){
+								aHref = anchorText.attr("href");
+					          }
 							// Start extracting valid href
 							log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 							aHref = FrameworkUtils.getLocaleReference(aHref,
