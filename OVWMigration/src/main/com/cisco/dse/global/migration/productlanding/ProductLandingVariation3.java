@@ -178,17 +178,13 @@ public class ProductLandingVariation3 extends BaseAction {
 									log.debug("linktext property is not set at " + primartCTANode.getPath());
 								}
 
-								if (primartCTANode.hasNode("linkurl")) {
-									Node primartCTALinkUrlNode = primartCTANode.getNode("linkurl");
-									if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
-										primartCTALinkUrlNode.setProperty("url", primaryCTALinkUrl);
-									} else {
-										sb.append("<li>link url of primary CTA doesn't exist</li>");
-										log.debug("url property is not set at " + primartCTALinkUrlNode	.getPath());
-									}
+								if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
+									primartCTANode.setProperty("linkurl", primaryCTALinkUrl);
 								} else {
-									sb.append("<li>primary_cta_v2 node is not having linkurl node</li>");
+									sb.append("<li>link url of primary CTA doesn't exist</li>");
+									log.debug("url property is not set at " + primartCTANode.getPath());
 								}
+								 
 							} else {
 								sb.append("<li>primary_cta_v2 node doesn't exists</li>");
 							}
@@ -332,14 +328,16 @@ public class ProductLandingVariation3 extends BaseAction {
 										if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 											Element lightBoxElement = lightBoxElements.first();
 											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+											if (StringUtils.isNotBlank(heroPanelTitle)) {
+												if (heroPanelPopUpNode != null) {
+													heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+												} else {
+													sb.append("<li>Hero content video pop up node not found.</li>");
+												}
+											}
 										}
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
-											if (heroPanelPopUpNode != null) {
-												heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
-											} else {
-												sb.append("<li>Hero content video pop up node not found.</li>");
-											}
 										} else {
 											sb.append("<li>title of hero slide doesn't exist</li>");
 											log.debug("title property is not set at " + heroPanelNode.getPath());
@@ -364,7 +362,7 @@ public class ProductLandingVariation3 extends BaseAction {
 										}
 									}
 								}if(imageSrcEmptyCount > 0){
-									sb.append("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
+									log.debug("<li> " +imageSrcEmptyCount+ "image(s) are not found on locale page's hero element. </li>");
 								}
 							} else {
 								sb.append("<li>Hero Large Frames/Panel Elements is not found</li>");
@@ -442,7 +440,7 @@ public class ProductLandingVariation3 extends BaseAction {
 				//Since no web page is having html blob component but we have html blob node in wem.
 				//Hence generating the same in the report by checking whether node exists or not.
 				if(indexLowerRightNode.hasNode("htmlblob")){
-					sb.append("<li>Extra right rail html blob found in en page.</li>");
+					sb.append("<li>Extra right rail html blob found in WEM page.</li>");
 				}
 				
 				//end of right rail html blob content.
@@ -456,7 +454,7 @@ public class ProductLandingVariation3 extends BaseAction {
 					if (rightRail != null) {
 						log.debug("rightRail size" + rightRail.size());
 						if (rightRail.size() != indexLowerRightNode.getNodes("tile_bordered*").getSize()) {
-							sb.append("<li>Mis-Match in tilebordered Panels count." + rightRail.size() + " is not equal " + indexLowerRightNode.getNodes("tile_bordered*").getSize() + "</li>");
+							sb.append("<li>Mis-Match in tilebordered Panels count. Element size is " + rightRail.size() + " is not equal to Node size  " + indexLowerRightNode.getNodes("tile_bordered*").getSize() + "</li>");
 						}
 						if (rightRail.size() > 0) {
 							NodeIterator titleBorderNodes = indexLowerRightNode.getNodes("tile_bordered*");
@@ -484,8 +482,6 @@ public class ProductLandingVariation3 extends BaseAction {
 								// End extracting valid href
 								if (titleBorderNodes.hasNext()) {
 									rightRailNode = (Node) titleBorderNodes.next();
-								} else {
-									sb.append("<li>all tile_boredered components are migrated</li>");
 								}
 
 								if (rightRailNode != null) {
@@ -498,12 +494,10 @@ public class ProductLandingVariation3 extends BaseAction {
 									} else {
 										sb.append("<li>Content miss match for " 	+ ele.className() + "</li>");
 									}
-								} else {
-									sb.append("<li>one of title_bordered node doesn't exist in node structure.</li>");
-								}
+								} 
 							}
 						} else {
-							sb.append("<li>No Content with class 'c23-pilot or cc23-pilot' found</li>");
+							log.debug("<li>No Content with class 'c23-pilot or cc23-pilot' found</li>");
 						}
 					} else {
 						sb.append("<li>tile bordered component not present in the web publisher page</li>");

@@ -336,15 +336,17 @@ public class ProductLandingVariation1 extends BaseAction {
 										if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 											Element lightBoxElement = lightBoxElements.first();
 											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+											if (StringUtils.isNotBlank(heroPanelTitle)) {
+												if (heroPanelPopUpNode != null) {
+													heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+												} else {
+													sb.append("<li>Hero content video pop up node not found.</li>");
+													log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
+												}
+											}
 										}
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
-											if (heroPanelPopUpNode != null) {
-												heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
-											} else {
-												sb.append("<li>Hero content video pop up node not found.</li>");
-												log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
-											}
 										} else {
 											sb.append("<li>title of hero slide doesn't exist</li>");
 											log.debug("Title is blank with in the 'frame' class of div.");
@@ -854,7 +856,7 @@ public class ProductLandingVariation1 extends BaseAction {
 									// html = htmlblobElement.outerHtml();
 									Element htmlElement = htmlblobElement.parent();
 									html = FrameworkUtils.extractHtmlBlobContent(htmlElement, "", locale, sb, urlMap);
-									if (htmlblobElement.getElementsByTag("ul").size() > 0) {
+									/*if (htmlblobElement.getElementsByTag("ul").size() > 0) {
 									} else {
 										Element iconBlockParent = htmlblobElement.parent();
 										if (iconBlockParent != null) {
@@ -866,7 +868,7 @@ public class ProductLandingVariation1 extends BaseAction {
 												}
 											}
 										}
-									}
+									}*/
 								} else {
 									sb.append("<li>htmlblob/icon-block Element section not found</li>");
 									log.debug("htmlblob/icon-block Element section not found");
