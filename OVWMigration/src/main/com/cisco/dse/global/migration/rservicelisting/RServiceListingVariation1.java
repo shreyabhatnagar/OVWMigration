@@ -19,6 +19,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -181,6 +182,9 @@ public class RServiceListingVariation1 extends BaseAction {
 										if(aEle != null){
 											h3Text = aEle.text()+h3Element.ownText();
 											aHref = aEle.absUrl("href");
+											if(StringUtil.isBlank(aHref)){
+												aHref = aEle.attr("href");
+											}
 											// Start extracting valid href
 											log.debug("Before linkTitleUrl" + aHref + "\n");
 											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -358,6 +362,9 @@ public class RServiceListingVariation1 extends BaseAction {
 													aText = aEle.text()+ownText;
 												}
 												aHref = aEle.absUrl("href");
+												if(StringUtil.isBlank(aHref)){
+													aHref = aEle.attr("href");
+												}
 												// Start extracting valid href
 												log.debug("Before linkUrl" + aHref + "\n");
 												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -411,6 +418,9 @@ public class RServiceListingVariation1 extends BaseAction {
 											aText = aElements.first().text();
 										}
 										aHref = aElements.first().absUrl("href");
+										if(StringUtil.isBlank(aHref)){
+											aHref = aElements.first().attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before linkUrl" + aHref + "\n");
 										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);

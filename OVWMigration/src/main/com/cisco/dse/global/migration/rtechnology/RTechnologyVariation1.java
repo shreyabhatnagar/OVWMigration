@@ -15,6 +15,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -242,6 +243,9 @@ public class RTechnologyVariation1 extends BaseAction {
 												Node linkdataNode = itemNode.getNode("linkdata");
 												String linkText = anchor.text();
 												String url = anchor.absUrl("href");
+												if(StringUtil.isBlank(url)){
+													url = anchor.attr("href");
+												}
 												url = FrameworkUtils.getLocaleReference(url, urlMap);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
@@ -256,6 +260,9 @@ public class RTechnologyVariation1 extends BaseAction {
 												Node linkdataNode = itemNode.getNode("linkdata");
 												String linkText = anchor.text();
 												String url = anchor.absUrl("href");
+												if(StringUtil.isBlank(url)){
+													url = anchor.attr("href");
+												}
 												url = FrameworkUtils.getLocaleReference(url, urlMap);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
@@ -274,6 +281,9 @@ public class RTechnologyVariation1 extends BaseAction {
 													Node linkdataNode = itemNode.getNode("linkdata");
 													String linkText = anchor.text();
 													String url = anchor.absUrl("href");
+													if(StringUtil.isBlank(url)){
+														url = anchor.attr("href");
+													}
 													url = FrameworkUtils.getLocaleReference(url, urlMap);
 													linkdataNode.setProperty("linktext", linkText);
 													linkdataNode.setProperty("url", url);
@@ -345,6 +355,9 @@ public class RTechnologyVariation1 extends BaseAction {
 											Node linkdataNode = itemNode.getNode("linkdata");
 											String linkText = anchor.text();
 											String url = anchor.absUrl("href");
+											if(StringUtil.isBlank(url)){
+												url = anchor.attr("href");
+											}
 											url = FrameworkUtils.getLocaleReference(url, urlMap);
 											linkdataNode.setProperty("linktext", linkText);
 											linkdataNode.setProperty("url", url);
@@ -359,6 +372,9 @@ public class RTechnologyVariation1 extends BaseAction {
 											Node linkdataNode = itemNode.getNode("linkdata");
 											String linkText = anchor.text();
 											String url = anchor.absUrl("href");
+											if(StringUtil.isBlank(url)){
+												url = anchor.attr("href");
+											}
 											url = FrameworkUtils.getLocaleReference(url, urlMap);
 											linkdataNode.setProperty("linktext", linkText);
 											linkdataNode.setProperty("url", url);
@@ -377,6 +393,9 @@ public class RTechnologyVariation1 extends BaseAction {
 												Node linkdataNode = itemNode.getNode("linkdata");
 												String linkText = anchor.text();
 												String url = anchor.absUrl("href");
+												if(StringUtil.isBlank(url)){
+													url = anchor.attr("href");
+												}
 												url = FrameworkUtils.getLocaleReference(url, urlMap);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);

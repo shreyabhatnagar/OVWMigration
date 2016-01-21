@@ -20,6 +20,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -331,6 +332,9 @@ public class RSolutionListingVariation02 extends BaseAction{
 				Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
 				if (anchorHref != null) {
 					aHref = anchorHref.last().absUrl("href");
+					if(StringUtil.isBlank(aHref)){
+						aHref = anchorHref.last().attr("href");
+					}
 					// Start extracting valid href
 					log.debug("Before aHref" + aHref + "\n");
 					aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -394,6 +398,9 @@ public class RSolutionListingVariation02 extends BaseAction{
 			Element lastAnchorHref = ele.select("a[href]").last();
 			if(lastAnchorHref != null){
 			aHref = lastAnchorHref.absUrl("href");
+			if(StringUtil.isBlank(aHref)){
+				aHref = lastAnchorHref.attr("href");
+			}
 			// Start extracting valid href
 			log.debug("Before aHref" + aHref + "\n");
 			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -449,6 +456,9 @@ public class RSolutionListingVariation02 extends BaseAction{
 			Node spoLightNode = spotLightComponentNode.hasNode("cta") ? spotLightComponentNode.getNode("cta") : null;
 			if (anchorHref != null) {
 				aHref = anchorHref.last().absUrl("href");
+				if(StringUtil.isBlank(aHref)){
+					aHref = anchorHref.last().attr("href");
+				}
 				// Start extracting valid href
 				log.debug("Before aHref" + aHref + "\n");
 				aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
@@ -490,6 +500,9 @@ public class RSolutionListingVariation02 extends BaseAction{
 						Elements aHref = anchorText.select("a[href]");
 						if (aHref != null) {
 							String anchorHref = aHref.last().absUrl("href");
+							if(StringUtil.isBlank(anchorHref)){
+								anchorHref = aHref.last().attr("href");
+							}
 							// Start extracting valid href
 							log.debug("Before anchorHref" + anchorHref + "\n");
 							anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
