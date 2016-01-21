@@ -19,6 +19,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -89,7 +90,7 @@ public class RProductTechnology extends BaseAction {
 				//Start tile Border Migration
 				try{
 					Elements tileBorderEle = doc.select("div.cc23-pilot");
-					migrateTileElements(tileBorderEle , technologyRightNode);
+					migrateTileElements(tileBorderEle , technologyRightNode,urlMap);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
@@ -165,7 +166,7 @@ public class RProductTechnology extends BaseAction {
 	}
 
 	private void migrateTileElements(Elements tileBorderEle,
-			Node technologyRightNode) throws PathNotFoundException, RepositoryException, JSONException {
+			Node technologyRightNode,Map<String,String> urlMap) throws PathNotFoundException, RepositoryException, JSONException {
 		if(tileBorderEle != null){
 			//List Component
 			Element listEle = tileBorderEle.first();
@@ -194,7 +195,10 @@ public class RProductTechnology extends BaseAction {
 							a = li.getElementsByTag("a").first();
 							if(a != null){
 								linktext = a.text();
-								linkurl = a.attr("href");
+								linkurl = a.absUrl("href");
+								if(StringUtil.isBlank(linkurl)){
+									linkurl = a.attr("href");
+								}
 								if(a.hasAttr("target")){
 									check= true;
 								}
@@ -251,7 +255,12 @@ public class RProductTechnology extends BaseAction {
 							tileNode.setProperty("title", title);
 							tileNode.setProperty("description", description);
 							tileNode.setProperty("linktext", a.text());
-							tileNode.setProperty("linkurl", a.attr("href"));
+							String aHref = a.absUrl("href");
+							if(StringUtil.isBlank(aHref)){
+								aHref = a.attr("href");
+							}
+							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+							tileNode.setProperty("linkurl",aHref );
 							tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 							if(lightboxid != null){
 								tileNode.setProperty("lightboxid", lightboxid);
@@ -282,7 +291,12 @@ public class RProductTechnology extends BaseAction {
 							tileNode.setProperty("title", title);
 							tileNode.setProperty("description", description);
 							tileNode.setProperty("linktext", a.text());
-							tileNode.setProperty("linkurl", a.attr("href"));
+							String aHref = a.absUrl("href");
+							if(StringUtil.isBlank(aHref)){
+								aHref = a.attr("href");
+							}
+							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+							tileNode.setProperty("linkurl", aHref);
 							tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 							if(lightboxid != null){
 								tileNode.setProperty("lightboxid", lightboxid);
@@ -317,7 +331,12 @@ public class RProductTechnology extends BaseAction {
 								tileNode.setProperty("title", title);
 								tileNode.setProperty("description", description);
 								tileNode.setProperty("linktext", a.text());
-								tileNode.setProperty("linkurl", a.attr("href"));
+								String aHref = a.absUrl("href");
+								if(StringUtil.isBlank(aHref)){
+									aHref = a.attr("href");
+								}
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								tileNode.setProperty("linkurl", aHref);
 								tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 								if(lightboxid != null){
 									tileNode.setProperty("lightboxid", lightboxid);
