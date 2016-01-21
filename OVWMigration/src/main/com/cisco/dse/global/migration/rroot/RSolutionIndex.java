@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -107,7 +108,10 @@ public class RSolutionIndex extends BaseAction {
 							if (aElements != null && !aElements.isEmpty()) {
 								Element aElement = aElements.first();
 								aText = aElement.text();
-								aLink = aElement.attr("href");
+								aLink = aElement.absUrl("href");
+								if(StringUtil.isBlank(aLink)){
+									aLink = aElement.attr("href");
+								}
 							} else {
 								sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
 								log.debug("No p elements found with in the div class 'c50-text' with in div class 'c50-pilot'");
@@ -354,6 +358,9 @@ public class RSolutionIndex extends BaseAction {
 				for (Element aElement : aElements) {
 					String aText = aElement.ownText();
 					String aLink = aElement.absUrl("href");
+					if(StringUtil.isBlank(aLink)){
+						aLink = aElement.attr("href");
+					}
 					if (node.hasNode("htmlblob")) {
 						if (product_contents != null && !product_contents.isEmpty()) {
 							if (count < product_contents.size()) {
