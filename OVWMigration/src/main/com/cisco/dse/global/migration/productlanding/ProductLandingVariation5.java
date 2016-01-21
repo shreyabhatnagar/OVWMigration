@@ -920,8 +920,7 @@ public class ProductLandingVariation5 extends BaseAction {
 									if (gd13v2_mid != null) {
 										NodeIterator textNodes = gd13v2_mid
 												.getNodes("text*");
-										if (textNodes.getSize() == c100_pilot_mid
-												.size()) {
+									
 											for (Element ele : c100_pilot_mid) {
 												String midGridHTML = ele.html();
 												textNodes.hasNext();
@@ -930,7 +929,8 @@ public class ProductLandingVariation5 extends BaseAction {
 												textNode.setProperty("text",
 														midGridHTML);
 											}
-										} else {
+										 if (textNodes.getSize() != c100_pilot_mid
+												.size()) {
 											sb.append("<li>Node size("
 													+ textNodes.getSize()
 													+ ") and Element size("
@@ -945,8 +945,7 @@ public class ProductLandingVariation5 extends BaseAction {
 									if (gd13v2_right != null) {
 										NodeIterator textNodes = gd13v2_right
 												.getNodes("text*");
-										if (textNodes.getSize() == c100_pilot_right
-												.size()) {
+										
 											for (Element ele : c100_pilot_right) {
 												String rightGridHTML = ele
 														.html();
@@ -956,7 +955,8 @@ public class ProductLandingVariation5 extends BaseAction {
 												textNode.setProperty("text",
 														rightGridHTML);
 											}
-										} else {
+										 if (textNodes.getSize() != c100_pilot_right
+												.size()) {
 											sb.append("<li>Node size("
 													+ textNodes.getSize()
 													+ ") and Element size("
