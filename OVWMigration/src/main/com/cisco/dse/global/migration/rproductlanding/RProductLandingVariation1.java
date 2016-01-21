@@ -20,6 +20,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -196,6 +197,9 @@ public class RProductLandingVariation1 extends BaseAction {
 														.text();
 												primaryCTALinkUrl = anchorElement
 														.absUrl("href");
+												if(StringUtil.isBlank(primaryCTALinkUrl)){
+													primaryCTALinkUrl = anchorElement.attr("href");
+												}
 												log.debug("primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 												// Start extracting valid href
 												log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
@@ -224,6 +228,9 @@ public class RProductLandingVariation1 extends BaseAction {
 											.text();
 									primaryCTALinkUrl = anchorOvtElement
 											.absUrl("href");
+									if(StringUtil.isBlank(primaryCTALinkUrl)){
+										primaryCTALinkUrl = anchorOvtElement.attr("href");
+									}
 									log.debug("primaryCTALinkUrl" + primaryCTALinkText + "\n");
 									// Start extracting valid href
 									log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
@@ -614,6 +621,9 @@ public class RProductLandingVariation1 extends BaseAction {
 												anchorText = aElement.text();
 												anchorHref = aElement
 														.absUrl("href");
+												if(StringUtil.isBlank(anchorHref)){
+													anchorHref = aElement.attr("href");
+												}
 												// Start extracting valid href
 												log.debug("Before anchorHref " + anchorHref + "\n");
 												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
@@ -709,6 +719,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																		linkUrl = anchorTag
 																				.first()
 																				.absUrl("href");
+																		if(StringUtil.isBlank(linkUrl)){
+																			linkUrl = anchorTag.first().absUrl("href");
+																		}
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl + "\n");
 																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
@@ -839,6 +852,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																					}
 																					linkTitleUrl = siATitle
 																							.absUrl("href");
+																					if(StringUtil.isBlank(linkTitleUrl)){
+																						linkTitleUrl = siATitle.absUrl("href");
+																					}
 																					// Start extracting valid href
 																					log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
 																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
@@ -954,6 +970,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																															.text();
 																													linkTextUrl = linkTextElement
 																															.absUrl("href");
+																													if(StringUtil.isBlank(linkTextUrl)){
+																														linkTextUrl = linkTextElement.absUrl("href");
+																													}
 																													// Start extracting valid href
 																													log.debug("Before linkTextUrl" + linkTextUrl + "\n");
 																													linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
@@ -1208,6 +1227,9 @@ public class RProductLandingVariation1 extends BaseAction {
 										.first().text() : "";
 								String anchorHref = anchor != null ? anchor
 										.first().absUrl("href") : "";
+										if(StringUtil.isBlank(anchorHref)){
+											anchorHref =  anchor.first().attr("href");
+										}
 										// Start extracting valid href
 										log.debug("Before anchorHref" + anchorHref + "\n");
 										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
@@ -1331,6 +1353,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																.text() : "";
 														String anchorHref = listItemAnchor
 																.first().absUrl("href");
+														if(StringUtil.isBlank(anchorHref)){
+															anchorHref = listItemAnchor.first().attr("href");
+														}
 														// Start extracting valid href
 														log.debug("Before anchorHref" + anchorHref + "\n");
 														anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
