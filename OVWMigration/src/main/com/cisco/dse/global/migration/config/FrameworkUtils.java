@@ -23,8 +23,10 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import javax.jcr.ValueFormatException;
 
 import org.apache.commons.httpclient.Credentials;
@@ -37,6 +39,7 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
@@ -164,12 +167,39 @@ public class FrameworkUtils {
 		log.debug("In the migrateDAMContent to migrate : " + path);
 		log.debug("Image path from the WEM node : " + imgRef);
 		String newImagePath = "";
+		Session session = getSession();
 
 		try {
 			if (StringUtils.isNotBlank(path)) {
-				if (path.indexOf("/content/en/us") == -1
+				if (path.indexOf("/content/en/us") != -1 || path.indexOf("/c/en/us") != -1) {
+					log.debug("image path is being from /c/en/us : " + path);
+					path = path.substring(0, path.lastIndexOf(".img"));
+					if (path.indexOf("http://") != -1 || path.indexOf("https://") != -1) {
+						try {
+							URL url = new URL(path);
+							path = url.getPath();
+						} catch (Exception e) {
+							log.error("Excepiton : ", e);
+						}
+					}
+					
+					if (path.startsWith("/c/")) {
+						path = path.replace("/c/", "/content/");
+					}
+					if (path.indexOf("_jcr_content") != -1) {
+						path = path.replace("_jcr_content", "jcr:content");
+					}
+					Node referenceNodePath = session.getNode(path);
+					if (referenceNodePath != null) {
+						path = referenceNodePath.hasProperty("fileReference") ? referenceNodePath.getProperty("fileReference").getString() : "";
+						log.debug("fileReference path for /c/en/us image path is : " + path);
+					}
+					
+					log.debug("Hence retriving the file reference path is : " + path);
+				}
+				if (path.indexOf("/content/dam/en/us") == -1
 						&& path.indexOf("/content/dam") == -1
-						&& path.indexOf("/c/en/us") == -1
+						&& path.indexOf("/c/dam/en/us") == -1
 						&& path.indexOf("/c/dam") == -1) {
 					log.debug("Path of the image is not a wem image path.");
 					if (path.indexOf("http:") == -1
@@ -190,28 +220,25 @@ public class FrameworkUtils {
 							imgRef = "/content/dam/global/" + locale + imagePath;
 						}
 					}
-					if(path.lastIndexOf("/")!=-1 && imgRef.lastIndexOf("/")!=-1){
+					if (path.lastIndexOf("/") != -1 && imgRef.lastIndexOf("/") != -1) {
 						String imageName = path.substring(path.lastIndexOf("/"), path.length());
-						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/"))+imageName;
+						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/")) + imageName;
 					}
 					newImagePath = setContentToDAM(path, imgRef);
 				} else if (!path.equalsIgnoreCase(imgRef)) {
-					log.debug("Path of the image is wem image path."+path);
+					log.debug("Path of the image is wem image path." + path);
 					if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
 						log.debug("Adding domain to the image path.");
 						path = "http://www.cisco.com" + path;
 					}
 					URL url = new URL(path);
 					path = url.getPath();
-					log.debug("getPath : "+path);
+					log.debug("getPath : " + path);
 					return path;
 				} else {
 					return "";
 				}
-			} /*else {
-				sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
-				log.debug("image path is blank.");
-			}*/
+			}
 		} catch (Exception e) {
 			log.error("Exception : ", e);
 		}
@@ -596,8 +623,7 @@ public class FrameworkUtils {
 	public static String updateHtmlBlobContent(String htmlWEBContent,
 			String htmlWEMContent, String loc, StringBuilder sb) throws JSONException{
 
-		List<String> htmlList = new ArrayList<String>() {
-		};
+		List<String> htmlList = new ArrayList<String>() {};
 		Element wemElement = null;
 		Document doc = null;
 		
@@ -703,6 +729,61 @@ public class FrameworkUtils {
 
 		return null;
 		}
+		
+	public static Session getSession() {
+		Repository repository = null;
+		Session session = null;
+		Properties prop = new Properties();
+		InputStream input = null;
+		String host = null;
+		String userId = null;
+		String pwd = null;
+		String workspace = null;
+		String workbookpath = null;
+		String reportspath = null;
+		String repo = null;
+		try {
+			String filename = "config.properties";
+			input = OVWMigration.class.getClassLoader().getResourceAsStream(filename);
+			if (input == null) {
+				log.debug("input is null");
+				return null;
+			}
+			// load a properties file from class path, inside static method
+			prop.load(input);
+			host = StringUtils.isNotBlank(prop.getProperty("serverurl")) ? prop.getProperty("serverurl") : "";
+			repo = host + "/crx/server";
+			userId = StringUtils.isNotBlank(prop.getProperty("aemuser")) ? prop.getProperty("aemuser") : "";
+			pwd = StringUtils.isNotBlank(prop.getProperty("aempassword")) ? prop.getProperty("aempassword") : "";
+			workspace = StringUtils.isNotBlank(prop.getProperty("workspace")) ? prop.getProperty("workspace") : "";
+			workbookpath = StringUtils.isNotBlank(prop.getProperty("workbookpath")) ? prop.getProperty("workbookpath") : "";
+			reportspath = StringUtils.isNotBlank(prop.getProperty("reportspath")) ? prop.getProperty("reportspath") : "";
 
+			log.debug("host : " + host);
+			log.debug("userId : " + userId);
+			log.debug("pwd : " + pwd);
+			log.debug("workspace : " + workspace);
+			log.debug("workbookpath : " + workbookpath);
+			log.debug("reportspath : " + reportspath);
 
+			if (host != "" && userId != "" && pwd != "" && workspace != "" && workbookpath != "" && reportspath != "") {
+				repository = JcrUtils.getRepository(repo);
+				session = repository.login(new SimpleCredentials(userId, pwd.toCharArray()), workspace);
+			}
+
+		} catch (IOException ex) {
+			log.error("IOException : ", ex);
+		} catch (Exception e) {
+			log.error("Exception : ", e);
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return session;
+	}
 }
