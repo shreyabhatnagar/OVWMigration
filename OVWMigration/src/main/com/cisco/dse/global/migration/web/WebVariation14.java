@@ -1,7 +1,7 @@
 package com.cisco.dse.global.migration.web;
 
 /* S.No			Name		Date		Description of change
- * 1			Bhavya		28-Dec-15	Added the Java file to handle the migration of benifits variation 3 with 3url.
+ * 1			Bhavya		20-Jan-16	Added the Java file to handle the migration of benifits variation 3 with 3url.
  * 
  * */
 import java.io.IOException;
@@ -32,29 +32,29 @@ import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
 
-public class WebVariation5 extends BaseAction{
+public class WebVariation14 extends BaseAction {
 
 	Document doc = null;
 
 	StringBuilder sb = new StringBuilder(1024);
 
-	Logger log = Logger.getLogger(WebVariation5.class);
+	Logger log = Logger.getLogger(WebVariation14.class);
 
 	public String translate(String host, String loc, String prod, String type,
 			String catType, String locale, Session session,  Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 
-		log.debug("In the translate method WebVariation5");
+		log.debug("In the translate method WebVariation14");
 		log.debug("In the translate method, catType is :" + catType);
 		String pagePropertiesPath = "/content/<locale>/" + catType
-				+ "/<prod>/professional-services/managed-cloud-services/jcr:content";
-		String managedCloudServiceMid = "/content/<locale>/"
+				+ "/<prod>/mobility/index/jcr:content";
+		String mobilityMid = "/content/<locale>/"
 				+ catType
-				+ "/<prod>/professional-services/managed-cloud-services/jcr:content/content_parsys/services/layout-services/gd21v1/gd21v1-mid";
+				+ "/<prod>/mobility/index/jcr:content/content_parsys/solutions/layout-solutions/gd21v1/gd21v1-mid";
 
 		String pageUrl = host + "/content/<locale>/" + catType
-				+ "/<prod>/professional-services/managed-cloud-services.html";
+				+ "/<prod>/mobility/index.html";
 		pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale)
 				.replace("<prod>", prod);
@@ -63,13 +63,13 @@ public class WebVariation5 extends BaseAction{
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
 
-		managedCloudServiceMid = managedCloudServiceMid.replace("<locale>", locale).replace("<prod>",
+		mobilityMid = mobilityMid.replace("<locale>", locale).replace("<prod>",
 				prod);
 
-		javax.jcr.Node managedCloudServiceMidNode = null;
+		javax.jcr.Node mobilityMidNode = null;
 		javax.jcr.Node pageJcrNode = null;
 		try {
-			managedCloudServiceMidNode = session.getNode(managedCloudServiceMid);
+			mobilityMidNode = session.getNode(mobilityMid);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 
 			try {
@@ -89,32 +89,77 @@ public class WebVariation5 extends BaseAction{
 
 				//Start of migration of Hero Large Component
 				try {
-					migrateHeroLarge(doc, managedCloudServiceMidNode,locale, urlMap);
+					migrateHeroLarge(doc, mobilityMidNode,locale, urlMap);
 				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
 					log.error("Exception : ", e);
 				}
 				//End of migration of Hero Large Component
-				
-				//Start of migration of List Component
-				try {
-					migrateList(doc, managedCloudServiceMidNode,session, locale, urlMap);
-				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
-					log.error("Exception : ", e);
-				}
-				//End of migration of List Component
 
-				
 				//Start of migration of HTMLBLOB Component
 				try {
-					migrateHtmlBlob(doc, managedCloudServiceMidNode,locale, urlMap);
+					migrateHtmlBlob(doc, mobilityMidNode,locale, urlMap);
 				} catch (Exception e) {
-					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.error("Exception : ", e);
 				}
 				//End of migration of HTMLBLOB Component
-
+				
+				//Check for mid list
+				try {
+					Node listNode = mobilityMidNode.hasNode("list") ? mobilityMidNode.getNode("list") : null;
+					Elements list = doc.select("div.n13-dm");
+					if(listNode != null){
+						if(list.isEmpty()){
+						sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
+						}else {
+							log.debug("list Available to migrate");
+						}
+					}else {
+						log.debug("gd-right is not available");
+					}
+					
+				} catch (Exception e) {
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.error("Exception : ", e);
+				}
+				//Check for mid list
+				
+				//Check for tabset
+				try {
+					Node cqNode = mobilityMidNode.hasNode("c17v1_cq") ? mobilityMidNode.getNode("c17v1_cq") : null;
+					Elements cq = doc.select("div.c17v1-cq");
+					if(cqNode != null){
+						if(cq.isEmpty()){
+						sb.append("<li>tabset is not available to migrate</li>");
+						}else {
+							log.debug("tabset is available to migrate");
+						}
+					}else {
+						log.debug("gd-right is not available");
+					}
+					
+				} catch (Exception e) {
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.error("Exception : ", e);
+				}
+				//Check for tabset
+				
+				
+				//Check for right panel
+				try {
+					Elements textElements = doc.select("div.gd-right");
+					if(!textElements.isEmpty()){
+						sb.append(Constants.RIGHT_PANEL_NODE_NOT_FOUND);
+					}else {
+						log.debug("gd-right is not available");
+					}
+					
+				} catch (Exception e) {
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.error("Exception : ", e);
+				}
+				//Check for right panel
 			} else {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
@@ -130,7 +175,7 @@ public class WebVariation5 extends BaseAction{
 	}
 
 	//Start of migration of hero Large
-	private void migrateHeroLarge(Document doc,Node managedCloudServiceMidNode, String locale,Map<String, String> urlMap) {
+	private void migrateHeroLarge(Document doc,Node mobilityMidNode, String locale,Map<String, String> urlMap) {
 		// TODO Auto-generated method stub
 		try {
 			String h2Text = "";
@@ -142,7 +187,7 @@ public class WebVariation5 extends BaseAction{
 			if(!heroElements.select("div.frame").isEmpty()){
 				heroElements = heroElements.select("div.frame");
 			}
-			Node heroNode = managedCloudServiceMidNode.hasNode("hero_large") ? managedCloudServiceMidNode.getNode("hero_large") : null;
+			Node heroNode = mobilityMidNode.hasNode("hero_large") ? mobilityMidNode.getNode("hero_large") : null;
 
 			if (heroNode != null) {
 				NodeIterator heroPanelNodeIterator = heroNode.hasNode("heropanel_0") ? heroNode.getNodes("heropanel*") : null;
@@ -200,7 +245,7 @@ public class WebVariation5 extends BaseAction{
 										sb.append("<li>Hero content video pop up node not found.</li>");
 									}
 								}
-								
+
 								String heroImage = FrameworkUtils.extractImagePath(ele, sb);
 								log.debug("heroImage before migration : " + heroImage + "\n");
 								if (heroPanelNode.hasNode("image")) {
@@ -242,151 +287,29 @@ public class WebVariation5 extends BaseAction{
 	}
 	//end of hero large migration
 
-
-	private void migrateList(Document doc,Node managedCloudServiceMidNode, Session session, String locale,Map<String, String> urlMap) throws RepositoryException {
-		Elements textElements = doc.select("div.c00-pilot");
-		Element listElement = textElements.last();
-
-		Node listNode = managedCloudServiceMidNode.hasNode("list") ? managedCloudServiceMidNode.getNode("list") : null;
-		if (listNode != null) {
-			if(listElement != null){
-				try {
-					String ownPdfText = "";
-					String pdfIcon = "";
-					String pdfSize = "";
-					String ownText = "";
-					Element h3Ele = listElement.getElementsByTag("h3").last();
-					Element ulEle = listElement.getElementsByTag("ul").last();
-					String h3Text = null;
-
-					// start of handling title of list component
-					if(h3Ele != null){
-						h3Text = h3Ele.text();
-						listNode.setProperty("title", h3Text);
-					} else {
-						sb.append(Constants.LIST_HEADING_COMPONENT_NOT_FOUND);
-
-					}
-					// end of handling title of list component
-
-					//Element List
-					Node ulNode = listNode.hasNode("element_list_0") ? listNode.getNode("element_list_0") : null;
-					if (ulNode != null) {
-						Elements list = ulEle.getElementsByTag("li");
-						List<String> listAdd = new ArrayList<String>();
-						for (Element li : list) {
-							pdfIcon = "";
-							pdfSize = "";
-							ownText = "";
-							boolean openNewWindow = false;
-							// pdf content
-							try {
-								ownPdfText = li.ownText();
-								if (StringUtils.isNotEmpty(ownPdfText)) {
-									log.debug("OWn text is:" + ownPdfText);
-									if (ownPdfText.toLowerCase()
-											.contains("pdf")
-											|| ownPdfText.toLowerCase()
-											.contains("video")) {
-										pdfIcon = "pdf";
-										if (ownPdfText.toLowerCase().contains(
-												"video")) {
-											pdfIcon = "video";
-										}
-										int i = 0;
-										for (; i < ownPdfText.length(); i++) {
-											char character = ownPdfText
-													.charAt(i);
-											boolean isDigit = Character
-													.isDigit(character);
-											if (isDigit) {
-												break;
-											}
-										}
-										pdfSize = ownPdfText.substring(i,
-												ownPdfText.length() - 1);
-										pdfSize = pdfSize.replace(")", "");
-										pdfSize = pdfSize.trim();
-										if(ownPdfText.length() >16){
-											ownText = li.ownText();
-											pdfIcon = "";
-											pdfSize = "";
-										}
-									}else {
-										ownText = li.ownText();
-									}
-								}
-							} catch (Exception e) {
-								sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
-								log.error("Exception : ", e);
-							}
-
-							if(!li.getElementsByTag("a").isEmpty()){
-								Element a = li.getElementsByTag("a").first();
-								// Start extracting valid href
-								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap);
-								log.debug("after anchorHref" + anchorHref + "\n");
-								// End extracting valid href
-								JSONObject obj = new JSONObject();
-								obj.put("linktext", a.text()+ownText);
-								obj.put("linkurl", anchorHref);
-								obj.put("icon", pdfIcon);
-								obj.put("size", pdfSize);
-								obj.put("description", "");
-								obj.put("openInNewWindow", openNewWindow);
-								listAdd.add(obj.toString());
-							}
-						}
-						ulNode.setProperty("listitems",listAdd.toArray(new String[listAdd.size()]));
-					} else {
-						sb.append(Constants.NO_LIST_NODES_FOUND);
-					}
-					// End of Element List
-				} catch (Exception e) {
-					sb.append(Constants.UNABLE_TO_MIGRATE_LIST_COMPONENT);
-					log.error("Exception : ", e);
-				}
-			}else {
-				sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
-			}
-		} else {
-			if(listElement != null){
-				sb.append(Constants.LIST_NODE_NOT_FOUND);
-			}
-			else {
-				log.debug("no list node or element to migrate");
-			}
-		}
-	}
-
-	// End of Migrate List Elements Method
-
 	//start of migration of htmlblob
-	private void migrateHtmlBlob(Document doc,Node managedCloudServiceMidNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+	private void migrateHtmlBlob(Document doc,Node mobilityMidNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		Elements textElements = doc.select("div.c00-pilot");
-		Node midNode = managedCloudServiceMidNode.hasNode("htmlblob") ? managedCloudServiceMidNode.getNode("htmlblob") : null ;
-		Element h3Last = null;
-		Element ulLast = null;
+		Node midNode = mobilityMidNode.hasNode("text") ? mobilityMidNode.getNode("text") : null ;
+		Element firstEle = null;
+		Element parentText = null;
 		
 		if(midNode != null){
 			if(!textElements.isEmpty()){
-				Element textElement = textElements.first();
-				if(textElement != null){
-					h3Last = textElement.getElementsByTag("h3").last();
-					ulLast = textElement.getElementsByTag("ul").last();
-					if(h3Last != null){
-					h3Last.remove();
+				firstEle = textElements.first();
+				if(firstEle != null){
+					parentText = firstEle.parent();
+					if(parentText != null){
+						String html = FrameworkUtils.extractHtmlBlobContent(parentText, "",locale, sb, urlMap);
+						midNode.setProperty("text", html);
+					}else {
+						sb.append("<li>Parent text does not exists</li>");
 					}
-					if(ulLast != null){
-					ulLast.remove();
-					}
-					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
-					midNode.setProperty("html", html);
+				}else {
+					sb.append(Constants.TEXT_DOES_NOT_EXIST);
 				}
-			}
-			else {
-				sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
+			}else {
+				sb.append(Constants.TEXT_DOES_NOT_EXIST);
 			}
 		}else {
 			if(textElements.isEmpty()){
@@ -397,7 +320,5 @@ public class WebVariation5 extends BaseAction{
 		}
 	}
 	//end of migration of htmlblob
+
 }
-
-
-

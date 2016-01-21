@@ -293,6 +293,34 @@ public class FrameworkUtils {
 			}
 			String newImagePath = "";
 			String error = "";
+			
+			//code for connection timed out.
+			for (int reconnection=0; reconnection<15; reconnection++) {
+				log.debug("Count of reconnection" + reconnection);
+
+				if(resObj != null && resObj.has("error") && !resObj.has("newImagePath")){
+					error = (String) resObj.get("error");
+					if(StringUtils.isNotBlank(error)){
+						statusCode = client.executeMethod(method);
+
+						if (statusCode != HttpStatus.SC_OK) {
+							log.debug("HTTP Method failed: " + method.getStatusLine());
+						}
+						responseBody = method.getResponseBody();
+						responseObj = new String(responseBody);
+						log.debug("josn object from service respones.");
+						log.debug(responseObj);
+						resObj = null;
+						if(StringUtils.isNotBlank(responseObj)){
+							resObj = new JSONObject(responseObj);
+						}
+						error = "";
+					}
+				}else {
+					break;
+				}
+			}
+			
 			if (resObj != null && resObj.has("newImagePath")) {
 				newImagePath = (String) resObj.get("newImagePath");
 				log.debug("Updated dam Image path : " + newImagePath);
