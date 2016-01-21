@@ -407,13 +407,15 @@ public class RProductLandingVariation1 extends BaseAction {
 											log.debug("<li>Hero Panel element not having any linkurl in it </li>");
 										}
 										Element ctaLinkElement = ele.select("p.cta-link").first(); 
+										if(ctaLinkElement != null){
 										Elements ctaLinkAnchorElements = ctaLinkElement
 												.getElementsByTag("a");
 										log.debug("ctaLinkAnchorElements.size() :::::: " + ctaLinkAnchorElements.size());
 										if (ctaLinkAnchorElements.size() > 1) {
 											sb.append("<li>Some extra text found in hero panel </li>");
 										}
-									} else {
+										}
+										} else {
 										log.debug("<li>Hero Panel link url element not found </li>");
 									}
 									// start image
@@ -501,8 +503,8 @@ public class RProductLandingVariation1 extends BaseAction {
 						sb.append(Constants.HERO_LARGE_COMPONENT_NOT_FOUND);
 					}
 				} catch (Exception e) {
-					sb.append("<li>Unable to update hero_large component." + e
-							+ "</li>");
+					sb.append("<li>Unable to update hero_large component.</li>");
+					log.debug("<li>Unable to update hero_large component." , e );
 				}
 
 				// end set Hero Large content.
@@ -512,7 +514,7 @@ public class RProductLandingVariation1 extends BaseAction {
 				try {
 					javax.jcr.Node drawersContainerNode = null;
 					Elements drawerComponentHeaderElements = doc
-							.select("div.c00-pilot,div.c100-pilot");
+							.select("div.c00-pilot,div.c100-pilot,div.cc00v1-pilot");
 					if (drawerComponentHeaderElements != null
 							&& !drawerComponentHeaderElements.isEmpty()) {
 						Element drawerComponentHeader = drawerComponentHeaderElements
@@ -649,7 +651,7 @@ public class RProductLandingVariation1 extends BaseAction {
 									Elements drawersPanelElements = doc
 											.select("div.n21,ul.n21");
 
-									if (drawersPanelElements != null) {
+									if (!drawersPanelElements.isEmpty()) {
 										// Element drawersPanelElement =
 										// drawersPanelElements.first();
 										// start new code
@@ -765,7 +767,9 @@ public class RProductLandingVariation1 extends BaseAction {
 																	drawersOverviewNode.setProperty("url", linkUrl);
 																	drawersOverviewNode.setProperty("linktype", "Url");
 																	
-																} 
+																} else{
+																	drawersPanelNode.setProperty("includeLink", "false");
+																}
 																if (StringUtils.isNotBlank(panelDescription)) {
 																	drawersPanelNode.setProperty("description", panelDescription);
 																} else {
@@ -1105,7 +1109,7 @@ public class RProductLandingVariation1 extends BaseAction {
 
 													}
 													if (!misMatchFlag) {
-														sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT);
+														sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT+" "+panelTitle);
 													}
 													if(infoLinksMisMatchFlag){
 														sb.append(Constants.MISMATCH_IN_INFOLINKS+" "+panelTitle);
@@ -1144,6 +1148,7 @@ public class RProductLandingVariation1 extends BaseAction {
 						}
 					} else {
 						log.debug("<li>DrawerComponent HeaderElements not found</li>");
+						sb.append("<li>DrawerComponent not found</li>");
 					}
 
 				} catch (Exception e) {
@@ -1383,8 +1388,21 @@ public class RProductLandingVariation1 extends BaseAction {
 					
 				}
 				if (doc.select("div.c42-pilot").size() > 0) {
-					Element htmlBlobElement =  doc.select("div.c42-pilot").first();
-					String html = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
+					Element htmlBlobElement =  null;
+					htmlBlobElement = doc.select("div.c42-pilot").first();
+										
+					Element htmlBlobParentElement = null;
+					if(htmlBlobElement != null){
+						htmlBlobParentElement = htmlBlobElement.parent();
+						Elements divc23Pilot = htmlBlobParentElement.select("div.c23-pilot,div.cc23-pilot");
+						Elements divn13Pilot = htmlBlobParentElement.select("div.n13-pilot");
+						divc23Pilot.remove();
+						divn13Pilot.remove();
+					}
+					String html = "";
+					if(htmlBlobParentElement != null){
+					 html = FrameworkUtils.extractHtmlBlobContent(htmlBlobParentElement, "", locale, sb, urlMap);
+					}
 					if (indexUpperLeftNode.hasNode("htmlblob_0")) {
 						Node htmlblobNode = indexUpperLeftNode.getNode("htmlblob_0");
 						if (StringUtils.isNotBlank(html)) {
