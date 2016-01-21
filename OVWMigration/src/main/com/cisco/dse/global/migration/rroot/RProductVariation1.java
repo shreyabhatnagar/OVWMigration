@@ -17,6 +17,7 @@ import javax.jcr.version.VersionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -480,7 +481,10 @@ public class RProductVariation1 extends BaseAction {
 
 	//Set ThirdLinks method
 	private void setThirdLinks(Element cqAnchor, NodeIterator items,String anchorText, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
-		String anchorHref  = cqAnchor.attr("href");
+		String anchorHref  = cqAnchor.absUrl("href");
+		if(StringUtil.isBlank(anchorHref)){
+			anchorHref = cqAnchor.attr("href");
+		}
 		anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
 		Node item = items.nextNode();
 		Node linkdata = item.hasNode("linkdata")?item.getNode("linkdata"):null;
