@@ -26,6 +26,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -493,6 +494,9 @@ public class RProductListingVariation2 extends BaseAction{
 																				title = siATitle.text();
 																				linkTitleUrl = siATitle
 																						.absUrl("href");
+																				if(StringUtil.isBlank(linkTitleUrl)){
+																					linkTitleUrl = siATitle.absUrl("href");
+																				}
 																				log.debug("linkTitleUrl: "+linkTitleUrl);
 																				}
 																				if(span!=null){
@@ -611,6 +615,9 @@ public class RProductListingVariation2 extends BaseAction{
 																						.text();
 																				linkTextUrl = linkTextElement
 																						.absUrl("href");
+																				if(StringUtil.isBlank(linkTextUrl)){
+																					linkTextUrl = linkTextElement.absUrl("href");
+																				}
 																				// Start extracting valid href
 																				log.debug("Before linkTextUrl" + linkTextUrl + "\n");
 																				linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
