@@ -105,7 +105,8 @@ public class WebVariation7 extends BaseAction{
 						log.debug("energy-webvar7 || retail-webvar7");
 						try{
 							log.debug("start of mid..$$");
-							Element gdMidEle = doc.select("div.gd-mid,div.gd-right").first();
+							Element gdMidEle = null;
+							/*Element gdMidEle = doc.select("div.gd-mid,div.gd-right").first();
 							if(gdMidEle==null){
 								log.debug("gdMidEle==null----S");
 								gdMidEle = doc.select("div.sitecopy_hs").first();
@@ -115,20 +116,31 @@ public class WebVariation7 extends BaseAction{
 								if(gdMidEle.hasClass("gd-right")){
 									log.debug("hasClass...##");
 									gdMidEle=gdMidEle.select("div.gd-left").last();
+								}*/
+							if(type.equals("iot-products-webvar7")){
+								gdMidEle = doc.select("div.gd-right").first();
+								gdMidEle = gdMidEle.select("div.gd-left").first();
+							}else{
+								gdMidEle = doc.select("div.gd-left,div.gd-mid").first();
+								if(gdMidEle==null){
+									log.debug("gdMidEle==null----S");
+									gdMidEle = doc.select("div.sitecopy_hs").first();
+									gdMidEle.select("c46-pilot").remove();
 								}
-								log.debug("in gdMid");
-								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle, "",locale, sb, urlMap);
-								if(!gdMid.equals("")&& gdMid!=null){
-									Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
-									if(leftBlob!=null){
-										leftBlob.setProperty("html", gdMid);
-									}else{
-										log.debug("html blob node not found.");
-										sb.append("<li>html blob node not found.</li>");
-									}
-								}
-
 							}
+							log.debug("in gdMid");
+							String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle, "",locale, sb, urlMap);
+							if(!gdMid.equals("")&& gdMid!=null){
+								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
+								if(leftBlob!=null){
+									leftBlob.setProperty("html", gdMid);
+								}else{
+									log.debug("html blob node not found.");
+									sb.append("<li>html blob node not found.</li>");
+								}
+							}
+
+
 							log.debug("end of mid..");
 						}catch(Exception e){
 							log.error("Unable to update hero : ",e);
