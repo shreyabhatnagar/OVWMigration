@@ -166,7 +166,7 @@ public class FrameworkUtils {
 			String locale, StringBuilder sb) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
 		log.debug("Image path from the WEM node : " + imgRef);
-		String newImagePath = "";
+		String newImagePath = null;
 		Session session = getSession();
 
 		try {

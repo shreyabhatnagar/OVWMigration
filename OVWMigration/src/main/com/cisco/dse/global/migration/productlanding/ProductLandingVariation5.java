@@ -219,7 +219,7 @@ public class ProductLandingVariation5 extends BaseAction {
 									if (gd12v2_left.hasNode("hero_large")) {
 										hero_large = gd12v2_left
 												.getNode("hero_large");
-										
+
 										Property panelNodesProperty = hero_large.hasProperty("panelNodes")?hero_large.getProperty("panelNodes"):null;
 										if(panelNodesProperty.isMultiple()){
 											panelPropertiest = panelNodesProperty.getValues();
@@ -227,7 +227,7 @@ public class ProductLandingVariation5 extends BaseAction {
 											panelPropertiest = new Value[1];
 											panelPropertiest[0] = panelNodesProperty.getValue();
 										}
-										
+
 										if(panelPropertiest != null && i<=panelPropertiest.length){
 											String propertyVal = panelPropertiest[i].getString();
 											if(StringUtils.isNotBlank(propertyVal)){
@@ -241,7 +241,7 @@ public class ProductLandingVariation5 extends BaseAction {
 										}else{
 											sb.append("<li>No heropanel Node found.</li>");
 										}
-										
+
 										if (heroPanelNode!=null) {
 											Node heroPanelPopUpNode = null;
 											Elements lightBoxElements = gridLeftElements.select("div.c50-image").select("a.c26v4-lightbox");
@@ -285,10 +285,14 @@ public class ProductLandingVariation5 extends BaseAction {
 													String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
 													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 													log.debug("heroImage " + heroImage + "\n");
-													if (StringUtils.isNotBlank(heroImage)) {
-														imageNode.setProperty("fileReference" , heroImage);
+													if(heroImage!=null){
+														if (StringUtils.isNotBlank(heroImage)) {
+															imageNode.setProperty("fileReference" , heroImage);
+														}else{
+															log.debug("image paths are same.");
+														}
 													}else{
-															sb.append("<li> image is not found on locale page's hero element. </li>");
+														sb.append("<li> image is not found on locale page's hero element. </li>");
 													}
 												} else {
 													sb.append("<li>hero image node doesn't exist</li>");
@@ -920,16 +924,16 @@ public class ProductLandingVariation5 extends BaseAction {
 									if (gd13v2_mid != null) {
 										NodeIterator textNodes = gd13v2_mid
 												.getNodes("text*");
-									
-											for (Element ele : c100_pilot_mid) {
-												String midGridHTML = ele.html();
-												textNodes.hasNext();
-												Node textNode = (Node) textNodes
-														.next();
-												textNode.setProperty("text",
-														midGridHTML);
-											}
-										 if (textNodes.getSize() != c100_pilot_mid
+
+										for (Element ele : c100_pilot_mid) {
+											String midGridHTML = ele.html();
+											textNodes.hasNext();
+											Node textNode = (Node) textNodes
+													.next();
+											textNode.setProperty("text",
+													midGridHTML);
+										}
+										if (textNodes.getSize() != c100_pilot_mid
 												.size()) {
 											sb.append("<li>Node size("
 													+ textNodes.getSize()
@@ -945,17 +949,17 @@ public class ProductLandingVariation5 extends BaseAction {
 									if (gd13v2_right != null) {
 										NodeIterator textNodes = gd13v2_right
 												.getNodes("text*");
-										
-											for (Element ele : c100_pilot_right) {
-												String rightGridHTML = ele
-														.html();
-												textNodes.hasNext();
-												Node textNode = (Node) textNodes
-														.next();
-												textNode.setProperty("text",
-														rightGridHTML);
-											}
-										 if (textNodes.getSize() != c100_pilot_right
+
+										for (Element ele : c100_pilot_right) {
+											String rightGridHTML = ele
+													.html();
+											textNodes.hasNext();
+											Node textNode = (Node) textNodes
+													.next();
+											textNode.setProperty("text",
+													rightGridHTML);
+										}
+										if (textNodes.getSize() != c100_pilot_right
 												.size()) {
 											sb.append("<li>Node size("
 													+ textNodes.getSize()

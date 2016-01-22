@@ -119,8 +119,10 @@ public class WebVariation10 extends BaseAction{
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Element htmlBlobElement = doc.select("div.gd-left").select("div.c00-pilot").first();
-					Element htmlBlobHeadElement = doc.select("div.gd-left").select("div.compact").first();
+					Element htmlBlobElement = doc.select("div.gd-left").first().select("div.c00-pilot").first();
+					
+					Element htmlBlobHeadElement = doc.select("div.gd-left").first().select("div.compact").first();
+					log.debug("heading elelemnt issss: "+ htmlBlobHeadElement);
 					if (htmlBlobElement != null) {
 						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
 						String htmlBlobHeadHtml = "";
@@ -392,19 +394,41 @@ public class WebVariation10 extends BaseAction{
 							}
 					
 					if (!extraTextExists) {
-						fHolderElement = htmlBlobElement.select("div#t-col-2").first();
+						fHolderElement = doc.select("div#t-col-2").first();
+						//fHolderElement = doc.getElementById("t-col-2");
+						log.debug("Right Rail Element isssS******"+ fHolderElement);
 						if(fHolderElement != null){
-						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(fHolderElement, "", locale, sb, urlMap);
+							if("zh_cn".equals(locale)){
+								htmlBlobContent = fHolderElement.html();
+								log.debug("printing outer html of zh_cn locale. "+ htmlBlobContent);
+							}else{
+						 htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(fHolderElement, "", locale, sb, urlMap);
+							}
 						}else{
 							sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" in right rail.</li>");
 						}
+						
+						
+						Elements c23V2PilotElements = doc.select("div.c23v2-pilot");
+						if(c23V2PilotElements.size() >1){
+							StringBuilder sBuilder = new StringBuilder();
+							for(Element gdRightMultiElement : c23V2PilotElements){
+								htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightMultiElement, "", locale, sb, urlMap);
+								sBuilder.append(htmlBlobRightContent);
+								
+							}
+							htmlBlobContent = htmlBlobContent.concat(sBuilder.toString());
+						}
+						else{
 						gdRightElement = doc.select("div.poly").first();
 						if(gdRightElement != null){
 						htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap);
 						htmlBlobContent = htmlBlobContent.concat(htmlBlobRightContent);
-						log.debug("right rail is: "+ htmlBlobContent);
-					}
+						}
 						
+						log.debug("right rail is: "+ htmlBlobContent);
+					
+						}	
 					}
 					//End of getContent
 					//Start of set content

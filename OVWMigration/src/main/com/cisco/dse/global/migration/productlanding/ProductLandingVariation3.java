@@ -387,7 +387,8 @@ public class ProductLandingVariation3 extends BaseAction {
 					if (textElements != null) {
 						Element textElement = textElements.first();
 						if (textElement != null) {
-							text = textElement.outerHtml();
+							
+							text = FrameworkUtils.extractHtmlBlobContent(textElement,"",locale,sb,urlMap);
 						} else {
 							log.debug("<li>Text Element not found</li>");
 						}
