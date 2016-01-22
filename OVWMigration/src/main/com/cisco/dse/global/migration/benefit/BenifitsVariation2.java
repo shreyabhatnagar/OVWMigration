@@ -131,7 +131,7 @@ public class BenifitsVariation2 extends BaseAction{
 										log.debug("text node updated...");
 									}
 								}
-								sb.append(Constants.EXTRA_TEXT_NODE_FOUND);
+								sb.append("<li>Extra text present on WEM page</li>");
 							}
 							log.debug("end of text...");
 						}else{
@@ -155,7 +155,7 @@ public class BenifitsVariation2 extends BaseAction{
 								textNode.setProperty("text",list.outerHtml());
 								log.debug("text node updated...");
 							}
-							sb.append(Constants.EXTRA_TEXT_NODE_FOUND);
+							sb.append("<li>Extra text present on WEM page</li>");
 						}
 						log.debug("end of text...");
 					}catch(Exception e){

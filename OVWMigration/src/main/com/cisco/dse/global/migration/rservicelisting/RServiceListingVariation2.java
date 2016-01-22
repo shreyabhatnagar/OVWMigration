@@ -339,6 +339,40 @@ public class RServiceListingVariation2 extends BaseAction{
 												//start handle pdf in wireless
 												Element liElement = aEle.parent();
 												ownPdfText = liElement.ownText();
+												// start getting pdf content in nobr tag
+												Elements nobrElements = liElement.getElementsByTag("nobr");
+												String liPdfText = "";
+												if (nobrElements.size() > 0) {
+													Element nobrElement = nobrElements.first();
+													if (nobrElement != null) {
+														log.debug("li nobr owntext....... " + nobrElement.ownText());
+														liPdfText = nobrElement.ownText();
+													}
+												}
+												if(StringUtils.isNotBlank(liPdfText)) {
+													log.debug("liPdfText text is:"+liPdfText);
+													if(liPdfText.toLowerCase().contains("pdf")){
+															pdfIcon = "pdf";
+															int i=0;
+															for(;i<liPdfText.length();i++){
+																char character = liPdfText.charAt(i);												
+																boolean isDigit = Character.isDigit(character);
+																if(isDigit){
+																	break;
+																} 
+															}	
+															pdfSize = liPdfText.substring(i, liPdfText.length()-1);
+															pdfSize = pdfSize.replace(")", "");
+															pdfSize = pdfSize.trim();
+															log.debug("Pdf size set to the node:"+listItemNode.getPath());
+															listItemNode.setProperty("icon", pdfIcon);
+															listItemNode.setProperty("size", pdfSize);
+													} else {
+														ownText = liPdfText;
+														log.debug("ownText:"+ownText);
+													}
+												}
+												// end getting pdf content in nobr tag
 												if(StringUtils.isNotEmpty(ownPdfText)){
 													log.debug("OWn text is:"+ownPdfText);
 													if(ownPdfText.toLowerCase().contains("pdf")){
@@ -468,8 +502,8 @@ public class RServiceListingVariation2 extends BaseAction{
 								listContainerNode = rightListContainerNode;
 								listNode = rightListItemsNode;
 							if (listContainerNode != null) {
-								
-								String textEle = ele.html();
+								//String textEle = ele.html();
+								String textEle = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 								listContainerNode.setProperty("text",textEle);
 							}	
 							}
