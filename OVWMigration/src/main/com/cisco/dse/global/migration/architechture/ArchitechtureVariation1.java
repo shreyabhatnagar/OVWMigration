@@ -289,12 +289,24 @@ public class ArchitechtureVariation1 extends BaseAction{
 							for (Element li : list){
 								boolean openNewWindow = false;
 								//pdf content
+								String pdf = li.ownText().trim();
+								String pdfIcon = null;
 								try{
-									String pdf = li.ownText().trim();
 									log.debug(pdf);
-									if(pdf.length()>0){	
-										openNewWindow = true;
+									if (pdf.length() > 0) {
+										if (pdf.toLowerCase().contains("pdf"))
+											pdfIcon = "pdf";
+										int i = 0;
+										for (; i < pdf.length(); i++) {
+											char character = pdf.charAt(i);
+											boolean isDigit = Character.isDigit(character);
+											if (isDigit) {
+												break;
+											}
+										}
+										pdf = pdf.substring(i, pdf.length() - 1);
 									}
+									pdf = pdf.trim();
 								}catch(Exception e){
 									sb.append(Constants.Exception_BY_SPECIAL_CHARACTER);
 									log.error("Exception : ",e);
@@ -308,8 +320,8 @@ public class ArchitechtureVariation1 extends BaseAction{
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", a.text());
 								obj.put("linkurl",aURL);
-								obj.put("icon","");
-								obj.put("size","");
+								obj.put("icon",pdfIcon);
+								obj.put("size",pdf);
 								obj.put("description","");
 								obj.put("openInNewWindow",openNewWindow);
 								listAdd.add(obj.toString());
