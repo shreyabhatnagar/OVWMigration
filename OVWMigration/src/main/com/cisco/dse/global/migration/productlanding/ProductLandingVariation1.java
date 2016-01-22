@@ -463,7 +463,10 @@ public class ProductLandingVariation1 extends BaseAction {
 											Element anchorElement = anchorElements.first();
 											if (anchorElement != null) {
 												anchorText = anchorElement.text();
-												anchorHref = anchorElement.attr("href");
+												anchorHref = anchorElement.absUrl("href");
+												if (StringUtils.isBlank(anchorHref)) {
+													anchorHref = anchorElement.attr("href");
+												}
 												// Start extracting valid href
 												log.debug("anchorHref before migration : " + anchorHref);
 												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
