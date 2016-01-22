@@ -184,7 +184,6 @@ public class ProductLandingVariation1 extends BaseAction {
 								if (StringUtils.isNotBlank(primaryCTALinkText)) {
 									primartCTANode.setProperty("linktext", primaryCTALinkText);
 								} else {
-									sb.append("<li>link text of primary CTA doesn't exist</li>");
 									log.debug("linktext property is not set at " + primartCTANode.getPath());
 								}
 
@@ -193,7 +192,6 @@ public class ProductLandingVariation1 extends BaseAction {
 									if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 										primartCTALinkUrlNode.setProperty("url", primaryCTALinkUrl);
 									} else {
-										sb.append("<li>link url of primary CTA doesn't exist</li>");
 										log.debug("url property is not set at " + primartCTALinkUrlNode.getPath());
 									}
 								} else {
@@ -451,7 +449,8 @@ public class ProductLandingVariation1 extends BaseAction {
 											log.debug("No first attribute found with name 'data-config-hidetext' in the doc.");
 										}
 									} else {
-										log.debug("No attribute found with name 'data-config-hidetext' in the doc.");
+										log.debug("No attribute found with name 'data-config-hidetext' in the doc So show Text and hide Text canot be migrated.");
+										sb.append("No attribute found with name 'data-config-hidetext' in the doc So show Text and hide Text canot be migrated.");
 									}
 									Element drawerHeaderLinksElement = drawerComponentHeader.select("div.clearfix").first();
 									JSONObject jsonObj = new JSONObject();
@@ -464,9 +463,6 @@ public class ProductLandingVariation1 extends BaseAction {
 											if (anchorElement != null) {
 												anchorText = anchorElement.text();
 												anchorHref = anchorElement.absUrl("href");
-												if (StringUtils.isBlank(anchorHref)) {
-													anchorHref = anchorElement.attr("href");
-												}
 												// Start extracting valid href
 												log.debug("anchorHref before migration : " + anchorHref);
 												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
@@ -594,7 +590,8 @@ public class ProductLandingVariation1 extends BaseAction {
 																if (StringUtils.isNotBlank(linkUrl)) {
 																	drawersPanelNode.setProperty("linkurl", linkUrl);
 																} else {
-																	sb.append("<li>Title Link of drawer panel doesn't exist for "+ panelTitle+" </li>");
+																	
+																	//sb.append("<li>Title Link of drawer panel doesn't exist for "+ panelTitle+" </li>");
 																	log.debug("link url is blank for thr one of the panel.");
 																}
 																if (StringUtils.isNotBlank(panelDescription)) {
