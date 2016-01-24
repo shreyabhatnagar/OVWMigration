@@ -242,6 +242,10 @@ public class FrameworkUtils {
 		} catch (Exception e) {
 			log.error("Exception : ", e);
 		}
+		finally  {
+			session.logout();
+			session = null;
+		}
 		return newImagePath;
 	}
 
