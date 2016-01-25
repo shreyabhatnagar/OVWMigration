@@ -773,9 +773,15 @@ public class Constants {
 	public static final String NO_ANCHOS_FOUND_IN_WEB_HTML_CONTENT = "<li>No Anchor found in the web html content.</li>";
 	
 	//EXTRA_ANCHOR_LINK_FOUND_IN_WEB_HTML_CONTENT
-	public static final String EXTRA_ANCHOR_LINK_FOUND_IN_WEB_HTML_CONTENT = "<li>Extra link found in web page : </li>";
+	public static final String EXTRA_ANCHOR_LINK_FOUND_IN_WEB_HTML_CONTENT = "<li>Extra anchor link found in web page : </li>";
+	
+	//EXTRA_ANCHOR_LINK_FOUND_IN_WEM_HTML_CONTENT
+	public static final String EXTRA_ANCHOR_LINK_FOUND_IN_WEM_HTML_CONTENT = "<li>Extra anchro link found in wem page : </li>";
 	
 	//NO_HTML_CONTET_FOUND_IN_WEM
 	public static final String NO_HTML_CONTET_FOUND_IN_WEM = "<li>No html content found in wem.</li>";
+	
+	//TITLE_NODE_NOT_FOUND
+	public static final String TITLE_NODE_NOT_FOUND = "<li>Title node not found.</li>";
 
 }
