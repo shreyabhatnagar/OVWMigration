@@ -134,7 +134,7 @@ public class ProductListingVariation3 extends BaseAction{
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
 
-					Elements pTagElements = doc.select("div.c00v0-pilotno-border");
+					Elements pTagElements = doc.select("div.c00v0-pilotno-border,c100v1-pilot no-border");
 					if(pTagElements.isEmpty()){
 						pTagElements = doc.select("div.no-border");
 					}
