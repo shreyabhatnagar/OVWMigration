@@ -198,6 +198,7 @@ public class RSolutionIndex extends BaseAction {
 				try {
 					// start of get logic.
 					Elements grid_elements = doc.select("div.gd22v1-pilot");
+					String h2Text = "";
 					if (grid_elements != null && !grid_elements.isEmpty()) {
 						Element grid_element = grid_elements.first();
 						Elements gd_left_Elements = grid_element.select("div.gd22v1-left");
@@ -205,6 +206,13 @@ public class RSolutionIndex extends BaseAction {
 								&& !gd_left_Elements.isEmpty()) {
 							Element gd_left_Element = gd_left_Elements.first();
 							Elements liElements = gd_left_Element.getElementsByTag("li");
+							Elements h2Elements = gd_left_Element.select("h2.bdr-1");
+							if(h2Elements != null && !h2Elements.isEmpty()){
+								Element h2Element = h2Elements.first();
+								h2Text = h2Element.ownText();
+							}else{
+								sb.append(Constants.TEXT_HAEDING_NOT_FOUND);
+							}
 							Node thirds_0 = null;
 							if (mainNode.hasNode("thirds_0")) {
 								thirds_0 = mainNode.getNode("thirds_0");
@@ -216,19 +224,19 @@ public class RSolutionIndex extends BaseAction {
 									if (count == 0) {
 										if (thirds_0 != null && thirds_0.hasNode("Th-Third-1")) {
 											Node Th_Third_1 = thirds_0.getNode("Th-Third-1");
-											setHtmlContent(Th_Third_1, aElements, locale, urlMap);
+											setHtmlContent(Th_Third_1, aElements, locale, urlMap, new Elements());
 										}
 									}
 									if (count == 1) {
 										if (thirds_0 != null && thirds_0.hasNode("Th-Third-2")) {
 											Node Th_Third_2 = thirds_0.getNode("Th-Third-2");
-											setHtmlContent(Th_Third_2, aElements, locale, urlMap);
+											setHtmlContent(Th_Third_2, aElements, locale, urlMap, new Elements());
 										}
 									}
 									if (count == 2) {
 										if (thirds_0 != null && thirds_0.hasNode("Th-Third-3")) {
 											Node Th_Third_3 = thirds_0.getNode("Th-Third-3");
-											setHtmlContent(Th_Third_3, aElements, locale, urlMap);
+											setHtmlContent(Th_Third_3, aElements, locale, urlMap, new Elements());
 										}
 									}
 									if (count > 2) {
@@ -240,6 +248,23 @@ public class RSolutionIndex extends BaseAction {
 									sb.append(Constants.NO_ANCHOS_FOUND_IN_WEB_HTML_CONTENT);
 								}
 							}
+							
+							
+							if (mainNode.hasNode("full_5")) {
+								Node full_5 = mainNode.getNode("full_5");
+								if(full_5.hasNode("Full")){
+									Node Full = full_5.getNode("Full");
+									if(Full.hasNode("header")){
+										Node header = Full.getNode("header");
+										if(StringUtils.isNotBlank(h2Text)){
+											header.setProperty("title", h2Text);
+										}else{
+											sb.append(Constants.TITLE_NODE_NOT_FOUND);
+										}
+									}
+								}
+							}
+							
 						} else {
 							sb.append(Constants.LEFT_GRID_ELEMENT_NOT_FOUND);
 						}
@@ -256,12 +281,21 @@ public class RSolutionIndex extends BaseAction {
 				// Start of logic for industries links migration.
 				try {
 					Elements grid_elements = doc.select("div.gd22v1-pilot");
+					String h2Text = "";
 					if (grid_elements != null && !grid_elements.isEmpty()) {
 						Element grid_element = grid_elements.first();
 						Elements gd_left_Elements = grid_element.select("div.gd22v1-right");
 						if (gd_left_Elements != null && !gd_left_Elements.isEmpty()) {
 							Element gd_left_Element = gd_left_Elements.first();
 							Elements liElements = gd_left_Element.getElementsByTag("li");
+							Elements h2Elements = gd_left_Element.select("h2.bdr-1");
+							if(h2Elements != null && !h2Elements.isEmpty()){
+								Element h2Element = h2Elements.first();
+								h2Text = h2Element.ownText();
+							}else{
+								sb.append(Constants.TEXT_HAEDING_NOT_FOUND);
+							}
+							
 							Node thirds_1 = null;
 							if (mainNode.hasNode("thirds_1")) {
 								thirds_1 = mainNode.getNode("thirds_1");
@@ -274,11 +308,11 @@ public class RSolutionIndex extends BaseAction {
 								if (aElements != null && !aElements.isEmpty()) {
 									Element aElement = aElements.first();
 									element.add(aElement);
-									if (count % 3 == 0) {
+									if (count % 3 == 0 || liElements.size() == count) {
 										if (index == 0) {
 											if (thirds_1 != null && thirds_1.hasNode("Th-Third-1")) {
 												Node Th_Third_1 = thirds_1.getNode("Th-Third-1");
-												setHtmlContent(Th_Third_1, element, locale, urlMap);
+												setHtmlContent(Th_Third_1, element, locale, urlMap, new Elements());
 											} else {
 												sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-1'");
 												log.debug("Node doesn't exist with name : 'Th-Third-1'");
@@ -288,7 +322,7 @@ public class RSolutionIndex extends BaseAction {
 										if (index == 1) {
 											if (thirds_1 != null && thirds_1.hasNode("Th-Third-2")) {
 												Node Th_Third_2 = thirds_1.getNode("Th-Third-2");
-												setHtmlContent(Th_Third_2, element, locale, urlMap);
+												setHtmlContent(Th_Third_2, element, locale, urlMap, new Elements());
 											} else {
 												sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-2'");
 												log.debug("Node doesn't exist with name : 'Th-Third-2'");
@@ -299,7 +333,7 @@ public class RSolutionIndex extends BaseAction {
 										if (index == 2) {
 											if (thirds_1 != null && thirds_1.hasNode("Th-Third-3")) {
 												Node Th_Third_3 = thirds_1.getNode("Th-Third-3");
-												setHtmlContent(Th_Third_3, element, locale, urlMap);
+												setHtmlContent(Th_Third_3, element, locale, urlMap, new Elements());
 											} else {
 												sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-3'");
 												log.debug("Node doesn't exist with name : 'Th-Third-3'");
@@ -314,6 +348,22 @@ public class RSolutionIndex extends BaseAction {
 								}
 								count++;
 							}
+							
+							if (mainNode.hasNode("full_7")) {
+								Node full_7 = mainNode.getNode("full_7");
+								if(full_7.hasNode("Full")){
+									Node Full = full_7.getNode("Full");
+									if(Full.hasNode("header")){
+										Node header = Full.getNode("header");
+										if(StringUtils.isNotBlank(h2Text)){
+											header.setProperty("title", h2Text);
+										}else{
+											sb.append(Constants.TITLE_NODE_NOT_FOUND);
+										}
+									}
+								}
+							}
+							
 						} else {
 							sb.append(Constants.NO_ANCHOS_FOUND_IN_WEB_HTML_CONTENT);
 							log.debug("div element not found with class 'gd22v1-left'");
@@ -326,6 +376,93 @@ public class RSolutionIndex extends BaseAction {
 					log.debug("Excepiton ", e);
 				}
 				// End of logic for industries links migration.
+				//Start of logic for topics content.
+				try{
+					Elements spotlight_medium_v2 = doc.select("div.spotlight-medium-v2");
+					Node thirds = null;
+					if (mainNode.hasNode("thirds")) {
+						thirds = mainNode.getNode("thirds");
+					}
+					Elements element = new Elements();
+					Elements imgElements = new Elements();
+					int count = 1;
+					int index = 0;
+					for(Element ele : spotlight_medium_v2){
+						Elements webAElements = ele.getElementsByTag("a");
+						Elements webImgElements = ele.getElementsByTag("img");
+						if(webAElements != null && !webAElements.isEmpty()){
+							Element webAElement = webAElements.first();
+							log.debug("anchor element : "+webAElement.outerHtml());
+							element.add(webAElement);
+							if(!webImgElements.isEmpty()){
+								imgElements.add(webImgElements.first());
+							}
+							if (count % 3 == 0 || spotlight_medium_v2.size() == count) {
+								if (index == 0) {
+									if (thirds != null && thirds.hasNode("Th-Third-1")) {
+										Node Th_Third_1 = thirds.getNode("Th-Third-1");
+										setHtmlContent(Th_Third_1, element, locale, urlMap, imgElements);
+									} else {
+										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-1'");
+										log.debug("Node doesn't exist with name : 'Th-Third-1'");
+									}
+									element = new Elements();
+									imgElements = new Elements();
+								}
+								if (index == 1) {
+									if (thirds != null && thirds.hasNode("Th-Third-2")) {
+										Node Th_Third_2 = thirds.getNode("Th-Third-2");
+										setHtmlContent(Th_Third_2, element, locale, urlMap, imgElements);
+									} else {
+										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-2'");
+										log.debug("Node doesn't exist with name : 'Th-Third-2'");
+									}
+									element = new Elements();
+									imgElements = new Elements();
+								}
+
+								if (index == 2) {
+									if (thirds != null && thirds.hasNode("Th-Third-3")) {
+										Node Th_Third_3 = thirds.getNode("Th-Third-3");
+										setHtmlContent(Th_Third_3, element, locale, urlMap, imgElements);
+									} else {
+										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-3'");
+										log.debug("Node doesn't exist with name : 'Th-Third-3'");
+									}
+									element = new Elements();
+									imgElements = new Elements();
+								}
+								index++;
+							}
+							if (index > 2) {
+								sb.append(Constants.EXTRA_ANCHOR_LINK_FOUND_IN_WEB_HTML_CONTENT + "'" +webAElement.text()+"'");
+							}
+						}else{
+							log.debug("No Anchor elements found with in the div class 'spotlight-medium-v2'");
+						}
+						count++;
+					}
+					while(index < 3){
+						if(index == 0 && thirds != null && thirds.hasNode("Th-Third-1")){
+							Node Th_Third_1 = thirds.getNode("Th-Third-1");
+							setHtmlContent(Th_Third_1, new Elements(), locale, urlMap, new Elements());
+						}
+						
+						if(index == 1 && thirds != null && thirds.hasNode("Th-Third-2")){
+							Node Th_Third_2 = thirds.getNode("Th-Third-2");
+							setHtmlContent(Th_Third_2, new Elements(), locale, urlMap, new Elements());
+						}
+						
+						if(index == 2 && thirds != null && thirds.hasNode("Th-Third-3")){
+							Node Th_Third_3 = thirds.getNode("Th-Third-3");
+							setHtmlContent(Th_Third_3, new Elements(), locale, urlMap, new Elements());
+						}
+						index++;
+					}
+				}catch(Exception e){
+					log.error("Excepiton : ", e);
+				}
+				//End of logic for topics content.
 			} else {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
@@ -340,9 +477,11 @@ public class RSolutionIndex extends BaseAction {
 	}
 
 	public void setHtmlContent(Node node, Elements aElements, String locale,
-			Map<String, String> urlMap) {
+			Map<String, String> urlMap, Elements imgElements) {
+		log.debug("In the 'setHtmlContent' method to update the content in the html content of the wem");
 		try {
 			Elements product_contents = null;
+			Elements media = null;
 			Document document1 = null;
 			Node htmlblob = null;
 			if (node.hasNode("htmlblob")) {
@@ -350,21 +489,37 @@ public class RSolutionIndex extends BaseAction {
 				String wemhtml = htmlblob.hasProperty("html") ? htmlblob.getProperty("html").getString() : "";
 				document1 = Jsoup.parse(wemhtml);
 				product_contents = document1.select("div.product-content");
+				media = document1.select("div.media");
 			} else {
 				log.debug("'htmlblob' node not found with in the node : " + node.getPath());
 			}
-			if (aElements != null && !aElements.isEmpty()) {
 				int count = 0;
+				String imgSrc = "";
 				for (Element aElement : aElements) {
 					String aText = aElement.ownText();
 					String aLink = aElement.absUrl("href");
 					if(StringUtil.isBlank(aLink)){
 						aLink = aElement.attr("href");
 					}
+					if(imgElements.size()>0){
+						Element imgElement = imgElements.get(count);
+						imgSrc = imgElement.attr("src");
+					}
 					if (node.hasNode("htmlblob")) {
 						if (product_contents != null && !product_contents.isEmpty()) {
 							if (count < product_contents.size()) {
 								Element product_content = product_contents.get(count);
+								if(media != null && !media.isEmpty()){
+									Element mediaEle = media.get(count);
+									Elements imgelements = mediaEle.getElementsByTag("img");
+									if(imgelements != null && !imgelements.isEmpty()){
+										Element imgelement = imgelements.first();
+										if(StringUtils.isNotBlank(imgSrc)){
+											imgSrc = FrameworkUtils.migrateDAMContent(imgSrc, "", locale, sb);
+											imgelement.attr("src",imgSrc);
+										}
+									}
+								}
 								Elements wemAElements = product_content.getElementsByTag("a");
 								if (wemAElements != null && !wemAElements.isEmpty()) {
 									Element wemAElement = wemAElements.first();
@@ -384,10 +539,17 @@ public class RSolutionIndex extends BaseAction {
 					}
 					count++;
 				}
-			} else {
-				sb.append(Constants.NO_ANCHOS_FOUND_IN_WEB_HTML_CONTENT);
-				log.debug("No anchro elements found in the web html content.");
-			}
+				if(count<3){
+					while(count != 3 && count<product_contents.size()){
+					Element product_content = product_contents.get(count);
+					Elements wemAElements = product_content.getElementsByTag("a");
+					if (wemAElements != null && !wemAElements.isEmpty()) {
+						Element wemAElement = wemAElements.first();
+						sb.append(Constants.EXTRA_ANCHOR_LINK_FOUND_IN_WEM_HTML_CONTENT + "'" +wemAElement.text()+"'");
+					} 
+					count++;
+					}
+				}
 			if (document1 != null) {
 				Element bodyContentElement = document1.getElementsByTag("body").first();
 				String html = FrameworkUtils.extractHtmlBlobContent(bodyContentElement, "", locale, sb, urlMap);
