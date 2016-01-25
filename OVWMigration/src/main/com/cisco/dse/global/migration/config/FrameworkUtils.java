@@ -171,9 +171,12 @@ public class FrameworkUtils {
 
 		try {
 			if (StringUtils.isNotBlank(path)) {
+				//-----------------------------------------------------------------------------------------------
+				//If the image path is having '/content/en/us' or  '/c/en/us' then if condition is satisfied to get the imgReference property from the current image path.
 				if (path.indexOf("/content/en/us") != -1 || path.indexOf("/c/en/us") != -1) {
 					log.debug("image path is being from /c/en/us : " + path);
-					path = path.substring(0, path.lastIndexOf(".img"));
+					path = path.substring(0, path.lastIndexOf(".img"));//image path to get the node.
+					//if the image path is having any domain then removing the domain from url.
 					if (path.indexOf("http://") != -1 || path.indexOf("https://") != -1) {
 						try {
 							URL url = new URL(path);
@@ -182,32 +185,45 @@ public class FrameworkUtils {
 							log.error("Excepiton : ", e);
 						}
 					}
-					
+					//'/c' is a short url, hence updating it with the long url to get the node structure.
 					if (path.startsWith("/c/")) {
 						path = path.replace("/c/", "/content/");
 					}
+					//image path should have 'jcr:content' instead of '_jcr_content'.
 					if (path.indexOf("_jcr_content") != -1) {
 						path = path.replace("_jcr_content", "jcr:content");
 					}
-					Node referenceNodePath = session.getNode(path);
+					Node referenceNodePath = null;
+					if(session.itemExists(path)){
+						referenceNodePath = session.getNode(path);
+					}else{
+						log.debug("Path not found in the node structure : "+path);
+					}
 					if (referenceNodePath != null) {
 						path = referenceNodePath.hasProperty("fileReference") ? referenceNodePath.getProperty("fileReference").getString() : "";
 						log.debug("fileReference path for /c/en/us image path is : " + path);
+					}else{
+						log.debug("No fileReference path found in the path : "+referenceNodePath.getPath());
 					}
 					
 					log.debug("Hence retriving the file reference path is : " + path);
 				}
+				//--------------------------------------------------------------------------------------------------------
+				//if the current image path is not having '/content/dam/en/us' or '/content/dam' then if block will be executed.
 				if (path.indexOf("/content/dam/en/us") == -1
 						&& path.indexOf("/content/dam") == -1
 						&& path.indexOf("/c/dam/en/us") == -1
 						&& path.indexOf("/c/dam") == -1) {
 					log.debug("Path of the image is not a wem image path.");
+					//Adding the domain to the web image path, since to get the IO we need absolute url.
 					if (path.indexOf("http:") == -1
 							&& path.indexOf("https:") == -1) {
 						log.debug("Adding domain to the image path.");
 						path = path.trim();
 						path = "http://www.cisco.com" + path;
 					}
+					//if there is fileReference property in the wem, then updating the path with 'assets' will be replaced with 'global/locale' and 'en/us' will be replaced with 'global/locale'.
+					//if the fileReference property in the wem is blank then the web page image url, 'web' will be replaced with 'content/dam/global/locale', if there is no string 'web' image path then directly appending '/content/dam/global/locale' 
 					if (StringUtils.isNotBlank(imgRef)) {
 						imgRef = imgRef.replace("/assets", "/global/" + locale);
 						imgRef = imgRef.replace("/en/us", "/global/" + locale);
@@ -220,12 +236,13 @@ public class FrameworkUtils {
 							imgRef = "/content/dam/global/" + locale + imagePath;
 						}
 					}
+					//updating the name of the wem image path with the web image path.
 					if (path.lastIndexOf("/") != -1 && imgRef.lastIndexOf("/") != -1) {
 						String imageName = path.substring(path.lastIndexOf("/"), path.length());
 						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/")) + imageName;
 					}
-					newImagePath = setContentToDAM(path, imgRef);
-				} else if (!path.equalsIgnoreCase(imgRef)) {
+					newImagePath = setContentToDAM(path, imgRef, locale);//method to hit the service to migrate the image.
+				} else if (!path.equalsIgnoreCase(imgRef)) {//if the image path is form content dam and if the image paths of the wem and web are different when returning the web image path.
 					log.debug("Path of the image is wem image path." + path);
 					if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
 						log.debug("Adding domain to the image path.");
@@ -235,21 +252,20 @@ public class FrameworkUtils {
 					path = url.getPath();
 					log.debug("getPath : " + path);
 					return path;
-				} else {
+				} else {//if both the image paths are same in the wem and web then returning blank, which meaning to not update the fileReference.
 					return "";
 				}
 			}
 		} catch (Exception e) {
 			log.error("Exception : ", e);
-		}
-		finally  {
+		}finally  {
 			session.logout();
 			session = null;
 		}
 		return newImagePath;
 	}
 
-	public static String setContentToDAM(String path, String imgPath) {
+	public static String setContentToDAM(String path, String imgPath, String locale) {
 		log.debug("In the setContentToDAM method to migrate : " + path + " to " + imgPath);
 
 		Properties prop = new Properties();
@@ -272,7 +288,7 @@ public class FrameworkUtils {
 
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(host + "/bin/services/DAMMigration?imgPath="
-				+ path+"&imgRef="+imgPath);
+				+ path+"&imgRef="+imgPath+"&locale="+locale);
 		Credentials defaultcreds = new UsernamePasswordCredentials("admin",
 				"admin");
 		AuthScope authscope = new AuthScope(domain, 4502,
