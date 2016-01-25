@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 
+import javax.jcr.Node;
+
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
@@ -46,11 +48,12 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 		String errorMsg = "";
 		ResourceResolver resourceResolver = null;
 		InputStream is = null;
+		String log = "";
 		try {
 			String newImagePath = "";
 			String imgPath = request.getParameter("imgPath");
 			String imgRef = request.getParameter("imgRef");
-			
+			String locale = request.getParameter("locale");
 			
 			String extension = imgPath.substring(imgPath.lastIndexOf(".")+1, imgPath.length());
 			
@@ -80,6 +83,12 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 			}
 			if (imageAsset != null) {
 				newImagePath = imageAsset.getPath();
+				Node imgNode = imageAsset.adaptTo(Node.class);
+				Node jcr_content = (imgNode != null && imgNode.hasNode("jcr:content"))?imgNode.getNode("jcr:content"):null;
+				Node metadata = (jcr_content != null && jcr_content.hasNode("metadata"))?jcr_content.getNode("metadata"):null;
+				log = log + "metadata NodePath : "+metadata.getPath();
+				metadata.setProperty("jcr:language", locale);
+				metadata.getSession().save();
 			}
 			jsonObj.put("newImagePath", newImagePath);
 		} catch (Exception e) {
@@ -94,6 +103,7 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 		}
 		try{
 			jsonObj.put("error", errorMsg);
+			jsonObj.put("log",log);
 		}catch(Exception e){
 			LOG.error("Exception : ",e);
 		}
