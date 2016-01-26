@@ -783,5 +783,9 @@ public class Constants {
 	
 	//TITLE_NODE_NOT_FOUND
 	public static final String TITLE_NODE_NOT_FOUND = "<li>Title node not found.</li>";
+	
+	//TILE_BORDERED_LINK_TEXT_NODE_NOT_FOUND
+	public static final String TILE_BORDERED_LINK_TEXT_NODE_NOT_FOUND = "<li>Tile bordered link text node is not available</li>";
+	
 
 }

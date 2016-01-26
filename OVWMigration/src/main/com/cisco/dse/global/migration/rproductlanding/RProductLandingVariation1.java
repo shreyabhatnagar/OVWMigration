@@ -1433,7 +1433,8 @@ public class RProductLandingVariation1 extends BaseAction {
 					}
 					
 				}
-				if (doc.select("div.c42-pilot").size() > 0) {
+				//fix for htmlblob components
+				/*if (doc.select("div.c42-pilot").size() > 0) {
 					Element htmlBlobElement =  null;
 					htmlBlobElement = doc.select("div.c42-pilot").first();
 										
@@ -1463,9 +1464,13 @@ public class RProductLandingVariation1 extends BaseAction {
 						}
 					}
 					sb.append("<li>Mis-match of html blob components "+"web page has (1) and nodes are ("+htmlBlobSize+") </li>");
-				} else {
+				} */
+				if(htmlBlobSize >0){
 					sb.append("<li>Mis-match of html blob components "+"web page has (0) and nodes are ("+htmlBlobSize+") </li>");
-				}
+					log.debug("htmlblobs are available in the web page");
+				}else {
+					log.debug("htmlblobs are not found in the web page");
+				}				
 				//end of html blob
 				
 				
