@@ -498,6 +498,27 @@ public class RProductLandingVariation1 extends BaseAction {
 										} else {
 											sb.append(Constants.HERO_SLIDE_IMAGE_NODE_NOT_FOUND);
 										}
+										// start hero pop up
+										Node imageLinkNode = heroPanelNode.hasNode("imageLink")?heroPanelNode.getNode("imageLink"):null;
+										Node heroPanelPopUpNode = null;
+										Element lightBoxElement = null;
+										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+										if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+											lightBoxElement = lightBoxElements.first();
+										}
+										if (imageLinkNode != null) {
+											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+										}
+										if (heroPanelPopUpNode == null && lightBoxElement != null) {
+											sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+										}
+										if (heroPanelPopUpNode != null && lightBoxElement == null) {
+											sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+										}
+										if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
+											heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+										}
+										// end hero pop up
 									}
 								}
 							} else {

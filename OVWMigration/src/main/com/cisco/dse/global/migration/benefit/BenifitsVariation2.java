@@ -105,7 +105,8 @@ public class BenifitsVariation2 extends BaseAction{
 								for(Element text : textEle){
 									if(textNodeIterator.hasNext()){
 										textNode = (Node)textNodeIterator.next();
-										textNode.setProperty("text",text.outerHtml());
+										String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap);
+										textNode.setProperty("text", html);
 										log.debug("text node updated...");
 									}
 								}
@@ -113,7 +114,8 @@ public class BenifitsVariation2 extends BaseAction{
 								for(Element text : textEle){
 									if(textNodeIterator.hasNext()){
 										textNode = (Node)textNodeIterator.next();
-										textNode.setProperty("text",text.outerHtml());
+										String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap);
+										textNode.setProperty("text", html);
 										log.debug("text node updated...");
 									}
 
@@ -127,7 +129,8 @@ public class BenifitsVariation2 extends BaseAction{
 								if(list!=null){
 									if(textNodeIterator.hasNext()){
 										textNode = (Node)textNodeIterator.next();
-										textNode.setProperty("text",list.outerHtml());
+										String html = FrameworkUtils.extractHtmlBlobContent(list, "", locale, sb, urlMap);
+										textNode.setProperty("text", html);
 										log.debug("text node updated...");
 									}
 								}
@@ -142,7 +145,8 @@ public class BenifitsVariation2 extends BaseAction{
 							}
 							if(textNodeIterator.hasNext()){
 								textNode = (Node)textNodeIterator.nextNode();
-								textNode.setProperty("text",text.outerHtml());
+								String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap);
+								textNode.setProperty("text", html);
 								log.debug("text node updated...");
 							}
 							if(textNodeIterator.hasNext()){
@@ -152,7 +156,8 @@ public class BenifitsVariation2 extends BaseAction{
 							}
 							if(textNodeIterator.hasNext()){
 								textNode = (Node)textNodeIterator.next();
-								textNode.setProperty("text",list.outerHtml());
+								String html = FrameworkUtils.extractHtmlBlobContent(list, "", locale, sb, urlMap);
+								textNode.setProperty("text", html);
 								log.debug("text node updated...");
 							}
 							sb.append("<li>Extra text present on WEM page</li>");
@@ -236,7 +241,8 @@ public class BenifitsVariation2 extends BaseAction{
 							Element iframe = htmlblobEle.getElementsByTag("iframe").first();
 							if(iframe!=null){
 								if(hBlobNode!=null){
-									hBlobNode.setProperty("html",htmlblobEle.outerHtml());
+									String html = FrameworkUtils.extractHtmlBlobContent(htmlblobEle, "", locale, sb, urlMap);
+									hBlobNode.setProperty("html", html);
 								}
 							}else{
 								sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
