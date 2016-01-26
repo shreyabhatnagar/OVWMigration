@@ -469,10 +469,10 @@ public class ProductLandingVariation11 extends BaseAction {
 								if(spotLightComponentNode.hasProperty("linktrigger")){
 									String linkTrigger = spotLightComponentNode.getProperty("linktrigger").getValue().getString();
 									if(linkTrigger.equals("title")){
-										if(h2aHref != null){
+										if(!h2aHref.isEmpty()){
 											spotLightComponentNode.setProperty("linkurl", h2aHref);
 										}else {
-											sb.append(Constants.TITLE_DONOT_HAVE_LINK);
+											sb.append(Constants.EXTRA_CTA_LINK_IN_TILE_BORDERED);
 										}
 									}
 								}
@@ -707,7 +707,7 @@ public class ProductLandingVariation11 extends BaseAction {
 					if ("es_mx".equals(locale)) {
 						Elements textElements = doc.select("div.c00-pilot");
 						if(!textElements.isEmpty()){
-							sb.append(Constants.TEXT_NODE_NOT_FOUND);
+							sb.append(Constants.EXTRA_COMPONENT_BELOW_HERO);
 							log.debug("c00-pilot is available");
 						}else {
 							log.debug("c00-pilot is not available");
