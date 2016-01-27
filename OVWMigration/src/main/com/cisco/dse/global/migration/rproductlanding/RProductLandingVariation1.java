@@ -516,7 +516,7 @@ public class RProductLandingVariation1 extends BaseAction {
 											sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
 										}
 										if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
-											heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+											heroPanelPopUpNode.setProperty("header", heroPanelTitle);
 										}
 										// end hero pop up
 									}
