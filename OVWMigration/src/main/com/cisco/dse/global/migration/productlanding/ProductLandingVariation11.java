@@ -376,6 +376,7 @@ public class ProductLandingVariation11 extends BaseAction {
 					String pText = "";
 					String aText = "";
 					String aHref = "";
+					String h2aHref = "";
 
 					Elements tileBorderedElements = doc.select("div.c23-pilot");
 					// Node spotLightNode =
@@ -400,6 +401,24 @@ public class ProductLandingVariation11 extends BaseAction {
 							Elements h2TagText = ele.getElementsByTag("h2");
 							if (h2TagText != null) {
 								h2Text = h2TagText.html();
+								Element firsth2Anchor = h2TagText.first();
+								if(firsth2Anchor != null){
+									Element h2Anchor = firsth2Anchor.getElementsByTag("a").first();
+									//fix for h2 anchor tag
+									if(h2Anchor !=null){
+										h2aHref = h2Anchor.absUrl("href");
+										if(StringUtil.isBlank(aHref)){
+											h2aHref = h2Anchor.attr("href");
+										}
+										// Start extracting valid href
+										log.debug("Before tileborderedLinkUrl" + aHref + "\n");
+										aHref = FrameworkUtils.getLocaleReference(h2aHref, urlMap);
+										log.debug("after tileborderedLinkUrl" + aHref + "\n");
+										// End extracting valid href
+									
+									}
+									//end of fix for h2 anchor tag
+								}
 							} else {
 								sb.append("<li>TileBordered Component Heading element not having any title in it ('h2' is blank)</li>");
 							}
@@ -430,8 +449,34 @@ public class ProductLandingVariation11 extends BaseAction {
 							spotLightComponentNode.setProperty("title", h2Text);
 							spotLightComponentNode
 							.setProperty("description", pText);
-							spotLightComponentNode.setProperty("linktext", aText);
-							spotLightComponentNode.setProperty("linkurl", aHref);
+							
+							//fix for link text for report
+							if(spotLightComponentNode.hasProperty("linktext")){
+								if(anchorText != null){
+								spotLightComponentNode.setProperty("linktext", aText);
+								spotLightComponentNode.setProperty("linkurl", aHref);
+								}else{
+									sb.append(Constants.CTA_NOT_AVAILABLE);
+								}
+							}else {
+								if(anchorText != null){
+									sb.append(Constants.TILE_BORDERED_LINK_TEXT_NODE_NOT_FOUND);
+								}
+							}
+							
+							//fix for h2 anchor tag
+							if(spotLightComponentNode.hasProperty("linkurl")){
+								if(spotLightComponentNode.hasProperty("linktrigger")){
+									String linkTrigger = spotLightComponentNode.getProperty("linktrigger").getValue().getString();
+									if(linkTrigger.equals("title")){
+										if(!h2aHref.isEmpty()){
+											spotLightComponentNode.setProperty("linkurl", h2aHref);
+										}else {
+											sb.append(Constants.EXTRA_CTA_LINK_IN_TILE_BORDERED);
+										}
+									}
+								}
+							}
 
 						}
 						if (eleSize != nodeSize) {
@@ -656,6 +701,25 @@ public class ProductLandingVariation11 extends BaseAction {
 					sb.append("<li>Unable to update followus component. Exception found is:  "
 							+ e + "</li>");
 				}
+				
+				//Start of Check for extra text content
+				try {
+					if ("es_mx".equals(locale) || "es_intl".equals(locale)) {
+						Elements textElements = doc.select("div.c00-pilot");
+						if(!textElements.isEmpty()){
+							sb.append(Constants.EXTRA_COMPONENT_BELOW_HERO);
+							log.debug("c00-pilot is available");
+						}else {
+							log.debug("c00-pilot is not available");
+						}
+					}
+				} catch (Exception e) {
+
+					sb.append("<li>Unable to update text component. Exception found is:  "
+							+ e + "</li>");
+				}
+				//end of Check for extra text content
+
 
 				session.save();
 			}

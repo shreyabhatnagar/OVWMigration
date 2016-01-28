@@ -783,5 +783,15 @@ public class Constants {
 	
 	//TITLE_NODE_NOT_FOUND
 	public static final String TITLE_NODE_NOT_FOUND = "<li>Title node not found.</li>";
+	
+	//TILE_BORDERED_LINK_TEXT_NODE_NOT_FOUND
+	public static final String TILE_BORDERED_LINK_TEXT_NODE_NOT_FOUND = "<li>Title Link does not exist on the title of the tile bordered element in right rail for locale page.</li>";
+	
+	//EXTRA_COMPONENT_BELOW_HERO
+	public static final String EXTRA_COMPONENT_BELOW_HERO = "<li>Extra text component found below the hero component on the locale page.</li>";
+	
+	//EXTRA_CTA_LINK_IN_TILE_BORDERED
+	public static final String EXTRA_CTA_LINK_IN_TILE_BORDERED = "<li>Extra CTA link found on title bordered element in right rail for locale page.</li>";
+
 
 }

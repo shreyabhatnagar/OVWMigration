@@ -147,6 +147,8 @@ public class ProductListingVariation6 extends BaseAction {
 									if (drawersPanelElements != null && !drawersPanelElements.isEmpty()) {
 										int count = 0;
 										for (Element drawersPanelElement : drawersPanelElements) {
+											String panelTitle = "";
+											boolean imageSrcNotFoundFlag = false;
 											Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 											if (drawerPanelLiElements != null) {
 												for (Element drawerPanelLiElement : drawerPanelLiElements) {
@@ -163,7 +165,6 @@ public class ProductListingVariation6 extends BaseAction {
 													Elements seriesElements = drawerPanelLiElement.select("div.series");
 													if (seriesElements != null) {
 														Element seriesElement = seriesElements.first();
-														String panelTitle = "";
 														String linkUrl = "";
 														String panelDescription = "";
 														if (seriesElement != null) {
@@ -211,6 +212,8 @@ public class ProductListingVariation6 extends BaseAction {
 																	log.debug("drawerImage " + drawerImage + "\n");
 																	if (StringUtils.isNotBlank(drawerImage)) {
 																		drawersImageNode.setProperty("fileReference" , drawerImage);
+																	}else{
+																		imageSrcNotFoundFlag = true;
 																	}
 																} else {
 																	sb.append("<li>drawer image node doesn't exist</li>");
@@ -393,13 +396,15 @@ public class ProductListingVariation6 extends BaseAction {
 																				log.debug("linkurl property is not set at " + subdrawerpanel.getPath());
 																			}
 																			// start image
-																			if (StringUtils.isNotBlank(subDrawerImage) && subdrawerpanel.hasNode("subdrawers-image")) {
+																			if(subdrawerpanel.hasNode("subdrawers-image")) {
 																				Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
 																				String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
 																				subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale,sb);
 																				log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
 																				if (StringUtils.isNotBlank(subDrawerImage)) {
 																					subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
+																				}else{
+																					imageSrcNotFoundFlag = true;
 																				}
 																			} else {
 																				sb.append("<li>subdrawer image node doesn't exist</li>");
@@ -438,6 +443,9 @@ public class ProductListingVariation6 extends BaseAction {
 															}
 															if (!misMatchFlag) {
 																sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT);
+															}
+															if(imageSrcNotFoundFlag){
+																sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 															}
 												}
 											}

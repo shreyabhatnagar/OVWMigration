@@ -278,6 +278,38 @@ public class RProductLandingVariation2 extends BaseAction {
 											} else {
 												sb.append(Constants.HERO_SLIDE_IMAGE_NODE_NOT_FOUND);
 											}
+											// start hero pop up
+											Node imageLinkNode = heroPanelNode.hasNode("imageLink")?heroPanelNode.getNode("imageLink"):null;
+											Node heroPanelPopUpNode = null;
+											Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+											Element lightBoxElement = null;
+											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												lightBoxElement = lightBoxElements.first();
+											}
+											if (imageLinkNode != null) {
+												heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+											}
+											if (heroPanelPopUpNode == null && lightBoxElement != null) {
+												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+											}
+											if (heroPanelPopUpNode != null && lightBoxElement == null) {
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+											}
+											if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
+												heroPanelPopUpNode.setProperty("header", heroPanelTitle);
+											}
+											/*if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												Element lightBoxElement = lightBoxElements.first();
+												if (StringUtils.isNotBlank(heroPanelTitle)) {
+													if (heroPanelPopUpNode != null) {
+														heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+													} else {
+														sb.append("<li>Hero content video pop up node not found.</li>");
+														log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
+													}
+												}
+											}*/
+											// end hero pop up
 										}
 									}
 									if(noImageCount>=1){
@@ -380,6 +412,39 @@ public class RProductLandingVariation2 extends BaseAction {
 											sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
 										}
 										// end image
+										// start pop up
+										Node imageLinkNode = spNode.hasNode("imageLink")?spNode.getNode("imageLink"):null;
+										if (imageLinkNode != null) {
+											Node spotLightPopUpNode = null;
+											Elements lightBoxElements = spEle.select("a.c26v4-lightbox");
+											Element lightBoxElement = null;
+											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												lightBoxElement = lightBoxElements.first();
+											}
+											spotLightPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+											if (spotLightPopUpNode == null && lightBoxElement != null) {
+												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+											}
+											if (spotLightPopUpNode != null && lightBoxElement == null) {
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+											}
+											if (spotLightPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2Ele.text())) {
+												spotLightPopUpNode.setProperty("header", h2Ele.text());
+											}
+											/*if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												Element lightBoxElement = lightBoxElements.first();
+												spotLightPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+												if (StringUtils.isNotBlank(h2Ele.text())) {
+													if (spotLightPopUpNode != null) {
+														spotLightPopUpNode.setProperty("header", h2Ele.text());
+													} else {
+														sb.append("<li>spotlight video pop up node not found.</li>");
+														log.debug("No pop-up node found for the spotlight node " + imageLinkNode.getPath());
+													}
+												}
+											}*/
+										}
+										// end pop up
 										spNode.setProperty("title", h2Ele.text());
 										String pText = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap);
 										spNode.setProperty("description", pText);
@@ -446,6 +511,39 @@ public class RProductLandingVariation2 extends BaseAction {
 											sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
 										}
 										// end image
+										// start pop up
+										Node imageLinkNode = spNode.hasNode("imageLink")?spNode.getNode("imageLink"):null;
+										if (imageLinkNode != null) {
+											Node spotLightPopUpNode = null;
+											Elements lightBoxElements = spEle.select("a.c26v4-lightbox");
+											Element lightBoxElement = null;
+											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												lightBoxElement = lightBoxElements.first();
+											}
+											spotLightPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+											if (spotLightPopUpNode == null && lightBoxElement != null) {
+												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+											}
+											if (spotLightPopUpNode != null && lightBoxElement == null) {
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+											}
+											if (spotLightPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2Ele.text())) {
+												spotLightPopUpNode.setProperty("header", h2Ele.text());
+											}
+											/*if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												Element lightBoxElement = lightBoxElements.first();
+												spotLightPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+												if (StringUtils.isNotBlank(h2Ele.text())) {
+													if (spotLightPopUpNode != null) {
+														spotLightPopUpNode.setProperty("header", h2Ele.text());
+													} else {
+														sb.append("<li>spotlight video pop up node not found.</li>");
+														log.debug("No pop-up node found for the spotlight node " + imageLinkNode.getPath());
+													}
+												}
+											}*/
+										}
+										// end pop up
 										spNode.setProperty("title", h2Ele.text());
 										String pText = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap);
 										spNode.setProperty("description", pText);

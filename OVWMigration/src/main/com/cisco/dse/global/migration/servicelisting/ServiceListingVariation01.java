@@ -337,7 +337,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									if (StringUtils.isNotBlank(linkTextTobeAdded)) {
-										aText =  linkTextTobeAdded + "" + aText ;
+										aText =  linkTextTobeAdded + " " + aText ;
 										if (aText.indexOf(".") != -1) {
 											aText = aText.replace(".", "");
 											aText = aText + ".";											
@@ -463,7 +463,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									JSONObject obj = new JSONObject();
 									String aText = aElements.text();
 									if (StringUtils.isNotBlank(linkTextTobeAdded)) {
-										aText =  linkTextTobeAdded + "" + aText ;
+										aText =  linkTextTobeAdded + " " + aText ;
 										if (aText.indexOf(".") != -1) {
 											aText = aText.replace(".", "");
 											aText = aText + ".";											

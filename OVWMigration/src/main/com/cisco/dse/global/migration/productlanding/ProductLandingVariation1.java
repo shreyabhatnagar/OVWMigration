@@ -590,9 +590,11 @@ public class ProductLandingVariation1 extends BaseAction {
 																if (StringUtils.isNotBlank(linkUrl)) {
 																	drawersPanelNode.setProperty("linkurl", linkUrl);
 																} else {
-																	
-																	//sb.append("<li>Title Link of drawer panel doesn't exist for "+ panelTitle+" </li>");
+																	//fix for generating comment in the report
+																	if(drawersPanelNode.hasProperty("linkurl")){
+																	sb.append("<li>Title Link of drawer panel doesn't exist for "+ panelTitle+" </li>");
 																	log.debug("link url is blank for thr one of the panel.");
+																	}
 																}
 																if (StringUtils.isNotBlank(panelDescription)) {
 																	drawersPanelNode.setProperty("description", panelDescription);
