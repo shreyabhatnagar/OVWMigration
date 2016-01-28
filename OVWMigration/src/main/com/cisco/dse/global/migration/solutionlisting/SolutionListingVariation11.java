@@ -164,7 +164,23 @@ public class SolutionListingVariation11 extends BaseAction {
 							+ e + "</li>");
 				}
 
-
+				/*try{
+					Element textEle = doc.select("div.c00v0-pilot").first();
+					if(textEle != null){
+						if(indexMidLeftNode.hasNode("text")){
+							Node textNode = indexMidLeftNode.getNode("text");
+							textNode.setProperty("text", textEle.html());
+						}else{
+							sb.append(Constants.TEXT_NODE_NOT_FOUND);
+						}
+					}else{
+						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+					}
+				}catch(Exception e){
+					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
+					log.error("Unable to migrate text component."+e);
+				}
+*/
 				// end set text
 				// ---------------------------------------------------------------------------------------------------------------------------------------
 				// start set spotlight component.
