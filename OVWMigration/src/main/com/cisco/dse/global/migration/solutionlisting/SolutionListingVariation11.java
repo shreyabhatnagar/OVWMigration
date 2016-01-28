@@ -87,7 +87,7 @@ public class SolutionListingVariation11 extends BaseAction {
 
 
 				// start set text component.
-				/*try {
+				try {
 					Elements textElements = doc.select("div.c00v0-alt1-pilot");
 					if (textElements != null) {
 						Node textNode = indexMidLeftNode.hasNode("text") ? indexMidLeftNode	.getNode("text"): null;
@@ -162,9 +162,9 @@ public class SolutionListingVariation11 extends BaseAction {
 				} catch (Exception e) {
 					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
 							+ e + "</li>");
-				}*/
+				}
 
-				try{
+				/*try{
 					Element textEle = doc.select("div.c00v0-pilot").first();
 					if(textEle != null){
 						if(indexMidLeftNode.hasNode("text")){
@@ -180,7 +180,7 @@ public class SolutionListingVariation11 extends BaseAction {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Unable to migrate text component."+e);
 				}
-
+*/
 				// end set text
 				// ---------------------------------------------------------------------------------------------------------------------------------------
 				// start set spotlight component.
