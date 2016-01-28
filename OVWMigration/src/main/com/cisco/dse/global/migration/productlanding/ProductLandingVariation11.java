@@ -193,15 +193,20 @@ public class ProductLandingVariation11 extends BaseAction {
 											}
 											
 											Node heroPanelPopUpNode = null;
+											Element lightBoxElement = null;
 											Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
 											if(lightBoxElements != null && !lightBoxElements.isEmpty()){
-												Element lightBoxElement = lightBoxElements.first();
-												heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+												lightBoxElement = lightBoxElements.first();
 											}
-											if(heroPanelPopUpNode != null){
+											if (heroPanelPopUpNode == null && lightBoxElement != null) {
+												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+											}
+											if (heroPanelPopUpNode != null && lightBoxElement == null) {
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+											}
+											if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2Text)) {
 												heroPanelPopUpNode.setProperty("popupHeader", h2Text);
-											}else{
-												sb.append("<li>Hero content video pop up node not found.</li>");
 											}
 											
 											heroPanelNode.setProperty("title", h2Text);

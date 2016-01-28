@@ -563,11 +563,25 @@ public class ProductLandingVariation10 extends BaseAction {
 			log.debug("heroImage before migration : " + heroImage + "\n");
 			if (heroPanelNode != null) {
 				Node heroPanelPopUpNode = null;
+				Element lightBoxElement = null;
 				Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+				heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+				lightBoxElements = !lightBoxElements.isEmpty() ? lightBoxElements : ele.select("div.c50-text").select("a.c26v4-lightbox");
+				
 				if(lightBoxElements != null && !lightBoxElements.isEmpty()){
-					Element lightBoxElement = lightBoxElements.first();
-					heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+					lightBoxElement = lightBoxElements.first();
 				}
+
+				if (heroPanelPopUpNode == null && lightBoxElement != null) {
+					sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+				}
+				if (heroPanelPopUpNode != null && lightBoxElement == null) {
+					sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+				}
+				if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(title)) {
+					heroPanelPopUpNode.setProperty("popupHeader", title);
+				}
+				
 				if (heroPanelNode.hasNode("image")) {
 					Node imageNode = heroPanelNode.getNode("image");
 					String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
@@ -580,12 +594,6 @@ public class ProductLandingVariation10 extends BaseAction {
 					}
 				} else {
 					sb.append("<li>hero image node doesn't exist</li>");
-				}
-				
-				if(heroPanelPopUpNode != null){
-					heroPanelPopUpNode.setProperty("popupHeader", title);
-				}else{
-					sb.append("<li>Hero content video pop up node not found.</li>");
 				}
 				
 				heroPanelNode.setProperty("title", title);

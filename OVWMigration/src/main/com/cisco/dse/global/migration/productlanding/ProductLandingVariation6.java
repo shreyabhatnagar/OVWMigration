@@ -157,33 +157,41 @@ public class ProductLandingVariation6 extends BaseAction {
 												}else{
 													sb.append("<li>No heropanel Node found.</li>");
 												}
-
-												Node heroPanelPopUpNode = null;
-												Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
-												if(lightBoxElements != null && !lightBoxElements.isEmpty()){
-													Element lightBoxElement = lightBoxElements.first();
-													heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heropanelNode);
-												}
-
+												
+												
 												Elements h2Elements = ele.getElementsByTag("h2");
+												String h2 = "";
 												if (h2Elements != null) {
 													Element h2element = h2Elements.first();
 													if (h2element != null) {
-														String h2 = h2element.text();
+														h2 = h2element.text();
 														heropanelNode.setProperty("title", h2);
-														if(heroPanelPopUpNode != null){
-															heroPanelPopUpNode.setProperty("popupHeader", h2);
-														}else{
-															if(lightBoxElements != null && !lightBoxElements.isEmpty()){
-																sb.append("<li>Hero content video pop up node not found.</li>");
-															}
-														}
 													} else {
 														sb.append("<li>No heading foundin hero panel.</li>");
 													}
 												} else {
 													sb.append("<li>No heading found in hero panel.</li>");
 												}
+												
+												//video pop up
+												Node heroPanelPopUpNode = null;
+												Element lightBoxElement = null;
+												Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+												heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heropanelNode);
+												if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+													lightBoxElement = lightBoxElements.first();
+												}
+												if (heroPanelPopUpNode == null && lightBoxElement != null) {
+													sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+												}
+												if (heroPanelPopUpNode != null && lightBoxElement == null) {
+													sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+												}
+												if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2)) {
+													heroPanelPopUpNode.setProperty("popupHeader", h2);
+												}
+												//video pop up end
+												
 												Elements pElements = ele
 														.getElementsByTag("p");
 												if (pElements != null) {
@@ -231,7 +239,7 @@ public class ProductLandingVariation6 extends BaseAction {
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
 														}else{
-															sb.append("<li> image is not found on locale page's hero element. </li>");
+																sb.append("<li> image is not found on locale page's hero element. </li>");
 														}
 													} else {
 														sb.append("<li>hero image node doesn't exist</li>");
