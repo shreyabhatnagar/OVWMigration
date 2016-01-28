@@ -203,13 +203,14 @@ public class FrameworkUtils {
 						path = referenceNodePath.hasProperty("fileReference") ? referenceNodePath.getProperty("fileReference").getString() : "";
 						log.debug("fileReference path for /c/en/us image path is : " + path);
 					}else{
-						log.debug("No fileReference path found in the path : "+referenceNodePath.getPath());
+						log.debug("No fileReference path found in the path : ");
 					}
 					
 					log.debug("Hence retriving the file reference path is : " + path);
 				}
 				//--------------------------------------------------------------------------------------------------------
 				//if the current image path is not having '/content/dam/en/us' or '/content/dam' then if block will be executed.
+				if (StringUtils.isNotBlank(path)) {
 				if (path.indexOf("/content/dam/en/us") == -1
 						&& path.indexOf("/content/dam") == -1
 						&& path.indexOf("/c/dam/en/us") == -1
@@ -255,6 +256,10 @@ public class FrameworkUtils {
 				} else {//if both the image paths are same in the wem and web then returning blank, which meaning to not update the fileReference.
 					return "";
 				}
+			} else {
+				log.debug("returning null : " + path);
+				return null;
+			}
 			}
 		} catch (Exception e) {
 			log.error("Exception : ", e);
