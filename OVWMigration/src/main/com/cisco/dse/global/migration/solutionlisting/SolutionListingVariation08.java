@@ -181,9 +181,11 @@ public class SolutionListingVariation08 extends BaseAction {
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
 														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 														log.debug("heroImage after migration : " + heroImage);
-														if (StringUtils.isNotBlank(heroImage)) {
+														if (StringUtils.isNotBlank(heroImage)) {															
 															imageNode.setProperty("fileReference" , heroImage);
-														}else{
+														}
+														if (heroImage == null){
+															log.debug("count is increasing for " + heroPanelNode.getPath());
 															imgSrcNotFoundCount++;
 														}
 													} else {
@@ -261,9 +263,10 @@ public class SolutionListingVariation08 extends BaseAction {
 												}
 											
 										}
-												if(imgSrcNotFoundCount > 0){
-													sb.append("<li> "+imgSrcNotFoundCount+" image(s) are not found on locale page for hero panel </li>");
-												}
+												
+										}
+										if(imgSrcNotFoundCount > 0){
+											sb.append("<li> "+imgSrcNotFoundCount+" image(s) are not found on locale page for hero panel </li>");
 										}
 								} else {
 									isHero = false;//No Hero Content Node Found.
