@@ -27,7 +27,7 @@ import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class PartnerVariation1 extends BaseAction {
 
 	Document doc;
-
+	Document securedDoc;
 	StringBuilder sb = new StringBuilder(1024);
 
 	static Logger log = Logger.getLogger(PartnerVariation1.class);
@@ -61,14 +61,14 @@ public class PartnerVariation1 extends BaseAction {
 			sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 			sb.append("<td><ul>");
 
-			javax.jcr.Node partnerLeftNode = null;
-			javax.jcr.Node partnerRightNode = null;
-			javax.jcr.Node partnerMidNode = null;
-			javax.jcr.Node partnerBottomNode = null;
-			javax.jcr.Node partnerDownLeftNode = null;
-			javax.jcr.Node partnerDownMidNode = null;
-			javax.jcr.Node partnerDownBottomNode = null;
-			javax.jcr.Node pageJcrNode = null;
+			Node partnerLeftNode = null;
+			Node partnerRightNode = null;
+			Node partnerMidNode = null;
+			Node partnerBottomNode = null;
+			Node partnerDownLeftNode = null;
+			Node partnerDownMidNode = null;
+			Node partnerDownBottomNode = null;
+			Node pageJcrNode = null;
 
 			partnerLeftNode = session.getNode(partnerLeft);
 			partnerRightNode = session.getNode(partnerRight);
@@ -86,6 +86,11 @@ public class PartnerVariation1 extends BaseAction {
 				log.error("Exception : ",e);
 			}
 
+			try{
+				securedDoc = getSecuredConnection(loc);
+			}catch(Exception e){
+				log.error("Exception : ",e);
+			}
 
 			if (doc != null) {
 				// start set page properties.
@@ -98,15 +103,8 @@ public class PartnerVariation1 extends BaseAction {
 					Element heroEle = doc.select("div.c50v3-pilot").first();
 					if(heroEle != null){
 						Node heroNode = partnerLeftNode.hasNode("hero_large")?partnerLeftNode.getNode("hero_large"):null;
-						Node heroDownNode = partnerDownLeftNode.hasNode("hero_full")?partnerDownLeftNode.getNode("hero_full"):null;
 						if(heroNode != null){
 							migrateHero(heroNode, heroEle, locale, urlMap);
-							log.debug("Hero Element Migrated");
-						}else{
-							sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
-						}
-						if(heroDownNode != null){
-							migrateHero(heroDownNode, heroEle, locale, urlMap);
 							log.debug("Hero Element Migrated");
 						}else{
 							sb.append(Constants.HERO_CONTENT_NODE_NOT_FOUND);
@@ -114,6 +112,21 @@ public class PartnerVariation1 extends BaseAction {
 					}else{
 						sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 					}
+					
+					log.debug("Start Secured Hero Element Migration.");
+					Element secHeroEle = securedDoc.select("div.c50v6-pilot").first();
+					if(secHeroEle != null){
+						Node heroDownNode = partnerDownLeftNode.hasNode("hero_full")?partnerDownLeftNode.getNode("hero_full"):null;
+						if(heroDownNode != null){
+							migrateHero(heroDownNode, secHeroEle, locale, urlMap);
+							log.debug("Secured Hero Element Migrated");
+						}else{
+							sb.append(Constants.SECURED_HERO_CONTENT_NODE_NOT_FOUND);
+						}
+					}else{
+						sb.append(Constants.SECURED_HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
+					}
+					
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
 					log.debug("Exception in Hero Element Migration"+e);
@@ -136,16 +149,24 @@ public class PartnerVariation1 extends BaseAction {
 				try{
 					log.debug("start Html Blobs migration");
 					Element midEle = doc.select("div.gd13v2-pilot").first();
-					boolean loggedIn = true;
 					if(midEle != null){
-						migrateHtmlBlobs(midEle , partnerMidNode, locale , urlMap , loggedIn);
-						log.debug("Html Blobs Element Migrated");
-						loggedIn = false;
-						migrateHtmlBlobs(midEle , partnerDownMidNode, locale , urlMap , loggedIn);
+						migrateHtmlBlobs(midEle , partnerMidNode, locale , urlMap);
 						log.debug("Html Blobs Element Migrated");
 					}else{
 						sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 					}
+					
+					log.debug("start Secured Html Blobs migration");
+					Element secMidEle = securedDoc.select("div.gd13v2-pilot").first();
+					if(secMidEle != null){
+						migrateHtmlBlobs(secMidEle , partnerDownMidNode, locale , urlMap);
+						log.debug("Secured Html Blobs Element Migrated");
+					}else{
+						sb.append(Constants.SECURED_HTMLBLOB_CONTENT_DOES_NOT_EXIST);
+					}
+					
+					
+					
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.debug("Exception in Top Right Element Migration"+e);
@@ -159,18 +180,24 @@ public class PartnerVariation1 extends BaseAction {
 					if(textEle != null){
 						migrateText(textEle , partnerBottomNode , locale, urlMap);
 						log.debug("Text is Migrated");
-						migrateText(textEle , partnerDownBottomNode , locale, urlMap);
-						log.debug("Text is Migrated");
 					}else{
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
+					
+					log.debug("Secured start Text Migration");
+					Element secTextEle = securedDoc.select("div.gd11-pilot").last().select("div.gd13v2-pilot").first();
+					if(secTextEle != null){
+						migrateText(secTextEle , partnerDownBottomNode , locale, urlMap);
+						log.debug("Secured Text is Migrated");
+					}else{
+						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
+					}
+					
 				}catch(Exception e){
 					log.debug("Exception in Text Migration");
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
 				//End text Migration
-
-
 			}else{
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
@@ -186,6 +213,7 @@ public class PartnerVariation1 extends BaseAction {
 
 
 	private void migrateHero(Node heroNode , Element heroEle , String locale , Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+		log.debug("In the migrateHero.");
 		Node heroPanelNode = heroNode.hasNode("heropanel_0")?heroNode.getNode("heropanel_0"):null;
 		if(heroPanelNode != null){
 			Element h2hero = heroEle.getElementsByTag("h2").first();
@@ -242,7 +270,7 @@ public class PartnerVariation1 extends BaseAction {
 	}
 
 	private void migrateHtmlBlobs(Element midEle, Node partnerMidNode,
-			String locale, Map<String, String> urlMap, boolean loggedIn) throws RepositoryException {
+			String locale, Map<String, String> urlMap) throws RepositoryException {
 		NodeIterator midNodes = partnerMidNode.hasNode("gd13v2-left")?partnerMidNode.getNodes("gd13v2-*"):null;
 		if(midNodes != null){
 			int size = (int)midNodes.getSize();
@@ -257,9 +285,6 @@ public class PartnerVariation1 extends BaseAction {
 						if(midNode.hasNode("htmlblob")){
 							Node htmlBlobNode = midNode.getNode("htmlblob");
 							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
-							if(!loggedIn){
-								outerHtml = outerHtml.replace("<p", "<!--<p").replace("p>", "p>-->");
-							}
 							htmlBlobNode.setProperty("html", outerHtml);
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -272,9 +297,6 @@ public class PartnerVariation1 extends BaseAction {
 								sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 							}
 							Node htmlBlobNode = midNode.getNode("htmlblob_0");
-							if(!loggedIn){
-								htmlBlob.getElementsByTag("img").remove();
-							}
 							htmlBlobNode.setProperty("html",  FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap));
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -286,9 +308,6 @@ public class PartnerVariation1 extends BaseAction {
 						if(midNode.hasNode("htmlblob")){
 							Node htmlBlobNode = midNode.getNode("htmlblob");
 							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
-							if(!loggedIn){
-								outerHtml = outerHtml.replace("<p", "<!--<p").replace("p>", "p>-->");
-							}
 							htmlBlobNode.setProperty("html", outerHtml);
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -301,9 +320,6 @@ public class PartnerVariation1 extends BaseAction {
 								sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 							}
 							Node htmlBlobNode = midNode.getNode("htmlblob_0");
-							if(!loggedIn){
-								htmlBlob.getElementsByTag("img").remove();
-							}
 							htmlBlobNode.setProperty("html",  FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap));
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -319,9 +335,6 @@ public class PartnerVariation1 extends BaseAction {
 							if(midNode.hasNode("htmlblob")){
 								Node htmlBlobNode = midNode.getNode("htmlblob");
 								String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
-								if(!loggedIn){
-									outerHtml = outerHtml.replace("<p", "<!--<p").replace("p>", "p>-->");
-								}
 								htmlBlobNode.setProperty("html", outerHtml);
 							}else{
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -334,9 +347,6 @@ public class PartnerVariation1 extends BaseAction {
 									sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 								}
 								Node htmlBlobNode = midNode.getNode("htmlblob_0");
-								if(!loggedIn){
-									htmlBlob.getElementsByTag("img").remove();
-								}
 								htmlBlobNode.setProperty("html",  FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap));
 							}else{
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
