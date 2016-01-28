@@ -195,13 +195,25 @@ public class SolutionListingVariation08 extends BaseAction {
 												
 												// end image
 												if (heroPanelNode != null) {
+													//start of hero pop up
 													Node heroPanelPopUpNode = null;
+													Element lightBoxElement = null;
 													Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
 													if(lightBoxElements != null && !lightBoxElements.isEmpty()){
 														sb.append("inside if condition."+heroPanelNode.getPath());
-														Element lightBoxElement = lightBoxElements.first();
-														heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+														lightBoxElement = lightBoxElements.first();
 													}
+													heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+													if (heroPanelPopUpNode == null && lightBoxElement != null) {
+														sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+													}
+													if (heroPanelPopUpNode != null && lightBoxElement == null) {
+														sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+													}
+													if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
+														heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+													}
+													//end of hero pop up
 													Elements h2TagText = ele.getElementsByTag("h2");
 													if (h2TagText != null) {
 														heroPanelTitle = h2TagText.html();
@@ -210,11 +222,6 @@ public class SolutionListingVariation08 extends BaseAction {
 													}
 													if (StringUtils.isNotBlank(heroPanelTitle)) {
 														heroPanelNode.setProperty("title", heroPanelTitle);
-														if(heroPanelPopUpNode != null){
-															heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
-														}else{
-															sb.append("<li>Hero content video pop up node not found.</li>");
-														}
 													}else {
 														sb.append("<li>title of hero slide doesn't exist</li>");
 													}

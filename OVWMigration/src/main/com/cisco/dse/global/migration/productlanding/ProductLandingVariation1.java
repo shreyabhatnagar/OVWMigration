@@ -329,20 +329,24 @@ public class ProductLandingVariation1 extends BaseAction {
 									
 									int imageSrcEmptyCount = 0;
 									if (heroPanelNode != null) {
+										//start of hero pop up 
 										Node heroPanelPopUpNode = null;
+										Element lightBoxElement = null;
 										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
 										if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
-											Element lightBoxElement = lightBoxElements.first();
-											heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
-											if (StringUtils.isNotBlank(heroPanelTitle)) {
-												if (heroPanelPopUpNode != null) {
-													heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
-												} else {
-													sb.append("<li>Hero content video pop up node not found.</li>");
-													log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
-												}
-											}
+											  lightBoxElement = lightBoxElements.first();
 										}
+										heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heroPanelNode);
+										if (heroPanelPopUpNode == null && lightBoxElement != null) {
+											sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+										}
+										if (heroPanelPopUpNode != null && lightBoxElement == null) {
+											sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+										}
+										if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle))  {
+												heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+										} 
+										//end of hero pop up
 										if (StringUtils.isNotBlank(heroPanelTitle)) {
 											heroPanelNode.setProperty("title", heroPanelTitle);
 										} else {
@@ -386,8 +390,10 @@ public class ProductLandingVariation1 extends BaseAction {
 										if(imageSrcEmptyCount > 0){
 											sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on locale page for hero panel </li>");
 										}
-									} 
+								}else{
+									sb.append("<li>hero node doesn't exist</li>");
 								}
+							}
 							} else {
 								log.debug("<li>Hero Large Frames/Panel Elements is not found</li>");
 								log.debug("No div found with class 'frame'");
@@ -400,6 +406,7 @@ public class ProductLandingVariation1 extends BaseAction {
 						sb.append("<li>Hero Large component is not found on web publisher page</li>");
 						log.debug("No element found with class 'c50-pilot'");
 					}
+						
 				} catch (Exception e) {
 					sb.append("<li>Unable to update hero_large component.</li>");
 					log.debug("Exception : ", e);
