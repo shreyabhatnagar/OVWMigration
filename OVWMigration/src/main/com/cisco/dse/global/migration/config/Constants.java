@@ -17,6 +17,9 @@ public class Constants {
 	// HTMLBLOB_CONTENT_DOES_NOT_EXIST
 	public static final String HTMLBLOB_CONTENT_DOES_NOT_EXIST  = "<li>Htmlblob content doesn't exist </li>";
 
+	//SECURED_HTMLBLOB_CONTENT_DOES_NOT_EXIST
+	public static final String SECURED_HTMLBLOB_CONTENT_DOES_NOT_EXIST  = "<li>Secured Htmlblob content doesn't exist </li>";
+	
 	// HTMLBLOB_NODE_DOES_NOT_EXIST
 	public static final String HTMLBLOB_NODE_DOES_NOT_EXIST  = "<li>Htmlblob node doesn't exist. </li>";
 
@@ -119,6 +122,9 @@ public class Constants {
 
 	//HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND
 	public static final String HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND = "<li>Hero content panel element not found.</li>";
+
+	//SECURED_HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND
+	public static final String SECURED_HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND = "<li>Secured Hero content panel element not found.</li>";
 	
 	//HERO_CONTENT_PANEL_TEXT_ELEMENT_NOT_FOUND
 	public static final String HERO_CONTENT_PANEL_TEXT_ELEMENT_NOT_FOUND = "<li>Hero content panel text element not found.</li>";
@@ -131,6 +137,9 @@ public class Constants {
 
 	//HERO_CONTENT_NODE_NOT_FOUND
 	public static final String HERO_CONTENT_NODE_NOT_FOUND = "<li>Hero content node not found.</li>";
+
+	//SECURED_HERO_CONTENT_NODE_NOT_FOUND
+	public static final String SECURED_HERO_CONTENT_NODE_NOT_FOUND = "<li>Secured Hero content node not found.</li>";
 	
 	//HERO_CONTENT_IMAGE_NODE_NOT_FOUND
 	public static final String HERO_CONTENT_IMAGE_NODE_NOT_FOUND = "<li>Hero content image node not found.</li>";
