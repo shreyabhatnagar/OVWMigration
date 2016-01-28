@@ -191,11 +191,11 @@ public class OVWMigration {
 															log.debug("variation : " + variation);
 															log.debug("actual type : " + variationType);
 															String pageUrl = "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot")) {
+															if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 															}else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
-															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about") || variation.startsWith("sWebVar10"))){
+															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about"))){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
 															} else if(StringUtils.isNotBlank(variation) && variation.startsWith("infrastructure")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/network-infrastructure");
