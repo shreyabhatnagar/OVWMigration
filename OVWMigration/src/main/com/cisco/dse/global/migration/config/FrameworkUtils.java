@@ -170,6 +170,12 @@ public class FrameworkUtils {
 		Session session = getSession();
 
 		try {
+			
+			//returning the image path if it have the current locale in it, since if the image is having locale then it is said to be already migrated.
+			if(imgRef.indexOf(locale) != -1){
+				return imgRef;
+			}
+			
 			if (StringUtils.isNotBlank(path)) {
 				//-----------------------------------------------------------------------------------------------
 				//If the image path is having '/content/en/us' or  '/c/en/us' then if condition is satisfied to get the imgReference property from the current image path.
@@ -231,8 +237,8 @@ public class FrameworkUtils {
 					} else {
 						URL url = new URL(path);
 						String imagePath = url.getPath();
-						if (imagePath.indexOf("/web") != -1) {
-							imgRef = imagePath.replace("/web", "/content/dam/global/" + locale);
+						if (imagePath.startsWith("/web/")) {
+							imgRef = imagePath.replace("/web/", "/content/dam/global/" + locale+"/");
 						} else {
 							imgRef = "/content/dam/global/" + locale + imagePath;
 						}
