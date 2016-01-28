@@ -228,8 +228,10 @@ public class ProductListingVariation6 extends BaseAction {
 																}
 																if (StringUtils.isNotBlank(linkUrl)) {
 																	drawersPanelNode.setProperty("linkurl", linkUrl);
-																} else {
-																	sb.append(Constants.DRAWER_PANEL_LINK_TITLE_NOT_FOUND);
+																}else {
+																	if(drawersPanelNode.hasProperty("linkurl")){
+																		sb.append(Constants.DRAWER_PANEL_LINK_TITLE_NOT_FOUND);
+																	}
 																}
 																if (StringUtils.isNotBlank(panelDescription)) {
 																	drawersPanelNode.setProperty("description", panelDescription);
@@ -442,7 +444,7 @@ public class ProductListingVariation6 extends BaseAction {
 																previousTitle = title;
 															}
 															if (!misMatchFlag) {
-																sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT);
+																sb.append(Constants.MIS_MATCH_IN_SUB_DRAWER_PANEL_COUNT+" \""+panelTitle+"\"");
 															}
 															if(imageSrcNotFoundFlag){
 																sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
