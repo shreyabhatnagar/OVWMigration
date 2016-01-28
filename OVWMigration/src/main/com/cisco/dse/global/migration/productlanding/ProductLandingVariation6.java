@@ -133,12 +133,12 @@ public class ProductLandingVariation6 extends BaseAction {
 										.getNode("gd12v2-left");
 								if (gd12v2_left.hasNode("hero_large")) {
 									Node hero_large = gd12v2_left.getNode("hero_large");
-									
+
 									Property panelNodesProperty = hero_large.hasProperty("panelNodes")?hero_large.getProperty("panelNodes"):null;
 									if(panelNodesProperty.isMultiple()){
 										panelPropertiest = panelNodesProperty.getValues();
 									}
-									
+
 									if (frameElements != null) {
 										if (frameElements.size()>0) {
 											int i = 0;
@@ -157,14 +157,14 @@ public class ProductLandingVariation6 extends BaseAction {
 												}else{
 													sb.append("<li>No heropanel Node found.</li>");
 												}
-												
+
 												Node heroPanelPopUpNode = null;
 												Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
 												if(lightBoxElements != null && !lightBoxElements.isEmpty()){
 													Element lightBoxElement = lightBoxElements.first();
 													heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(heropanelNode);
 												}
-												
+
 												Elements h2Elements = ele.getElementsByTag("h2");
 												if (h2Elements != null) {
 													Element h2element = h2Elements.first();
@@ -174,7 +174,9 @@ public class ProductLandingVariation6 extends BaseAction {
 														if(heroPanelPopUpNode != null){
 															heroPanelPopUpNode.setProperty("popupHeader", h2);
 														}else{
-															sb.append("<li>Hero content video pop up node not found.</li>");
+															if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+																sb.append("<li>Hero content video pop up node not found.</li>");
+															}
 														}
 													} else {
 														sb.append("<li>No heading foundin hero panel.</li>");
@@ -229,7 +231,7 @@ public class ProductLandingVariation6 extends BaseAction {
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
 														}else{
-																sb.append("<li> image is not found on locale page's hero element. </li>");
+															sb.append("<li> image is not found on locale page's hero element. </li>");
 														}
 													} else {
 														sb.append("<li>hero image node doesn't exist</li>");
@@ -497,99 +499,93 @@ public class ProductLandingVariation6 extends BaseAction {
 				// --------------------------------------------------------------------------------------------------------------------------
 				// start of Grid one.
 				try {
-					Elements bdr_1 = null;
-					Elements gd12v2_pilots = doc.select("div.gd12v2-pilot");
-					if (gd12v2_pilots != null) {
-						bdr_1 = gd12v2_pilots.select("h2.bdr-1");
-						if (bdr_1.size() == 0) {
-							bdr_1 = doc.select("h2.bdr-1");
+					Elements gd11v1 = doc.select("div.gd11v1-mid");
+					int i = 0;
+					if (gd11v1 != null) {
+						if (layoutOverViewNode != null) {
+							if (layoutOverViewNode.hasNode("gd11v1")) {
+								Node gd11v1_Nodes = layoutOverViewNode
+										.getNode("gd11v1");
+								if (gd11v1_Nodes.hasNode("gd11v1-mid")) {
+									Node gd11v1_midNode = gd11v1_Nodes
+											.getNode("gd11v1-mid");
+									if (gd11v1_midNode.hasNode("htmlblob_0")) {
+										Node htmlblob_0 = gd11v1_midNode
+												.getNode("htmlblob_0");
+										Element gd11v1_mid = gd11v1.get(i).getElementsByClass("c00-pilot").first();
+										if (gd11v1_mid != null) {
+											htmlblob_0.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gd11v1_mid, "", locale, sb, urlMap));
+										} else {
+											sb.append("<li>Heading of the grid is blank.</li>");
+										}
+									} else {
+										sb.append("<li>'htmlblob_0' node doesn't exists.</li>");
+									}
+								} else {
+									sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
+								}
+							} else {
+								sb.append("<li>'gd11v1' Node doesn't exist.</li>");
+							}
+							i++;
+							if (layoutOverViewNode.hasNode("gd11v1_0")) {
+								Node gd11v1_0_Nodes = layoutOverViewNode
+										.getNode("gd11v1_0");
+								if (gd11v1_0_Nodes.hasNode("gd11v1-mid")) {
+									Node gd11v1_midNode = gd11v1_0_Nodes
+											.getNode("gd11v1-mid");
+									if (gd11v1_midNode.hasNode("htmlblob")) {
+										Node htmlblob = gd11v1_midNode
+												.getNode("htmlblob");
+										Element gd11v1_mid = gd11v1.get(i).getElementsByClass("c00-pilot").first();
+										if (gd11v1_mid != null ) {
+											htmlblob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gd11v1_mid, "", locale, sb, urlMap));
+										} else {
+											sb.append("<li>Heading of the grid is blank.</li>");
+										}
+									} else {
+										sb.append("<li>'htmlblob' node doesn't exists.</li>");
+									}
+								} else {
+									sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
+								}
+							} else {
+								sb.append("<li>'gd11v1_0' Node doesn't exist.</li>");
+							}
+							i++;
+							if (layoutOverViewNode.hasNode("gd11v1_1")) {
+								Node gd11v1_1_Nodes = layoutOverViewNode
+										.getNode("gd11v1_1");
+								if (gd11v1_1_Nodes.hasNode("gd11v1-mid")) {
+									Node gd11v1_midNode = gd11v1_1_Nodes
+											.getNode("gd11v1-mid");
+									if (gd11v1_midNode.hasNode("text")) {
+										Node text = gd11v1_midNode.getNode("text");
+										Element gd11v1_mid = gd11v1.get(i).getElementsByClass("c00-pilot").first();
+										if (gd11v1_mid != null) {
+											text.setProperty("text", gd11v1_mid.html());
+										} else {
+											sb.append("<li>Heading of the grid is blank.</li>");
+										}
+									} else {
+										sb.append("<li>'text' node doesn't exists.</li>");
+									}
+								} else {
+									sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
+								}
+							} else {
+								sb.append("<li>'gd11v1_1' Node doesn't exist.</li>");
+							}
+						} else {
+							sb.append("<li>Node doesn't exist with path : "
+									+ layoutOverView + "</li>");
 						}
+							
 					} else {
 						sb.append("<li>Html blob element not found.</li>");
 					}
 
-					if (layoutOverViewNode != null) {
-
-						if (layoutOverViewNode.hasNode("gd11v1")) {
-							Node gd11v1_Nodes = layoutOverViewNode
-									.getNode("gd11v1");
-							if (gd11v1_Nodes.hasNode("gd11v1-mid")) {
-								Node gd11v1_mid = gd11v1_Nodes
-										.getNode("gd11v1-mid");
-								if (gd11v1_mid.hasNode("htmlblob_0")) {
-									Node htmlblob_0 = gd11v1_mid
-											.getNode("htmlblob_0");
-									if (bdr_1 != null && bdr_1.size() > 0
-											&& bdr_1.get(0) != null) {
-										htmlblob_0.setProperty("html", bdr_1
-												.get(0).parent().html());
-									} else {
-										sb.append("<li>Heading of the grid is blank.</li>");
-									}
-								} else {
-									sb.append("<li>'htmlblob_0' node doesn't exists.</li>");
-								}
-							} else {
-								sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
-							}
-						} else {
-							sb.append("<li>'gd11v1' Node doesn't exist.</li>");
-						}
-
-						if (layoutOverViewNode.hasNode("gd11v1_0")) {
-							Node gd11v1_0_Nodes = layoutOverViewNode
-									.getNode("gd11v1_0");
-							if (gd11v1_0_Nodes.hasNode("gd11v1-mid")) {
-								Node gd11v1_mid = gd11v1_0_Nodes
-										.getNode("gd11v1-mid");
-								if (gd11v1_mid.hasNode("htmlblob")) {
-									Node htmlblob = gd11v1_mid
-											.getNode("htmlblob");
-									if (bdr_1 != null && bdr_1.size() > 1
-											&& bdr_1.get(1) != null) {
-										htmlblob.setProperty("html",
-												bdr_1.get(1).parent().html());
-									} else {
-										sb.append("<li>Heading of the grid is blank.</li>");
-									}
-								} else {
-									sb.append("<li>'htmlblob' node doesn't exists.</li>");
-								}
-							} else {
-								sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
-							}
-						} else {
-							sb.append("<li>'gd11v1_0' Node doesn't exist.</li>");
-						}
-
-						if (layoutOverViewNode.hasNode("gd11v1_1")) {
-							Node gd11v1_1_Nodes = layoutOverViewNode
-									.getNode("gd11v1_1");
-							if (gd11v1_1_Nodes.hasNode("gd11v1-mid")) {
-								Node gd11v1_mid = gd11v1_1_Nodes
-										.getNode("gd11v1-mid");
-								if (gd11v1_mid.hasNode("text")) {
-									Node text = gd11v1_mid.getNode("text");
-									if (bdr_1 != null && bdr_1.size() > 2
-											&& bdr_1.get(2) != null) {
-										text.setProperty("text", bdr_1.get(2)
-												.parent().html());
-									} else {
-										sb.append("<li>Heading of the grid is blank.</li>");
-									}
-								} else {
-									sb.append("<li>'text' node doesn't exists.</li>");
-								}
-							} else {
-								sb.append("<li>'gd11v1-mid' node doesn't exists.</li>");
-							}
-						} else {
-							sb.append("<li>'gd11v1_1' Node doesn't exist.</li>");
-						}
-					} else {
-						sb.append("<li>Node doesn't exist with path : "
-								+ layoutOverView + "</li>");
-					}
+					
 				} catch (Exception e) {
 					log.error("Exception : ", e);
 					sb.append("<li>Unable to update grid component.\n</li>");
@@ -885,9 +881,9 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 								}
 							}if(imageSrcEmptyCount > 0){
-									sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
+								sb.append("<li> "+imageSrcEmptyCount+" image(s) are not found on spot light component of locale page. </li>");
 							}
-	
+
 						} else {
 							sb.append("<li>Second grid element not found.</li>");
 						}
@@ -1256,20 +1252,20 @@ public class ProductLandingVariation6 extends BaseAction {
 					} else {
 						sb.append("<li>Grid Four title border section not found. </li>");
 					}
-			} catch (Exception e) {
-				log.error("Exception : ", e);
-				sb.append("<li>Unable to update grid two component.\n</li>");
+				} catch (Exception e) {
+					log.error("Exception : ", e);
+					sb.append("<li>Unable to update grid two component.\n</li>");
+				}
+				// End of grid four.
+			}else{
+				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
-			// End of grid four.
-		}else{
-			sb.append(Constants.URL_CONNECTION_EXCEPTION);
+			session.save();
+		} catch (Exception e) {
+			log.error("Exception : ", e);
+			sb.append("<li>Exception " + e + "</li>");
 		}
-		session.save();
-	} catch (Exception e) {
-		log.error("Exception : ", e);
-		sb.append("<li>Exception " + e + "</li>");
+		sb.append("</ul></td>");
+		return sb.toString();
 	}
-	sb.append("</ul></td>");
-	return sb.toString();
-}
 }
