@@ -106,7 +106,8 @@ public class WebVariation6 extends BaseAction{
 	//Start of page Migration
 	private void migratePageElements(Document doc,Node privateHybridRightNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
-		Elements rightElements = doc.select("div.gd-right");
+		Elements rightElements = doc.select("div.gd12-pilot");
+		doc.select("div.gd-left").remove();
 		Node midNode = privateHybridRightNode.hasNode("htmlblob") ? privateHybridRightNode.getNode("htmlblob") : null ;
 
 		if(midNode != null){
