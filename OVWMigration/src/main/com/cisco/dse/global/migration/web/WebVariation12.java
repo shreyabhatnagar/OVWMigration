@@ -136,7 +136,7 @@ public class WebVariation12 extends BaseAction {
 					if (webNode.hasNode("gd22v2-right/htmlblob")) {
 						Node htmlBlobNode = webNode.getNode("gd22v2-right/htmlblob");
 						if (!StringUtils.isEmpty(htmlBlobContent)) {
-							String html = oldImage.toString().replaceAll("<br>", "");
+							String html =oldImage.toString().replaceAll("<br>", "");
 							htmlBlobNode.setProperty("html",html);
 							log.debug("HtmlBlob Content migrated is done.");
 						}
