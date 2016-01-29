@@ -133,6 +133,13 @@ public class WebVariation7 extends BaseAction{
 							if(!gdMid.equals("")&& gdMid!=null){
 								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
 								if(leftBlob!=null){
+									Element migrateEle = doc.getElementsByTag("migrtae").first();
+									if(migrateEle==null){
+										migrateEle = doc.getElementsByTag("migrate").first();
+									}
+									if(migrateEle!=null){
+										gdMid = migrateEle.outerHtml() + gdMid;
+									}
 									leftBlob.setProperty("html", gdMid);
 								}else{
 									log.debug("html blob node not found.");
@@ -157,12 +164,19 @@ public class WebVariation7 extends BaseAction{
 								//							gdMidEle.html()
 								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap);
 								log.debug("---------My log----------"+gdMid);
+
 								if(!gdMid.equals("")&& gdMid!=null){
 									Node leftBlob1 =null; 
 									if(leftBlobIterator.hasNext()){
 										leftBlob1 = (Node)leftBlobIterator.next();
 									}
 									if(leftBlob1!=null){
+										log.debug("migrate miss spelt");
+										Element migrateEle = doc.getElementsByTag("migrate").first();
+										if(migrateEle!=null){
+											log.debug("migrate !=null");
+											gdMid = migrateEle.outerHtml() + gdMid;
+										}
 										leftBlob1.setProperty("html", gdMid);
 									}else{
 										log.debug("html blob node not found.");

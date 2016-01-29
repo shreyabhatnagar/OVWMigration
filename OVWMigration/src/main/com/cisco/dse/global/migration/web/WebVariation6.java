@@ -102,7 +102,7 @@ public class WebVariation6 extends BaseAction{
 		log.debug("Msg returned is " + sb.toString());
 		return sb.toString();
 	}
-	
+
 	//Start of page Migration
 	private void migratePageElements(Document doc,Node privateHybridRightNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
