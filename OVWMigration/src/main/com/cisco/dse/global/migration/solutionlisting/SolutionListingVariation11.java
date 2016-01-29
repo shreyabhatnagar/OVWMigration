@@ -89,7 +89,10 @@ public class SolutionListingVariation11 extends BaseAction {
 				// start set text component.
 				try {
 					Elements textElements = doc.select("div.c00v0-alt1-pilot");
-					if (textElements != null) {
+					if(textElements.isEmpty()){
+						textElements = doc.select("div.c00v0-pilot,div.cc00v0-pilot");
+					}
+					if (!textElements.isEmpty()) {
 						Node textNode = indexMidLeftNode.hasNode("text") ? indexMidLeftNode	.getNode("text"): null;
 						if (textNode != null) {
 							for (Element ele : textElements) {
@@ -124,7 +127,7 @@ public class SolutionListingVariation11 extends BaseAction {
 					int count = 0;
 					boolean paragraphExists = false;
 					Elements textParbaseElements = doc.select("div.text, div.parbase");
-					if (textParbaseElements != null) {
+					if (!textParbaseElements.isEmpty()) {
 						for (Element ele : textParbaseElements) {
 							if (ele != null) {
 								Elements textProp = ele.getElementsByTag("h2");
@@ -133,6 +136,7 @@ public class SolutionListingVariation11 extends BaseAction {
 								}
 							} 
 						}
+					}
 						if(count == 0){
 
 							Elements cc00Elements = doc.select("div.cc00-pilot");
@@ -149,16 +153,17 @@ public class SolutionListingVariation11 extends BaseAction {
 										}
 									} 
 								}
-								sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+								if(count != 0)
+									sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
 								if(paragraphExists){
 									sb.append("<li>Extra description found on locale page.Hence element is not migrated.</li>");
 								}
 							}
 						}else{
 							count = count-1;
-							sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
+							if(count != 0)
+								sb.append(Constants.TEXT_NODE_NOT_FOUND.replace(".", " ") + "for " +count+" sub headings and hence element is not migrated.");
 						}
-					}
 				} catch (Exception e) {
 					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
 							+ e + "</li>");
