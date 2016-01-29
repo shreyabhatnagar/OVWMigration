@@ -58,7 +58,7 @@ public class WebVariation9 extends BaseAction{
 		
 		String webNodePath = "/content/<locale>/"
 				+ catType
-				+ "/<prod>/featured-case-studies/jcr:content/content_parsys/generic/layout-generic/gd12v2";
+				+ "/<prod>/featured-case-studies/jcr:content/content_parsys/generic/layout-generic/gd12v2_0";
 		//String webBottomNodePath = "/content/<locale>/"
 				//+ catType
 			//	+ "/<prod>//content/en/us/solutions/test-wp-on-wem/about/jcr:content/content_parsys/generic/layout-generic/gd12v2/gd12v2-right";

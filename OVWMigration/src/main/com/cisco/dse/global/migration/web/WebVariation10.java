@@ -59,23 +59,23 @@ public class WebVariation10 extends BaseAction{
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
 		
-		String firstRowLeftNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
+		String firstRowLeftNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left";
 		firstRowLeftNodePath = firstRowLeftNodePath.replace("<locale>",	locale).replace("<prod>", prod);
-		String secondRowLeftNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd23v1/gd23v1-left";
+		String secondRowLeftNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd23v1/gd23v1-left";
 		secondRowLeftNodePath = secondRowLeftNodePath.replace("<locale>",locale).replace("<prod>", prod);
-		String secondRowMidNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd23v1/gd23v1-mid";
+		String secondRowMidNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd23v1/gd23v1-mid";
 		secondRowMidNodePath = secondRowMidNodePath.replace("<locale>",	locale).replace("<prod>", prod);
-		String secondRowRightNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd23v1/gd23v1-right";
+		String secondRowRightNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd23v1/gd23v1-right";
 		secondRowRightNodePath = secondRowRightNodePath.replace("<locale>",locale).replace("<prod>", prod);
-		String thirdRowHeadingNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd21v1/gd21v1-mid";
+		String thirdRowHeadingNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd21v1/gd21v1-mid";
 		thirdRowHeadingNodePath = thirdRowHeadingNodePath.replace("<locale>",locale).replace("<prod>", prod);
-		String thirdRowLeftNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd21v1/gd21v1-mid/gd23v1/gd23v1-left";
+		String thirdRowLeftNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd21v1/gd21v1-mid/gd23v1/gd23v1-left";
 		thirdRowLeftNodePath = thirdRowLeftNodePath.replace("<locale>",locale).replace("<prod>", prod);
-		String thirdRowMidNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd21v1/gd21v1-mid/gd23v1/gd23v1-mid";
+		String thirdRowMidNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd21v1/gd21v1-mid/gd23v1/gd23v1-mid";
 		thirdRowMidNodePath = thirdRowMidNodePath.replace("<locale>",locale).replace("<prod>", prod);
-		String thirdRowRightNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left/gd21v1/gd21v1-mid/gd23v1/gd23v1-right";
+		String thirdRowRightNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left/gd21v1/gd21v1-mid/gd23v1/gd23v1-right";
 		thirdRowRightNodePath = thirdRowRightNodePath.replace("<locale>",locale).replace("<prod>", prod);
-		String rightRailNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
+		String rightRailNodePath = "/content/<locale>/"+catType+"/overview/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-right";
 		rightRailNodePath = rightRailNodePath.replace("<locale>",locale).replace("<prod>", prod);
 		
 		Node firstRowLeftNode = null;
