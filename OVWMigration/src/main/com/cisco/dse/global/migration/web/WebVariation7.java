@@ -133,9 +133,12 @@ public class WebVariation7 extends BaseAction{
 							if(!gdMid.equals("")&& gdMid!=null){
 								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
 								if(leftBlob!=null){
-									Element migEle = doc.getElementsByTag("migrate").first();
-									if(migEle!=null){
-										gdMid = migEle.outerHtml() + gdMid;
+									Element migrateEle = doc.getElementsByTag("migrtae").first();
+									if(migrateEle==null){
+										migrateEle = doc.getElementsByTag("migrate").first();
+									}
+									if(migrateEle!=null){
+										gdMid = migrateEle.outerHtml() + gdMid;
 									}
 									leftBlob.setProperty("html", gdMid);
 								}else{
@@ -167,11 +170,13 @@ public class WebVariation7 extends BaseAction{
 									if(leftBlobIterator.hasNext()){
 										leftBlob1 = (Node)leftBlobIterator.next();
 									}
-									Element migrateEle = doc.getElementsByTag("migrate").first();
-									if(migrateEle!=null){
-									gdMid = migrateEle.outerHtml() + gdMid;
-									}
 									if(leftBlob1!=null){
+										log.debug("migrate miss spelt");
+										Element migrateEle = doc.getElementsByTag("migrate").first();
+										if(migrateEle!=null){
+											log.debug("migrate !=null");
+											gdMid = migrateEle.outerHtml() + gdMid;
+										}
 										leftBlob1.setProperty("html", gdMid);
 									}else{
 										log.debug("html blob node not found.");

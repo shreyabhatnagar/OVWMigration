@@ -115,10 +115,6 @@ public class WebVariation6 extends BaseAction{
 				Element textElement = rightElements.first();
 				if(textElement != null){
 					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
-					Element migEle = doc.getElementsByTag("migrate").first();
-					if(migEle!=null){
-						html = migEle.outerHtml() + html;
-					}
 					midNode.setProperty("html", html);
 				}
 			}
