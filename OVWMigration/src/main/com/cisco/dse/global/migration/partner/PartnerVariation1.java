@@ -186,6 +186,15 @@ public class PartnerVariation1 extends BaseAction {
 					
 					log.debug("Secured start Text Migration");
 					Element secTextEle = securedDoc.select("div.gd11-pilot").last().select("div.gd13v2-pilot").first();
+					if(secTextEle == null){
+						secTextEle = securedDoc.select("div.gd11-pilot").last().select("div.compact").first();
+						if(secTextEle == null){
+							secTextEle = securedDoc.select("div.gd12v1-pilot").last();
+							if(secTextEle == null){
+								secTextEle = securedDoc.select("div.gd13v2-pilot").last();
+							}
+						}
+					}
 					if(secTextEle != null){
 						migrateText(secTextEle , partnerDownBottomNode , locale, urlMap);
 						log.debug("Secured Text is Migrated");

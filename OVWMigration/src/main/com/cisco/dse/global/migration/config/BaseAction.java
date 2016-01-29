@@ -43,7 +43,7 @@ public abstract class BaseAction {
 	protected Document getSecuredConnection(String loc) {
 		Document doc = null;
 		try {			
-			log.debug("Inside the getSecuredConnection method.");
+			log.debug("Inside the getSecuredConnection method to connect to : "+loc);
 			Connection connection = null;
 			Map<String, String> cookies = null;
 			
