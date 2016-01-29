@@ -65,6 +65,7 @@ import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation09
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation11;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation12;
 import com.cisco.dse.global.migration.solutionlisting.SolutionListingVariation2;
+import com.cisco.dse.global.migration.technology.TechnologyVariation1;
 import com.cisco.dse.global.migration.technology.TechnologyVariation2;
 import com.cisco.dse.global.migration.trainingevents.TrainingAndEventsVariation1;
 import com.cisco.dse.global.migration.web.WebVariation4;
@@ -1156,6 +1157,7 @@ public class OVWMigration {
 																msg16 = msg16 + "<tr>";
 																msg16 = msg16
 																		+ new TechnologyVariation1().translate(
+											
 																				host, gLink, prod, type, cattype,
 																				sheet.getSheetName(), session, urlMap);
 																msg16 = msg16 + "</tr>";
