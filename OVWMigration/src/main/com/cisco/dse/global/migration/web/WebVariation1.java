@@ -254,6 +254,19 @@ public class WebVariation1 extends BaseAction{
 					heroPanelNode.setProperty("linkurl", anchorHref);
 				}
 				// end image
+				String anchorPath = "";
+				if (ele.select("div.c50-image").size() > 0 && ele.select("div.c50-image").first().getElementsByTag("a").size() > 0) {
+					Element anchorElement = ele.select("div.c50-image").first().getElementsByTag("a").first();
+					if (anchorElement != null) {
+						anchorPath = anchorElement.absUrl("href");
+						if (StringUtils.isBlank(anchorPath)) {
+							anchorPath = anchorElement.attr("href");
+						}
+					}
+				}
+				if (StringUtils.isNotBlank(anchorPath)) {
+					sb.append("<li>WEB page is having a link for hero panel image but WEM page is not having link for the same hero panel image</li>");
+				}
 				
 			}catch (Exception e) {
 				e.printStackTrace();
