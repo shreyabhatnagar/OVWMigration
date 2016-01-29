@@ -45,10 +45,10 @@ public class WebVariation11 extends BaseAction{
 				+ "/<prod>/jcr:content";
 		String orderServicesLeft = "/content/<locale>/"
 				+ catType
-				+ "/<prod>/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-left";
+				+ "/<prod>/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-left";
 		String orderServicesRight = "/content/<locale>/"
 				+ catType
-				+ "/<prod>/jcr:content/content_parsys/overview/layout-overview/gd12v2/gd12v2-right";
+				+ "/<prod>/jcr:content/content_parsys/services/layout-services/gd12v2/gd12v2-right";
 
 
 		String pageUrl = host + "/content/<locale>/" + catType
