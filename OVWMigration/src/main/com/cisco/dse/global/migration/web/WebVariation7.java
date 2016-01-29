@@ -133,6 +133,10 @@ public class WebVariation7 extends BaseAction{
 							if(!gdMid.equals("")&& gdMid!=null){
 								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
 								if(leftBlob!=null){
+									Element migEle = doc.getElementsByTag("migrate").first();
+									if(migEle!=null){
+										gdMid = migEle.outerHtml() + gdMid;
+									}
 									leftBlob.setProperty("html", gdMid);
 								}else{
 									log.debug("html blob node not found.");
@@ -157,10 +161,15 @@ public class WebVariation7 extends BaseAction{
 								//							gdMidEle.html()
 								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap);
 								log.debug("---------My log----------"+gdMid);
+
 								if(!gdMid.equals("")&& gdMid!=null){
 									Node leftBlob1 =null; 
 									if(leftBlobIterator.hasNext()){
 										leftBlob1 = (Node)leftBlobIterator.next();
+									}
+									Element migrateEle = doc.getElementsByTag("migrate").first();
+									if(migrateEle!=null){
+									gdMid = migrateEle.outerHtml() + gdMid;
 									}
 									if(leftBlob1!=null){
 										leftBlob1.setProperty("html", gdMid);

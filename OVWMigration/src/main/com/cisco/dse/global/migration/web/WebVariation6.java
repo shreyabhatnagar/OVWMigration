@@ -102,7 +102,7 @@ public class WebVariation6 extends BaseAction{
 		log.debug("Msg returned is " + sb.toString());
 		return sb.toString();
 	}
-	
+
 	//Start of page Migration
 	private void migratePageElements(Document doc,Node privateHybridRightNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
@@ -115,6 +115,10 @@ public class WebVariation6 extends BaseAction{
 				Element textElement = rightElements.first();
 				if(textElement != null){
 					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
+					Element migEle = doc.getElementsByTag("migrate").first();
+					if(migEle!=null){
+						html = migEle.outerHtml() + html;
+					}
 					midNode.setProperty("html", html);
 				}
 			}
