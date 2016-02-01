@@ -197,7 +197,7 @@ public class OVWMigration {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 															}else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
-															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") || variationType.equals("about"))){
+															}else if(StringUtils.isNotBlank(variationType) && (variationType.equals("partners") || variationType.equals("training-events") ||variationType.equals("support")|| variationType.equals("about"))){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>/", "");
 															} else if(StringUtils.isNotBlank(variation) && variation.startsWith("infrastructure")){
 																pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("<prod>", prod+"/network-infrastructure");
