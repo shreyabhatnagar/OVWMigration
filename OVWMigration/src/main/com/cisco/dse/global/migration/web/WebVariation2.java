@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -109,177 +110,177 @@ public class WebVariation2 extends BaseAction {
 					String herolinkUrl = "";
 					heroLargeNode = heroParentNode.hasNode("hero_large") ? heroParentNode
 							.getNode("hero_large") : null;
-					if (heroLargeNode != null) {
-						Property panelNodesProperty = heroLargeNode
-								.hasProperty("panelNodes") ? heroLargeNode
-								.getProperty("panelNodes") : null;
-						if (panelNodesProperty.isMultiple()) {
-							panelPropertiest = panelNodesProperty.getValues();
-						}
-					} else {
-						sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
-						log.debug("Node with name 'hero_lage' doesn't exist under");
-					}
+							if (heroLargeNode != null) {
+								Property panelNodesProperty = heroLargeNode
+										.hasProperty("panelNodes") ? heroLargeNode
+												.getProperty("panelNodes") : null;
+												if (panelNodesProperty.isMultiple()) {
+													panelPropertiest = panelNodesProperty.getValues();
+												}
+							} else {
+								sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
+								log.debug("Node with name 'hero_lage' doesn't exist under");
+							}
 
-					Element heroLagreElement = doc.select("div.c50-pilot")
-							.first();
-					if (heroLagreElement != null) {
-						Elements heroLargeFrameElements = heroLagreElement
-								.select("div.frame");
-						Node heroPanelNode = null;
-						if (heroLargeFrameElements != null) {
-							if (heroLargeFrameElements.size() != heroLargeNode
-									.getNodes("heropanel*").getSize()) {
-								sb.append(Constants.MISMATCH_IN_HERO_SLIDES);
-							}
-							int i = 0;
-							for (Element ele : heroLargeFrameElements) {
-								Element heroTitleElement = ele
-										.getElementsByTag("h2").first();
-								if (heroTitleElement != null) {
-									heroTitle = heroTitleElement.text();
-								} else {
-									sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
-									log.debug("No h2 first element found with in the class 'frame' of div.");
-								}
-								Element heroDescriptionElement = ele
-										.getElementsByTag("p").first();
-								if (heroDescriptionElement != null) {
-									heroDescription = heroDescriptionElement
-											.text();
-								} else {
-									sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
-									log.debug("No p frist element found with in the class 'frame' of div.");
-								}
-								Element heroPanelLinkTextElement = ele
-										.getElementsByTag("b").first();
-								if (heroPanelLinkTextElement != null) {
-									heroLinkText = heroPanelLinkTextElement
-											.text();
-								} else {
-									sb.append(Constants.HERO_CONTENT_ANCHOR_TEXT_IS_BLANK);
-									log.debug("No b tags first elemtn found with in the class 'frame' of div.");
-								}
-								Element heroPanelLinkUrlElement = ele
-										.getElementsByTag("a").first();
-								if (heroPanelLinkUrlElement != null) {
-									herolinkUrl = heroPanelLinkUrlElement
-											.absUrl("href");
-									if(StringUtils.isBlank(herolinkUrl)){
-										herolinkUrl = heroPanelLinkUrlElement.attr("href");
-							          }
-									// Start extracting valid href
-									log.debug("heroPanellinkUrl before migration : "
-											+ herolinkUrl);
-									herolinkUrl = FrameworkUtils
-											.getLocaleReference(herolinkUrl,
-													urlMap);
-									log.debug("heroPanellinkUrl after migration : "
-											+ herolinkUrl);
-									// End extracting valid href
-								} else {
-									sb.append("<li>Hero Panel element not having any linkurl in it </li>");
-									log.debug("No anchor first element found with in the class 'frame' of div.");
-								}
-								String heroImage = FrameworkUtils
-										.extractImagePath(ele, sb);
-								log.debug("heroImage path : " + heroImage);
-								if (panelPropertiest != null
-										&& i <= panelPropertiest.length) {
-									String propertyVal = panelPropertiest[i]
-											.getString();
-									if (StringUtils.isNotBlank(propertyVal)) {
-										JSONObject jsonObj = new JSONObject(
-												propertyVal);
-										if (jsonObj.has("panelnode")) {
-											String panelNodeProperty = jsonObj
-													.get("panelnode")
-													.toString();
-											heroPanelNode = heroLargeNode
-													.hasNode(panelNodeProperty) ? heroLargeNode
-													.getNode(panelNodeProperty)
-													: null;
-										}
+							Element heroLagreElement = doc.select("div.c50-pilot")
+									.first();
+							if (heroLagreElement != null) {
+								Elements heroLargeFrameElements = heroLagreElement
+										.select("div.frame");
+								Node heroPanelNode = null;
+								if (heroLargeFrameElements != null) {
+									if (heroLargeFrameElements.size() != heroLargeNode
+											.getNodes("heropanel*").getSize()) {
+										sb.append(Constants.MISMATCH_IN_HERO_SLIDES);
 									}
-									i++;
-								}
-								if (heroPanelNode != null) {
-									Node heroPanelPopUpNode = null;
-									Elements lightBoxElements = ele.select(
-											"p.cta-link").select(
-											"a.c26v4-lightbox");
-									if (StringUtils.isNotBlank(heroTitle)) {
-										heroPanelNode.setProperty("title",
-												heroTitle);
-										heroPanelPopUpNode = FrameworkUtils
-												.getHeroPopUpNode(heroPanelNode);
-										if (heroPanelPopUpNode != null) {
-											if (lightBoxElements != null
-													&& !lightBoxElements
-															.isEmpty()) {
-												heroPanelPopUpNode.setProperty(
-														"popupHeader",
+									int i = 0;
+									for (Element ele : heroLargeFrameElements) {
+										Element heroTitleElement = ele
+												.getElementsByTag("h2").first();
+										if (heroTitleElement != null) {
+											heroTitle = heroTitleElement.text();
+										} else {
+											sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
+											log.debug("No h2 first element found with in the class 'frame' of div.");
+										}
+										Element heroDescriptionElement = ele
+												.getElementsByTag("p").first();
+										if (heroDescriptionElement != null) {
+											heroDescription = heroDescriptionElement
+													.text();
+										} else {
+											sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
+											log.debug("No p frist element found with in the class 'frame' of div.");
+										}
+										Element heroPanelLinkTextElement = ele
+												.getElementsByTag("b").first();
+										if (heroPanelLinkTextElement != null) {
+											heroLinkText = heroPanelLinkTextElement
+													.text();
+										} else {
+											sb.append(Constants.HERO_CONTENT_ANCHOR_TEXT_IS_BLANK);
+											log.debug("No b tags first elemtn found with in the class 'frame' of div.");
+										}
+										Element heroPanelLinkUrlElement = ele
+												.getElementsByTag("a").first();
+										if (heroPanelLinkUrlElement != null) {
+											herolinkUrl = heroPanelLinkUrlElement
+													.absUrl("href");
+											if(StringUtils.isBlank(herolinkUrl)){
+												herolinkUrl = heroPanelLinkUrlElement.attr("href");
+											}
+											// Start extracting valid href
+											log.debug("heroPanellinkUrl before migration : "
+													+ herolinkUrl);
+											herolinkUrl = FrameworkUtils
+													.getLocaleReference(herolinkUrl,
+															urlMap);
+											log.debug("heroPanellinkUrl after migration : "
+													+ herolinkUrl);
+											// End extracting valid href
+										} else {
+											sb.append("<li>Hero Panel element not having any linkurl in it </li>");
+											log.debug("No anchor first element found with in the class 'frame' of div.");
+										}
+										String heroImage = FrameworkUtils
+												.extractImagePath(ele, sb);
+										log.debug("heroImage path : " + heroImage);
+										if (panelPropertiest != null
+												&& i <= panelPropertiest.length) {
+											String propertyVal = panelPropertiest[i]
+													.getString();
+											if (StringUtils.isNotBlank(propertyVal)) {
+												JSONObject jsonObj = new JSONObject(
+														propertyVal);
+												if (jsonObj.has("panelnode")) {
+													String panelNodeProperty = jsonObj
+															.get("panelnode")
+															.toString();
+													heroPanelNode = heroLargeNode
+															.hasNode(panelNodeProperty) ? heroLargeNode
+																	.getNode(panelNodeProperty)
+																	: null;
+												}
+											}
+											i++;
+										}
+										if (heroPanelNode != null) {
+											Node heroPanelPopUpNode = null;
+											Elements lightBoxElements = ele.select(
+													"p.cta-link").select(
+															"a.c26v4-lightbox");
+											if (StringUtils.isNotBlank(heroTitle)) {
+												heroPanelNode.setProperty("title",
 														heroTitle);
-											} else {
-												sb.append("<li>Hero content video pop up elements not found in locale page.</li>");
-												log.debug("No pop-up node found for the hero panel node "
-														+ heroPanelNode
-																.getPath());
-											}
-										} else {
-											if (lightBoxElements != null
-													&& !lightBoxElements
+												heroPanelPopUpNode = FrameworkUtils
+														.getHeroPopUpNode(heroPanelNode);
+												if (heroPanelPopUpNode != null) {
+													if (lightBoxElements != null
+															&& !lightBoxElements
 															.isEmpty()) {
-												sb.append("<li>Hero content video pop up node not found.</li>");
+														heroPanelPopUpNode.setProperty(
+																"popupHeader",
+																heroTitle);
+													} else {
+														sb.append("<li>Hero content video pop up elements not found in locale page.</li>");
+														log.debug("No pop-up node found for the hero panel node "
+																+ heroPanelNode
+																.getPath());
+													}
+												} else {
+													if (lightBoxElements != null
+															&& !lightBoxElements
+															.isEmpty()) {
+														sb.append("<li>Hero content video pop up node not found.</li>");
+													}
+												}
+											}
+											if (StringUtils.isNotBlank(heroDescription)) {
+												heroPanelNode.setProperty(
+														"description", heroDescription);
+											}
+											if (StringUtils.isNotBlank(heroLinkText)) {
+												heroPanelNode.setProperty("linktext",
+														heroLinkText);
+											}
+											if (StringUtils.isNotBlank(herolinkUrl)) {
+												heroPanelNode.setProperty("linkurl",
+														herolinkUrl);
+											}
+											if (heroPanelNode.hasNode("image")) {
+												Node imageNode = heroPanelNode
+														.getNode("image");
+												String fileReference = imageNode
+														.hasProperty("fileReference") ? imageNode
+																.getProperty("fileReference")
+																.getString() : "";
+																heroImage = FrameworkUtils
+																		.migrateDAMContent(heroImage,
+																				fileReference, locale,
+																				sb);
+																log.debug("heroImage : " + heroImage);
+																if (StringUtils.isNotBlank(heroImage)) {
+																	imageNode.setProperty(
+																			"fileReference", heroImage);
+																} else {
+																	sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
+																}
+											} else {
+												sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
+												log.debug("'image' node doesn't exists in "
+														+ heroPanelNode.getPath());
 											}
 										}
 									}
-									if (StringUtils.isNotBlank(heroDescription)) {
-										heroPanelNode.setProperty(
-												"description", heroDescription);
-									}
-									if (StringUtils.isNotBlank(heroLinkText)) {
-										heroPanelNode.setProperty("linktext",
-												heroLinkText);
-									}
-									if (StringUtils.isNotBlank(herolinkUrl)) {
-										heroPanelNode.setProperty("linkurl",
-												herolinkUrl);
-									}
-									if (heroPanelNode.hasNode("image")) {
-										Node imageNode = heroPanelNode
-												.getNode("image");
-										String fileReference = imageNode
-												.hasProperty("fileReference") ? imageNode
-												.getProperty("fileReference")
-												.getString() : "";
-										heroImage = FrameworkUtils
-												.migrateDAMContent(heroImage,
-														fileReference, locale,
-														sb);
-										log.debug("heroImage : " + heroImage);
-										if (StringUtils.isNotBlank(heroImage)) {
-											imageNode.setProperty(
-													"fileReference", heroImage);
-										} else {
-											sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
-										}
-									} else {
-										sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
-										log.debug("'image' node doesn't exists in "
-												+ heroPanelNode.getPath());
-									}
+								} else {
+									log.debug(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
+									log.debug("No div found with class 'frame'");
 								}
+							} else {
+								;
+								sb.append(Constants.HERO_LARGE_COMPONENT_NOT_FOUND);
+								log.debug("No element found with class 'c50-pilot'");
 							}
-						} else {
-							log.debug(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
-							log.debug("No div found with class 'frame'");
-						}
-					} else {
-						;
-						sb.append(Constants.HERO_LARGE_COMPONENT_NOT_FOUND);
-						log.debug("No element found with class 'c50-pilot'");
-					}
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
 					log.debug("Exception : ", e);
@@ -320,7 +321,7 @@ public class WebVariation2 extends BaseAction {
 							aHref = anchorText.absUrl("href");
 							if(StringUtils.isBlank(aHref)){
 								aHref = anchorText.attr("href");
-					          }
+							}
 							// Start extracting valid href
 							log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 							aHref = FrameworkUtils.getLocaleReference(aHref,
@@ -334,26 +335,27 @@ public class WebVariation2 extends BaseAction {
 						sb.append(Constants.PRIMARY_CTA_COMPONENT_NOT_FOUND);
 					}
 					// setting data
-					Node primaryCtaNode = primaryCtaParentNode
-							.hasNode("primary_cta") ? primaryCtaParentNode
-							.getNode("primary_cta") : null;
-					if (primaryCtaNode != null) {
-						if (StringUtils.isNotBlank("h3Text")) {
-							primaryCtaNode.setProperty("title", h3Text);
-						}
-						if (StringUtils.isNotBlank("pText")) {
-							primaryCtaNode.setProperty("description", pText);
-						}
-						if (StringUtils.isNotBlank("aText")) {
-							primaryCtaNode.setProperty("linktext", aText);
-						}
-						if (StringUtils.isNotBlank("aHref")) {
-							primaryCtaNode.setProperty("linkurl", aHref);
-						}
-					} else {
-						sb.append("<li>Primary cta node not found.</li>");
+					NodeIterator primaryCtaNodeItr = primaryCtaParentNode
+							.hasNodes() ? primaryCtaParentNode
+									.getNodes("primary_cta*") : null;
+									Node primaryCtaNode = primaryCtaNodeItr.hasNext()?(Node)primaryCtaNodeItr.next():null;
+									if (primaryCtaNode != null) {
+										if (StringUtils.isNotBlank("h3Text")) {
+											primaryCtaNode.setProperty("title", h3Text);
+										}
+										if (StringUtils.isNotBlank("pText")) {
+											primaryCtaNode.setProperty("description", pText);
+										}
+										if (StringUtils.isNotBlank("aText")) {
+											primaryCtaNode.setProperty("linktext", aText);
+										}
+										if (StringUtils.isNotBlank("aHref")) {
+											primaryCtaNode.setProperty("linkurl", aHref);
+										}
+									} else {
+										sb.append("<li>Primary cta node not found.</li>");
 
-					}
+									}
 
 				} catch (Exception e) {
 					sb.append(Constants.PRIMARY_CTA_COMPONENT_NOT_UPDATED);
@@ -369,35 +371,35 @@ public class WebVariation2 extends BaseAction {
 					Elements htmlEle = doc.select("div.gd-left");
 					if(htmlEle.size() == 1 && htmlEle != null){
 						htmlEle.first().select("div.c50-pilot").remove();
-							htmlContent = FrameworkUtils
-									.extractHtmlBlobContent(htmlEle.first(), "",
-											locale, sb, urlMap);
+						htmlContent = FrameworkUtils
+								.extractHtmlBlobContent(htmlEle.first(), "",
+										locale, sb, urlMap);
 					}else{
-					for (Element ele : htmlEle) {
-						if (count == 2) {
+						for (Element ele : htmlEle) {
+							if (count == 2) {
 
-							if (ele != null) {
-								htmlContent = FrameworkUtils
-										.extractHtmlBlobContent(ele, "",
-												locale, sb, urlMap);
-							} else {
-								sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+								if (ele != null) {
+									htmlContent = FrameworkUtils
+											.extractHtmlBlobContent(ele, "",
+													locale, sb, urlMap);
+								} else {
+									sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
+								}
 							}
+							count++;
 						}
-						count++;
-					}
 					}
 					// setting data
 					Node htmlNode = leftHtmlblobNode.hasNode("htmlblob") ? leftHtmlblobNode
 							.getNode("htmlblob") : null;
-					if (htmlNode != null) {
-						if (StringUtils.isNotEmpty(htmlContent)
-								&& htmlContent != null) {
-							htmlNode.setProperty("html", htmlContent);
-						}
-					} else {
-						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
-					}
+							if (htmlNode != null) {
+								if (StringUtils.isNotEmpty(htmlContent)
+										&& htmlContent != null) {
+									htmlNode.setProperty("html", htmlContent);
+								}
+							} else {
+								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+							}
 
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -411,13 +413,13 @@ public class WebVariation2 extends BaseAction {
 					// getting data
 					Element htmlEle = doc.select("div.gd-right").last();
 					if (htmlEle != null) {
-					htmlEle.select("div.c47-pilot").remove();
-					Elements s12Ele = htmlEle.select("div.s12-pilot");
-					if(s12Ele != null && !s12Ele.isEmpty()){
-						sb.append("<li>Extra Component found with  class s12-pilot and that can't be migrated.</li>");
-						htmlEle.select("div.s12-pilot").remove();
-					}
-					log.debug("gd-right " + htmlEle);
+						htmlEle.select("div.c47-pilot").remove();
+						Elements s12Ele = htmlEle.select("div.s12-pilot");
+						if(s12Ele != null && !s12Ele.isEmpty()){
+							sb.append("<li>Extra Component found with  class s12-pilot and that can't be migrated.</li>");
+							htmlEle.select("div.s12-pilot").remove();
+						}
+						log.debug("gd-right " + htmlEle);
 						htmlContent = FrameworkUtils.extractHtmlBlobContent(
 								htmlEle, "", locale, sb, urlMap);
 					} else {
@@ -427,14 +429,14 @@ public class WebVariation2 extends BaseAction {
 					// setting data
 					Node htmlNode = rightHtmlblobNode.hasNode("htmlblob") ? rightHtmlblobNode
 							.getNode("htmlblob") : null;
-					if (htmlNode != null) {
-						if (StringUtils.isNotEmpty(htmlContent)
-								&& htmlContent != null) {
-							htmlNode.setProperty("html", htmlContent.replaceAll("<br>", ""));
-						}
-					} else {
-						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
-					}
+							if (htmlNode != null) {
+								if (StringUtils.isNotEmpty(htmlContent)
+										&& htmlContent != null) {
+									htmlNode.setProperty("html", htmlContent.replaceAll("<br>", ""));
+								}
+							} else {
+								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
+							}
 
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
