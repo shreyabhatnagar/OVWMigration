@@ -38,6 +38,7 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.log4j.Logger;
@@ -449,9 +450,9 @@ public class FrameworkUtils {
 				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap);
 				log.debug("after anchorHref" + updatedAnchorPath + "\n");
 
-				log.debug(anchor.getKey().toString() +" is updated to "+updatedAnchorPath);
-				if(StringUtils.isNotBlank(existingAnchorPath) && StringUtils.isNotBlank(updatedAnchorPath)){
-					outeHtmlText = outeHtmlText.replace("\"" +existingAnchorPath + "\"", "\"" + updatedAnchorPath + "\"");
+				log.debug(StringEscapeUtils.escapeXml(existingAnchorPath) +" is updated to "+updatedAnchorPath);
+				if(StringUtils.isNotBlank(StringEscapeUtils.escapeXml(existingAnchorPath)) && StringUtils.isNotBlank(updatedAnchorPath)){
+					outeHtmlText = outeHtmlText.replace("\"" +StringEscapeUtils.escapeXml(existingAnchorPath) + "\"", "\"" + updatedAnchorPath + "\"");
 				}
 			}
 		}
