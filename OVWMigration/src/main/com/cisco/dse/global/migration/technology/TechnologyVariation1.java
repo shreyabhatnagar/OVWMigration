@@ -206,6 +206,7 @@ public class TechnologyVariation1 extends BaseAction {
 								linkurl = anchor.attr("href");
 							}
 							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap);
+							linkurl = linkurl.replaceAll(" ", "");
 							tileNode.setProperty("linkurl", linkurl);
 						}else{
 							sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
