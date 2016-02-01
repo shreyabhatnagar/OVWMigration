@@ -1,7 +1,11 @@
 package com.cisco.dse.global.migration.config;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -41,6 +45,42 @@ public abstract class BaseAction {
 	}
 	
 	protected Document getSecuredConnection(String loc) {
+		
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		String ciscoid = null;
+		String ciscopwd = null;
+
+		try {
+			String filename = "config.properties";
+			input = OVWMigration.class.getClassLoader().getResourceAsStream(
+					filename);
+			if (input == null) {
+				log.debug("input is null");
+			}
+			// load a properties file from class path, inside static method
+			prop.load(input);
+
+			ciscoid = StringUtils.isNotBlank(prop.getProperty("ciscoid")) ? prop.getProperty("ciscoid") : "";
+			ciscopwd = StringUtils.isNotBlank(prop.getProperty("ciscopwd")) ? prop.getProperty("ciscopwd") : "";
+
+			log.debug("ciscoid : "+ciscoid);
+			log.debug("ciscopwd : "+ciscopwd);
+			
+		} catch (IOException ex) {
+			log.error("IOException : ", ex);
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
 		Document doc = null;
 		try {			
 			log.debug("Inside the getSecuredConnection method to connect to : "+loc);
@@ -49,10 +89,12 @@ public abstract class BaseAction {
 			
 			String loginUrl = "https://sso.cisco.com/autho/login/loginaction.html";
 			
+			if(StringUtils.isNotBlank(ciscoid) && StringUtils.isNotBlank(ciscopwd)){
 			for (int retry=0; retry<10; retry++) {
+				Connection.Response res = null;
 				log.debug("Trying to login to "+loginUrl+". Connection retry count is : "+retry);
-				Connection.Response res = Jsoup.connect(loginUrl)
-					    .data("userid", "sbasta", "password", "Qwer1234$")
+				res = Jsoup.connect(loginUrl)
+					    .data("userid", ciscoid, "password", ciscopwd)
 					    .method(Method.POST)
 					    .execute();
 				if (res != null) {
@@ -85,9 +127,14 @@ public abstract class BaseAction {
 				}
 				Thread.sleep(3000);
 			}
+			}else{
+				log.debug("please configure ciscoid and ciscoppwd");
+			}
+			
 		}catch (Exception e) {
 			log.error("Exception : ", e);
 		}
+		
 
 		return doc;
 	}
