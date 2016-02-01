@@ -90,6 +90,7 @@ import com.cisco.dse.global.migration.web.WebVariation9;
 import com.cisco.dse.global.migration.web.WebVariation12;
 import com.cisco.dse.global.migration.subcat.SubCatVariation4;
 import com.cisco.dse.global.migration.benefit.BenefitsVariation1;
+import com.cisco.dse.global.migration.productlisting.ProductListingVariation8;
 
 public class OVWMigration {
 
@@ -1166,6 +1167,21 @@ public class OVWMigration {
 																sb.append(msg16);
 																sb.append("<tr><td colspan='3'>.</td></tr>");
 															}
+															else if ("product-listing-var8".equals(type)&&"YES".equalsIgnoreCase(check)) {
+																String msg10 = "";
+																msg10 = msg10 + "<tr>";
+																msg10 = msg10
+																		+ new ProductListingVariation8().translate(
+																				host, gLink, prod, type, cattype,
+																				sheet.getSheetName(), session);
+																msg10 = msg10 + "</tr>";
+
+																sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+																sb.append(msg10);
+																sb.append("<tr><td colspan='3'>.</td></tr>");
+
+															}
+
 
 
 
