@@ -102,13 +102,13 @@ public class BenefitsVariation1 extends BaseAction {
 					// setting data
 					Node textNode = benefitsLeftNode.hasNode("text") ? benefitsLeftNode
 							.getNode("text") : null;
-					if (textNode != null) {
-						if (StringUtils.isNotEmpty(text) && text != null) {
-							textNode.setProperty("text", text);
-						}
-					} else {
-						sb.append(Constants.TEXT_NODE_NOT_FOUND);
-					}
+							if (textNode != null) {
+								if (StringUtils.isNotEmpty(text) && text != null) {
+									textNode.setProperty("text", text);
+								}
+							} else {
+								sb.append(Constants.TEXT_NODE_NOT_FOUND);
+							}
 
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
@@ -156,63 +156,63 @@ public class BenefitsVariation1 extends BaseAction {
 					// setting data of text component
 					Node textNode = benefitsLeftNode.hasNode("text_0") ? benefitsLeftNode
 							.getNode("text_0") : null;
-					if (textNode != null) {
-						if (StringUtils.isNotEmpty(text) && text != null) {
-							textNode.setProperty("text", text);
-						}
-					} else {
-						sb.append(Constants.TEXT_NODE_NOT_FOUND);
-					}
-					if (!ulList.isEmpty()) {
-						// getting data of list component
-						listTitle = ulList.get(0).text();
-						Elements listEle = ulList.get(1).select("a");
-						for (Element ele : listEle) {
-							JSONObject obj = new JSONObject();
-							aText = ele.text();
-							aHref = ele.absUrl("href");
-							// Start extracting valid href
-							log.debug("link ref before migration : " + aHref);
-							aHref = FrameworkUtils.getLocaleReference(aHref,
-									urlMap);
-							log.debug("link ref after migration : " + aHref);
-							// End extracting valid href
-							obj.put("linktext", aText);
-							obj.put("linkurl", aHref);
-							obj.put("icon", "none");
-							obj.put("size", "");
-							obj.put("description", "");
-							obj.put("openInNewWindow", false);
-							list.add(obj.toString());
-						}
-					} else {
-						sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
-					}
-					// setting data of list component
-					Node listNode = benefitsLeftNode.hasNode("list") ? benefitsLeftNode
-							.getNode("list") : null;
-					if (listNode != null) {
-						if (StringUtils.isNotEmpty(listTitle)) {
-							listNode.setProperty("title", listTitle);
-						}
-						Node eleListNode = listNode.hasNode("element_list_0") ? listNode
-								.getNode("element_list_0") : null;
-						if (eleListNode != null) {
-							boolean multiple = eleListNode.getProperty(
-									"listitems").isMultiple();
-							if (multiple) {
-								eleListNode.setProperty("listitems",
-										list.toArray(new String[list.size()]));
+							if (textNode != null) {
+								if (StringUtils.isNotEmpty(text) && text != null) {
+									textNode.setProperty("text", text);
+								}
 							} else {
-								eleListNode.setProperty("listitems",
-										list.toString());
+								sb.append(Constants.TEXT_NODE_NOT_FOUND);
 							}
-						} else {
-							sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
-						}
-					} else {
-						sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
-					}
+							if (!ulList.isEmpty()) {
+								// getting data of list component
+								listTitle = ulList.get(0).text();
+								Elements listEle = ulList.get(1).select("a");
+								for (Element ele : listEle) {
+									JSONObject obj = new JSONObject();
+									aText = ele.text();
+									aHref = ele.absUrl("href");
+									// Start extracting valid href
+									log.debug("link ref before migration : " + aHref);
+									aHref = FrameworkUtils.getLocaleReference(aHref,
+											urlMap);
+									log.debug("link ref after migration : " + aHref);
+									// End extracting valid href
+									obj.put("linktext", aText);
+									obj.put("linkurl", aHref);
+									obj.put("icon", "none");
+									obj.put("size", "");
+									obj.put("description", "");
+									obj.put("openInNewWindow", false);
+									list.add(obj.toString());
+								}
+							} else {
+								sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
+							}
+							// setting data of list component
+							Node listNode = benefitsLeftNode.hasNode("list") ? benefitsLeftNode
+									.getNode("list") : null;
+									if (listNode != null) {
+										if (StringUtils.isNotEmpty(listTitle)) {
+											listNode.setProperty("title", listTitle);
+										}
+										Node eleListNode = listNode.hasNode("element_list_0") ? listNode
+												.getNode("element_list_0") : null;
+												if (eleListNode != null) {
+													boolean multiple = eleListNode.getProperty(
+															"listitems").isMultiple();
+													if (multiple) {
+														eleListNode.setProperty("listitems",
+																list.toArray(new String[list.size()]));
+													} else {
+														eleListNode.setProperty("listitems",
+																list.toString());
+													}
+												} else {
+													sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
+												}
+									} else {
+										sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
+									}
 
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
@@ -238,74 +238,85 @@ public class BenefitsVariation1 extends BaseAction {
 							"div.c23-pilot");
 					NodeIterator tileIterator = benefitsRightNode.hasNodes() ? benefitsRightNode
 							.getNodes("tile*") : null;
-					if (tileEle != null) {
-						if (tileIterator != null) {
-							int nodeCount = (int) tileIterator.getSize();
-							int eleCount = tileEle.size();
-							if (nodeCount != eleCount) {
-								String message = Constants.TILE_BORDERED_ELEMENT_COUNT_MISMATCH;
-								message = message.replace("(<ele>)",
-										Integer.toString(eleCount));
-								message = message.replace("(<node>)",
-										Integer.toString(nodeCount));
-								sb.append(message);
+							if (tileEle != null) {
+								if (tileIterator != null) {
+									int nodeCount = (int) tileIterator.getSize();
+									int eleCount = tileEle.size();
+									if (nodeCount != eleCount) {
+										String message = Constants.TILE_BORDERED_ELEMENT_COUNT_MISMATCH;
+										message = message.replace("(<ele>)",
+												Integer.toString(eleCount));
+										message = message.replace("(<node>)",
+												Integer.toString(nodeCount));
+										sb.append(message);
+									}
+									for (Element ele : tileEle) {
+										Element tileTitleEle = ele.select("h2,h3")
+												.first();
+										if (tileTitleEle != null) {
+											tileTitle = tileTitleEle.text();
+										} else {
+											sb.append(Constants.TILE_BORDERED_TITLE_NOT_FOUND);
+										}
+										Element tileDescEle = ele.getElementsByTag("p")
+												.first();
+										if (tileDescEle != null) {
+											tileDesc = tileDescEle.text();
+										} else {
+											sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
+										}
+										Element tileCta = ele.getElementsByTag("a")
+												.first();
+										if (tileCta != null) {
+											ctaText = tileCta.text();
+											ctaLink = tileCta.absUrl("href");
+											if (StringUtil.isBlank(ctaLink)) {
+												ctaLink = tileCta.attr("href");
+											}
+										} else {
+											sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
+										}
+										// Start extracting valid href
+										log.debug("Before ctaLink" + ctaLink + "\n");
+										ctaLink = FrameworkUtils.getLocaleReference(
+												ctaLink, urlMap);
+
+										ctaLink = ctaLink.replaceAll(" ", "").replaceAll("%20","");
+										log.debug("after ctaLink" + ctaLink + "\n");
+										// End extracting valid href
+										if (tileIterator.hasNext()) {
+											Node tileNode = (Node) tileIterator.next();
+											if(tileNode.hasProperty("linktrigger")){
+												String value = tileNode.getProperty("linktrigger").getString();
+												if(value.equals("title")){
+													tileNode = tileIterator.hasNext()?tileIterator.nextNode():null;
+													if(tileNode == null){
+														break;
+													}
+												}
+											}
+											if (StringUtils.isNotEmpty(tileTitle)) {
+												tileNode.setProperty("title", tileTitle);
+											}
+											if (StringUtils.isNotEmpty(tileDesc)) {
+												tileNode.setProperty("description",
+														tileDesc);
+											}
+											if (StringUtils.isNotEmpty(ctaText)) {
+												tileNode.setProperty("linktext",
+														ctaText);
+											}
+											if (StringUtils.isNotEmpty(ctaLink)) {
+												tileNode.setProperty("linkurl", ctaLink);
+											}
+										}
+									}
+								} else {
+									sb.append(Constants.TILE_BORDERED_NODES_NOT_FOUND);
+								}
+							} else {
+								sb.append(Constants.TILE_BORDERED_ELEMENTS_NOT_FOUND);
 							}
-							for (Element ele : tileEle) {
-								Element tileTitleEle = ele.select("h2,h3")
-										.first();
-								if (tileTitleEle != null) {
-									tileTitle = tileTitleEle.text();
-								} else {
-									sb.append(Constants.TILE_BORDERED_TITLE_NOT_FOUND);
-								}
-								Element tileDescEle = ele.getElementsByTag("p")
-										.first();
-								if (tileDescEle != null) {
-									tileDesc = tileDescEle.text();
-								} else {
-									sb.append(Constants.TILE_BORDERED_DESCRIPTION_NOT_FOUND);
-								}
-								Element tileCta = ele.getElementsByTag("a")
-										.first();
-								if (tileCta != null) {
-									ctaText = tileCta.text();
-									ctaLink = tileCta.absUrl("href");
-									if (StringUtil.isBlank(ctaLink)) {
-										ctaLink = tileCta.attr("href");
-									}
-								} else {
-									sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
-								}
-								// Start extracting valid href
-								log.debug("Before ctaLink" + ctaLink + "\n");
-								ctaLink = FrameworkUtils.getLocaleReference(
-										ctaLink, urlMap);
-								log.debug("after ctaLink" + ctaLink + "\n");
-								// End extracting valid href
-								if (tileIterator.hasNext()) {
-									Node tileNode = (Node) tileIterator.next();
-									if (StringUtils.isNotEmpty(tileTitle)) {
-										tileNode.setProperty("title", tileTitle);
-									}
-									if (StringUtils.isNotEmpty(tileDesc)) {
-										tileNode.setProperty("description",
-												tileDesc);
-									}
-									if (StringUtils.isNotEmpty(ctaText)) {
-										tileNode.setProperty("linktext",
-												ctaText);
-									}
-									if (StringUtils.isNotEmpty(ctaLink)) {
-										tileNode.setProperty("linkurl", ctaLink);
-									}
-								}
-							}
-						} else {
-							sb.append(Constants.TILE_BORDERED_NODES_NOT_FOUND);
-						}
-					} else {
-						sb.append(Constants.TILE_BORDERED_ELEMENTS_NOT_FOUND);
-					}
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 					log.error("Exception ", e);
