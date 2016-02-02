@@ -149,6 +149,12 @@ public class WebVariation1 extends BaseAction{
 							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
+						if (webNode != null) {
+							
+							if (htmlBlobElements.isEmpty()) {
+								sb.append("<li>htmlblob elements in the left grid not found.</li>");
+							}
+					}
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
@@ -186,6 +192,12 @@ public class WebVariation1 extends BaseAction{
 							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
+						if (webNode != null) {
+							
+							if (htmlBlobElements.isEmpty()) {
+								sb.append("<li>htmlblob elements in the right grid not found.</li>");
+							}
+					}
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
