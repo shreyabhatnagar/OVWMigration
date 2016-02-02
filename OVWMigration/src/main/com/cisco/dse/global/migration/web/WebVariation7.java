@@ -294,7 +294,7 @@ public class WebVariation7 extends BaseAction{
 						Element gdRightEle = doc.select("div.gd-right").last();
 
 						if(gdRightEle==null){
-							gdRightEle = doc.select("td#framework-column-right").first();
+							gdRightEle = doc.select("div#framework-content-right").first();
 						}
 						if(gdRightEle!=null){
 							//							String gdRight = gdRightEle.html();
@@ -303,7 +303,7 @@ public class WebVariation7 extends BaseAction{
 								gdRightEle=null;
 							}
 							if(gdRightEle==null){
-								gdRightEle = doc.select("td#framework-column-right").first();
+								gdRightEle = doc.select("div#framework-content-right").first();
 							}
 
 							if(gdRightEle!=null){	
