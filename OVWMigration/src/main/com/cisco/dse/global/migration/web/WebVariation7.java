@@ -133,10 +133,9 @@ public class WebVariation7 extends BaseAction{
 							if(!gdMid.equals("")&& gdMid!=null){
 								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
 								if(leftBlob!=null){
-									Element migrateEle = doc.getElementsByTag("migrtae").first();
-									if(migrateEle==null){
-										migrateEle = doc.getElementsByTag("migrate").first();
-									}
+									
+									Element migrateEle = doc.getElementsByTag("migrate").first();
+									migrateEle.select("div.gd-mid").remove();
 									if(migrateEle!=null){
 										gdMid = migrateEle.outerHtml() + gdMid;
 									}
