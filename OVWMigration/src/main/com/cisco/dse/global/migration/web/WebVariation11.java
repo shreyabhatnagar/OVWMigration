@@ -270,37 +270,61 @@ public class WebVariation11 extends BaseAction{
 	}
 
 	private void migrateBottomGrid(Document doc, Node orderServicesLeftNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
-		Elements grids = doc.select("div.gd21-pilot");
+		Elements grids = doc.select("div.gd21-pilot,div.n05v16");
 		Node gd23v1 = orderServicesLeftNode.hasNode("gd21v1") ? orderServicesLeftNode.getNode("gd21v1") : null ;
-
+		if(grids.isEmpty()){
+		grids = doc.select("div.n05v16");
+		}
 		if(gd23v1 != null){
-			// Start of mid grid
-			Node gd23v1mid = gd23v1.hasNode("gd21v1-mid") ? gd23v1.getNode("gd21v1-mid") : null;
-			Elements midGrid = grids.select("div.gd-mid");
-			if(gd23v1mid != null){
-				Node htmlBlob = gd23v1mid.hasNode("htmlblob") ? gd23v1mid.getNode("htmlblob") : null;
-				if(htmlBlob != null){
-					if(!midGrid.isEmpty()){
-						String html = FrameworkUtils.extractHtmlBlobContent(midGrid.first(), "",locale, sb, urlMap);
-						htmlBlob.setProperty("html", html);
+			if(!grids.isEmpty()){
+				// Start of mid grid
+				Node gd23v1mid = gd23v1.hasNode("gd21v1-mid") ? gd23v1.getNode("gd21v1-mid") : null;
+				Elements midGrid = grids.select("div.gd-mid");
+				Elements midGridJp = null;
+				if(midGrid.isEmpty()){
+					midGridJp = doc.select("div.n05v16");
+				}
+				if(gd23v1mid != null){
+					Node htmlBlob = gd23v1mid.hasNode("htmlblob") ? gd23v1mid.getNode("htmlblob") : null;
+					if(htmlBlob != null){
+						if(!midGrid.isEmpty()){
+							String html = FrameworkUtils.extractHtmlBlobContent(midGrid.first(), "",locale, sb, urlMap);
+							htmlBlob.setProperty("html", html);
+						}else if(!midGridJp.isEmpty()) {
+							Element midGridEle = midGridJp.first();
+							log.debug("before loop "+ midGridEle);
+							for(Element ele : midGridJp){
+								if(!ele.equals(midGridEle)){
+								midGridEle.append(ele.html());
+								}
+							}
+							log.debug("after loop "+ midGridEle);
+							String html = FrameworkUtils.extractHtmlBlobContent(midGridEle, "",locale, sb, urlMap);
+							htmlBlob.setProperty("html", html);
+						}else {
+							sb.append("<li>Bottom Grid Element not available</li>");
+						}
+					}else {
+						if(!midGrid.isEmpty()){
+							log.debug("grids are not found");
+							sb.append("htmlblob node not found");
+						}else {
+							log.debug("midGrid and leftnodes are not found");
+						}
 					}
+
 				}else {
 					if(!midGrid.isEmpty()){
 						log.debug("grids are not found");
-						sb.append("htmlblob node not found");
+						sb.append("midGrid node not found");
 					}else {
 						log.debug("midGrid and leftnodes are not found");
 					}
 				}
+				// End of mid grid
 			}else {
-				if(!midGrid.isEmpty()){
-					log.debug("grids are not found");
-					sb.append("midGrid node not found");
-				}else {
-					log.debug("midGrid and leftnodes are not found");
-				}
+				sb.append("<li>Bottom Grid Element not available</li>");
 			}
-			// End of mid grid
 		} else {
 			if(!grids.isEmpty()){
 				log.debug("grids are not found");
