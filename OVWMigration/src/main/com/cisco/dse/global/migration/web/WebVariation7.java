@@ -140,7 +140,7 @@ public class WebVariation7 extends BaseAction{
 										gdMid = migrateEle.outerHtml() + gdMid;
 									}*/
 									Element migrateEle = doc.getElementsByTag("migrtae").first();
-									String c50JS = migrateEle.getElementsByTag("script").last().outerHtml();
+									String c50JS = migrateEle != null ? migrateEle.getElementsByTag("script").last().outerHtml() : "";
 									log.debug("hero java script is : "+c50JS);
 									leftBlob.setProperty("html",c50JS+gdMid);
 								}else{
