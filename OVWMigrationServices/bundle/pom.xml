@@ -68,6 +68,22 @@
 			<groupId>com.day.cq.dam</groupId>
 			<artifactId>cq-dam-api</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>com.day.cq.dam</groupId>
+    		<artifactId>cq-dam-commons</artifactId>
+  		</dependency>
+  		<dependency>
+    		<groupId>com.day.cq.wcm</groupId>
+    		<artifactId>cq-wcm-commons</artifactId>
+		</dependency>
+		<dependency>
+  			<groupId>com.day.cq</groupId>
+  			<artifactId>cq-search</artifactId>
+		</dependency>
+		<dependency>
+  			<groupId>org.jsoup</groupId>
+  			<artifactId>jsoup</artifactId>
+  		</dependency>
 	</dependencies>
 
 	<!-- ====================================================================== -->
