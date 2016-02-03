@@ -307,11 +307,11 @@ public class WebVariation5 extends BaseAction{
 												ownPdfText.length() - 1);
 										pdfSize = pdfSize.replace(")", "");
 										pdfSize = pdfSize.trim();
-										if(ownPdfText.length() >16){
+										/*if(ownPdfText.length() >16){
 											ownText = li.ownText();
 											pdfIcon = "";
 											pdfSize = "";
-										}
+										}*/
 									}else {
 										ownText = li.ownText();
 									}

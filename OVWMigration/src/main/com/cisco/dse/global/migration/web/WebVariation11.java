@@ -343,11 +343,23 @@ public class WebVariation11 extends BaseAction{
 		if(textElements.isEmpty()){
 			textElements = doc.select("div.s01-pilot");
 		}
+		boolean fHolderExists = false;
 		if(htmlBlob != null){
 			if(!textElements.isEmpty()){
 				Element textElement = textElements.first();
 				if(textElement != null){
+					Elements childelements = textElement.children();
+					for(Element childElement : childelements){
+						if(childElement.hasClass("local-f-holder_a")){
+							fHolderExists =  true;
+						}
+						
+					}
+					if(!fHolderExists){
+						textElement = doc.select("div.contcss").first();
+					}
 					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
+					
 					htmlBlob.setProperty("html", html);
 				}
 			} else {
