@@ -93,10 +93,17 @@ public abstract class BaseAction {
 			for (int retry=0; retry<10; retry++) {
 				Connection.Response res = null;
 				log.debug("Trying to login to "+loginUrl+". Connection retry count is : "+retry);
-				res = Jsoup.connect(loginUrl)
-					    .data("userid", ciscoid, "password", ciscopwd)
-					    .method(Method.POST)
-					    .execute();
+				try{
+					log.debug("trying to connect with credentials");
+					res = Jsoup.connect(loginUrl)
+							.data("userid", ciscoid, "password", ciscopwd)
+							.method(Method.POST)
+							.execute();
+				}
+				catch(Exception e){
+					log.error("Exception : ",e);
+					log.error("Unable to login trying again.");
+				}
 				if (res != null) {
 					try {
 						log.debug("Connection established!!!");
