@@ -134,12 +134,15 @@ public class WebVariation7 extends BaseAction{
 								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
 								if(leftBlob!=null){
 									
-									Element migrateEle = doc.getElementsByTag("migrate").first();
+									/*Element migrateEle = doc.getElementsByTag("migrate").first();
 									migrateEle.select("div.gd-mid").remove();
 									if(migrateEle!=null){
 										gdMid = migrateEle.outerHtml() + gdMid;
-									}
-									leftBlob.setProperty("html", gdMid);
+									}*/
+									Element migrateEle = doc.getElementsByTag("migrtae").first();
+									String c50JS = migrateEle.getElementsByTag("script").last().outerHtml();
+									log.debug("hero java script is : "+c50JS);
+									leftBlob.setProperty("html",c50JS+gdMid);
 								}else{
 									log.debug("html blob node not found.");
 									sb.append("<li>html blob node not found.</li>");
@@ -171,12 +174,15 @@ public class WebVariation7 extends BaseAction{
 									}
 									if(leftBlob1!=null){
 										log.debug("migrate miss spelt");
-										Element migrateEle = doc.getElementsByTag("migrate").first();
+										/*Element migrateEle = doc.getElementsByTag("migrate").first();
 										if(migrateEle!=null){
 											log.debug("migrate !=null");
 											gdMid = migrateEle.outerHtml() + gdMid;
-										}
-										leftBlob1.setProperty("html", gdMid);
+										}*/
+										Element migrateEle = doc.getElementsByTag("migrate").first();
+										String c50JS = migrateEle.getElementsByTag("script").last().outerHtml();
+										log.debug("hero java script is : "+c50JS);
+										leftBlob1.setProperty("html", c50JS+gdMid);
 									}else{
 										log.debug("html blob node not found.");
 										sb.append("<li>html blob node not found.</li>");
