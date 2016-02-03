@@ -138,6 +138,7 @@ public class SubCatVariation4 extends BaseAction {
 								Element heroTitleElement = ele
 										.getElementsByTag("h2").first();
 								if (heroTitleElement != null) {
+									log.debug("Hero Title:" + heroTitleElement);
 									heroTitle = heroTitleElement.text();
 								} else {
 									sb.append(Constants.HERO_CONTENT_HEADING_ELEMENT_DOESNOT_EXISTS);
@@ -166,8 +167,9 @@ public class SubCatVariation4 extends BaseAction {
 								if (heroPanelLinkUrlElement != null) {
 									herolinkUrl = heroPanelLinkUrlElement
 											.absUrl("href");
-									if(StringUtil.isBlank(herolinkUrl)){
-										herolinkUrl = heroPanelLinkUrlElement.attr("href");
+									if (StringUtil.isBlank(herolinkUrl)) {
+										herolinkUrl = heroPanelLinkUrlElement
+												.attr("href");
 									}
 									// Start extracting valid href
 									log.debug("heroPanellinkUrl before migration : "
@@ -207,27 +209,35 @@ public class SubCatVariation4 extends BaseAction {
 								int imageSrcEmptyCount = 0;
 								if (heroPanelNode != null) {
 									Node heroPanelPopUpNode = null;
+									Element lightBoxElement = null;
 									Elements lightBoxElements = ele.select(
 											"p.cta-link").select(
 											"a.c26v4-lightbox");
+									if (lightBoxElements != null
+											&& !lightBoxElements.isEmpty()) {
+										lightBoxElement = lightBoxElements
+												.first();
+									}
+									heroPanelPopUpNode = FrameworkUtils
+											.getHeroPopUpNode(heroPanelNode);
+									if (heroPanelPopUpNode == null
+											&& lightBoxElement != null) {
+										sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+									}
+									if (heroPanelPopUpNode != null
+											&& lightBoxElement == null) {
+										sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+									}
+									if (heroPanelPopUpNode != null
+											&& lightBoxElement != null
+											&& StringUtils
+													.isNotBlank(heroTitle)) {
+										heroPanelPopUpNode.setProperty(
+												"popupHeader", heroTitle);
+									}
 									if (StringUtils.isNotBlank(heroTitle)) {
 										heroPanelNode.setProperty("title",
 												heroTitle);
-										if (lightBoxElements != null
-												&& !lightBoxElements.isEmpty()) {
-											heroPanelPopUpNode = FrameworkUtils
-													.getHeroPopUpNode(heroPanelNode);
-											if (heroPanelPopUpNode != null) {
-												heroPanelPopUpNode.setProperty(
-														"popupHeader",
-														heroTitle);
-											} else {
-												sb.append("<li>Hero content video pop up node not found.</li>");
-												log.debug("No pop-up node found for the hero panel node "
-														+ heroPanelNode
-																.getPath());
-											}
-										}
 									}
 									if (StringUtils.isNotBlank(heroDescription)) {
 										heroPanelNode.setProperty(
@@ -303,8 +313,9 @@ public class SubCatVariation4 extends BaseAction {
 					String linkUrl = "";
 					List<String> list = new ArrayList<String>();
 					// getting data
-					Element listEle = doc.select("div.gd-right").select("div.n13-pilot").first();
-					if(listEle == null){
+					Element listEle = doc.select("div.gd-right")
+							.select("div.n13-pilot").first();
+					if (listEle == null) {
 						listEle = doc.select("div.n13-pilot").last();
 					}
 					if (listEle != null) {
@@ -319,7 +330,7 @@ public class SubCatVariation4 extends BaseAction {
 						if (links != null) {
 							for (Element anchor : links) {
 								linkUrl = anchor.absUrl("href");
-								if(StringUtil.isBlank(linkUrl)){
+								if (StringUtil.isBlank(linkUrl)) {
 									linkUrl = anchor.attr("href");
 								}
 								linkUrl = FrameworkUtils.getLocaleReference(
@@ -396,7 +407,7 @@ public class SubCatVariation4 extends BaseAction {
 								Element aElement = aElements.first();
 								String title = aElement.attr("title");
 								String href = aElement.absUrl("href");
-								if(StringUtil.isBlank(href)){
+								if (StringUtil.isBlank(href)) {
 									href = aElement.attr("href");
 								}
 								// Start extracting valid href
@@ -526,7 +537,7 @@ public class SubCatVariation4 extends BaseAction {
 						if (spotLightCta != null) {
 							ctaText = spotLightCta.text();
 							ctaLink = spotLightCta.absUrl("href");
-							if(StringUtil.isBlank(ctaLink)){
+							if (StringUtil.isBlank(ctaLink)) {
 								ctaLink = spotLightCta.attr("href");
 							}
 						} else {
@@ -562,7 +573,8 @@ public class SubCatVariation4 extends BaseAction {
 										.select("a.c26v4-lightbox");
 								spotLightPopUpNode = FrameworkUtils
 										.getHeroPopUpNode(ctaNode);
-								log.debug("Spotlight popup node:"+spotLightPopUpNode.getPath());
+								log.debug("Spotlight popup node:"
+										+ spotLightPopUpNode.getPath());
 								if (spotLightPopUpNode != null) {
 									if (lightBoxElements != null
 											&& !lightBoxElements.isEmpty()) {
@@ -591,9 +603,11 @@ public class SubCatVariation4 extends BaseAction {
 												fileReference, locale, sb);
 								log.debug("spotLightImage " + spotLightImage
 										+ "\n");
-								if (StringUtils.isNotBlank(spotLightImage)) {
-									imageNode.setProperty("fileReference",
-											spotLightImage);
+								if (spotLightImage != null) {
+									if (StringUtils.isNotBlank(spotLightImage)) {
+										imageNode.setProperty("fileReference",
+												spotLightImage);
+									}
 								} else {
 									sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 								}
