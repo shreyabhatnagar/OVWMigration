@@ -158,7 +158,7 @@ public class BenefitsVariation1 extends BaseAction {
 						log.debug("List elements:" + ulList);
 						if(flag_enil){
 							Element cc00Ele = doc.select("div.cc00-pilot").first();
-							cc00Ele.select("h2").remove();
+							cc00Ele.select("h1").remove();
 							text = FrameworkUtils.extractHtmlBlobContent(cc00Ele, "",locale, sb, urlMap);
 						}
 					} else {
