@@ -32,6 +32,8 @@ public class BenefitsVariation1 extends BaseAction {
 	StringBuilder sb = new StringBuilder(1024);
 
 	static Logger log = Logger.getLogger(BenefitsVariation1.class);
+	
+	boolean flag_enil = false;
 
 	public String translate(String host, String loc, String prod, String type,
 			String catType, String locale, Session session,
@@ -92,7 +94,11 @@ public class BenefitsVariation1 extends BaseAction {
 					String text = "";
 					// getting data
 					Element textEle = doc.select("div.gd-left")
-							.select("div.c00-pilot").first();
+							.select("div.c00-pilot,div.cc00-pilot").first();
+					if(textEle.hasClass("cc00-pilot")){
+						textEle = textEle.getElementsByTag("h1").first();
+						flag_enil = true;
+					}
 					if (textEle != null) {
 						text = FrameworkUtils.extractHtmlBlobContent(textEle,
 								"", locale, sb, urlMap);
@@ -129,7 +135,7 @@ public class BenefitsVariation1 extends BaseAction {
 					int childrenSize;
 					// getting data of text component
 					Element textEle = doc.select("div.gd-left")
-							.select("div.c00-pilot").last();
+							.select("div.c00-pilot,div.nn13-pilot").last();
 					if (textEle != null) {
 						childrenSize = textEle.children().size();
 						for (int count = 0; count < childrenSize; count++) {
@@ -150,6 +156,11 @@ public class BenefitsVariation1 extends BaseAction {
 						text = paraList.toString();
 						log.debug("Text elements:" + text);
 						log.debug("List elements:" + ulList);
+						if(flag_enil){
+							Element cc00Ele = doc.select("div.cc00-pilot").first();
+							cc00Ele.select("h2").remove();
+							text = FrameworkUtils.extractHtmlBlobContent(cc00Ele, "",locale, sb, urlMap);
+						}
 					} else {
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
@@ -235,7 +246,7 @@ public class BenefitsVariation1 extends BaseAction {
 					String ctaText = "";
 					String ctaLink = "";
 					Elements tileEle = doc.select("div.gd-right").select(
-							"div.c23-pilot");
+							"div.c23-pilot,div.cc23-pilot");
 					NodeIterator tileIterator = benefitsRightNode.hasNodes() ? benefitsRightNode
 							.getNodes("tile*") : null;
 							if (tileEle != null) {

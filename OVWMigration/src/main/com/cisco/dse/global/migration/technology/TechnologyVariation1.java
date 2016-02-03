@@ -86,7 +86,7 @@ public class TechnologyVariation1 extends BaseAction {
 				//start Text migration
 				try{
 					log.debug("start Text migration");
-					Elements textEles = doc.select("div.c00-pilot");
+					Elements textEles = doc.select("div.c00-pilot,div.cc00-pilot,div.nn13-pilot");
 					if(textEles != null){
 						migrateText(textEles , technologyLeftNode, locale , urlMap);
 						log.debug("Text Element Migrated");
@@ -117,7 +117,7 @@ public class TechnologyVariation1 extends BaseAction {
 				//start of tile Border Component migration.
 				try{
 					log.debug("start of tile Border Component migration.");
-					Elements tileEles = doc.getElementsByClass("c23-pilot");
+					Elements tileEles = doc.select("div.c23-pilot,div.cc23-pilot");
 					migrateTileBoreder(tileEles,technologyRightNode,locale,urlMap);
 				}catch(Exception e){
 					log.error("Exception in tileBolder migration");
@@ -187,6 +187,9 @@ public class TechnologyVariation1 extends BaseAction {
 					if(tileNodes.hasNext()){
 						Node tileNode = tileNodes.nextNode();
 						Element title = tileEle.getElementsByTag("h2").first();
+						if(title==null){
+							title = tileEle.getElementsByTag("h3").first();
+						}
 						if(title != null){
 							tileNode.setProperty("title", title.text());
 						}else{
