@@ -122,8 +122,8 @@ public class RProductVariation1 extends BaseAction {
 				Element htmlBlobEle = doc.select("div.gd12v2-pilot").first();
 				if(htmlBlobEle != null){
 					sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
-				}
-*/
+				}*/
+
 				Element topRight = doc.select("div.c23v5-pilot").first();
 				if(topRight != null){
 					Node htmlBlobNode = indexTopRightNode.hasNode("htmlblob_0")?indexTopRightNode.getNode("htmlblob_0"):null;
