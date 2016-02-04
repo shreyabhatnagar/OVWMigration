@@ -531,6 +531,7 @@ public class RSolutionIndex extends BaseAction {
 									wemAElement.text(aText);
 									wemAElement.attr("href", aLink);
 									log.debug(wemAElement);
+									log.debug(document1);
 								} else {
 									sb.append(Constants.NO_ANCHORS_FOUND_IN_WEM_HTML_CONTENT);
 									log.debug("No anchor elements found in wem html content in : " + product_content.html());

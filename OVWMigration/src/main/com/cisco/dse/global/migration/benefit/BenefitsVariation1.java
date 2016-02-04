@@ -301,7 +301,7 @@ public class BenefitsVariation1 extends BaseAction {
 												String value = tileNode.getProperty("linktrigger").getString();
 												if(value.equals("title")){
 													if((int)tileIterator.getSize() != tileEle.size()){
-														tileNode = tileIterator.hasNext()?tileIterator.nextNode():null;
+														tileNode = tileIterator.hasNext() ? tileIterator.nextNode():null;
 														if(tileNode == null){
 															break;
 														}
