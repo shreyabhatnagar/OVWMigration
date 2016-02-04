@@ -61,7 +61,7 @@ public class Constants {
 	public static final String SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND = "<li>Spotlight Component description element not having any description in it ('p' is blank)</li>";
 
 	// SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND
-	public static final String SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND = "<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>";
+	public static final String SPOTLIGHT_ANCHOR_ELEMENT_NOT_FOUND = "<li>Spotlight Component anchor tag element not found.</li>";
 
 	//SPOTLIGHT_HEADING_TEXT_NOT_FOUND
 	public static final String SPOTLIGHT_HEADING_TEXT_NOT_FOUND = "<li>Spotlight heading text not found.</li>";

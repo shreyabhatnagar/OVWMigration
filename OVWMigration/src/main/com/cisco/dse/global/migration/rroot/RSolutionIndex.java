@@ -488,6 +488,11 @@ public class RSolutionIndex extends BaseAction {
 				htmlblob = node.getNode("htmlblob");
 				String wemhtml = htmlblob.hasProperty("html") ? htmlblob.getProperty("html").getString() : "";
 				document1 = Jsoup.parse(wemhtml);
+				Element li = document1.getElementsByTag("li").last();
+				Element div = li.getElementsByClass("media").first();
+				if(div == null){
+					sb.append(Constants.EXTRA_ANCHOR_LINK_FOUND_IN_WEM_HTML_CONTENT + "'" +li.text()+"'");
+				}
 				product_contents = document1.select("div.product-content");
 				media = document1.select("div.media");
 			} else {
@@ -525,6 +530,8 @@ public class RSolutionIndex extends BaseAction {
 									Element wemAElement = wemAElements.first();
 									wemAElement.text(aText);
 									wemAElement.attr("href", aLink);
+									log.debug(wemAElement);
+									log.debug(document1);
 								} else {
 									sb.append(Constants.NO_ANCHORS_FOUND_IN_WEM_HTML_CONTENT);
 									log.debug("No anchor elements found in wem html content in : " + product_content.html());

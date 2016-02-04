@@ -114,7 +114,7 @@ public class RProductVariation1 extends BaseAction {
 				// end set page properties.
 
 				//start of top-gd
-				NodeIterator heroNodes = indexHeroNode.hasNode("hero_panel")?indexHeroNode.getNodes("hero_panel*"):null;
+				/*NodeIterator heroNodes = indexHeroNode.hasNode("hero_panel")?indexHeroNode.getNodes("hero_panel*"):null;
 				if(heroNodes != null){
 					sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 				}
@@ -123,7 +123,7 @@ public class RProductVariation1 extends BaseAction {
 				if(htmlBlobEle != null){
 					sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
 				}
-
+*/
 				Element topRight = doc.select("div.c23v5-pilot").first();
 				if(topRight != null){
 					Node htmlBlobNode = indexTopRightNode.hasNode("htmlblob_0")?indexTopRightNode.getNode("htmlblob_0"):null;
@@ -136,9 +136,9 @@ public class RProductVariation1 extends BaseAction {
 					sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 				}
 
-				if(indexTopRightNode.hasNode("letushelp_eot_partne")){
+				/*if(indexTopRightNode.hasNode("letushelp_eot_partne")){
 					sb.append(Constants.PARTNER_HELP_COMPONENT_NOT_FOUND);
-				}
+				}*/
 
 				//end of top-gd
 
@@ -173,9 +173,9 @@ public class RProductVariation1 extends BaseAction {
 					sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
 				}
 
-				if(indexThirdNode1.hasNode("list_container_0")){
+				/*if(indexThirdNode1.hasNode("list_container_0")){
 					sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
-				}
+				}*/
 				//end of third1
 
 				//start of third21
@@ -324,9 +324,9 @@ public class RProductVariation1 extends BaseAction {
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 							}
 							i+=2;
-							if(twoThird.hasNode("list_container")){
+							/*if(twoThird.hasNode("list_container")){
 								sb.append(Constants.LIST_ELEMENT_NOT_FOUND);
-							}
+							}*/
 						}
 					}else{
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
