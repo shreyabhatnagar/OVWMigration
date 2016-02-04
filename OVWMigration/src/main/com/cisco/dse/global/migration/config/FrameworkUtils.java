@@ -499,6 +499,11 @@ public class FrameworkUtils {
 	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap) {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			if (urlMap.containsKey(primaryCTALinkUrl)) {
+				if(primaryCTALinkUrl.endsWith(".html#top")){  //code to remove if #top is in provided url for "back to top" issue.
+					log.debug("link with #top before trim : "+ primaryCTALinkUrl );
+					primaryCTALinkUrl ="#top";
+					log.debug("link with #top after trim : "+ primaryCTALinkUrl );
+				}
 				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
 			}
 		}
