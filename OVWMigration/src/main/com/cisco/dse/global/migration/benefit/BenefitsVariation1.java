@@ -32,7 +32,7 @@ public class BenefitsVariation1 extends BaseAction {
 	StringBuilder sb = new StringBuilder(1024);
 
 	static Logger log = Logger.getLogger(BenefitsVariation1.class);
-	
+
 	boolean flag_enil = false;
 
 	public String translate(String host, String loc, String prod, String type,
@@ -300,9 +300,11 @@ public class BenefitsVariation1 extends BaseAction {
 											if(tileNode.hasProperty("linktrigger")){
 												String value = tileNode.getProperty("linktrigger").getString();
 												if(value.equals("title")){
-													tileNode = tileIterator.hasNext()?tileIterator.nextNode():null;
-													if(tileNode == null){
-														break;
+													if((int)tileIterator.getSize() != tileEle.size()){
+														tileNode = tileIterator.hasNext()?tileIterator.nextNode():null;
+														if(tileNode == null){
+															break;
+														}
 													}
 												}
 											}
