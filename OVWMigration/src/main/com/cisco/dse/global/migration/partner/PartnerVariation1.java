@@ -88,6 +88,8 @@ public class PartnerVariation1 extends BaseAction {
 
 			try{
 				securedDoc = getSecuredConnection(loc);
+				
+				
 			}catch(Exception e){
 				log.error("Exception : ",e);
 			}
@@ -196,6 +198,7 @@ public class PartnerVariation1 extends BaseAction {
 						}
 					}
 					if(secTextEle != null){
+						
 						migrateText(secTextEle , partnerDownBottomNode , locale, urlMap);
 						log.debug("Secured Text is Migrated");
 					}else{
@@ -294,6 +297,7 @@ public class PartnerVariation1 extends BaseAction {
 						if(midNode.hasNode("htmlblob")){
 							Node htmlBlobNode = midNode.getNode("htmlblob");
 							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
+							
 							htmlBlobNode.setProperty("html", outerHtml);
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -377,7 +381,10 @@ public class PartnerVariation1 extends BaseAction {
 			String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		Node textNode = partnerBottomNode.hasNode("text_0")?partnerBottomNode.getNode("text_0"):null;
 		if(textNode != null){
-			textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap));
+			
+			String textToSet = FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap);
+			textNode.setProperty("text", textToSet.replaceAll("<p>&nbsp;</p>", ""));
+			
 		}else{
 			sb.append(Constants.TEXT_NODE_NOT_FOUND);
 		}
