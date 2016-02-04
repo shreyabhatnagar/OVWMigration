@@ -88,6 +88,9 @@ public class WebVariation1 extends BaseAction{
 				try {
 					log.debug("Start of Hero component");
 					Elements heroElements = doc.select("div.frame");
+					if(heroElements==null || heroElements.isEmpty()){
+						heroElements = doc.select("div.c50-pilot");
+					}
 					Node heroNode = webNode.hasNode("gd12v2-left/hero_medium") ? webNode.getNode("gd12v2-left/hero_medium") : null;
 
 					if (heroNode != null) {
@@ -134,6 +137,9 @@ public class WebVariation1 extends BaseAction{
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
 					Elements htmlBlobElements = doc.select("div.gd-left").select("div.c00-pilot");
+					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
+						htmlBlobElements = doc.select("div.gd23-pilot");
+					}
 					if (htmlBlobElements != null) {
 						for(Element ele : htmlBlobElements )
 						{
@@ -176,7 +182,10 @@ public class WebVariation1 extends BaseAction{
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Elements htmlBlobElements = doc.select("div.gd-right");
+					Elements htmlBlobElements = doc.select("div.gd12-pilot").select("div.gd-right");
+					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
+						htmlBlobElements = doc.select("div.f-holder");
+					}
 					if (htmlBlobElements != null) {
 						for(Element ele : htmlBlobElements )
 						{
