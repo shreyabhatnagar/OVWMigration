@@ -73,7 +73,7 @@ public class Constants {
 	public static final String SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND = "<li>spotlight anchor text not found.</li>";
 
 	//SPOTLIGHT_ANCHOR_LINK_NOT_FOUND
-	public static final String SPOTLIGHT_ANCHOR_LINK_NOT_FOUND = "<li>Spotlight anchor link not found.</li>";
+	public static final String SPOTLIGHT_ANCHOR_LINK_NOT_FOUND = "<li>spotlight anchor link not found.</li>";
 
 	// SPOTLIGHT_TITLELINK_NODE_NOT_FOUND
 	public static final String SPOTLIGHT_TITLELINK_NODE_NOT_FOUND = "<li>Spotlight Component's titlelink node not found</li>";
