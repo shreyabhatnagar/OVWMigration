@@ -119,9 +119,15 @@ public class WebVariation10 extends BaseAction{
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Element htmlBlobElement = doc.select("div.gd-left").first().select("div.c00-pilot").first();
+					Element htmlBlobElement = doc.select("div.gd-left").first();
+					if(htmlBlobElement != null){
+						htmlBlobElement = htmlBlobElement.select("div.c00-pilot").first();
+					}
 					
-					Element htmlBlobHeadElement = doc.select("div.gd-left").first().select("div.compact").first();
+					Element htmlBlobHeadElement = doc.select("div.gd-left").first();
+					if(htmlBlobHeadElement != null){
+						htmlBlobHeadElement = htmlBlobHeadElement.select("div.compact").first();
+					}
 					log.debug("heading elelemnt issss: "+ htmlBlobHeadElement);
 					if (htmlBlobElement != null) {
 						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
