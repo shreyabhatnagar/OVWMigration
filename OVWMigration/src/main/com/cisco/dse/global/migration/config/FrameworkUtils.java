@@ -134,6 +134,9 @@ public class FrameworkUtils {
 								}
 								if (StringUtils.isNotBlank(pageTitle)) {
 									pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
+									if(pageTitle.contains("- Cisco")){
+                                        pageTitle = pageTitle.substring(0,pageTitle.lastIndexOf("- Cisco"));     
+									}
 									if (jcrNode.hasProperty("jcr:title")) {
 										jcrNode.setProperty("jcr:title",pageTitle);
 									}
@@ -182,6 +185,9 @@ public class FrameworkUtils {
 				//If the image path is having '/content/en/us' or  '/c/en/us' then if condition is satisfied to get the imgReference property from the current image path.
 				if (path.indexOf("/content/en/us") != -1 || path.indexOf("/c/en/us") != -1) {
 					log.debug("image path is being from /c/en/us : " + path);
+					
+					
+				if(path.lastIndexOf(".img") != -1){	
 					path = path.substring(0, path.lastIndexOf(".img"));//image path to get the node.
 					//if the image path is having any domain then removing the domain from url.
 					if (path.indexOf("http://") != -1 || path.indexOf("https://") != -1) {
@@ -212,6 +218,8 @@ public class FrameworkUtils {
 					}else{
 						log.debug("No fileReference path found in the path : ");
 					}
+				}
+					
 					
 					log.debug("Hence retriving the file reference path is : " + path);
 				}
@@ -220,8 +228,10 @@ public class FrameworkUtils {
 				if (StringUtils.isNotBlank(path)) {
 				if (path.indexOf("/content/dam/en/us") == -1
 						&& path.indexOf("/content/dam") == -1
+						&& path.indexOf("/content/en/us") == -1
 						&& path.indexOf("/c/dam/en/us") == -1
-						&& path.indexOf("/c/dam") == -1) {
+						&& path.indexOf("/c/dam") == -1
+						&& path.indexOf("/c/en/us") == -1) {
 					log.debug("Path of the image is not a wem image path.");
 					//Adding the domain to the web image path, since to get the IO we need absolute url.
 					if (path.indexOf("http:") == -1
@@ -499,7 +509,7 @@ public class FrameworkUtils {
 	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap, String locale, StringBuilder sb) {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			String pdfPath = "";
-			if(primaryCTALinkUrl.endsWith(".pdf") ||primaryCTALinkUrl.endsWith(".doc") || primaryCTALinkUrl.endsWith(".docx") ){
+			if(primaryCTALinkUrl.endsWith(".pdf")|| primaryCTALinkUrl.endsWith(".PDF") || primaryCTALinkUrl.endsWith(".doc") || primaryCTALinkUrl.endsWith(".DOC") || primaryCTALinkUrl.endsWith(".docx") || primaryCTALinkUrl.endsWith(".DOCX") ){
 				pdfPath = FrameworkUtils.migrateDAMContent(primaryCTALinkUrl, "", locale, sb);
 				log.debug("pdf path after migraiton is: "+ pdfPath);
 				return pdfPath;
