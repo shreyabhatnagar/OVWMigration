@@ -104,7 +104,7 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 						if(StringUtils.isNotBlank(data)){
 							JSONObject obj = new JSONObject(data);
 							String url = (String)(obj.has("linkurl")?obj.get("linkurl"):"");
-							if(url.endsWith(".pdf") || url.endsWith(".doc") || url.endsWith(".docx")){
+							if(url.endsWith(".pdf") || url.endsWith(".doc") || url.endsWith(".docx") || url.endsWith(".PDF") || url.endsWith(".DOC") || url.endsWith(".DOCX")){
 								if(resourceResolver.getResource(url) != null){
 									set.add(url);
 								}
@@ -116,7 +116,7 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 					if(StringUtils.isNotBlank(data)){
 						JSONObject obj = new JSONObject(data);
 						String url = (String)(obj.has("linkurl")?obj.get("linkurl"):"");
-						if(url.endsWith(".pdf") || url.endsWith(".doc") || url.endsWith(".docx")){
+						if(url.endsWith(".pdf") || url.endsWith(".doc") || url.endsWith(".docx") || url.endsWith(".PDF") || url.endsWith(".DOC") || url.endsWith(".DOCX")){
 							if(resourceResolver.getResource(url) != null){
 								set.add(url);
 							}
@@ -172,7 +172,7 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 				
 				for (Element element : document.getElementsByTag("a")) {
 					String url = element.attr("href");
-					if(url.endsWith(".pdf") || url.endsWith(".doc") || url.endsWith(".docx")){
+					if(url.endsWith(".pdf") || url.endsWith(".doc") || url.endsWith(".docx") || url.endsWith(".PDF") || url.endsWith(".DOC") || url.endsWith(".DOCX")){
 						if(resourceResolver.getResource(url) != null){
 							set.add(url);
 						}
