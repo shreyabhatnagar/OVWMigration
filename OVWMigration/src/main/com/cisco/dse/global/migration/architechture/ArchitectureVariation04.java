@@ -310,15 +310,15 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of last list in left section
-					handleResourcesSection(architectureLeftNode, urlMap);
+					handleResourcesSection(architectureLeftNode, urlMap, locale);
 					// end of last list in left section
 					// --------------------------------------------------------------------------------------------------------------------------------------
 					// start of right side list component migration
-					handleRightListSection(architectureRightNode, urlMap);
+					handleRightListSection(architectureRightNode, urlMap, locale);
 					// end of right side list component migration
 					//---------------------------------------------------------------------------------------------------------------------------------------
 					// start tile section
-					handleTileSection(architectureRightNode, urlMap);
+					handleTileSection(architectureRightNode, urlMap, locale);
 					// end of tile section
 				} else {
 
@@ -410,7 +410,7 @@ public class ArchitectureVariation04 extends BaseAction {
 										if(StringUtil.isBlank(linkurl)){
 											linkurl = aElements.attr("href");	
 										}
-										linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap);
+										linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb);
 									} else {
 										aText = liEle.html();
 									}
@@ -449,11 +449,11 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end of migrating list components
 					// -------------------------------------------------------------------------------------------------------------------------
 					// start of last list in left section
-					handleResourcesSection(architectureLeftNode, urlMap);
+					handleResourcesSection(architectureLeftNode, urlMap, locale);
 					// end of last list in left section
 					//-------------------------------------------------------------------------------------------------------------------------
 					// start tile section
-					handleTileSection(architectureRightNode, urlMap);
+					handleTileSection(architectureRightNode, urlMap, locale);
 
 					// end tile section
 					// --------------------------------------------------------------------------------------------------------------------
@@ -462,7 +462,7 @@ public class ArchitectureVariation04 extends BaseAction {
 					// end html blob
 					// -----------------------------------------------------------------------------------------------------------------------------
 					// start of right side list component migration
-					handleRightListSection(architectureRightNode, urlMap);
+					handleRightListSection(architectureRightNode, urlMap, locale);
 					// end of right side list component migration
 				}
 				session.save();
@@ -513,7 +513,7 @@ public class ArchitectureVariation04 extends BaseAction {
 
 	}
 
-	public void handleTileSection(Node architectureRightNode, Map<String, String> urlMap) {
+	public void handleTileSection(Node architectureRightNode, Map<String, String> urlMap, String locale) {
 		// start of tile bordered section
 		try {
 			String h2Text = "";
@@ -562,7 +562,7 @@ public class ArchitectureVariation04 extends BaseAction {
 								if(StringUtil.isBlank(aHref)){
 									aHref = anchorText.attr("href");	
 								}
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 							} else {
 								sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
 							}
@@ -587,7 +587,7 @@ public class ArchitectureVariation04 extends BaseAction {
 		}
 		// end of tile bordered section
 	}
-	public void handleRightListSection(Node architectureRightNode, Map<String, String> urlMap) {
+	public void handleRightListSection(Node architectureRightNode, Map<String, String> urlMap, String locale) {
 		try {
 			String h2Text = "";
 			boolean anchor = true;
@@ -613,7 +613,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						if(StringUtil.isBlank(aHref)){
 							aHref = aEle.attr("href");	
 						}
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 						obj.put("linktext", aText);
 						obj.put("linkurl", aHref);
 						obj.put("icon", "");
@@ -665,7 +665,7 @@ public class ArchitectureVariation04 extends BaseAction {
 		}
 
 	}
-	public void handleResourcesSection(Node architectureLeftNode, Map<String, String> urlMap){
+	public void handleResourcesSection(Node architectureLeftNode, Map<String, String> urlMap, String locale){
 		try {
 			String h2Text = "";
 			String text = "";
@@ -711,7 +711,7 @@ public class ArchitectureVariation04 extends BaseAction {
 						if(StringUtil.isBlank(aHref)){
 							aHref = aEle.attr("href");
 						}
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 						obj.put("linktext", aText);
 						obj.put("linkurl", aHref);
 						obj.put("icon", pdfIcon);

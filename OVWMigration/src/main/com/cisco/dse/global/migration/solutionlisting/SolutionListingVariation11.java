@@ -233,7 +233,7 @@ public class SolutionListingVariation11 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before ahref" + ahref + "\n");
-									ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
+									ahref = FrameworkUtils.getLocaleReference(ahref, urlMap, locale, sb);
 									log.debug("after ahref" + ahref + "\n");
 									// End extracting valid href
 								} else {

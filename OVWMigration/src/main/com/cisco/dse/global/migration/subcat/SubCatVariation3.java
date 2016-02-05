@@ -211,7 +211,7 @@ public class SubCatVariation3 extends BaseAction {
 												if(StringUtil.isBlank(aHref)){
 													aHref = aHero.attr("href");
 												}
-												heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap));
+												heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb));
 											}
 										}else{
 											sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
@@ -308,7 +308,7 @@ public class SubCatVariation3 extends BaseAction {
 							if(StringUtil.isBlank(aURL)){
 								aURL = anchor.attr("href");
 							}
-							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
+							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
 							JSONObject obj = new JSONObject();
 							obj.put("linktext", anchor.text());
 							obj.put("linkurl",aURL);
@@ -354,7 +354,7 @@ public class SubCatVariation3 extends BaseAction {
 						if(StringUtil.isBlank(aHref)){
 							aHref = aElement.attr("href");
 						}
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 						obj.put("linkurl",aHref );
 						list.add(obj.toString());
 					} else {
@@ -445,7 +445,7 @@ public class SubCatVariation3 extends BaseAction {
 						if(StringUtil.isBlank(aURL)){
 							aURL = link.attr("href");
 						}
-						aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
+						aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
 						spotLightNode.setProperty("linktext", link.text());
 						Node linkNode = spotLightNode.hasNode("cta")?spotLightNode.getNode("cta"):null;
 						if(linkNode != null){
@@ -499,7 +499,7 @@ public class SubCatVariation3 extends BaseAction {
 								if(StringUtil.isBlank(aURL)){
 									aURL = anchor.attr("href");
 								}
-								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
+								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", anchor.text());
 								obj.put("linkurl",aURL);

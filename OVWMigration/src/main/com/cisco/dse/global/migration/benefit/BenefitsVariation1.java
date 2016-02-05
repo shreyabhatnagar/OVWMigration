@@ -185,7 +185,7 @@ public class BenefitsVariation1 extends BaseAction {
 									// Start extracting valid href
 									log.debug("link ref before migration : " + aHref);
 									aHref = FrameworkUtils.getLocaleReference(aHref,
-											urlMap);
+											urlMap, locale, sb);
 									log.debug("link ref after migration : " + aHref);
 									// End extracting valid href
 									obj.put("linktext", aText);
@@ -290,7 +290,7 @@ public class BenefitsVariation1 extends BaseAction {
 										// Start extracting valid href
 										log.debug("Before ctaLink" + ctaLink + "\n");
 										ctaLink = FrameworkUtils.getLocaleReference(
-												ctaLink, urlMap);
+												ctaLink, urlMap, locale, sb);
 
 										ctaLink = ctaLink.replaceAll(" ", "").replaceAll("%20","");
 										log.debug("after ctaLink" + ctaLink + "\n");

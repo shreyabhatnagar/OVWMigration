@@ -189,7 +189,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 										}
 										// Start extracting valid href
 										log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after heroPanelLinkUrl" + aHref + "\n");
 										// End extracting valid href
 										heroPanelNode.setProperty("linktext", aText);
@@ -524,7 +524,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 								}
 								// Start extracting valid href
 								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								JSONObject obj = new JSONObject();

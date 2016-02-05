@@ -243,7 +243,7 @@ public class SolutionListingVariation08 extends BaseAction {
 													}
 													// Start extracting valid href
 													log.debug("Before aHref" + aHref + "\n");
-													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 													log.debug("after primaryCTALinkUrl" + aHref + "\n");
 													// End extracting valid href
 												} else {
@@ -366,7 +366,7 @@ public class SolutionListingVariation08 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after primaryCTALinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {

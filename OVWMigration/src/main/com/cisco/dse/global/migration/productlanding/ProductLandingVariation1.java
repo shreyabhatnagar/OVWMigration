@@ -141,7 +141,7 @@ public class ProductLandingVariation1 extends BaseAction {
 													primaryCTALinkUrl = anchorElement.attr("href");
 												}
 												log.debug("primaryCTALinkUrl before migration : " + primaryCTALinkUrl);
-												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
 												log.debug("primaryCTALinkUrl after migration : " + primaryCTALinkUrl);
 											} else {
 												sb.append("<li>Primary CTA Link anchor tag not found </li>");
@@ -292,7 +292,7 @@ public class ProductLandingVariation1 extends BaseAction {
 											heroPanellinkUrl = heroPanelLinkUrlElement.attr("href");
 											// Start extracting valid href
 											log.debug("heroPanellinkUrl before migration : " + heroPanellinkUrl);
-											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
 											log.debug("heroPanellinkUrl after migration : " + heroPanellinkUrl);
 											// End extracting valid href
 										} else {
@@ -472,7 +472,7 @@ public class ProductLandingVariation1 extends BaseAction {
 												anchorHref = anchorElement.absUrl("href");
 												// Start extracting valid href
 												log.debug("anchorHref before migration : " + anchorHref);
-												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 												log.debug("anchorHref after migration : " + anchorHref);
 												// End extracting valid href
 											} else {
@@ -545,7 +545,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																		linkUrl = anchorTag.first().attr("href");
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl);
-																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 																		log.debug("after linkUrl" + linkUrl);
 																		// End extracting valid href
 																	}
@@ -648,7 +648,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																					linkTitleUrl = siATitle.attr("href");
 																					// Start extracting  valid href
 																					log.debug("Before linkTitleUrl" + linkTitleUrl);
-																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
 																					log.debug("after linkTitleUrl" + linkTitleUrl);
 																					// End extracting valid href
 																				} else {
@@ -722,7 +722,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																					linkTextUrl = linkTextElement.attr("href");
 																					// Start extracting valid href
 																					log.debug("Before linkTextUrl" + linkTextUrl);
-																					linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																					linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
 																					log.debug("after linkTextUrl" + linkTextUrl);
 																					// End extracting valid href
 																				} else {
@@ -945,7 +945,7 @@ public class ProductLandingVariation1 extends BaseAction {
 								String anchorHref = anchor != null ? anchor.attr("href") : "";
 								// Start extracting valid href
 								log.debug("Before anchorHref" + anchorHref);
-								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 								log.debug("after anchorHref" + anchorHref);
 								// End extracting valid href
 								if (titleBorderNodes.hasNext()) {

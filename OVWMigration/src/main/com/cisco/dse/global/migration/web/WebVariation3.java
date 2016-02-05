@@ -215,7 +215,7 @@ public class WebVariation3 extends BaseAction{
 							if(aURL.equals("")){
 								aURL = a.attr("href");
 							}
-							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
+							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
 							JSONObject obj = new JSONObject();
 							obj.put("linktext", a.text());
 							obj.put("linkurl",aURL);
@@ -319,7 +319,7 @@ public class WebVariation3 extends BaseAction{
 								}
 								// Start extracting valid href
 								log.debug("heroPanellinkUrl before migration : " + heroPanellinkUrl);
-								heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+								heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
 								log.debug("heroPanellinkUrl after migration : " + heroPanellinkUrl);
 								// End extracting valid href
 							} else {
@@ -448,7 +448,7 @@ public class WebVariation3 extends BaseAction{
 						if(aUrl.equals("")){
 							aUrl = link.attr("href");
 						}
-						aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap);
+						aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 						Node linkUrlNode = ctaNode.getNode("linkurl");
 						linkUrlNode.setProperty("url", aUrl);
 					}else{
@@ -549,7 +549,7 @@ public class WebVariation3 extends BaseAction{
 										if(aUrl.equals("")){
 											aUrl = spLink.attr("href");
 										}
-										aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap);
+										aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 										ctaNode.setProperty("url", aUrl);
 									}
 								}else{
@@ -635,7 +635,7 @@ public class WebVariation3 extends BaseAction{
 							if(linkurl.equals("")){
 								linkurl = anchor.attr("href");
 							}
-							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap);
+							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb);
 							tileNode.setProperty("linkurl", linkurl);
 						}else{
 							sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);

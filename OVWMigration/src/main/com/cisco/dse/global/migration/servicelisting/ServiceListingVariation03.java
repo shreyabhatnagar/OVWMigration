@@ -185,7 +185,7 @@ public class ServiceListingVariation03 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before spotlight" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after spotlight" + aHref + "\n");
 									// End extracting valid href
 								} else {

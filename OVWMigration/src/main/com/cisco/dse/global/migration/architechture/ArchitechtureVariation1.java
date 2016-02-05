@@ -94,7 +94,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 
 				//Start of List Component
 				try {
-					migratelistElements(doc,architectureLeftNode,session,urlMap);
+					migratelistElements(doc,architectureLeftNode,session,urlMap,locale);
 				}
 				catch(Exception e){
 					sb.append("Exception in List Component");
@@ -105,7 +105,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 
 				//Start of Right Rail
 				try{
-					migraterightRailElements(doc,architectureRightNode,urlMap);
+					migraterightRailElements(doc,architectureRightNode,urlMap,locale);
 				}
 				catch(Exception e)
 				{
@@ -191,7 +191,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 	//End of Migrate Text Method
 
 	// Start of Migrate List Elements method
-	private void migratelistElements(Document doc, Node architectureLeftNode, Session session, Map<String, String> urlMap) throws RepositoryException {
+	private void migratelistElements(Document doc, Node architectureLeftNode, Session session, Map<String, String> urlMap, String locale) throws RepositoryException {
 		Elements listElements = doc.select("div.gd-left").select("div.n13-pilot");
 
 		if(listElements == null || listElements.size() == 0){
@@ -207,7 +207,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 					Node listNode;
 					for(Element ele : listElements){
 						listNode = (Node)listNodeIterator.next();
-						setListElements(ele , listNode ,session,urlMap);
+						setListElements(ele , listNode ,session,urlMap, locale);
 					}
 				}
 				else if(nodeSize < eleSize){
@@ -215,7 +215,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 					for(Element ele : listElements){
 						if(listNodeIterator.hasNext()){
 							listNode = (Node)listNodeIterator.next();
-							setListElements(ele , listNode ,session,urlMap);
+							setListElements(ele , listNode ,session,urlMap, locale);
 						}
 					}	
 					sb.append(Constants.MISMATCH_IN_LIST_NODES+eleSize+Constants.LIST_NODES_COUNT+nodeSize);
@@ -225,7 +225,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 					Node listNode;
 					for(Element ele : listElements){
 						listNode = (Node)listNodeIterator.next();
-						setListElements(ele , listNode ,session,urlMap);
+						setListElements(ele , listNode ,session,urlMap, locale);
 					}
 					sb.append(Constants.MISMATCH_IN_LIST_NODES+eleSize+Constants.LIST_NODES_COUNT+nodeSize);
 				}
@@ -239,7 +239,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 
 	}
 
-	private void setListElements(Element ele, Node architectureListNode, Session session, Map<String, String> urlMap) {
+	private void setListElements(Element ele, Node architectureListNode, Session session, Map<String, String> urlMap, String locale) {
 		try{
 			Elements h2Ele = ele.getElementsByTag("h2");
 			Elements h3Ele = ele.getElementsByTag("h3");
@@ -331,7 +331,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 								if(StringUtil.isBlank(aURL)){
 									aURL = a.attr("href");
 								}
-								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
+								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", a.text());
 								obj.put("linkurl",aURL);
@@ -370,7 +370,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 	//End of Migrate List Elements Method
 
 	//start Migrate right rail Method
-	private void migraterightRailElements(Document doc, Node architectureRightNode, Map<String, String> urlMap) {
+	private void migraterightRailElements(Document doc, Node architectureRightNode, Map<String, String> urlMap, String locale) {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select("div.c23-pilot");
@@ -404,7 +404,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 							Node listNode;
 							for (Element rightListEle : rightRailList) {
 								listNode = (Node)tileIterator.next();
-								setRightRailList(listNode, rightListEle,urlMap);
+								setRightRailList(listNode, rightListEle,urlMap,locale);
 							}
 						}
 						else if (eleSize > nodeSize) {
@@ -412,7 +412,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 							for (Element rightListEle : rightRailList) {
 								if (tileIterator.hasNext()) {
 									listNode = (Node)tileIterator.next();
-									setRightRailList(listNode, rightListEle,urlMap);						}
+									setRightRailList(listNode, rightListEle,urlMap,locale);						}
 								else {
 									log.debug("Next node not found");
 									sb.append(Constants.TILEBORDER_Element_ON_LOCALE_PAGE+ eleSize +Constants.TILEBORDER_NODE+ nodeSize +"</li>");
@@ -425,7 +425,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 							Node listNode;
 							for (Element rightListEle : rightRailList) {
 								listNode = (Node)tileIterator.next();
-								setRightRailList(listNode, rightListEle,urlMap);						
+								setRightRailList(listNode, rightListEle,urlMap,locale);						
 							}
 							sb.append(Constants.TILEBORDER_Element_ON_LOCALE_PAGE+ eleSize +Constants.TILEBORDER_NODE+ nodeSize +"</li>");
 						}
@@ -439,7 +439,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 		}
 	}
 
-	public void setRightRailList (Node listNode, Element rightListEle, Map<String, String> urlMap) {
+	public void setRightRailList (Node listNode, Element rightListEle, Map<String, String> urlMap, String locale) {
 		try {
 			Element title;
 			Element description;
@@ -469,7 +469,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 			if(StringUtil.isBlank(listurl)){
 				listurl = listtext.attr("href");
 			}
-			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap);
+			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap, locale, sb);
 			listNode.setProperty("linktext", listtext.text()+rightListEle.ownText());
 			listNode.setProperty("linkurl",listurl);
 

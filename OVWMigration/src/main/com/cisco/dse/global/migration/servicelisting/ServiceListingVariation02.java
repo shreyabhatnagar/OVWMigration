@@ -171,14 +171,14 @@ public class ServiceListingVariation02 extends BaseAction {
 								for(Element ele : listElements){
 									if(listNodeIterator.hasNext()){
 										Node listNode = (Node)listNodeIterator.next();
-										setList(ele , listNode,urlMap);
+										setList(ele , listNode,urlMap, locale);
 									}
 								}
 							}else if(listEleSize > listNodeSize){
 								for(Element ele : listElements){
 									if(listNodeIterator.hasNext()){
 										Node listNode = (Node)listNodeIterator.next();
-										setList(ele , listNode,urlMap);
+										setList(ele , listNode,urlMap, locale);
 									}else{
 										sb.append(Constants.MISMATCH_IN_LIST_ELEMENT+listEleSize+") "+ Constants.LIST_NODES_COUNT+listNodeSize+") </li>");
 									}
@@ -187,7 +187,7 @@ public class ServiceListingVariation02 extends BaseAction {
 							}else if(listEleSize < listNodeSize){
 								for(Element ele : listElements){
 									Node listNode = (Node)listNodeIterator.next();
-									setList(ele , listNode,urlMap);
+									setList(ele , listNode,urlMap, locale);
 								}
 
 							}else{
@@ -231,7 +231,7 @@ public class ServiceListingVariation02 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before followus" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after followus" + aHref + "\n");
 									// End extracting valid href
 									obj.put("linkurl",aHref);
@@ -318,7 +318,7 @@ public class ServiceListingVariation02 extends BaseAction {
 	}
 
 	//start setList
-	void setList(Element ele , Node listNode,Map<String,String> urlMap){
+	void setList(Element ele , Node listNode,Map<String,String> urlMap, String locale){
 		try{
 			Elements h2Ele = ele.getElementsByTag("h2");
 			Elements h3Ele = ele.getElementsByTag("h3");
@@ -362,7 +362,7 @@ public class ServiceListingVariation02 extends BaseAction {
 						}
 						// Start extracting valid href
 						log.debug("Before list" + aHref + "\n");
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 						log.debug("after list" + aHref + "\n");
 						// End extracting valid href
 						obj.put("linkurl",aHref);
@@ -416,7 +416,7 @@ public class ServiceListingVariation02 extends BaseAction {
 			}
 			// Start extracting valid href
 			log.debug("Before spotlight" + tLink + "\n");
-			tLink = FrameworkUtils.getLocaleReference(tLink, urlMap);
+			tLink = FrameworkUtils.getLocaleReference(tLink, urlMap, locale, sb);
 			log.debug("after spotlight" + tLink + "\n");
 			// End extracting valid href
 			spotLightComponentNode.setProperty("title",title);
@@ -481,7 +481,7 @@ public class ServiceListingVariation02 extends BaseAction {
 			}
 			// Start extracting valid href
 			log.debug("Before spotlight" + linkUrl + "\n");
-			linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+			linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 			log.debug("after spotlight" + linkUrl + "\n");
 			// End extracting valid href
 			spotLightComponentNode.setProperty("linktext", aText);

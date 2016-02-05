@@ -201,7 +201,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before gd-left" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after gd-left" + aHref + "\n");
 										// End extracting valid href
 										String pdf = element.ownText();
@@ -349,7 +349,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gd-mid" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after gd-mid" + aHref + "\n");
 									// End extracting valid href
 									obj.put("linktext", aText);
@@ -475,7 +475,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gd-right" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after gd-right" + aHref + "\n");
 									// End extracting valid href
 									obj.put("linktext", aText);

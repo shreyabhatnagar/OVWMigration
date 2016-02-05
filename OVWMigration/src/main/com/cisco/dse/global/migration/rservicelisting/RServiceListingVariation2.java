@@ -195,7 +195,7 @@ public class RServiceListingVariation2 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before linkTitleUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after linkTitleUrl" + aHref + "\n");
 											
 											
@@ -411,7 +411,7 @@ public class RServiceListingVariation2 extends BaseAction{
 												}
 												// Start extracting valid href
 												log.debug("Before linkUrl" + aHref + "\n");
-												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 												log.debug("after linkUrl" + aHref + "\n");
 												// End extracting valid href
 												if (aText != null) {
@@ -463,7 +463,7 @@ public class RServiceListingVariation2 extends BaseAction{
 										}
 										// Start extracting valid href
 										log.debug("Before linkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after linkUrl" + aHref + "\n");
 										// End extracting valid href
 										if (aText != null) {

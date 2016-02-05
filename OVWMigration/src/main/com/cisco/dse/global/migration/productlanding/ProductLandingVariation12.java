@@ -182,7 +182,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after heroPanelLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -329,7 +329,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before selectorbartitleLinkUrl" + titleURL + "\n");
-								titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap);
+								titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap, locale, sb);
 								log.debug("after selectorbartitleLinkUrl" + titleURL + "\n");
 								// End extracting valid href
 							} else {
@@ -355,7 +355,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before selectorBarMenuLinkUrl" + aHref + "\n");
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after selectorBarMenuLinkUrl" + aHref + "\n");
 								// End extracting valid href
 							} else {
@@ -397,7 +397,7 @@ public class ProductLandingVariation12 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before listItemLinkUrl" + anchorHref + "\n");
-											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 											log.debug("after listItemLinkUrl" + anchorHref + "\n");
 											// End extracting valid href
 											jsonObj.put("linktext", anchorText);
@@ -518,7 +518,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before tileBorderedLinkUrl" + aHref + "\n");
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after tileBorderedLinkUrl" + aHref + "\n");
 								// End extracting valid href
 							} else {
@@ -620,7 +620,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before spotlightLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after spotlightLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -717,7 +717,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before rightPilotLinkUrl" + anchorHref + "\n");
-									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 									log.debug("after rightPilotLinkUrl" + anchorHref + "\n");
 									// End extracting valid href
 									String anchorTarget = listItemAnchor
@@ -949,7 +949,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before indexListLinkUrl" + anchorHref + "\n");
-									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 									log.debug("after indexListLinkUrl" + anchorHref + "\n");
 									// End extracting valid href
 									String anchorTarget = listItemAnchor
@@ -1106,7 +1106,7 @@ public class ProductLandingVariation12 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before followusLinkUrl" + href + "\n");
-									href = FrameworkUtils.getLocaleReference(href, urlMap);
+									href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb);
 									log.debug("after followusLinkUrl" + href + "\n");
 									// End extracting valid href
 									obj.put("linktext", title);

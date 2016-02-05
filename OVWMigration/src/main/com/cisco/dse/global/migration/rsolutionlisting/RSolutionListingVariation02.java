@@ -337,7 +337,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					}
 					// Start extracting valid href
 					log.debug("Before aHref" + aHref + "\n");
-					aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+					aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 					log.debug("after aHref" + aHref + "\n");
 					// End extracting valid href
 					spoLightNode.setProperty("url",aHref);
@@ -403,7 +403,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 			}
 			// Start extracting valid href
 			log.debug("Before aHref" + aHref + "\n");
-			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 			log.debug("after aHref" + aHref + "\n");
 			// End extracting valid href
 			spoLightNode.setProperty("url",aHref);
@@ -461,7 +461,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 				}
 				// Start extracting valid href
 				log.debug("Before aHref" + aHref + "\n");
-				aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+				aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 				log.debug("after aHref" + aHref + "\n");
 				// End extracting valid href
 				spoLightNode.setProperty("url",aHref);
@@ -505,7 +505,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 							}
 							// Start extracting valid href
 							log.debug("Before anchorHref" + anchorHref + "\n");
-							anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+							anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 							log.debug("after anchorHref" + anchorHref + "\n");
 							// End extracting valid href
 							titleLink.setProperty("linktype", "Url");

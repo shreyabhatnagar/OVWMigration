@@ -447,7 +447,7 @@ public class FrameworkUtils {
 				Map.Entry anchor = (Map.Entry)anchorIterator.next();
 				String existingAnchorPath = anchor.getValue().toString();
 				log.debug("Before anchorHref" + anchor.getKey().toString() + "\n");
-				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap);
+				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap, locale, sb);
 				log.debug("after anchorHref" + updatedAnchorPath + "\n");
 
 				log.debug(StringEscapeUtils.escapeXml(existingAnchorPath) +" is updated to "+updatedAnchorPath);
@@ -496,13 +496,20 @@ public class FrameworkUtils {
 	}
 	//anudeep
 
-	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap) {
+	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap, String locale, StringBuilder sb) {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			if (urlMap.containsKey(primaryCTALinkUrl)) {
 				if(primaryCTALinkUrl.endsWith(".html#top")){  //code to remove if #top is in provided url for "back to top" issue.
 					log.debug("link with #top before trim : "+ primaryCTALinkUrl );
 					primaryCTALinkUrl ="#top";
 					log.debug("link with #top after trim : "+ primaryCTALinkUrl );
+				}
+				String pdfPath = "";
+				if(primaryCTALinkUrl.endsWith(".pdf") ||primaryCTALinkUrl.endsWith(".doc") || primaryCTALinkUrl.endsWith(".docx") ){
+					pdfPath = FrameworkUtils.migrateDAMContent(primaryCTALinkUrl, "", locale, sb);
+					log.debug("pdf path after migraiton is: "+ pdfPath);
+					return pdfPath;
+					
 				}
 				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
 			}
