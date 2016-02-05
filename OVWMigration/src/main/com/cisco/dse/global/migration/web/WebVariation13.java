@@ -62,7 +62,6 @@ public class WebVariation13 extends BaseAction {
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
 				doc = getConnection(loc);
-				log.debug("document:"+doc.html());
 			} catch (Exception e) {
 				log.error("Exception ", e);
 			}
@@ -78,21 +77,29 @@ public class WebVariation13 extends BaseAction {
 				//start of right html blob component
 				try {
 					String htmlBlobContent = "";
+					StringBuilder oldImage = new StringBuilder();
 					
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Elements htmlBlobElements = doc.select("div#location_wrapper");
 					
-					if (htmlBlobElements != null) {
+					Elements htmlBlobTitle = doc.select("div#mb-title-nav-bar");
+					if (htmlBlobTitle != null && !htmlBlobTitle.isEmpty()) {
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobTitle.last(), "", locale, sb, urlMap);
+						oldImage.append(htmlBlobContent);
+					}
+					Elements htmlBlobElements = doc.select("div#location_wrapper");
+					if (htmlBlobElements != null && !htmlBlobElements.isEmpty()) {
 							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
+							oldImage.append(htmlBlobContent);
 						}
+					
 					//End of getContent
 					//Start of set content
 					if (webTopNode.hasNode("gd11v1-mid/htmlblob")) {
 						Node htmlBlobNode = webTopNode.getNode("gd11v1-mid/htmlblob");
 						if (StringUtils.isNotBlank(htmlBlobContent)) {
-							htmlBlobNode.setProperty("html",htmlBlobContent);
+							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
@@ -146,7 +153,7 @@ public class WebVariation13 extends BaseAction {
 					Elements htmlBlob4Ele  = htmlBlobElements.select("div#col3");
 					if (htmlBlob4Ele != null) {
 							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlob4Ele.first(), "", locale, sb, urlMap);
-						}
+					}
 					
 					
 					//End of getContent
