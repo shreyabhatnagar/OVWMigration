@@ -142,7 +142,11 @@ public class BenefitsVariation03 extends BaseAction {
 		log.debug("lastTextNode:"+lastTextNode);
 		Elements textElements = doc.select("div.c00-pilot");
 		if (textElements.size() != 1) {
-			migrateTextComponents(textElements.first(),firstTextNode, locale, urlMap);
+			Element titleEle = textElements.first().getElementsByTag("h1").first();
+			if(titleEle==null){
+				titleEle = textElements.first().getElementsByTag("h2").first();
+			}
+			migrateTextComponents(titleEle,firstTextNode, locale, urlMap);
 			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale,urlMap);
 		} else if (textElements.size() == 1) {
 			Element titleEle = textElements.first();

@@ -144,6 +144,11 @@ public class ArchitechtureVariation1 extends BaseAction{
 					Node textNode;
 					for(Element ele : textElements){
 						textNode = (Node)textNodeIterator.next();
+						if(ele.hasClass("mboxDefault")){
+							log.debug("has mboxDefault class..");
+							ele.select("div.mboxDefault").remove();
+							log.debug("mboxDefault removed..");
+						}
 						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 					}
 				}
@@ -152,6 +157,11 @@ public class ArchitechtureVariation1 extends BaseAction{
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
 							textNode = (Node)textNodeIterator.next();
+							if(ele.hasClass("mboxDefault")){
+								log.debug("has mboxDefault class..");
+								ele.select("div.mboxDefault").remove();
+								log.debug("mboxDefault removed..");
+							}
 							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 						}
 						else{
@@ -163,6 +173,11 @@ public class ArchitechtureVariation1 extends BaseAction{
 					Node textNode;
 					for(Element ele : textElements){
 						textNode = (Node)textNodeIterator.next();
+						if(ele.hasClass("mboxDefault")){
+							log.debug("has mboxDefault class..");
+							ele.select("div.mboxDefault").remove();
+							log.debug("mboxDefault removed..");
+						}
 						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 					}
 					sb.append(Constants.Text_Element_Mismatch+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
