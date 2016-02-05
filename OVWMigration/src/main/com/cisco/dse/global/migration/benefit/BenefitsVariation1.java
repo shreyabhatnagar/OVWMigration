@@ -234,7 +234,7 @@ public class BenefitsVariation1 extends BaseAction {
 				// -------------------------------------------------------------------------------------------------------
 				// start of right list component
 				Elements listEle = doc.select("div.n13-pilot");
-				if (listEle != null) {
+				if (!listEle.isEmpty()) {
 					sb.append(Constants.LIST_NODE_NOT_FOUND);
 				}
 				// end of right list component
