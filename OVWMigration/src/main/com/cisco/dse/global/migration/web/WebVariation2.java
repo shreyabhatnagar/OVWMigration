@@ -174,7 +174,7 @@ public class WebVariation2 extends BaseAction {
 													+ herolinkUrl);
 											herolinkUrl = FrameworkUtils
 													.getLocaleReference(herolinkUrl,
-															urlMap, locale, sb);
+															urlMap,locale, sb);
 											log.debug("heroPanellinkUrl after migration : "
 													+ herolinkUrl);
 											// End extracting valid href
@@ -325,7 +325,7 @@ public class WebVariation2 extends BaseAction {
 							// Start extracting valid href
 							log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 							aHref = FrameworkUtils.getLocaleReference(aHref,
-									urlMap, locale, sb);
+									urlMap,locale, sb);
 							log.debug("after primaryCTALinkUrl" + aHref + "\n");
 							// End extracting valid href
 						} else {
@@ -420,6 +420,34 @@ public class WebVariation2 extends BaseAction {
 							htmlEle.select("div.s12-pilot").remove();
 						}
 						log.debug("gd-right " + htmlEle);
+						//Fix By Aziz
+						Element popUp = htmlEle.getElementsByClass("c23-pilot").first().getElementsByTag("a").first();
+						if(popUp != null){
+							if(popUp.hasAttr("data-config-targetlightbox")){
+								String id = popUp.attr("data-config-targetlightbox");
+								Element popUpHeading = doc.getElementById(id);
+								if(popUpHeading != null){
+									Element popUpHeader = popUpHeading.getElementsByTag("h2").first();
+									if(popUpHeader != null){
+										Node c26v4_popup_cqNode = rightHtmlblobNode.hasNode("c26v4_popup_cq") ? rightHtmlblobNode.getNode("c26v4_popup_cq") : null;
+										if(c26v4_popup_cqNode != null){
+											c26v4_popup_cqNode.setProperty("popupHeader", popUpHeader.text());
+										}else{
+											sb.append("<li>PopUpNode not found.</li>");
+										}
+									}else{
+										sb.append("<li>PopUp heading element not found in web page.</li>");
+									}
+								}else{
+									sb.append("<li>PopUp anchor element not found in web page.</li>");
+								}
+							}else{
+								sb.append("<li>PopUp anchor element not found in web page.</li>");
+							}
+						}else{
+							sb.append("<li>PopUp anchor element not found in web page.</li>");
+						}
+						//End of Fix
 						htmlContent = FrameworkUtils.extractHtmlBlobContent(
 								htmlEle, "", locale, sb, urlMap);
 					} else {

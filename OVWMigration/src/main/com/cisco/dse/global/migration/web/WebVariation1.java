@@ -182,7 +182,7 @@ public class WebVariation1 extends BaseAction{
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Elements htmlBlobElements = doc.select("div.gd12-pilot").select("div.gd-right");
+					Elements htmlBlobElements = doc.select("div.gd-right").select("div.c00v0-pilot");
 					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
 						htmlBlobElements = doc.select("div.f-holder");
 					}

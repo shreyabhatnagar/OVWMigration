@@ -215,7 +215,7 @@ public class WebVariation3 extends BaseAction{
 							if(aURL.equals("")){
 								aURL = a.attr("href");
 							}
-							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
+							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap,locale, sb);
 							JSONObject obj = new JSONObject();
 							obj.put("linktext", a.text());
 							obj.put("linkurl",aURL);
@@ -319,7 +319,7 @@ public class WebVariation3 extends BaseAction{
 								}
 								// Start extracting valid href
 								log.debug("heroPanellinkUrl before migration : " + heroPanellinkUrl);
-								heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
+								heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap,locale, sb);
 								log.debug("heroPanellinkUrl after migration : " + heroPanellinkUrl);
 								// End extracting valid href
 							} else {
@@ -448,7 +448,7 @@ public class WebVariation3 extends BaseAction{
 						if(aUrl.equals("")){
 							aUrl = link.attr("href");
 						}
-						aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
+						aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap,locale, sb);
 						Node linkUrlNode = ctaNode.getNode("linkurl");
 						linkUrlNode.setProperty("url", aUrl);
 					}else{
@@ -485,7 +485,9 @@ public class WebVariation3 extends BaseAction{
 		if (textElement != null) {
 			if (midSizeLowerLeftNode.hasNode("text")) {
 				Node textNode = midSizeLowerLeftNode.getNode("text");
-				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap));
+				String text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
+				text = text.replace(text.substring(0, text.indexOf("<h2>")), "").replace("</div>", "");
+				textNode.setProperty("text",text );
 			}else{
 				sb.append(Constants.TEXT_NODE_NOT_FOUND);
 			}
