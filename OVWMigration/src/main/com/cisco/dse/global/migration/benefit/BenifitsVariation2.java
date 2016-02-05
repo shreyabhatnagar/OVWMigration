@@ -211,7 +211,7 @@ public class BenifitsVariation2 extends BaseAction{
 											if(StringUtil.isBlank(aHref)){
 												aHref = aEle.attr("href");
 											}
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											spCta.setProperty("url",aHref);
 										}else{
 											sb.append(Constants.CTA_NOT_AVAILABLE);
@@ -267,12 +267,12 @@ public class BenifitsVariation2 extends BaseAction{
 						NodeIterator tileNodeIterator = benifitsRightNode.hasNode("tile_bordered")?benifitsRightNode.getNodes("tile_bordered*"):null;
 						int tileNodeSize = (int)tileNodeIterator.getSize();
 						if(tileEleSize==tileNodeSize){
-							setTile(tileEle, tileNodeIterator,urlMap);
+							setTile(tileEle, tileNodeIterator,urlMap, locale);
 						}else if(tileEleSize>tileNodeSize){
-							setTile(tileEle, tileNodeIterator,urlMap);
+							setTile(tileEle, tileNodeIterator,urlMap, locale);
 							sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}else if(tileEleSize<tileNodeSize){
-							setTile(tileEle, tileNodeIterator,urlMap);
+							setTile(tileEle, tileNodeIterator,urlMap, locale);
 							sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}
 						log.debug("end of right rail..");
@@ -298,7 +298,7 @@ public class BenifitsVariation2 extends BaseAction{
 		session.save();
 		return sb.toString();
 	}
-	public void setTile(Elements tileEle,NodeIterator tileNodeIterator,Map<String,String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setTile(Elements tileEle,NodeIterator tileNodeIterator,Map<String,String> urlMap, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		if(tileEle!=null){
 			for(Element tile : tileEle){
 				Element tTitleEle = tile.getElementsByTag("h2").first();
@@ -319,7 +319,7 @@ public class BenifitsVariation2 extends BaseAction{
 						if(StringUtil.isBlank(aHref)){
 							aHref = aEle.attr("href");
 						}
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 						tileNode.setProperty("linkurl",aHref);	
 					}
 				}

@@ -181,7 +181,7 @@ public class ProductListingVariation6 extends BaseAction {
 																		}
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl + "\n");
-																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 																		log.debug("after linkUrl" + linkUrl + "\n");
 																		// End extracting valid href
 																	} 
@@ -284,7 +284,7 @@ public class ProductListingVariation6 extends BaseAction {
 																							}
 																							// Start extracting valid href
 																							log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
-																							linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																							linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
 																							log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
 																							// End extracting valid href
 																							if (title.equals(previousTitle)) {
@@ -355,7 +355,7 @@ public class ProductListingVariation6 extends BaseAction {
 																							}
 																							// Start extracting valid href
 																							log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																							linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																							linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
 																							log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																							// End extracting valid href
 																						} else {

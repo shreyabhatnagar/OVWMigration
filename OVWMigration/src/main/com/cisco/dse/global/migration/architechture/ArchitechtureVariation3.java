@@ -122,7 +122,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 				// Start of Right Rail
 				try {
-					migrateRightRailContent(doc, architectureRightNode, urlMap);
+					migrateRightRailContent(doc, architectureRightNode, urlMap,locale);
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
 				}
@@ -407,7 +407,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 					if(StringUtil.isBlank(aURL)){
 						aURL = a.attr("href");
 					}
-					aURL = FrameworkUtils.getLocaleReference(aURL, urlMap);
+					aURL = FrameworkUtils.getLocaleReference(aURL, urlMap,locale,sb);
 					JSONObject obj = new JSONObject();
 					obj.put("linktext", a.text()+text);
 					obj.put("linkurl", aURL);
@@ -430,7 +430,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of Right rail migration
 	private void migrateRightRailContent(Document doc,
-			Node architectureRightNode, Map<String, String> urlMap) {
+			Node architectureRightNode, Map<String, String> urlMap, String locale) {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select(
@@ -469,7 +469,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 								if (tileIterator.hasNext()) {
 									listNode = (Node) tileIterator.next();
 									setRightRailContent(listNode, rightListEle,
-											urlMap);
+											urlMap,locale);
 								} else {
 									log.debug("Next node not found");
 								}
@@ -480,7 +480,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 								if (tileIterator.hasNext()) {
 									listNode = (Node) tileIterator.next();
 									setRightRailContent(listNode, rightListEle,
-											urlMap);
+											urlMap,locale);
 								} else {
 									log.debug("Next node not found");
 									sb.append(Constants.RIGHT_RAIL_NODE_COUNT
@@ -496,7 +496,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 								if (tileIterator.hasNext()) {
 									listNode = (Node) tileIterator.next();
 									setRightRailContent(listNode, rightListEle,
-											urlMap);
+											urlMap,locale);
 								} else {
 									log.debug("Next node not found");
 								}
@@ -519,7 +519,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of setting Right rail Content
 	public void setRightRailContent(Node listNode, Element rightListEle,
-			Map<String, String> urlMap) {
+			Map<String, String> urlMap, String locale) {
 		try {
 			Element title;
 			Element description;
@@ -548,7 +548,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 			if(StringUtil.isBlank(listurl)){
 				listurl = listtext.attr("href");
 			}
-			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap);
+			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap, locale, sb);
 			String linkStringValue = null;
 			if (listNode.hasProperty("linktrigger")) {
 				Property linkTrigger = listNode.getProperty("linktrigger");

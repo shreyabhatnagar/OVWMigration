@@ -246,7 +246,7 @@ public class PartnerVariation1 extends BaseAction {
 				String aHref = aHero.absUrl("href");
 				if(StringUtil.isBlank(aHref)){
 					aHref = aHero.attr("href");				}
-				heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap));
+				heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb));
 			}else{
 				sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 			}

@@ -216,7 +216,7 @@ public class ProductLandingVariation6 extends BaseAction {
 														}
 														// Start extracting valid href
 														log.debug("Before heroPanelLinkUrl" + ahref + "\n");
-														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap);
+														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap, locale, sb);
 														log.debug("after heroPanelLinkUrl" + ahref + "\n");
 														// End extracting valid href
 														heropanelNode.setProperty("linktext", aText);
@@ -338,7 +338,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after primaryCTALinkUrl" + aHref + "\n");
 										// End extracting valid href
 									} else {
@@ -386,7 +386,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before rightrailsocialLinkUrl" + href + "\n");
-										href = FrameworkUtils.getLocaleReference(href, urlMap);
+										href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb);
 										log.debug("after rightrailsocialLinkUrl" + href + "\n");
 										// End extracting valid href
 										obj.put("linktext", title);
@@ -672,7 +672,7 @@ public class ProductLandingVariation6 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("Before listLinkUrl" + aLink + "\n");
-												aLink = FrameworkUtils.getLocaleReference(aLink, urlMap);
+												aLink = FrameworkUtils.getLocaleReference(aLink, urlMap, locale, sb);
 												log.debug("after listLinkUrl" + aLink + "\n");
 												// End extracting valid href
 												obj.put("linktext", aText);
@@ -835,7 +835,7 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gridtwoLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after gridtwoLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -953,7 +953,7 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gridThreeLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after gridThreeLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -1097,7 +1097,7 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gridFourLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after gridFourLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -1196,7 +1196,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before rightGridLinkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after rightGridLinkUrl" + aHref + "\n");
 										// End extracting valid href
 									} else {

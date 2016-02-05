@@ -182,7 +182,7 @@ public class SubCatVariation2 extends BaseAction{
 									}
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after heroPanelLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -369,7 +369,7 @@ public class SubCatVariation2 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before ListLinkUrl" + anchorHref + "\n");
-											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 											log.debug("after ListLinkUrl" + anchorHref + "\n");
 											// End extracting valid href
 											String anchorTarget = listItemAnchor
@@ -504,7 +504,7 @@ public class SubCatVariation2 extends BaseAction{
 									}
 									// Start extracting valid href
 									log.debug("Before followusLinkUrl" + href + "\n");
-									href = FrameworkUtils.getLocaleReference(href, urlMap);
+									href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb);
 									log.debug("after followusLinkUrl" + href + "\n");
 									// End extracting valid href
 									obj.put("linktext", title);
@@ -837,7 +837,7 @@ public class SubCatVariation2 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before ListLinkUrl" + anchorHref + "\n");
-											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 											log.debug("after ListLinkUrl" + anchorHref + "\n");
 											// End extracting valid href
 											String anchorTarget = listItemAnchor
@@ -1012,7 +1012,7 @@ public class SubCatVariation2 extends BaseAction{
 					}
 					// Start extracting valid href
 					log.debug("Before spotlight LinkUrl" + linkUrl + "\n");
-					linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+					linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 					log.debug("after spotlight LinkUrl" + linkUrl + "\n");
 					// End extracting valid href
 					slNode.setProperty("linktext", linkText);
@@ -1039,7 +1039,7 @@ public class SubCatVariation2 extends BaseAction{
 						}
 						// Start extracting valid href
 						log.debug("Before spotlight LinkUrl" + slLinkUrl + "\n");
-						slLinkUrl = FrameworkUtils.getLocaleReference(slLinkUrl, urlMap);
+						slLinkUrl = FrameworkUtils.getLocaleReference(slLinkUrl, urlMap, locale, sb);
 						log.debug("after spotlight LinkUrl" + slLinkUrl + "\n");
 						// End extracting valid href
 						slNode.setProperty("title", slLinkText);

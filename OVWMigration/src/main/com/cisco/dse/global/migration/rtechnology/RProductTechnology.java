@@ -90,7 +90,7 @@ public class RProductTechnology extends BaseAction {
 				//Start tile Border Migration
 				try{
 					Elements tileBorderEle = doc.select("div.cc23-pilot");
-					migrateTileElements(tileBorderEle , technologyRightNode,urlMap);
+					migrateTileElements(tileBorderEle , technologyRightNode,urlMap, locale);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
@@ -166,7 +166,7 @@ public class RProductTechnology extends BaseAction {
 	}
 
 	private void migrateTileElements(Elements tileBorderEle,
-			Node technologyRightNode,Map<String,String> urlMap) throws PathNotFoundException, RepositoryException, JSONException {
+			Node technologyRightNode,Map<String,String> urlMap, String locale) throws PathNotFoundException, RepositoryException, JSONException {
 		if(tileBorderEle != null){
 			//List Component
 			Element listEle = tileBorderEle.first();
@@ -259,7 +259,7 @@ public class RProductTechnology extends BaseAction {
 							if(StringUtil.isBlank(aHref)){
 								aHref = a.attr("href");
 							}
-							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 							tileNode.setProperty("linkurl",aHref );
 							tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 							if(lightboxid != null){
@@ -295,7 +295,7 @@ public class RProductTechnology extends BaseAction {
 							if(StringUtil.isBlank(aHref)){
 								aHref = a.attr("href");
 							}
-							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 							tileNode.setProperty("linkurl", aHref);
 							tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 							if(lightboxid != null){
@@ -335,7 +335,7 @@ public class RProductTechnology extends BaseAction {
 								if(StringUtil.isBlank(aHref)){
 									aHref = a.attr("href");
 								}
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								tileNode.setProperty("linkurl", aHref);
 								tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 								if(lightboxid != null){

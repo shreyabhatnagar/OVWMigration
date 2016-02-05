@@ -182,7 +182,7 @@ public class SolutionListingVariation6 extends BaseAction {
 											+ herolinkUrl);
 									herolinkUrl = FrameworkUtils
 											.getLocaleReference(herolinkUrl,
-													urlMap);
+													urlMap, locale, sb);
 									log.debug("heroPanellinkUrl after migration : "
 											+ herolinkUrl);
 									// End extracting valid href
@@ -445,7 +445,7 @@ public class SolutionListingVariation6 extends BaseAction {
 				// Start extracting valid href
 				log.debug("Before titleLink" + titleLink + "\n");
 				titleLink = FrameworkUtils
-						.getLocaleReference(titleLink, urlMap);
+						.getLocaleReference(titleLink, urlMap, locale, sb);
 				log.debug("after titleLink" + titleLink + "\n");
 				// End extracting valid href
 

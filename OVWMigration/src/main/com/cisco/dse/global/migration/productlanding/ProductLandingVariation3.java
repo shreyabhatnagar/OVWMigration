@@ -135,7 +135,7 @@ public class ProductLandingVariation3 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("primaryCTALinkUrl before migration : " + primaryCTALinkUrl);
-												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
 												log.debug("primaryCTALinkUrl after migration : " + primaryCTALinkUrl);
 												// End extracting valid href
 											} else {
@@ -275,7 +275,7 @@ public class ProductLandingVariation3 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl);
-											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
 											log.debug("after heroPanellinkUrl" + heroPanellinkUrl);
 											// End extracting valid href
 										} else {
@@ -478,7 +478,7 @@ public class ProductLandingVariation3 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before tileborderedLinkUrl" + anchorHref);
-								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 								log.debug("after tileborderedLinkUrl" + anchorHref);
 								// End extracting valid href
 								if (titleBorderNodes.hasNext()) {

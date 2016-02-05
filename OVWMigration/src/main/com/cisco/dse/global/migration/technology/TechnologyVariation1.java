@@ -158,7 +158,7 @@ public class TechnologyVariation1 extends BaseAction {
 					if(aUrl == ""){
 						aUrl = a.attr("href");
 					}
-					aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap);
+					aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 					obj.put("linktext",a.text());
 					obj.put("linkurl",aUrl);
 					obj.put("icon","none");
@@ -208,7 +208,7 @@ public class TechnologyVariation1 extends BaseAction {
 							if(linkurl.equals("")){
 								linkurl = anchor.attr("href");
 							}
-							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap);
+							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb);
 							linkurl = linkurl.replaceAll(" ", "").replaceAll("%20", "");
 							tileNode.setProperty("linkurl", linkurl);
 						}else{

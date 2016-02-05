@@ -174,7 +174,7 @@ public class WebVariation2 extends BaseAction {
 													+ herolinkUrl);
 											herolinkUrl = FrameworkUtils
 													.getLocaleReference(herolinkUrl,
-															urlMap);
+															urlMap, locale, sb);
 											log.debug("heroPanellinkUrl after migration : "
 													+ herolinkUrl);
 											// End extracting valid href
@@ -325,7 +325,7 @@ public class WebVariation2 extends BaseAction {
 							// Start extracting valid href
 							log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 							aHref = FrameworkUtils.getLocaleReference(aHref,
-									urlMap);
+									urlMap, locale, sb);
 							log.debug("after primaryCTALinkUrl" + aHref + "\n");
 							// End extracting valid href
 						} else {

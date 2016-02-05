@@ -160,7 +160,7 @@ public class WebVariation9 extends BaseAction{
 											+ herolinkUrl);
 									herolinkUrl = FrameworkUtils
 											.getLocaleReference(herolinkUrl,
-													urlMap);
+													urlMap, locale, sb);
 									log.debug("heroPanellinkUrl after migration : "
 											+ herolinkUrl);
 									// End extracting valid href

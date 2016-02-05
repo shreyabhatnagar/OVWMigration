@@ -153,7 +153,7 @@ public class RBenefitVariation1 extends BaseAction {
 						// Start extracting valid href
 						log.debug("Before ctaLink" + ctaLink + "\n");
 						ctaLink = FrameworkUtils.getLocaleReference(ctaLink,
-								urlMap);
+								urlMap, locale, sb);
 						log.debug("after ctaLink" + ctaLink + "\n");
 						// End extracting valid href
 
@@ -324,7 +324,7 @@ public class RBenefitVariation1 extends BaseAction {
 						// Start extracting valid href
 						log.debug("Before ctaLink" + ctaLink + "\n");
 						ctaLink = FrameworkUtils.getLocaleReference(ctaLink,
-								urlMap);
+								urlMap, locale, sb);
 						log.debug("after ctaLink" + ctaLink + "\n");
 						// End extracting valid href
 
@@ -447,7 +447,7 @@ public class RBenefitVariation1 extends BaseAction {
 													+ "\n");
 											aHref = FrameworkUtils
 													.getLocaleReference(aHref,
-															urlMap);
+															urlMap, locale, sb);
 											log.debug("after aHref" + aHref
 													+ "\n");
 											// End extracting valid href
@@ -536,7 +536,7 @@ public class RBenefitVariation1 extends BaseAction {
 								// Start extracting valid href
 								log.debug("Before ctaLink" + ctaLink + "\n");
 								ctaLink = FrameworkUtils.getLocaleReference(
-										ctaLink, urlMap);
+										ctaLink, urlMap, locale, sb);
 								log.debug("after ctaLink" + ctaLink + "\n");
 								// End extracting valid href
 								if (tileIterator.hasNext()) {

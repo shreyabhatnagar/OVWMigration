@@ -370,7 +370,7 @@ public class BenefitsVariation03 extends BaseAction {
 								if(StringUtil.isBlank(aHref)){
 									aHref = a.attr("href");
 								}
-								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								obj.put("linktext", a.text()+ " "+text);
@@ -579,7 +579,7 @@ public class BenefitsVariation03 extends BaseAction {
 				}
 				// Start extracting valid href
 				log.debug("Before anchorHref" + listurl.absUrl("href") + "\n");
-				String anchorHref = FrameworkUtils.getLocaleReference(listHref, urlMap);
+				String anchorHref = FrameworkUtils.getLocaleReference(listHref, urlMap, locale, sb);
 				log.debug("after anchorHref" + anchorHref + "\n");
 				// End extracting valid href
 

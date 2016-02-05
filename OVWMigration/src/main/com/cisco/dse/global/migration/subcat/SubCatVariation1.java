@@ -183,7 +183,7 @@ public class SubCatVariation1 extends BaseAction {
 											+ herolinkUrl);
 									herolinkUrl = FrameworkUtils
 											.getLocaleReference(herolinkUrl,
-													urlMap);
+													urlMap, locale, sb);
 									log.debug("heroPanellinkUrl after migration : "
 											+ herolinkUrl);
 									// End extracting valid href
@@ -408,7 +408,7 @@ public class SubCatVariation1 extends BaseAction {
 								// Start extracting valid href
 								log.debug("Before pilotLinkUrl" + href + "\n");
 								href = FrameworkUtils.getLocaleReference(href,
-										urlMap);
+										urlMap, locale, sb);
 								log.debug("after pilotLinkUrl" + href + "\n");
 								// End extracting valid href
 								obj.put("linktext", title);
@@ -616,7 +616,7 @@ public class SubCatVariation1 extends BaseAction {
 						// Start extracting valid href
 						log.debug("Before ctaLink" + ctaLink + "\n");
 						ctaLink = FrameworkUtils.getLocaleReference(ctaLink,
-								urlMap);
+								urlMap, locale, sb);
 						log.debug("after ctaLink" + ctaLink + "\n");
 						// End extracting valid href
 

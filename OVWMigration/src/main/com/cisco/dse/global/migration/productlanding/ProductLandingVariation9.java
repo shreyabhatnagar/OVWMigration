@@ -153,7 +153,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after primaryCTALinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -245,7 +245,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after heroPanelLinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -364,7 +364,7 @@ public class ProductLandingVariation9 extends BaseAction{
 													}
 													// Start extracting valid href
 													log.debug("Before selectorbartitleLinkUrl" + titleURL + "\n");
-													titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap);
+													titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap, locale, sb);
 													log.debug("after selectorbartitleLinkUrl" + titleURL + "\n");
 													// End extracting valid href
 												} else {
@@ -382,7 +382,7 @@ public class ProductLandingVariation9 extends BaseAction{
 													}
 													// Start extracting valid href
 													log.debug("Before selectorbarmenuLinkUrl" + aHref + "\n");
-													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 													log.debug("after selectorbarmenuLinkUrl" + aHref + "\n");
 													// End extracting valid href
 												} else {
@@ -422,7 +422,7 @@ public class ProductLandingVariation9 extends BaseAction{
 																}
 																// Start extracting valid href
 																log.debug("Before selectorbarLinkUrl" + anchorHref + "\n");
-																anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+																anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 																log.debug("after selectorbarLinkUrl" + anchorHref + "\n");
 																// End extracting valid href
 																jsonObj.put("linktext", anchorText);
@@ -700,7 +700,7 @@ public class ProductLandingVariation9 extends BaseAction{
 									}
 									// Start extracting valid href
 									log.debug("Before tileborderedLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after tileborderedLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {

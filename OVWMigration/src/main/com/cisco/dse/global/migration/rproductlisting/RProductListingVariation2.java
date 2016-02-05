@@ -507,7 +507,7 @@ public class RProductListingVariation2 extends BaseAction{
 																				
 																				// Start extracting valid href
 																				log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
-																				linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																				linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
 																				log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
 																				// End extracting valid href
 																			} else {
@@ -621,7 +621,7 @@ public class RProductListingVariation2 extends BaseAction{
 																				}
 																				// Start extracting valid href
 																				log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																				linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																				linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
 																				log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																				// End extracting valid href
 																			

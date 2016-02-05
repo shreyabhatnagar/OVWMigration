@@ -203,7 +203,7 @@ public class RProductLandingVariation1 extends BaseAction {
 												log.debug("primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 												// Start extracting valid href
 												log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
-												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
 												log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 												// End extracting valid href
 									
@@ -234,7 +234,7 @@ public class RProductLandingVariation1 extends BaseAction {
 									log.debug("primaryCTALinkUrl" + primaryCTALinkText + "\n");
 									// Start extracting valid href
 									log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
-									primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap);
+									primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
 									log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 									// End extracting valid href
 								}else {
@@ -406,7 +406,7 @@ public class RProductLandingVariation1 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
-											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap);
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
 											log.debug("after heroPanellinkUrl" + heroPanellinkUrl + "\n");
 											// End extracting valid href
 									
@@ -647,7 +647,7 @@ public class RProductLandingVariation1 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("Before anchorHref " + anchorHref + "\n");
-												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 												log.debug("after anchorHref" + anchorHref + "\n");
 												// End extracting valid href
 												if (linkItemIterator.hasNext()) {
@@ -745,7 +745,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																		}
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl + "\n");
-																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap);
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 																		log.debug("after linkUrl" + linkUrl + "\n");
 																		// End extracting valid href
 																	}
@@ -878,7 +878,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																					}
 																					// Start extracting valid href
 																					log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
-																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap);
+																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
 																					log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
 																					// End extracting valid href
 																				} else {
@@ -996,7 +996,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																													}
 																													// Start extracting valid href
 																													log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																													linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap);
+																													linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
 																													log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																													// End extracting valid href
 																													ownTextCheck = false;
@@ -1253,7 +1253,7 @@ public class RProductLandingVariation1 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before anchorHref" + anchorHref + "\n");
-										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 										log.debug("after anchorHref" + anchorHref + "\n");
 										// End extracting valid href
 								if (anchor != null && anchor.size() > 1) {
@@ -1379,7 +1379,7 @@ public class RProductLandingVariation1 extends BaseAction {
 														}
 														// Start extracting valid href
 														log.debug("Before anchorHref" + anchorHref + "\n");
-														anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap);
+														anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 														log.debug("after anchorHref" + anchorHref + "\n");
 														// End extracting valid href
 														if (item.hasNext()) {

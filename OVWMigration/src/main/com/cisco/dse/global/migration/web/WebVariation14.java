@@ -224,7 +224,7 @@ public class WebVariation14 extends BaseAction {
 									aHref = anchorText.attr("href");
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after heroPanelLinkUrl" + aHref + "\n");
 									// End extracting valid href
 									heroPanelNode.setProperty("linktext", aText);

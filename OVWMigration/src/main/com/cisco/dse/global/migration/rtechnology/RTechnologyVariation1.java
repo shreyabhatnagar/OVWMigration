@@ -112,7 +112,7 @@ public class RTechnologyVariation1 extends BaseAction {
 					}else{
 						tileBorderEle = tileBorderEles.first();
 					}
-					migrateTileElements(tileBorderEle , technologyRightNode , urlMap);
+					migrateTileElements(tileBorderEle , technologyRightNode , urlMap, locale);
 					log.debug("Tile Border is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in tile Border Migration");
@@ -246,7 +246,7 @@ public class RTechnologyVariation1 extends BaseAction {
 												if(StringUtil.isBlank(url)){
 													url = anchor.attr("href");
 												}
-												url = FrameworkUtils.getLocaleReference(url, urlMap);
+												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
 											}else{
@@ -263,7 +263,7 @@ public class RTechnologyVariation1 extends BaseAction {
 												if(StringUtil.isBlank(url)){
 													url = anchor.attr("href");
 												}
-												url = FrameworkUtils.getLocaleReference(url, urlMap);
+												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
 											}else{
@@ -284,7 +284,7 @@ public class RTechnologyVariation1 extends BaseAction {
 													if(StringUtil.isBlank(url)){
 														url = anchor.attr("href");
 													}
-													url = FrameworkUtils.getLocaleReference(url, urlMap);
+													url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 													linkdataNode.setProperty("linktext", linkText);
 													linkdataNode.setProperty("url", url);
 												}else{
@@ -321,7 +321,7 @@ public class RTechnologyVariation1 extends BaseAction {
 	}
 
 	private void migrateTileElements(Element tileBorderEle,
-			Node technologyRightNode, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			Node technologyRightNode, Map<String, String> urlMap, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if(tileBorderEle != null){
 			Element heading = tileBorderEle.getElementsByTag("h3").first();
 			if(heading != null){
@@ -358,7 +358,7 @@ public class RTechnologyVariation1 extends BaseAction {
 											if(StringUtil.isBlank(url)){
 												url = anchor.attr("href");
 											}
-											url = FrameworkUtils.getLocaleReference(url, urlMap);
+											url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 											linkdataNode.setProperty("linktext", linkText);
 											linkdataNode.setProperty("url", url);
 										}else{
@@ -375,7 +375,7 @@ public class RTechnologyVariation1 extends BaseAction {
 											if(StringUtil.isBlank(url)){
 												url = anchor.attr("href");
 											}
-											url = FrameworkUtils.getLocaleReference(url, urlMap);
+											url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 											linkdataNode.setProperty("linktext", linkText);
 											linkdataNode.setProperty("url", url);
 										}else{
@@ -396,7 +396,7 @@ public class RTechnologyVariation1 extends BaseAction {
 												if(StringUtil.isBlank(url)){
 													url = anchor.attr("href");
 												}
-												url = FrameworkUtils.getLocaleReference(url, urlMap);
+												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
 											}else{
