@@ -15,24 +15,25 @@ import org.jsoup.nodes.Document;
 public abstract class BaseAction {
 
 	static Logger log = Logger.getLogger(BaseAction.class);
-
 	protected Document getConnection(String loc) {
 		Document doc = null;
 		try {			
 			log.debug("Inside the getConnection method.");
-			Connection connection = null;
 			for (int retry=0; retry<10; retry++) {
 				log.debug("Trying to establish connection to "+loc+". Connection retry count is : "+retry);
-				connection = Jsoup.connect(loc);
+				Connection connection = Jsoup.connect(loc).timeout(10000);
 				if (connection != null) {
 					try {
-						log.debug("Connection established!!!");
 						doc = connection.get();
+						log.debug("Connection established!!!");
 						break;
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						log.error("Exception : ",e);
 						log.debug("As document is not retrieved due to above exception, connection retry loop will continue.");
+					} finally{
+						if(connection != null){
+							connection = null;
+						}
 					}
 				}
 				Thread.sleep(3000);
@@ -40,7 +41,6 @@ public abstract class BaseAction {
 		}catch (Exception e) {
 			log.error("Exception : ", e);
 		}
-
 		return doc;
 	}
 	
@@ -48,14 +48,11 @@ public abstract class BaseAction {
 		
 		Properties prop = new Properties();
 		InputStream input = null;
-
 		String ciscoid = null;
 		String ciscopwd = null;
-
 		try {
 			String filename = "config.properties";
-			input = OVWMigration.class.getClassLoader().getResourceAsStream(
-					filename);
+			input = OVWMigration.class.getClassLoader().getResourceAsStream(filename);
 			if (input == null) {
 				log.debug("input is null");
 			}
@@ -64,7 +61,6 @@ public abstract class BaseAction {
 
 			ciscoid = StringUtils.isNotBlank(prop.getProperty("ciscoid")) ? prop.getProperty("ciscoid") : "";
 			ciscopwd = StringUtils.isNotBlank(prop.getProperty("ciscopwd")) ? prop.getProperty("ciscopwd") : "";
-
 			log.debug("ciscoid : "+ciscoid);
 			log.debug("ciscopwd : "+ciscopwd);
 			
@@ -88,7 +84,6 @@ public abstract class BaseAction {
 			Map<String, String> cookies = null;
 			
 			String loginUrl = "https://sso.cisco.com/autho/login/loginaction.html";
-			
 			if(StringUtils.isNotBlank(ciscoid) && StringUtils.isNotBlank(ciscopwd)){
 			for (int retry=0; retry<10; retry++) {
 				Connection.Response res = null;
@@ -96,6 +91,7 @@ public abstract class BaseAction {
 				try{
 					log.debug("trying to connect with credentials");
 					res = Jsoup.connect(loginUrl)
+							.timeout(10000)
 							.data("userid", ciscoid, "password", ciscopwd)
 							.method(Method.POST)
 							.execute();
@@ -117,7 +113,6 @@ public abstract class BaseAction {
 				}
 				Thread.sleep(3000);
 			}
-			
 			for (int retry=0; retry<10; retry++) {
 				log.debug("Trying to establish connection to "+loc+". Connection retry count is : "+retry);
 				connection = Jsoup.connect(loc).cookies(cookies);
@@ -137,12 +132,9 @@ public abstract class BaseAction {
 			}else{
 				log.debug("please configure ciscoid and ciscoppwd");
 			}
-			
 		}catch (Exception e) {
 			log.error("Exception : ", e);
 		}
-		
-
 		return doc;
 	}
 }

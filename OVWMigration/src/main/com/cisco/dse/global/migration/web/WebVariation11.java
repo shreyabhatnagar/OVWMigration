@@ -357,10 +357,14 @@ public class WebVariation11 extends BaseAction{
 					}
 					if(!fHolderExists){
 						textElement = doc.select("div.contcss").first();
+						//log.debug("text element: "+ textElement);
 					}
-					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
+					if(textElement != null){
+						String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
+						htmlBlob.setProperty("html", html);
+					}
 					
-					htmlBlob.setProperty("html", html);
+					
 				}
 			} else {
 				log.debug("Right panel is not available");
