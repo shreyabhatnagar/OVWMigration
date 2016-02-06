@@ -28,7 +28,7 @@ public class GetPdfList {
 						System.out.println("Url : " + gLink);
 						for (Element ele : links1) {
 							String link = ele.attr("href");
-							if (link.endsWith(".pdf")) {
+							if (link.endsWith(".pdf") || link.endsWith(".PDF")) {
 								System.out.println(link);
 							}
 						}
