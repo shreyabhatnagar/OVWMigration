@@ -19,6 +19,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
@@ -30,6 +31,9 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.DamConstants;
+import com.day.cq.dam.commons.util.AssetReferenceSearch;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
@@ -62,7 +66,24 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 		String pagePath = request.getParameter("pagePath");
 		Map<String, String> queryMap = new HashMap<String, String>();
 		Set<String> set = new HashSet<String>();
-
+		
+		try {
+			resourceResolver = resolverFactory.getAdministrativeResourceResolver(null);
+			Resource r = resourceResolver.getResource(pagePath+"/jcr:content");
+			Node n = r.adaptTo(Node.class);
+			AssetReferenceSearch ref = new AssetReferenceSearch(n, DamConstants.MOUNTPOINT_ASSETS, resourceResolver);
+			Map<String, Asset> allref = new HashMap<String, Asset>();
+			allref.putAll(ref.search());
+			for (Map.Entry<String, Asset> entry : allref.entrySet()) {
+				String val = entry.getKey();
+				Asset asset = entry.getValue();
+				printWritter.print("\nassets : "+asset.getPath());
+			}
+		}catch(Exception e){
+			printWritter.print("Exception : " + e);
+		}
+		
+		/*
 		try {
 			resourceResolver = resolverFactory.getAdministrativeResourceResolver(null);
 			session = resourceResolver.adaptTo(Session.class);
@@ -141,6 +162,7 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 			printWritter.print("Exception : " + e);
 		}
 		printWritter.print(ja.toString());
+		*/
 	}
 
 	Set<String> getImagePathsFromHtml(String propName, String pagePath,
