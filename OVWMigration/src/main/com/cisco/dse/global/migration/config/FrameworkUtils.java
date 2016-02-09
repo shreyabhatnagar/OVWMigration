@@ -250,6 +250,9 @@ public class FrameworkUtils {
 						String imagePath = url.getPath();
 						if (imagePath.startsWith("/web/")) {
 							imgRef = imagePath.replace("/web/", "/content/dam/global/" + locale+"/");
+						}else if(imagePath.toLowerCase().startsWith("/en/us/")){
+							imgRef = imagePath.replace("/en/us/", "/content/dam/global/" + locale+"/");
+							imgRef = imagePath.replace("/en/US/", "/content/dam/global/" + locale+"/");
 						} else {
 							imgRef = "/content/dam/global/" + locale + imagePath;
 						}

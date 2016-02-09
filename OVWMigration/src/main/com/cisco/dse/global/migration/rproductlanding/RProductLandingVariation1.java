@@ -466,13 +466,18 @@ public class RProductLandingVariation1 extends BaseAction {
 										} else {
 											sb.append(Constants.HERO_SLIDE_LINKTEXT_NOT_FOUND);
 										}
-										if (StringUtils
-												.isNotBlank(heroPanellinkUrl)) {
-											heroPanelNode
-													.setProperty("linkurl",
-															heroPanellinkUrl);
+										if (heroPanelNode.hasNode("cta")) {
+											if (StringUtils
+													.isNotBlank(heroPanellinkUrl)) {
+												heroPanelNode
+														.getNode("cta")
+														.setProperty("url",
+																heroPanellinkUrl);
+											} else {
+												sb.append(Constants.HERO_SLIDE_LINKURL_NOT_FOUND);
+											}
 										} else {
-											sb.append(Constants.HERO_SLIDE_LINKURL_NOT_FOUND);
+											sb.append(Constants.HERO_COMPONENT_CTA_NODE_NOT_FOUND);
 										}
 										if (heroPanelNode.hasNode("image")) {
 											Node imageNode = heroPanelNode
