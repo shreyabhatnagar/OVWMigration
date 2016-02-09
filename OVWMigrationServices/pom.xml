@@ -131,6 +131,21 @@
   				<version>1.8.2</version>
   				<scope>provided</scope>
   			</dependency>
+  			<dependency>
+  				<groupId>com.day.jcr.vault</groupId>
+  				<artifactId>vault-commons</artifactId>
+  				<version>2.2.12</version>
+			</dependency>
+			<dependency>
+				<groupId>com.adobe.granite</groupId>
+				<artifactId>day-commons-ldapclient</artifactId>
+				<version>1.1.8</version>
+		</dependency>
+		<dependency>
+    		<groupId>com.adobe.granite</groupId>
+    		<artifactId>com.adobe.granite.asset.api</artifactId>
+    		<version>1.6</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 

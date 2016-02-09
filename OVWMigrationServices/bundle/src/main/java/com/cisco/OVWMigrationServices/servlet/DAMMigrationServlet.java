@@ -7,6 +7,7 @@ import java.net.URL;
 
 import javax.jcr.Node;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
@@ -22,10 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.AssetManager;
+import com.day.jcr.vault.util.MimeTypes;
 
 @SlingServlet(paths = { "/bin/services/DAMMigration" }, methods = { "GET" })
 @Properties({ @Property(name = "service.pid", value = "com.cisco.OVWMigrationServices.servlet.DAMMigrationServlet") })
-public class DAMMigrationServlet extends SlingAllMethodsServlet{
+public class DAMMigrationServlet extends SlingAllMethodsServlet {
 
 	/**
 	 * serialVersionUID = 1L;
@@ -33,83 +35,87 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet{
 	private static final long serialVersionUID = 1L;
 
 	/** The Constant LOG. */
-	private static final Logger LOG = LoggerFactory
-			.getLogger(DAMMigrationServlet.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DAMMigrationServlet.class);
 
 	@Reference
 	private ResourceResolverFactory resolverFactory;
 
-	protected void doPost(SlingHttpServletRequest request,
-			SlingHttpServletResponse response) throws IOException {
+	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
 
 		LOG.debug("In the doPost method of OVWMigrationServlet");
 		JSONObject jsonObj = new JSONObject();
 		PrintWriter printWritter = response.getWriter();
-		String errorMsg = "";
+		StringBuilder errorMsg = new StringBuilder();
 		ResourceResolver resourceResolver = null;
 		InputStream is = null;
-		String log = "";
+		StringBuilder log = new StringBuilder();
 		try {
 			String newImagePath = "";
 			String imgPath = request.getParameter("imgPath");
 			String imgRef = request.getParameter("imgRef");
 			String locale = request.getParameter("locale");
-			
-			String extension = imgPath.substring(imgPath.lastIndexOf(".")+1, imgPath.length());
-			
-			if(extension.length()>=4 || extension.lastIndexOf("?")!=-1){
-				if(extension.lastIndexOf("?")!=-1){
-					extension = extension.substring(0, extension.lastIndexOf("?"));
+
+			String extension = imgPath.substring(imgPath.lastIndexOf(".") + 1, imgPath.length());
+			if (extension.length() >= 4 || extension.lastIndexOf("?") != -1) {
+				if (extension.lastIndexOf("?") != -1) {
+					extension = extension.substring(0,
+							extension.lastIndexOf("?"));
 				}
 			}
-			
+
 			URL url = new URL(imgPath);
-			String path = url.getPath();
-			//String imageName = path.substring(path.lastIndexOf("/") + 1, path.length());
-			//String imagePath = path.substring(0, path.lastIndexOf("/"));
 			is = url.openStream();
-			resourceResolver = resolverFactory
-					.getAdministrativeResourceResolver(null);
-
-			AssetManager assetMgr = resourceResolver
-					.adaptTo(AssetManager.class);
-
+			resourceResolver = resolverFactory.getAdministrativeResourceResolver(null);
+			AssetManager assetMgr = resourceResolver.adaptTo(AssetManager.class);
 			Asset imageAsset = null;
-			if (extension.equalsIgnoreCase("pdf")) {
-				imageAsset = assetMgr.createAsset(imgRef, is, "application/pdf", true);
+			if (is != null) {
+				if (StringUtils.isNotBlank(extension)) {
+					String mimeType = MimeTypes.getMimeType(extension);
+					if (StringUtils.isNotBlank(mimeType)) {
+						com.adobe.granite.asset.api.AssetManager asserts = resourceResolver.adaptTo(com.adobe.granite.asset.api.AssetManager.class);
+						boolean assetExists = asserts.assetExists(imgRef);
+						if (!assetExists) {
+							imageAsset = assetMgr.createAsset(imgRef, is, mimeType, true);
+						} else {
+							log.append("~asset already exists");
+						}
+					} else {
+						log.append("~No mime Type Found");
+					}
+				} else {
+					log.append("~No extension Found in the url");
+				}
 			} else {
-				imageAsset = assetMgr.createAsset(imgRef, is, "image/jpeg",
-						true);
+				log.append("~Asset not found : " + url.getPath());
 			}
 			if (imageAsset != null) {
 				newImagePath = imageAsset.getPath();
 				Node imgNode = imageAsset.adaptTo(Node.class);
-				Node jcr_content = (imgNode != null && imgNode.hasNode("jcr:content"))?imgNode.getNode("jcr:content"):null;
-				Node metadata = (jcr_content != null && jcr_content.hasNode("metadata"))?jcr_content.getNode("metadata"):null;
-				log = log + "metadata NodePath : "+metadata.getPath();
+				Node jcr_content = (imgNode != null && imgNode.hasNode("jcr:content")) ? imgNode.getNode("jcr:content") : null;
+				Node metadata = (jcr_content != null && jcr_content.hasNode("metadata")) ? jcr_content.getNode("metadata") : null;
+				log = log.append("~metadata NodePath : ").append(metadata.getPath());
 				metadata.setProperty("jcr:language", locale);
 				metadata.getSession().save();
 			}
 			jsonObj.put("newImagePath", newImagePath);
 		} catch (Exception e) {
-			errorMsg = e.getMessage();
-		}finally{
-			if(resourceResolver != null){
+			errorMsg.append(e.getStackTrace());
+		} finally {
+			if (resourceResolver != null) {
 				resourceResolver.close();
 			}
-			if(is != null){
+			if (is != null) {
 				is.close();
 			}
 		}
-		try{
-			jsonObj.put("error", errorMsg);
-			jsonObj.put("log",log);
-		}catch(Exception e){
-			LOG.error("Exception : ",e);
+		try {
+			jsonObj.put("error", errorMsg.toString());
+			jsonObj.put("log", log.toString());
+		} catch (Exception e) {
+			LOG.error("Exception : ", e);
 		}
 		printWritter.print(jsonObj.toString());
 	}
-
 	protected void doGet(SlingHttpServletRequest request,
 			SlingHttpServletResponse response) throws IOException {
 		doPost(request, response);
