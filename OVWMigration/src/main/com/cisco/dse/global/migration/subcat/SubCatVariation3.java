@@ -94,7 +94,7 @@ public class SubCatVariation3 extends BaseAction {
 				try{
 					log.debug("Start Hero Element Migration");
 					Element heroEle = doc.select("div.c50v4-pilot").first();
-					migrateHero(heroEle , spLeftNode , locale , urlMap);
+					migrateHero(heroEle , spLeftNode , locale , urlMap, catType, type);
 					log.debug("Hero Element Migrated");
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
@@ -118,7 +118,7 @@ public class SubCatVariation3 extends BaseAction {
 				try{
 					log.debug("start Top Right migration");
 					Element rightRailEle = doc.getElementsByClass("n13v1-pilot").first();
-					migrateRightRail(rightRailEle , spRightNode, locale , urlMap);
+					migrateRightRail(rightRailEle , spRightNode, locale , urlMap, catType, type);
 					log.debug("Top Right Element Migrated");
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -134,7 +134,7 @@ public class SubCatVariation3 extends BaseAction {
 					if(textEle == null){
 						textEle = textEles.get(1).getElementsByClass("c00-pilot").first();
 					}
-					migrateText(textEle , spMidNode , locale, urlMap);
+					migrateText(textEle , spMidNode , locale, urlMap, catType, type);
 					log.debug("Text is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in Text Migration");
@@ -146,7 +146,7 @@ public class SubCatVariation3 extends BaseAction {
 				try{
 					log.debug("start secondText Migration");
 					Element textEle = doc.select("div.gd21-pilot").last();
-					migrateSecondText(textEle , spBottomNode , locale, urlMap);
+					migrateSecondText(textEle , spBottomNode , locale, urlMap, catType, type);
 					log.debug("secondText is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in secondText Migration");
@@ -168,7 +168,7 @@ public class SubCatVariation3 extends BaseAction {
 	}
 
 
-	private void migrateHero(Element heroElement, Node spLeftNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException, JSONException {
+	private void migrateHero(Element heroElement, Node spLeftNode, String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException, JSONException {
 		if(heroElement != null){
 			Elements heroEles = heroElement.getElementsByClass("frame");
 			if(heroEles != null){
@@ -211,13 +211,13 @@ public class SubCatVariation3 extends BaseAction {
 												if(StringUtil.isBlank(aHref)){
 													aHref = aHero.attr("href");
 												}
-												heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb));
+												heroPanelNode.setProperty("linkurl", FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type));
 											}
 										}else{
 											sb.append(Constants.HERO_CONTENT_ANCHOR_ELEMENT_DOESNOT_EXISTS);
 										}
 										String heroImage = FrameworkUtils.extractImagePath(heroEle, sb);
-										heroImage = FrameworkUtils.migrateDAMContent(heroImage, "", locale, sb);
+										heroImage = FrameworkUtils.migrateDAMContent(heroImage, "", locale, sb, catType, type);
 										if(heroImage != ""){
 											Node heroImageNode = heroPanelNode.hasNode("image")?heroPanelNode.getNode("image"):null;
 											if(heroImageNode != null){
@@ -287,7 +287,7 @@ public class SubCatVariation3 extends BaseAction {
 	}
 
 	private void migrateRightRail(Element listEle, Node spRightNode,
-			String locale, Map<String, String> urlMap) throws RepositoryException, JSONException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws RepositoryException, JSONException {
 		if(listEle != null){
 			if(spRightNode.hasNode("list")){
 				Node listNode = spRightNode.getNode("list");
@@ -308,7 +308,7 @@ public class SubCatVariation3 extends BaseAction {
 							if(StringUtil.isBlank(aURL)){
 								aURL = anchor.attr("href");
 							}
-							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
+							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb, catType, type);
 							JSONObject obj = new JSONObject();
 							obj.put("linktext", anchor.text());
 							obj.put("linkurl",aURL);
@@ -354,7 +354,7 @@ public class SubCatVariation3 extends BaseAction {
 						if(StringUtil.isBlank(aHref)){
 							aHref = aElement.attr("href");
 						}
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 						obj.put("linkurl",aHref );
 						list.add(obj.toString());
 					} else {
@@ -374,11 +374,11 @@ public class SubCatVariation3 extends BaseAction {
 	}
 
 	private void migrateText(Element textEle, Node spMidNode,
-			String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if(textEle != null){
 			Node textNode = spMidNode.hasNode("text")?spMidNode.getNode("text"):null;
 			if(textNode != null){
-				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap));
+				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap, catType, type));
 			}else{
 				sb.append(Constants.TEXT_NODE_NOT_FOUND);
 			}
@@ -388,7 +388,7 @@ public class SubCatVariation3 extends BaseAction {
 	}
 
 	private void migrateSecondText(Element textEle, Node spBottomNode,
-			String locale, Map<String, String> urlMap) throws RepositoryException, JSONException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws RepositoryException, JSONException {
 		if(textEle != null){
 			Elements textEles = textEle.getElementsByClass("c00-pilot");
 			if(textEles != null){
@@ -399,12 +399,12 @@ public class SubCatVariation3 extends BaseAction {
 					if(size == eleSize){
 						for(Element textElement : textEles){
 							Node textNode = textNodes.nextNode();
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type));
 						}
 					}else if(size > eleSize){
 						for(Element textElement : textEles){
 							Node textNode = textNodes.nextNode();
-							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap));
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type));
 						}
 						if(textNodes.hasNext()){
 							sb.append(Constants.TEXT_NODE_MISMATCH + size + Constants.TEXT_ELEMENT_COUNT + eleSize + ".</li>");
@@ -413,7 +413,7 @@ public class SubCatVariation3 extends BaseAction {
 						for(Element textElement : textEles){
 							if(textNodes.hasNext()){
 								Node textNode = textNodes.nextNode();
-								textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap));
+								textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type));
 							}else{
 								sb.append(Constants.TEXT_NODE_MISMATCH + size + Constants.TEXT_ELEMENT_COUNT + eleSize + ".</li>");
 							}
@@ -434,7 +434,7 @@ public class SubCatVariation3 extends BaseAction {
 					Element link = spEle.getElementsByTag("a").last();
 					Element description = spEle.getElementsByTag("p").first();
 					String fileReference = FrameworkUtils.extractImagePath(spEle, sb);
-					fileReference = FrameworkUtils.migrateDAMContent(fileReference, "", locale, sb);
+					fileReference = FrameworkUtils.migrateDAMContent(fileReference, "", locale, sb, catType, type);
 					if(title != null){
 						spotLightNode.setProperty("title", title.text());
 					}else{
@@ -445,7 +445,7 @@ public class SubCatVariation3 extends BaseAction {
 						if(StringUtil.isBlank(aURL)){
 							aURL = link.attr("href");
 						}
-						aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
+						aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb, catType, type);
 						spotLightNode.setProperty("linktext", link.text());
 						Node linkNode = spotLightNode.hasNode("cta")?spotLightNode.getNode("cta"):null;
 						if(linkNode != null){
@@ -499,7 +499,7 @@ public class SubCatVariation3 extends BaseAction {
 								if(StringUtil.isBlank(aURL)){
 									aURL = anchor.attr("href");
 								}
-								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
+								aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb, catType, type);
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", anchor.text());
 								obj.put("linkurl",aURL);

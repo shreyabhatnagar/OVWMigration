@@ -181,7 +181,7 @@ public class ProductListingVariation6 extends BaseAction {
 																		}
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl + "\n");
-																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb, catType, type);
 																		log.debug("after linkUrl" + linkUrl + "\n");
 																		// End extracting valid href
 																	} 
@@ -208,7 +208,7 @@ public class ProductListingVariation6 extends BaseAction {
 																if (drawersPanelNode.hasNode("drawers-image")) {
 																	Node drawersImageNode = drawersPanelNode.getNode("drawers-image");
 																	String fileReference = drawersImageNode.hasProperty("fileReference")?drawersImageNode.getProperty("fileReference").getString():"";
-																	drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale,sb);
+																	drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale,sb, catType, type);
 																	log.debug("drawerImage " + drawerImage + "\n");
 																	if (StringUtils.isNotBlank(drawerImage)) {
 																		drawersImageNode.setProperty("fileReference" , drawerImage);
@@ -284,7 +284,7 @@ public class ProductListingVariation6 extends BaseAction {
 																							}
 																							// Start extracting valid href
 																							log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
-																							linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
+																							linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb, catType, type);
 																							log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
 																							// End extracting valid href
 																							if (title.equals(previousTitle)) {
@@ -355,7 +355,7 @@ public class ProductListingVariation6 extends BaseAction {
 																							}
 																							// Start extracting valid href
 																							log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																							linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
+																							linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb, catType, type);
 																							log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																							// End extracting valid href
 																						} else {
@@ -401,7 +401,7 @@ public class ProductListingVariation6 extends BaseAction {
 																			if(subdrawerpanel.hasNode("subdrawers-image")) {
 																				Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
 																				String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
-																				subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale,sb);
+																				subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale,sb, catType, type);
 																				log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
 																				if (StringUtils.isNotBlank(subDrawerImage)) {
 																					subDrawersImageNode.setProperty("fileReference" , subDrawerImage);

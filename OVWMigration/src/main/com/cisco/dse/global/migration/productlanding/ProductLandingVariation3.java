@@ -135,7 +135,7 @@ public class ProductLandingVariation3 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("primaryCTALinkUrl before migration : " + primaryCTALinkUrl);
-												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb, catType, type);
 												log.debug("primaryCTALinkUrl after migration : " + primaryCTALinkUrl);
 												// End extracting valid href
 											} else {
@@ -275,7 +275,7 @@ public class ProductLandingVariation3 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl);
-											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb, catType, type);
 											log.debug("after heroPanellinkUrl" + heroPanellinkUrl);
 											// End extracting valid href
 										} else {
@@ -305,7 +305,7 @@ public class ProductLandingVariation3 extends BaseAction {
 										if (heroPanelNode.hasNode("image")) {
 											Node imageNode = heroPanelNode.getNode("image");
 											String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString() : "";
-											heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale, sb);
+											heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale, sb, catType, type);
 											log.debug("heroImage after migration : " + heroImage);
 											if (StringUtils.isNotBlank(heroImage)) {
 												imageNode.setProperty("fileReference", heroImage);
@@ -388,7 +388,7 @@ public class ProductLandingVariation3 extends BaseAction {
 						Element textElement = textElements.first();
 						if (textElement != null) {
 							
-							text = FrameworkUtils.extractHtmlBlobContent(textElement,"",locale,sb,urlMap);
+							text = FrameworkUtils.extractHtmlBlobContent(textElement,"",locale,sb,urlMap, catType, type);
 						} else {
 							log.debug("<li>Text Element not found</li>");
 						}
@@ -416,7 +416,7 @@ public class ProductLandingVariation3 extends BaseAction {
 					if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 						// Element htmlblobElement = htmlblobElements.first();
 						for (Element htmlblobElement : htmlblobElements) {
-							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "", locale, sb, urlMap);
+							html = html + FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "", locale, sb, urlMap, catType, type);
 						}
 					} else {
 						sb.append("<li>htmlblob component not found on web publisher page</li>");
@@ -478,7 +478,7 @@ public class ProductLandingVariation3 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before tileborderedLinkUrl" + anchorHref);
-								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
+								anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
 								log.debug("after tileborderedLinkUrl" + anchorHref);
 								// End extracting valid href
 								if (titleBorderNodes.hasNext()) {

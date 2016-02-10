@@ -89,7 +89,7 @@ public class WebVariation11 extends BaseAction{
 
 				// Start of migration of header
 				try {
-					migrateHeaderHtmlBlob(doc, orderServicesLeftNode,locale, urlMap);
+					migrateHeaderHtmlBlob(doc, orderServicesLeftNode,locale, urlMap, catType, type);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -98,7 +98,7 @@ public class WebVariation11 extends BaseAction{
 
 				// Start of migration of grids
 				try {
-					migrateGrids(doc, orderServicesLeftNode,locale, urlMap);
+					migrateGrids(doc, orderServicesLeftNode,locale, urlMap, catType, type);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -107,7 +107,7 @@ public class WebVariation11 extends BaseAction{
 
 				// Start of migration of bottom Grid
 				try {
-					migrateBottomGrid(doc, orderServicesLeftNode,locale, urlMap);
+					migrateBottomGrid(doc, orderServicesLeftNode,locale, urlMap, catType, type);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -116,7 +116,7 @@ public class WebVariation11 extends BaseAction{
 
 				// Start of migration of right panel
 				try {
-					migrateRightPanel(doc, orderServicesRightNode,locale, urlMap);
+					migrateRightPanel(doc, orderServicesRightNode,locale, urlMap, catType, type);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -138,7 +138,7 @@ public class WebVariation11 extends BaseAction{
 	}
 
 
-	private void migrateHeaderHtmlBlob(Document doc,Node orderServicesLeftNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+	private void migrateHeaderHtmlBlob(Document doc,Node orderServicesLeftNode, String locale,Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
 		Elements textElements = doc.select("div.c00-pilot");
 		Node htmlBlob = orderServicesLeftNode.hasNode("htmlblob") ? orderServicesLeftNode.getNode("htmlblob") : null;
 
@@ -146,7 +146,7 @@ public class WebVariation11 extends BaseAction{
 			if(!textElements.isEmpty()){
 				Element textElement = textElements.first();
 				if(textElement != null){
-						String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
+						String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap, catType, type);
 						htmlBlob.setProperty("html", html);
 				}
 			} else {
@@ -164,7 +164,7 @@ public class WebVariation11 extends BaseAction{
 
 	}
 
-	private void migrateGrids(Document doc, Node orderServicesLeftNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+	private void migrateGrids(Document doc, Node orderServicesLeftNode,String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
 		Elements grids = doc.select("div.gd23-pilot");
 		Node gd23v1 = orderServicesLeftNode.hasNode("gd23v1") ? orderServicesLeftNode.getNode("gd23v1") : null ;
 		if(gd23v1 != null) {
@@ -176,7 +176,7 @@ public class WebVariation11 extends BaseAction{
 				Node htmlBlob = gd23v1left.hasNode("htmlblob") ? gd23v1left.getNode("htmlblob") : null;
 				if(htmlBlob != null){
 					if(!leftGrid.isEmpty()){
-						String html = FrameworkUtils.extractHtmlBlobContent(leftGrid.first(), "",locale, sb, urlMap);
+						String html = FrameworkUtils.extractHtmlBlobContent(leftGrid.first(), "",locale, sb, urlMap, catType, type);
 						htmlBlob.setProperty("html", html);
 					}else {
 						sb.append(Constants.LEFT_GRID_ELEMENT_NOT_FOUND);
@@ -206,7 +206,7 @@ public class WebVariation11 extends BaseAction{
 				Node htmlBlob = gd23v1mid.hasNode("htmlblob") ? gd23v1mid.getNode("htmlblob") : null;
 				if(htmlBlob != null){
 					if(!midGrid.isEmpty()){
-						String html = FrameworkUtils.extractHtmlBlobContent(midGrid.first(), "",locale, sb, urlMap);
+						String html = FrameworkUtils.extractHtmlBlobContent(midGrid.first(), "",locale, sb, urlMap, catType, type);
 						htmlBlob.setProperty("html", html);
 					}else {
 						sb.append(Constants.MID_GRID_ELEMENT_NOT_FOUND);
@@ -236,7 +236,7 @@ public class WebVariation11 extends BaseAction{
 				Node htmlBlob = gd23v1right.hasNode("htmlblob") ? gd23v1right.getNode("htmlblob") : null;
 				if(htmlBlob != null){
 					if(!rightGrid.isEmpty()){
-						String html = FrameworkUtils.extractHtmlBlobContent(rightGrid.first(), "",locale, sb, urlMap);
+						String html = FrameworkUtils.extractHtmlBlobContent(rightGrid.first(), "",locale, sb, urlMap, catType, type);
 						htmlBlob.setProperty("html", html);
 					}else {
 						sb.append(Constants.RIGHT_GRID_ELEMENT_NOT_FOUND);
@@ -269,7 +269,7 @@ public class WebVariation11 extends BaseAction{
 		}
 	}
 
-	private void migrateBottomGrid(Document doc, Node orderServicesLeftNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+	private void migrateBottomGrid(Document doc, Node orderServicesLeftNode,String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
 		Elements grids = doc.select("div.gd21-pilot,div.n05v16");
 		Node gd23v1 = orderServicesLeftNode.hasNode("gd21v1") ? orderServicesLeftNode.getNode("gd21v1") : null ;
 		if(grids.isEmpty()){
@@ -288,7 +288,7 @@ public class WebVariation11 extends BaseAction{
 					Node htmlBlob = gd23v1mid.hasNode("htmlblob") ? gd23v1mid.getNode("htmlblob") : null;
 					if(htmlBlob != null){
 						if(!midGrid.isEmpty()){
-							String html = FrameworkUtils.extractHtmlBlobContent(midGrid.first(), "",locale, sb, urlMap);
+							String html = FrameworkUtils.extractHtmlBlobContent(midGrid.first(), "",locale, sb, urlMap, catType, type);
 							htmlBlob.setProperty("html", html);
 						}else if(!midGridJp.isEmpty()) {
 							Element midGridEle = midGridJp.first();
@@ -299,7 +299,7 @@ public class WebVariation11 extends BaseAction{
 								}
 							}
 							log.debug("after loop "+ midGridEle);
-							String html = FrameworkUtils.extractHtmlBlobContent(midGridEle, "",locale, sb, urlMap);
+							String html = FrameworkUtils.extractHtmlBlobContent(midGridEle, "",locale, sb, urlMap, catType, type);
 							htmlBlob.setProperty("html", html);
 						}else {
 							sb.append("<li>Bottom Grid Element not available</li>");
@@ -335,7 +335,7 @@ public class WebVariation11 extends BaseAction{
 		}
 	}
 
-	private void migrateRightPanel(Document doc, Node orderServicesRightNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+	private void migrateRightPanel(Document doc, Node orderServicesRightNode,String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
 
 		Elements textElements = doc.select("div.fw-cisco-assistant,div.s01v8-pilot");
 		Node htmlBlob = orderServicesRightNode.hasNode("htmlblob") ? orderServicesRightNode.getNode("htmlblob") : null;
@@ -360,7 +360,7 @@ public class WebVariation11 extends BaseAction{
 						//log.debug("text element: "+ textElement);
 					}
 					if(textElement != null){
-						String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
+						String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap, catType, type);
 						htmlBlob.setProperty("html", html);
 					}
 					

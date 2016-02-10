@@ -101,7 +101,7 @@ public class BenefitsVariation1 extends BaseAction {
 					}
 					if (textEle != null) {
 						text = FrameworkUtils.extractHtmlBlobContent(textEle,
-								"", locale, sb, urlMap);
+								"", locale, sb, urlMap, catType, type);
 					} else {
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
@@ -147,7 +147,7 @@ public class BenefitsVariation1 extends BaseAction {
 								if (flag == false) {
 									paraList.append(FrameworkUtils
 											.extractHtmlBlobContent(child, "",
-													locale, sb, urlMap));
+													locale, sb, urlMap, catType, type));
 								} else {
 									ulList.add(child);
 								}
@@ -159,7 +159,7 @@ public class BenefitsVariation1 extends BaseAction {
 						if(flag_enil){
 							Element cc00Ele = doc.select("div.cc00-pilot").first();
 							cc00Ele.select("h1").remove();
-							text = FrameworkUtils.extractHtmlBlobContent(cc00Ele, "",locale, sb, urlMap);
+							text = FrameworkUtils.extractHtmlBlobContent(cc00Ele, "",locale, sb, urlMap, catType, type);
 						}
 					} else {
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
@@ -185,7 +185,7 @@ public class BenefitsVariation1 extends BaseAction {
 									// Start extracting valid href
 									log.debug("link ref before migration : " + aHref);
 									aHref = FrameworkUtils.getLocaleReference(aHref,
-											urlMap, locale, sb);
+											urlMap, locale, sb, catType, type);
 									log.debug("link ref after migration : " + aHref);
 									// End extracting valid href
 									obj.put("linktext", aText);
@@ -290,7 +290,7 @@ public class BenefitsVariation1 extends BaseAction {
 										// Start extracting valid href
 										log.debug("Before ctaLink" + ctaLink + "\n");
 										ctaLink = FrameworkUtils.getLocaleReference(
-												ctaLink, urlMap, locale, sb);
+												ctaLink, urlMap, locale, sb, catType, type);
 
 										ctaLink = ctaLink.replaceAll(" ", "").replaceAll("%20","");
 										log.debug("after ctaLink" + ctaLink + "\n");

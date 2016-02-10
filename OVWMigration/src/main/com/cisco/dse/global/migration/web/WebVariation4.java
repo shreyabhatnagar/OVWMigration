@@ -97,14 +97,14 @@ public class WebVariation4 extends BaseAction {
 								
 				for (Element leftListElement : leftListElements) {
 					log.debug("left list element is ["+leftListElement+"]");
-					leftListContent.add(FrameworkUtils.extractHtmlBlobContent(leftListElement, "", locale, sb, urlMap));
+					leftListContent.add(FrameworkUtils.extractHtmlBlobContent(leftListElement, "", locale, sb, urlMap, catType, type));
 				}
 				
 				for (Element rightListElement : rightListElements) {
 					log.debug("right list element is ["+rightListElement+"]");
 					Element rightListEle = rightListElement.children().first();
 					log.debug("right list element to be migrated is ["+rightListEle+"]");
-					rightListContent.add(FrameworkUtils.extractHtmlBlobContent(rightListEle, "", locale, sb, urlMap));
+					rightListContent.add(FrameworkUtils.extractHtmlBlobContent(rightListEle, "", locale, sb, urlMap, catType, type));
 				}
 				
 				String backToTopContent = "";
@@ -114,11 +114,11 @@ public class WebVariation4 extends BaseAction {
 					Element paraElement = midTitleElement.select("div.c00-pilot").first().getElementsByTag("p").first();
 					if(paraElement != null && paraElement.hasAttr("align")) {
 						log.debug("This is a link for - back to top - element");
-						backToTopContent = FrameworkUtils.extractHtmlBlobContent(midTitleElement, "", locale, sb, urlMap);
+						backToTopContent = FrameworkUtils.extractHtmlBlobContent(midTitleElement, "", locale, sb, urlMap, catType, type);
 					}
 					else {
 						log.debug("This is a htmlblob header element");
-						titleContent = FrameworkUtils.extractHtmlBlobContent(midTitleElement, "", locale, sb, urlMap);
+						titleContent = FrameworkUtils.extractHtmlBlobContent(midTitleElement, "", locale, sb, urlMap, catType, type);
 						titleContent = backToTopContent + titleContent;
 						midTitleContent.add(titleContent);
 						backToTopContent = "";
@@ -153,7 +153,7 @@ public class WebVariation4 extends BaseAction {
 						if (headerHtmlBlob != null) {						
 							log.debug("header element is ["+headerElement+"]");
 							if (headerElement != null) {
-								headerHtmlBlob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(headerElement, "", locale, sb, urlMap));
+								headerHtmlBlob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(headerElement, "", locale, sb, urlMap, catType, type));
 							}
 							else {
 								log.debug("Title header not found on locale page.");
@@ -172,7 +172,7 @@ public class WebVariation4 extends BaseAction {
 						if (shareHtmlBlob != null) {				
 							log.debug("share element is ["+shareElement+"]");
 							if (shareElement != null) {
-								shareHtmlBlob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(shareElement, "", locale, sb, urlMap));
+								shareHtmlBlob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(shareElement, "", locale, sb, urlMap, catType, type));
 							}
 							else {
 								log.debug("Share element not found on locale page.");

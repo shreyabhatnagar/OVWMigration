@@ -203,7 +203,7 @@ public class RProductLandingVariation1 extends BaseAction {
 												log.debug("primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 												// Start extracting valid href
 												log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
-												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
+												primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb, catType, type);
 												log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 												// End extracting valid href
 									
@@ -234,7 +234,7 @@ public class RProductLandingVariation1 extends BaseAction {
 									log.debug("primaryCTALinkUrl" + primaryCTALinkText + "\n");
 									// Start extracting valid href
 									log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
-									primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
+									primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb, catType, type);
 									log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 									// End extracting valid href
 								}else {
@@ -406,7 +406,7 @@ public class RProductLandingVariation1 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
-											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
+											heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb, catType, type);
 											log.debug("after heroPanellinkUrl" + heroPanellinkUrl + "\n");
 											// End extracting valid href
 									
@@ -491,7 +491,7 @@ public class RProductLandingVariation1 extends BaseAction {
 													.migrateDAMContent(
 															heroImage,
 															fileReference,
-															locale, sb);
+															locale, sb, catType, type);
 											log.debug("heroImage " + heroImage
 													+ "\n");
 											if (StringUtils
@@ -652,7 +652,7 @@ public class RProductLandingVariation1 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("Before anchorHref " + anchorHref + "\n");
-												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
+												anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
 												log.debug("after anchorHref" + anchorHref + "\n");
 												// End extracting valid href
 												if (linkItemIterator.hasNext()) {
@@ -750,7 +750,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																		}
 																		// Start extracting valid href
 																		log.debug("Before linkUrl" + linkUrl + "\n");
-																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
+																		linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb, catType, type);
 																		log.debug("after linkUrl" + linkUrl + "\n");
 																		// End extracting valid href
 																	}
@@ -783,7 +783,7 @@ public class RProductLandingVariation1 extends BaseAction {
 															if (drawersPanelNode != null) {
 																Node drawersImageNode = drawersPanelNode.getNode("image");
 																String fileReference = drawersImageNode.hasProperty("fileReference") ? drawersImageNode.getProperty("fileReference").getString() : "";
-																drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale, sb);
+																drawerImage = FrameworkUtils.migrateDAMContent(drawerImage, fileReference, locale, sb, catType, type);
 																log.debug("drawerImage " + drawerImage);
 																if (StringUtils.isNotBlank(drawerImage)) {
 																	drawersImageNode.setProperty("fileReference", drawerImage);
@@ -883,7 +883,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																					}
 																					// Start extracting valid href
 																					log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
-																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
+																					linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb, catType, type);
 																					log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
 																					// End extracting valid href
 																				} else {
@@ -924,7 +924,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																						subDrawerImage,
 																						fileReference,
 																						locale,
-																						sb);
+																						sb, catType, type);
 																		log.debug("subDrawerImage after migration : "
 																				+ subDrawerImage
 																				+ "\n");
@@ -1001,7 +1001,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																													}
 																													// Start extracting valid href
 																													log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																													linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
+																													linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb, catType, type);
 																													log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																													// End extracting valid href
 																													ownTextCheck = false;
@@ -1258,7 +1258,7 @@ public class RProductLandingVariation1 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before anchorHref" + anchorHref + "\n");
-										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
+										anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
 										log.debug("after anchorHref" + anchorHref + "\n");
 										// End extracting valid href
 								if (anchor != null && anchor.size() > 1) {
@@ -1384,7 +1384,7 @@ public class RProductLandingVariation1 extends BaseAction {
 														}
 														// Start extracting valid href
 														log.debug("Before anchorHref" + anchorHref + "\n");
-														anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
+														anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
 														log.debug("after anchorHref" + anchorHref + "\n");
 														// End extracting valid href
 														if (item.hasNext()) {

@@ -88,7 +88,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 				//Start of migration of Hero Large Component
 				try {
-					migrateHeroLarge(doc, trainingAndEventsLeftNode,locale, urlMap);
+					migrateHeroLarge(doc, trainingAndEventsLeftNode,locale, urlMap, catType, type);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -97,7 +97,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 				//Start of migration of HTMLBLOB Component
 				try {
-					migrateTextAndHtmlBlob(doc, trainingAndEventsLeftNode,locale, urlMap);
+					migrateTextAndHtmlBlob(doc, trainingAndEventsLeftNode,locale, urlMap, catType, type);
 				} catch (Exception e) {
 					log.debug(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -106,7 +106,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 				//Start of migration of Right List Component
 				try {
-					migrateRightList(doc, trainingAndEventsRightNode,session, locale, urlMap);
+					migrateRightList(doc, trainingAndEventsRightNode,session, locale, urlMap, catType, type);
 				} catch (Exception e) {
 					log.debug(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -135,7 +135,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 	}
 
-	private void migrateHeroLarge(Document doc,Node trainingAndEventsLeftNode, String locale,Map<String, String> urlMap) {
+	private void migrateHeroLarge(Document doc,Node trainingAndEventsLeftNode, String locale,Map<String, String> urlMap, String catType, String type) {
 		// TODO Auto-generated method stub
 		try {
 			String h2Text = "";
@@ -189,7 +189,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 										}
 										// Start extracting valid href
 										log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 										log.debug("after heroPanelLinkUrl" + aHref + "\n");
 										// End extracting valid href
 										heroPanelNode.setProperty("linktext", aText);
@@ -204,7 +204,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 									if (heroPanelNode.hasNode("image")) {
 										Node imageNode = heroPanelNode.getNode("image");
 										String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
-										heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
+										heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
 										log.debug("heroImage after migration : " + heroImage + "\n");
 										if (StringUtils.isNotBlank(heroImage)) {
 											imageNode.setProperty("fileReference", heroImage);
@@ -240,7 +240,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 
 	}
 
-	private void migrateTextAndHtmlBlob(Document doc,Node trainingAndEventsLeftNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+	private void migrateTextAndHtmlBlob(Document doc,Node trainingAndEventsLeftNode, String locale,Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
 		Elements htmlBlobElements = null;
 		
 		Node htmlBlobNode = trainingAndEventsLeftNode.hasNode("htmlblob_0") ? trainingAndEventsLeftNode.getNode("htmlblob_0") : null;
@@ -252,13 +252,13 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 					if (gd21PilotElement.select("div.c50-pilot ").size() > 0) {
 						gd21PilotElement.select("div.c50-pilot ").remove();
 					}
-					html = html + FrameworkUtils.extractHtmlBlobContent(gd21PilotElement, "",locale, sb, urlMap);
+					html = html + FrameworkUtils.extractHtmlBlobContent(gd21PilotElement, "",locale, sb, urlMap, catType, type);
 				}
 			}
 			Elements gd22PilotElements = doc.select("div.gd22-pilot");
 			if (gd22PilotElements != null) {
 				for (Element gd22PilotElement : gd22PilotElements) {
-					html = html + FrameworkUtils.extractHtmlBlobContent(gd22PilotElement, "",locale, sb, urlMap);
+					html = html + FrameworkUtils.extractHtmlBlobContent(gd22PilotElement, "",locale, sb, urlMap, catType, type);
 				}
 			}
 			if(htmlBlobNode != null){
@@ -283,7 +283,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 			if(htmlBlobNode != null){
 				
 					Element htmlBlobEle = htmlBlobElements.first();
-					String html = FrameworkUtils.extractHtmlBlobContent(htmlBlobEle, "",locale, sb, urlMap);
+					String html = FrameworkUtils.extractHtmlBlobContent(htmlBlobEle, "",locale, sb, urlMap, catType, type);
 					htmlBlobNode.setProperty("html", html);
 				
 			}
@@ -302,7 +302,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 	}
 	}
 
-	private void migrateRightList(Document doc,Node trainingAndEventsRightNode, Session session, String locale,Map<String, String> urlMap) throws RepositoryException {
+	private void migrateRightList(Document doc,Node trainingAndEventsRightNode, Session session, String locale,Map<String, String> urlMap, String catType, String type) throws RepositoryException {
 		Elements listElements = doc.select("div.n13-pilot");
 		
 		//Check for the follow us
@@ -350,14 +350,14 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 					Node listNode = null;
 					for (Element ele : listElements) {
 						listNode = (Node) listNodeIterator.next();
-						setListElements(ele, listNode, session, locale, urlMap);
+						setListElements(ele, listNode, session, locale, urlMap, catType, type);
 					}
 				} else if (nodeSize < count) {
 					Node listNode;
 					for (Element ele : listElements) {
 						if (listNodeIterator.hasNext()) {
 							listNode = (Node) listNodeIterator.next();
-							setListElements(ele, listNode, session, locale, urlMap);
+							setListElements(ele, listNode, session, locale, urlMap, catType, type);
 						}
 					}
 					sb.append(Constants.MISMATCH_IN_LIST_NODES + count
@@ -368,7 +368,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 					Node listNode;
 					for (Element ele : listElements) {
 						listNode = (Node) listNodeIterator.next();
-						setListElements(ele, listNode, session, locale, urlMap);
+						setListElements(ele, listNode, session, locale, urlMap, catType, type);
 					}
 					sb.append(Constants.MISMATCH_IN_LIST_NODES + count
 							+ Constants.LIST_NODES_COUNT + nodeSize);
@@ -381,7 +381,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 		}
 	}
 
-	private void setListElements(Element ele, Node rightListNode,Session session, String locale, Map<String, String> urlMap) {
+	private void setListElements(Element ele, Node rightListNode,Session session, String locale, Map<String, String> urlMap, String catType, String type) {
 		try {
 			String ownPdfText = "";
 			String pdfIcon = "";
@@ -524,7 +524,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 								}
 								// Start extracting valid href
 								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								JSONObject obj = new JSONObject();

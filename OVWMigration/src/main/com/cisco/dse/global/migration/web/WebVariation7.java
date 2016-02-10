@@ -129,7 +129,7 @@ public class WebVariation7 extends BaseAction{
 								}
 							}
 							log.debug("in gdMid");
-							String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle, "",locale, sb, urlMap);
+							String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle, "",locale, sb, urlMap, catType, type);
 							if(!gdMid.equals("")&& gdMid!=null){
 								Node leftBlob = indLeftNode.hasNode("htmlblob")?indLeftNode.getNode("htmlblob"):null;
 								if(leftBlob!=null){
@@ -164,7 +164,7 @@ public class WebVariation7 extends BaseAction{
 							if(gdMidEle1!=null){
 								log.debug("in gdMid@@@@");
 								//							gdMidEle.html()
-								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap);
+								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap, catType, type);
 								log.debug("---------My log----------"+gdMid);
 
 								if(!gdMid.equals("")&& gdMid!=null){
@@ -195,7 +195,7 @@ public class WebVariation7 extends BaseAction{
 
 							if(gdMidEle2!=null){
 								//							gdMidEle.html()
-								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle2, "",locale, sb, urlMap);
+								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle2, "",locale, sb, urlMap, catType, type);
 								if(!gdMid.equals("")&& gdMid!=null){
 									Node leftBlob2 =null; 
 									if(leftBlobIterator.hasNext()){
@@ -220,7 +220,7 @@ public class WebVariation7 extends BaseAction{
 
 							if(gdMidEle3!=null){
 								//							gdMidEle.html()
-								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle3, "",locale, sb, urlMap);
+								String gdMid = FrameworkUtils.extractHtmlBlobContent(gdMidEle3, "",locale, sb, urlMap, catType, type);
 								if(!gdMid.equals("")&& gdMid!=null){
 									Node leftBlob3 =null; 
 									if(leftBlobIterator.hasNext()){
@@ -250,8 +250,8 @@ public class WebVariation7 extends BaseAction{
 							if(gdMidEle1!=null&&gdMidEle2!=null){
 								log.debug("in gdMid");
 								//							gdMidEle.html()
-								String gdMid1 = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap);
-								String gdMid2 = FrameworkUtils.extractHtmlBlobContent(gdMidEle2, "",locale, sb, urlMap);
+								String gdMid1 = FrameworkUtils.extractHtmlBlobContent(gdMidEle1, "",locale, sb, urlMap, catType, type);
+								String gdMid2 = FrameworkUtils.extractHtmlBlobContent(gdMidEle2, "",locale, sb, urlMap, catType, type);
 								String gdMid = gdMid1+gdMid2;
 								if(!gdMid.equals("")&& gdMid!=null){
 									Node leftBlob1 =null; 
@@ -270,7 +270,7 @@ public class WebVariation7 extends BaseAction{
 
 							Element gdMidEle3 = doc.select("div.gd-mid").select("div.n13-pilot").last();
 							if(gdMidEle3!=null){
-								String gdMid3 = FrameworkUtils.extractHtmlBlobContent(gdMidEle3, "",locale, sb, urlMap);
+								String gdMid3 = FrameworkUtils.extractHtmlBlobContent(gdMidEle3, "",locale, sb, urlMap, catType, type);
 								if(!gdMid3.equals("")){
 									Node leftBlob1 =null; 
 									if(leftBlobIterator.hasNext()){
@@ -313,7 +313,7 @@ public class WebVariation7 extends BaseAction{
 							}
 
 							if(gdRightEle!=null){	
-								String gdRight = FrameworkUtils.extractHtmlBlobContent(gdRightEle, "",locale, sb, urlMap);
+								String gdRight = FrameworkUtils.extractHtmlBlobContent(gdRightEle, "",locale, sb, urlMap, catType, type);
 								Node rightBlob = indRightNode.hasNode("htmlblob")?indRightNode.getNode("htmlblob"):null;
 								if(rightBlob!=null){
 									rightBlob.setProperty("html",gdRight.replaceAll("<br>", ""));

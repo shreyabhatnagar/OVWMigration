@@ -162,11 +162,11 @@ public class RProductListingVariation1 extends BaseAction{
 						Element pTagText = pTag.getElementsByTag("p").last();
 						log.debug("pTagText property!: " + pTagText);
 						if(pTagText != null){
-							pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap);
+							pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap, catType, type);
 							if("<p></p>".equals(pTagVal)){
 								pTag = pElements.first();
 								pTagText = pTag.getElementsByTag("p").first();
-								pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap);
+								pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap, catType, type);
 							}
 							if(textNodeTwo != null){
 								textNodeTwo.setProperty("text", pTagVal);
