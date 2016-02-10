@@ -130,10 +130,10 @@ public class WebVariation10 extends BaseAction{
 					}
 					log.debug("heading elelemnt issss: "+ htmlBlobHeadElement);
 					if (htmlBlobElement != null) {
-						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap, catType, type);
 						String htmlBlobHeadHtml = "";
 						if(htmlBlobHeadElement != null){
-							htmlBlobHeadHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlobHeadElement, "", locale, sb, urlMap);
+							htmlBlobHeadHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlobHeadElement, "", locale, sb, urlMap, catType, type);
 						}
 						htmlBlobContent = htmlBlobContent + htmlBlobHeadHtml;
 						log.debug("htmlBlobContent is :"+ htmlBlobContent);
@@ -178,14 +178,14 @@ public class WebVariation10 extends BaseAction{
 						Element midHtmlblobElement = htmlBlobElement.select("div.gd-mid").first();
 						Element rightHtmlblobElement = htmlBlobElement.select("div.gd-right").first();
 						if(leftHtmlblobElement != null){
-							leftHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(leftHtmlblobElement, "", locale, sb, urlMap);
+							leftHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(leftHtmlblobElement, "", locale, sb, urlMap, catType, type);
 						}
 						log.debug("htmlblobl leftttt element for first list kind: "+leftHtmlblobElement );
 						if(midHtmlblobElement != null){
-							midHtmlBlobContent =  FrameworkUtils.extractHtmlBlobContent(midHtmlblobElement, "", locale, sb, urlMap);
+							midHtmlBlobContent =  FrameworkUtils.extractHtmlBlobContent(midHtmlblobElement, "", locale, sb, urlMap, catType, type);
 						}
 						if(rightHtmlblobElement != null){
-							rightHtmlBlobContent =  FrameworkUtils.extractHtmlBlobContent(rightHtmlblobElement, "", locale, sb, urlMap);
+							rightHtmlBlobContent =  FrameworkUtils.extractHtmlBlobContent(rightHtmlblobElement, "", locale, sb, urlMap, catType, type);
 						}
 					//End of getContent
 					//Start of set content
@@ -234,7 +234,7 @@ public class WebVariation10 extends BaseAction{
 					// Start get content.
 					Element htmlBlobHeadElement = doc.select("div.c00v0-alt1-pilot").last();
 					if (htmlBlobHeadElement != null) {
-						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobHeadElement, "", locale, sb, urlMap);
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobHeadElement, "", locale, sb, urlMap, catType, type);
 					
 					//End of getContent
 					//Start of set content
@@ -291,11 +291,11 @@ public class WebVariation10 extends BaseAction{
 						Element midHtmlBlobElement = eachHtmlElement.select("div.gd-mid").first();
 						Element rightHtmlBlobElement = eachHtmlElement.select("div.gd-right").first();
 						if(leftHtmlBlobElement != null && !isFirstBlob){
-							String htmlContent = FrameworkUtils.extractHtmlBlobContent(leftHtmlBlobElement, "", locale, sb, urlMap);
+							String htmlContent = FrameworkUtils.extractHtmlBlobContent(leftHtmlBlobElement, "", locale, sb, urlMap, catType, type);
 							leftNodeItemsList.add(htmlContent);
 						}
 						if(midHtmlBlobElement != null && !isFirstBlob){
-							String htmlContent = FrameworkUtils.extractHtmlBlobContent(midHtmlBlobElement, "", locale, sb, urlMap);
+							String htmlContent = FrameworkUtils.extractHtmlBlobContent(midHtmlBlobElement, "", locale, sb, urlMap, catType, type);
 							if(midNodeItemsList.size() == 3){
 								leftNodeItemsList.add(htmlContent);
 							}
@@ -304,7 +304,7 @@ public class WebVariation10 extends BaseAction{
 							}
 						}
 						if(rightHtmlBlobElement != null && !isFirstBlob){
-							String htmlContent = FrameworkUtils.extractHtmlBlobContent(rightHtmlBlobElement, "", locale, sb, urlMap);
+							String htmlContent = FrameworkUtils.extractHtmlBlobContent(rightHtmlBlobElement, "", locale, sb, urlMap, catType, type);
 							rightNodeItemsList.add(htmlContent);
 						}
 						
@@ -395,7 +395,7 @@ public class WebVariation10 extends BaseAction{
 								gdRightElement = gd12V1Element.select("div.gd-right").last();
 								log.debug("gdRightElement is"+ gdRightElement);
 								if(gdRightElement != null){
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap, catType, type);
 							}
 							}
 					
@@ -408,7 +408,7 @@ public class WebVariation10 extends BaseAction{
 								htmlBlobContent = fHolderElement.html();
 								log.debug("printing outer html of zh_cn locale. "+ htmlBlobContent);
 							}else{
-						 htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(fHolderElement, "", locale, sb, urlMap);
+						 htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(fHolderElement, "", locale, sb, urlMap, catType, type);
 							}
 						}else{
 							sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND+" in right rail.</li>");
@@ -419,7 +419,7 @@ public class WebVariation10 extends BaseAction{
 						if(c23V2PilotElements.size() >1){
 							StringBuilder sBuilder = new StringBuilder();
 							for(Element gdRightMultiElement : c23V2PilotElements){
-								htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightMultiElement, "", locale, sb, urlMap);
+								htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightMultiElement, "", locale, sb, urlMap, catType, type);
 								sBuilder.append(htmlBlobRightContent);
 								
 							}
@@ -428,7 +428,7 @@ public class WebVariation10 extends BaseAction{
 						else{
 						gdRightElement = doc.select("div.poly").first();
 						if(gdRightElement != null){
-						htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap);
+						htmlBlobRightContent = FrameworkUtils.extractHtmlBlobContent(gdRightElement, "", locale, sb, urlMap, catType, type);
 						htmlBlobContent = htmlBlobContent.concat(htmlBlobRightContent);
 						}
 						

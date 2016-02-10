@@ -150,7 +150,7 @@ public class ProductLandingVariation5 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 											log.debug("after heroPanelLinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -283,7 +283,7 @@ public class ProductLandingVariation5 extends BaseAction {
 												if (heroPanelNode.hasNode("image")) {
 													Node imageNode = heroPanelNode.getNode("image");
 													String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
+													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
 													log.debug("heroImage " + heroImage + "\n");
 													if(heroImage!=null){
 														if (StringUtils.isNotBlank(heroImage)) {
@@ -400,7 +400,7 @@ public class ProductLandingVariation5 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 											log.debug("after primaryCTALinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -449,7 +449,7 @@ public class ProductLandingVariation5 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before rightrailsocialLinkUrl" + href + "\n");
-											href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb);
+											href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb, catType, type);
 											log.debug("after rightrailsocialLinkUrl" + href + "\n");
 											// End extracting valid href
 											obj.put("linktext", title);

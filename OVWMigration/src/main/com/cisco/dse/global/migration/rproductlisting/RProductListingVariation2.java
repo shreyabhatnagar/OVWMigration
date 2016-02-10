@@ -164,7 +164,7 @@ public class RProductListingVariation2 extends BaseAction{
 						if(!pElements.isEmpty()){
 							for(Element ptagElement : pElements){
 								log.debug("pTagText property!: " + ptagElement.text());
-								pTagVal = FrameworkUtils.extractHtmlBlobContent(ptagElement, "", locale, sb, urlMap);
+								pTagVal = FrameworkUtils.extractHtmlBlobContent(ptagElement, "", locale, sb, urlMap, catType, type);
 								paragraphBuilder.append(pTagVal);
 							}
 							log.debug("paragraphBuilder.toString() is: "+paragraphBuilder.toString());
@@ -278,7 +278,7 @@ public class RProductListingVariation2 extends BaseAction{
 												
 												if((count == 2 || count == 3) && htmlBlobNodeExists){
 													isHtmlBlob = true;
-													String htmContent = FrameworkUtils.extractHtmlBlobContent(drawerPanelLiElement, "", locale, sb, urlMap);
+													String htmContent = FrameworkUtils.extractHtmlBlobContent(drawerPanelLiElement, "", locale, sb, urlMap, catType, type);
 													 log.debug("htmlblobl exists for : "+ gridNarrowWideNodePath);
 													if(htmlblobIterator.hasNext()){
 														Node htmlblobNode = (Node) htmlblobIterator.next();
@@ -374,7 +374,7 @@ public class RProductListingVariation2 extends BaseAction{
 																			drawerImage,
 																			fileReference,
 																			locale,
-																			sb);
+																			sb, catType, type);
 															log.debug("drawerImage "
 																	+ drawerImage
 																	+ "\n");
@@ -507,7 +507,7 @@ public class RProductListingVariation2 extends BaseAction{
 																				
 																				// Start extracting valid href
 																				log.debug("Before linkTitleUrl" + linkTitleUrl + "\n");
-																				linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb);
+																				linkTitleUrl = FrameworkUtils.getLocaleReference(linkTitleUrl, urlMap, locale, sb, catType, type);
 																				log.debug("after linkTitleUrl" + linkTitleUrl + "\n");
 																				// End extracting valid href
 																			} else {
@@ -548,7 +548,7 @@ public class RProductListingVariation2 extends BaseAction{
 																					subDrawerImage,
 																					fileReference,
 																					locale,
-																					sb);
+																					sb, catType, type);
 																	log.debug("subDrawerImage after migration : "
 																			+ subDrawerImage
 																			+ "\n");
@@ -621,7 +621,7 @@ public class RProductListingVariation2 extends BaseAction{
 																				}
 																				// Start extracting valid href
 																				log.debug("Before linkTextUrl" + linkTextUrl + "\n");
-																				linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb);
+																				linkTextUrl = FrameworkUtils.getLocaleReference(linkTextUrl, urlMap, locale, sb, catType, type);
 																				log.debug("after linkTextUrl" + linkTextUrl + "\n");
 																				// End extracting valid href
 																			

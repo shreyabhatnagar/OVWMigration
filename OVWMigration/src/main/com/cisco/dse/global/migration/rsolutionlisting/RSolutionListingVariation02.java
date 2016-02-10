@@ -88,7 +88,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 
 				//Start of Spotlight
 				try {
-					migrateSpotLightContent(doc,solutionWideNode, locale, urlMap);
+					migrateSpotLightContent(doc,solutionWideNode, locale, urlMap, catType, type);
 				}
 				catch(Exception e){
 					sb.append(Constants.UNABLE_TO_UPDATE_SPOTLIGHT);
@@ -169,7 +169,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 
 	}
 
-	private void migrateSpotLightContent(Document doc, Node solutionWideNode, String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private void migrateSpotLightContent(Document doc, Node solutionWideNode, String locale, Map<String, String> urlMap, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		// start set spotlight component.
 		Elements spotLightElements = doc.select("div.c11-pilot");
 		Elements spotLightTextElements = doc.select("div.cc00-pilot");
@@ -184,7 +184,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					for (Element ele : spotLightElements) {
 						spoLightNodeIterator.hasNext();
 						Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-						spotLightMissedImageCount = setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
+						spotLightMissedImageCount = setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount, catType, type);
 					}
 				}
 
@@ -192,7 +192,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					for (Element ele : spotLightElements) {
 						if(spoLightNodeIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							spotLightMissedImageCount = setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
+							spotLightMissedImageCount = setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount, catType, type);
 						}
 					}
 					sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
@@ -201,7 +201,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					for (Element ele : spotLightElements) {
 						spoLightNodeIterator.hasNext();
 						Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-						spotLightMissedImageCount =	setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
+						spotLightMissedImageCount =	setSpotLightContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount, catType, type);
 					}
 					sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 				}
@@ -238,17 +238,17 @@ public class RSolutionListingVariation02 extends BaseAction{
 						for (Element ele : h3Tag) {
 							spoLightNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
+							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount, catType, type);
 						}
 						for (Element ele : pTag) {
 							spoLightNodePTagIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
-							setSpotLightTextContent(ele,spotLightComponentNode, locale, urlMap);
+							setSpotLightTextContent(ele,spotLightComponentNode, locale, urlMap, catType, type);
 						}
 						for (Element ele : aTag) {
 							spoLightNodeLinkIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeLinkIterator.next();
-							setSpotLightAnchorContent(ele,spotLightComponentNode, locale, urlMap);
+							setSpotLightAnchorContent(ele,spotLightComponentNode, locale, urlMap, catType, type);
 						}
 					}
 
@@ -256,19 +256,19 @@ public class RSolutionListingVariation02 extends BaseAction{
 						for (Element ele : h3Tag) {
 							if(spoLightNodeIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
+							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount, catType, type);
 							}
 						}
 						for (Element ele : pTag) {
 							if(spoLightNodePTagIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
-							setSpotLightTextContent(ele,spotLightComponentNode, locale, urlMap);
+							setSpotLightTextContent(ele,spotLightComponentNode, locale, urlMap, catType, type);
 							}
 						}
 						for (Element ele : aTag) {
 							if(spoLightNodeLinkIterator.hasNext()){
 							Node spotLightComponentNode = (Node) spoLightNodeLinkIterator.next();
-							setSpotLightAnchorContent(ele,spotLightComponentNode, locale, urlMap);
+							setSpotLightAnchorContent(ele,spotLightComponentNode, locale, urlMap, catType, type);
 							}
 						}
 						sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
@@ -277,17 +277,17 @@ public class RSolutionListingVariation02 extends BaseAction{
 						for (Element ele : h3Tag) {
 							spoLightNodeIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodeIterator.next();
-							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount);
+							spotLightMissedImageCount = setSpotLightTitleContent(ele,spotLightComponentNode, locale, urlMap, spotLightMissedImageCount, catType, type);
 						}
 						for (Element ele : pTag) {
 							spoLightNodePTagIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
-							setSpotLightTextContent(ele,spotLightComponentNode, locale, urlMap);
+							setSpotLightTextContent(ele,spotLightComponentNode, locale, urlMap, catType, type);
 						}
 						for (Element ele : aTag) {
 							spoLightNodePTagIterator.hasNext();
 							Node spotLightComponentNode = (Node) spoLightNodePTagIterator.next();
-							setSpotLightAnchorContent(ele,spotLightComponentNode, locale, urlMap);
+							setSpotLightAnchorContent(ele,spotLightComponentNode, locale, urlMap, catType, type);
 						}
 						sb.append(Constants.SPOTLIGHT_NODE_COUNT + nodeSize + Constants.SPOTLIGHT_ELEMENT_COUNT + eleSize);
 					}
@@ -310,7 +310,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 		}
 	}
 
-	private void setSpotLightAnchorContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private void setSpotLightAnchorContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 
 		Element parentEle = ele.parent();
 		if(parentEle != null){
@@ -337,7 +337,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 					}
 					// Start extracting valid href
 					log.debug("Before aHref" + aHref + "\n");
-					aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+					aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 					log.debug("after aHref" + aHref + "\n");
 					// End extracting valid href
 					spoLightNode.setProperty("url",aHref);
@@ -353,7 +353,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 	}
 
 	//Start Spotlight Set Method
-	private int setSpotLightContent(Element ele, Node spotLightComponentNode,String locale, Map<String, String> urlMap, int spotLightMissedImageCount) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private int setSpotLightContent(Element ele, Node spotLightComponentNode,String locale, Map<String, String> urlMap, int spotLightMissedImageCount, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		String h2Text = "";
 		String pText = "";
 		String aText = "";
@@ -403,7 +403,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 			}
 			// Start extracting valid href
 			log.debug("Before aHref" + aHref + "\n");
-			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+			aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 			log.debug("after aHref" + aHref + "\n");
 			// End extracting valid href
 			spoLightNode.setProperty("url",aHref);
@@ -419,7 +419,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 			if (spotLightComponentNode.hasNode("image")) {
 				Node spotLightImageNode = spotLightComponentNode.getNode("image");
 				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb);
+				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb, catType, type);
 				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);
@@ -436,7 +436,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 	//End of SpotLight Set Method
 
 	//Start of Spot Light text Content into Spotlight
-	private void setSpotLightTextContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private void setSpotLightTextContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		String pText = "";
 		Elements descriptionText = ele.getElementsByTag("p");
 		Elements descriptionLinkText = ele.select("p[class]");
@@ -461,7 +461,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 				}
 				// Start extracting valid href
 				log.debug("Before aHref" + aHref + "\n");
-				aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+				aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 				log.debug("after aHref" + aHref + "\n");
 				// End extracting valid href
 				spoLightNode.setProperty("url",aHref);
@@ -480,7 +480,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 	//End of Spot Light text Content into Spotlight
 
 	//Start of Spot Light title Content into Spotlight
-	private int setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap, int spotLightMissedImageCount) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+	private int setSpotLightTitleContent(Element ele,Node spotLightComponentNode, String locale, Map<String, String> urlMap, int spotLightMissedImageCount, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		String aText = "";
 		
 		Elements anchorText = ele.getElementsByTag("a");
@@ -505,7 +505,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 							}
 							// Start extracting valid href
 							log.debug("Before anchorHref" + anchorHref + "\n");
-							anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
+							anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
 							log.debug("after anchorHref" + anchorHref + "\n");
 							// End extracting valid href
 							titleLink.setProperty("linktype", "Url");
@@ -525,7 +525,7 @@ public class RSolutionListingVariation02 extends BaseAction{
 			if (spotLightComponentNode.hasNode("image")) {
 				Node spotLightImageNode = spotLightComponentNode.getNode("image");
 				String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb);
+				spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale, sb, catType, type);
 				log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {
 					spotLightImageNode.setProperty("fileReference" , spotLightImage);

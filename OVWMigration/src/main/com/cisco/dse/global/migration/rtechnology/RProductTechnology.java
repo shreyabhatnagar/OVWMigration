@@ -81,7 +81,7 @@ public class RProductTechnology extends BaseAction {
 				//start Text Migration
 				try{
 					Element textEle = doc.select("div.cc00-pilot").first();
-					migrateText(textEle , technologyLeftNode , locale, urlMap);
+					migrateText(textEle , technologyLeftNode , locale, urlMap, catType, type);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
@@ -90,7 +90,7 @@ public class RProductTechnology extends BaseAction {
 				//Start tile Border Migration
 				try{
 					Elements tileBorderEle = doc.select("div.cc23-pilot");
-					migrateTileElements(tileBorderEle , technologyRightNode,urlMap, locale);
+					migrateTileElements(tileBorderEle , technologyRightNode,urlMap, locale, catType, type);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
@@ -110,7 +110,7 @@ public class RProductTechnology extends BaseAction {
 	}
 
 
-	private void migrateText(Element textEle, Node technologyLeftNode, String locale, Map<String, String> urlMap) throws RepositoryException {
+	private void migrateText(Element textEle, Node technologyLeftNode, String locale, Map<String, String> urlMap, String catType, String type) throws RepositoryException {
 		if(textEle != null){
 			NodeIterator textNodes = technologyLeftNode.hasNode("text")?technologyLeftNode.getNodes("text*"):null;
 			if(textNodes != null){
@@ -131,7 +131,7 @@ public class RProductTechnology extends BaseAction {
 					if(text != ""){
 						eleSize++;
 						try{
-							text = FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap);
+							text = FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap, catType, type);
 						}catch(Exception e){
 							sb.append(Constants.UNABLE_TO_MIGRATE_TEXT_IMAGE);
 						}
@@ -166,7 +166,7 @@ public class RProductTechnology extends BaseAction {
 	}
 
 	private void migrateTileElements(Elements tileBorderEle,
-			Node technologyRightNode,Map<String,String> urlMap, String locale) throws PathNotFoundException, RepositoryException, JSONException {
+			Node technologyRightNode,Map<String,String> urlMap, String locale, String catType, String type) throws PathNotFoundException, RepositoryException, JSONException {
 		if(tileBorderEle != null){
 			//List Component
 			Element listEle = tileBorderEle.first();
@@ -259,7 +259,7 @@ public class RProductTechnology extends BaseAction {
 							if(StringUtil.isBlank(aHref)){
 								aHref = a.attr("href");
 							}
-							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 							tileNode.setProperty("linkurl",aHref );
 							tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 							if(lightboxid != null){
@@ -295,7 +295,7 @@ public class RProductTechnology extends BaseAction {
 							if(StringUtil.isBlank(aHref)){
 								aHref = a.attr("href");
 							}
-							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+							aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 							tileNode.setProperty("linkurl", aHref);
 							tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 							if(lightboxid != null){
@@ -335,7 +335,7 @@ public class RProductTechnology extends BaseAction {
 								if(StringUtil.isBlank(aHref)){
 									aHref = a.attr("href");
 								}
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 								tileNode.setProperty("linkurl", aHref);
 								tileNode.setProperty("lightboxtrigger", lightboxtrigger);
 								if(lightboxid != null){

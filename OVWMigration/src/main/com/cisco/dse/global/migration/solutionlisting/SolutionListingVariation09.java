@@ -102,12 +102,12 @@ public class SolutionListingVariation09 extends BaseAction {
 					Elements textHeadingElements = doc.select("div.c00v0-pilot");
 					Elements textDescriptionElements = doc.select("div.c00v1-pilot");
 					if (textHeadingElements != null ) {
-						textContent.append(FrameworkUtils.extractHtmlBlobContent(textHeadingElements.first(), "", locale, sb, urlMap));
+						textContent.append(FrameworkUtils.extractHtmlBlobContent(textHeadingElements.first(), "", locale, sb, urlMap, catType, type));
 					}else {
 							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
 					if(!textDescriptionElements.isEmpty()){
-						textContent.append(FrameworkUtils.extractHtmlBlobContent(textDescriptionElements.first(), "", locale, sb, urlMap));
+						textContent.append(FrameworkUtils.extractHtmlBlobContent(textDescriptionElements.first(), "", locale, sb, urlMap, catType, type));
 					}
 					textProp = textContent.toString();
 					Node textNode = solutionListingMidnode.hasNode("text") ? solutionListingMidnode
@@ -139,7 +139,7 @@ public class SolutionListingVariation09 extends BaseAction {
 							Elements images = htmlBlobElements.select("td");
 							for(Element ele:images)
 							{
-								htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+								htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
 								oldImage.append(htmlBlobContent);
 							}
 							oldImage.append("</tr></table>");

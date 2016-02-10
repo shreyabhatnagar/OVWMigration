@@ -216,7 +216,7 @@ public class ProductLandingVariation6 extends BaseAction {
 														}
 														// Start extracting valid href
 														log.debug("Before heroPanelLinkUrl" + ahref + "\n");
-														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap, locale, sb);
+														ahref = FrameworkUtils.getLocaleReference(ahref, urlMap, locale, sb, catType, type);
 														log.debug("after heroPanelLinkUrl" + ahref + "\n");
 														// End extracting valid href
 														heropanelNode.setProperty("linktext", aText);
@@ -234,7 +234,7 @@ public class ProductLandingVariation6 extends BaseAction {
 													if (heropanelNode.hasNode("image")) {
 														Node imageNode = heropanelNode.getNode("image");
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
+														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
 														log.debug("heroImage " + heroImage + "\n");
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
@@ -338,7 +338,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 										log.debug("after primaryCTALinkUrl" + aHref + "\n");
 										// End extracting valid href
 									} else {
@@ -386,7 +386,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before rightrailsocialLinkUrl" + href + "\n");
-										href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb);
+										href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb, catType, type);
 										log.debug("after rightrailsocialLinkUrl" + href + "\n");
 										// End extracting valid href
 										obj.put("linktext", title);
@@ -522,7 +522,7 @@ public class ProductLandingVariation6 extends BaseAction {
 												.getNode("htmlblob_0");
 										Element gd11v1_mid = gd11v1.get(i).getElementsByClass("c00-pilot").first();
 										if (gd11v1_mid != null) {
-											htmlblob_0.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gd11v1_mid, "", locale, sb, urlMap));
+											htmlblob_0.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gd11v1_mid, "", locale, sb, urlMap, catType, type));
 										} else {
 											sb.append("<li>Heading of the grid is blank.</li>");
 										}
@@ -547,7 +547,7 @@ public class ProductLandingVariation6 extends BaseAction {
 												.getNode("htmlblob");
 										Element gd11v1_mid = gd11v1.get(i).getElementsByClass("c00-pilot").first();
 										if (gd11v1_mid != null ) {
-											htmlblob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gd11v1_mid, "", locale, sb, urlMap));
+											htmlblob.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gd11v1_mid, "", locale, sb, urlMap, catType, type));
 										} else {
 											sb.append("<li>Heading of the grid is blank.</li>");
 										}
@@ -672,7 +672,7 @@ public class ProductLandingVariation6 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("Before listLinkUrl" + aLink + "\n");
-												aLink = FrameworkUtils.getLocaleReference(aLink, urlMap, locale, sb);
+												aLink = FrameworkUtils.getLocaleReference(aLink, urlMap, locale, sb, catType, type);
 												log.debug("after listLinkUrl" + aLink + "\n");
 												// End extracting valid href
 												obj.put("linktext", aText);
@@ -835,7 +835,7 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gridtwoLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 									log.debug("after gridtwoLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -873,7 +873,7 @@ public class ProductLandingVariation6 extends BaseAction {
 											if (tile_slp_small.hasNode("image")) {
 												Node imageNode = tile_slp_small.getNode("image");
 												String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
+												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
 												log.debug("spotLightImage " + spotLightImage + "\n");
 												if (StringUtils.isNotBlank(spotLightImage)) {
 													imageNode.setProperty("fileReference" , spotLightImage);
@@ -953,7 +953,7 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gridThreeLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 									log.debug("after gridThreeLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -1014,7 +1014,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										if (spotlight_large_v2.hasNode("image")) {
 											Node imageNode = spotlight_large_v2.getNode("image");
 											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
+											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
 											log.debug("spotLightImage " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												imageNode.setProperty("fileReference" , spotLightImage);
@@ -1097,7 +1097,7 @@ public class ProductLandingVariation6 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before gridFourLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 									log.debug("after gridFourLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -1196,7 +1196,7 @@ public class ProductLandingVariation6 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before rightGridLinkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 										log.debug("after rightGridLinkUrl" + aHref + "\n");
 										// End extracting valid href
 									} else {

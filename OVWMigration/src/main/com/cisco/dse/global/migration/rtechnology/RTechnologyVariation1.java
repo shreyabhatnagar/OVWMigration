@@ -81,7 +81,7 @@ public class RTechnologyVariation1 extends BaseAction {
 				try{
 					log.debug("start Text Migration");
 					Element textEle = doc.select("div.c00-pilot").first();
-					migrateText(textEle , technologyLeftNode , locale, urlMap);
+					migrateText(textEle , technologyLeftNode , locale, urlMap, catType, type);
 					log.debug("Text is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in Text Migration");
@@ -93,7 +93,7 @@ public class RTechnologyVariation1 extends BaseAction {
 				try{
 					log.debug("start List Migration");
 					Element listEle = doc.select("div.nn13-pilot").first();
-					migrateList(listEle , technologyLeftNode , locale, urlMap);
+					migrateList(listEle , technologyLeftNode , locale, urlMap, catType, type);
 					log.debug("List is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in List Migration");
@@ -112,7 +112,7 @@ public class RTechnologyVariation1 extends BaseAction {
 					}else{
 						tileBorderEle = tileBorderEles.first();
 					}
-					migrateTileElements(tileBorderEle , technologyRightNode , urlMap, locale);
+					migrateTileElements(tileBorderEle , technologyRightNode , urlMap, locale, catType, type);
 					log.debug("Tile Border is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in tile Border Migration");
@@ -134,7 +134,7 @@ public class RTechnologyVariation1 extends BaseAction {
 	}
 
 	private void migrateText(Element textEle, Node technologyLeftNode,
-			String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if(textEle != null){
 			NodeIterator textNodes = technologyLeftNode.hasNode("text")?technologyLeftNode.getNodes("text*"):null;
 			if(textNodes != null){
@@ -165,7 +165,7 @@ public class RTechnologyVariation1 extends BaseAction {
 					if(imageEle != null){
 						Node textImgaeNode = technologyLeftNode.hasNode("image")?technologyLeftNode.getNode("image"):null;
 						String textImageEle = FrameworkUtils.extractImagePath(imageEle, sb);
-						String textImage = FrameworkUtils.migrateDAMContent(textImageEle, "", locale, sb);
+						String textImage = FrameworkUtils.migrateDAMContent(textImageEle, "", locale, sb, catType, type);
 						if(textImage != ""){
 							Node imageNode = textImgaeNode.hasNode("image")?textImgaeNode.getNode("image"):null;
 							if(imageNode != null){
@@ -189,7 +189,7 @@ public class RTechnologyVariation1 extends BaseAction {
 						Node textLastNode = textNodes.nextNode();
 						if(textEle.html() != ""){
 							eleSize++;
-							textLastNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap));
+							textLastNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap, catType, type));
 						}else{
 							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
@@ -214,7 +214,7 @@ public class RTechnologyVariation1 extends BaseAction {
 	}
 
 	private void migrateList(Element listEle, Node technologyLeftNode,
-			String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
 		if(listEle != null){
 			Node listContainerNode = technologyLeftNode.hasNode("list_container")?technologyLeftNode.getNode("list_container"):null;
 			if(listContainerNode!= null){
@@ -246,7 +246,7 @@ public class RTechnologyVariation1 extends BaseAction {
 												if(StringUtil.isBlank(url)){
 													url = anchor.attr("href");
 												}
-												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb, catType, type);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
 											}else{
@@ -263,7 +263,7 @@ public class RTechnologyVariation1 extends BaseAction {
 												if(StringUtil.isBlank(url)){
 													url = anchor.attr("href");
 												}
-												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb, catType, type);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
 											}else{
@@ -284,7 +284,7 @@ public class RTechnologyVariation1 extends BaseAction {
 													if(StringUtil.isBlank(url)){
 														url = anchor.attr("href");
 													}
-													url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+													url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb, catType, type);
 													linkdataNode.setProperty("linktext", linkText);
 													linkdataNode.setProperty("url", url);
 												}else{
@@ -321,7 +321,7 @@ public class RTechnologyVariation1 extends BaseAction {
 	}
 
 	private void migrateTileElements(Element tileBorderEle,
-			Node technologyRightNode, Map<String, String> urlMap, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			Node technologyRightNode, Map<String, String> urlMap, String locale, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if(tileBorderEle != null){
 			Element heading = tileBorderEle.getElementsByTag("h3").first();
 			if(heading != null){
@@ -358,7 +358,7 @@ public class RTechnologyVariation1 extends BaseAction {
 											if(StringUtil.isBlank(url)){
 												url = anchor.attr("href");
 											}
-											url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+											url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb, catType, type);
 											linkdataNode.setProperty("linktext", linkText);
 											linkdataNode.setProperty("url", url);
 										}else{
@@ -375,7 +375,7 @@ public class RTechnologyVariation1 extends BaseAction {
 											if(StringUtil.isBlank(url)){
 												url = anchor.attr("href");
 											}
-											url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+											url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb, catType, type);
 											linkdataNode.setProperty("linktext", linkText);
 											linkdataNode.setProperty("url", url);
 										}else{
@@ -396,7 +396,7 @@ public class RTechnologyVariation1 extends BaseAction {
 												if(StringUtil.isBlank(url)){
 													url = anchor.attr("href");
 												}
-												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+												url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb, catType, type);
 												linkdataNode.setProperty("linktext", linkText);
 												linkdataNode.setProperty("url", url);
 											}else{

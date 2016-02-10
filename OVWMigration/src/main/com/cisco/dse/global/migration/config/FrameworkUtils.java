@@ -167,14 +167,13 @@ public class FrameworkUtils {
 	}
 
 	public static String migrateDAMContent(String path, String imgRef,
-			String locale, StringBuilder sb) {
+			String locale, StringBuilder sb, String catType, String type) {
 		log.debug("In the migrateDAMContent to migrate : " + path);
 		log.debug("Image path from the WEM node : " + imgRef);
 		String newImagePath = null;
 		Session session = getSession();
 
 		try {
-			
 			//returning the image path if it have the current locale in it, since if the image is having locale then it is said to be already migrated.
 			if(imgRef.indexOf(locale) != -1){
 				return imgRef;
@@ -185,8 +184,6 @@ public class FrameworkUtils {
 				//If the image path is having '/content/en/us' or  '/c/en/us' then if condition is satisfied to get the imgReference property from the current image path.
 				if (path.indexOf("/content/en/us") != -1 || path.indexOf("/c/en/us") != -1) {
 					log.debug("image path is being from /c/en/us : " + path);
-					
-					
 				if(path.lastIndexOf(".img") != -1){	
 					path = path.substring(0, path.lastIndexOf(".img"));//image path to get the node.
 					//if the image path is having any domain then removing the domain from url.
@@ -219,8 +216,6 @@ public class FrameworkUtils {
 						log.debug("No fileReference path found in the path : ");
 					}
 				}
-					
-					
 					log.debug("Hence retriving the file reference path is : " + path);
 				}
 				//--------------------------------------------------------------------------------------------------------
@@ -240,27 +235,13 @@ public class FrameworkUtils {
 						path = path.trim();
 						path = "http://www.cisco.com" + path;
 					}
-					//if there is fileReference property in the wem, then updating the path with 'assets' will be replaced with 'global/locale' and 'en/us' will be replaced with 'global/locale'.
-					//if the fileReference property in the wem is blank then the web page image url, 'web' will be replaced with 'content/dam/global/locale', if there is no string 'web' image path then directly appending '/content/dam/global/locale' 
-					if (StringUtils.isNotBlank(imgRef) && imgRef.indexOf(locale) == -1) {
-						imgRef = imgRef.replace("/assets", "/global/" + locale);
-						imgRef = imgRef.replace("/en/us", "/global/" + locale);
-					} else {
-						URL url = new URL(path);
-						String imagePath = url.getPath();
-						if (imagePath.startsWith("/web/")) {
-							imgRef = imagePath.replace("/web/", "/content/dam/global/" + locale+"/");
-						}else if(imagePath.toLowerCase().startsWith("/en/us/")){
-							imgRef = imagePath.replace("/en/us/", "/content/dam/global/" + locale+"/");
-							imgRef = imagePath.replace("/en/US/", "/content/dam/global/" + locale+"/");
-						} else {
-							imgRef = "/content/dam/global/" + locale + imagePath;
-						}
-					}
 					//updating the name of the wem image path with the web image path.
-					if (path.lastIndexOf("/") != -1 && imgRef.lastIndexOf("/") != -1) {
+					if (path.lastIndexOf("/") != -1) {
 						String imageName = path.substring(path.lastIndexOf("/"), path.length());
-						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/")) + imageName;
+						if(StringUtils.isBlank(catType)){
+							catType = type.substring(0, type.lastIndexOf("-"));
+						}
+						imgRef = "/content/dam/global/" + locale+ "/" + catType + imageName;
 					}
 					newImagePath = setContentToDAM(path, imgRef, locale);//method to hit the service to migrate the image.
 				} else if (!path.equalsIgnoreCase(imgRef)) {//if the image path is form content dam and if the image paths of the wem and web are different when returning the web image path.
@@ -435,7 +416,7 @@ public class FrameworkUtils {
 	}*/
 
 	//anudeep
-	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb, Map<String, String> urlMap) {
+	public static String extractHtmlBlobContent(Element htmlBlobElement, String fileReference, String locale, StringBuilder sb, Map<String, String> urlMap, String catType, String type) {
 		log.debug("In the extractHtmlBlobContent method.");
 		String outeHtmlText = htmlBlobElement.outerHtml();
 		List<String> existingimagePaths = null;
@@ -445,7 +426,7 @@ public class FrameworkUtils {
 			Iterator<String> iterator = existingimagePaths.iterator();
 			while(iterator.hasNext()){
 				String existingimagePath = iterator.next();
-				updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb);
+				updatedImgPath = migrateDAMContent(existingimagePath, fileReference, locale,sb, catType, type);
 
 				log.debug(existingimagePath +" is updated to "+updatedImgPath);
 				if(StringUtils.isNotBlank(existingimagePath) && StringUtils.isNotBlank(updatedImgPath)){
@@ -460,7 +441,7 @@ public class FrameworkUtils {
 				Map.Entry anchor = (Map.Entry)anchorIterator.next();
 				String existingAnchorPath = anchor.getValue().toString();
 				log.debug("Before anchorHref" + anchor.getKey().toString() + "\n");
-				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap, locale, sb);
+				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap, locale, sb, catType, type);
 				log.debug("after anchorHref" + updatedAnchorPath + "\n");
 
 				log.debug(StringEscapeUtils.escapeXml(existingAnchorPath) +" is updated to "+updatedAnchorPath);
@@ -509,11 +490,11 @@ public class FrameworkUtils {
 	}
 	//anudeep
 
-	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap, String locale, StringBuilder sb) {
+	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap, String locale, StringBuilder sb, String catType, String type) {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			String pdfPath = "";
 			if(primaryCTALinkUrl.endsWith(".pdf")|| primaryCTALinkUrl.endsWith(".PDF") || primaryCTALinkUrl.endsWith(".doc") || primaryCTALinkUrl.endsWith(".DOC") || primaryCTALinkUrl.endsWith(".docx") || primaryCTALinkUrl.endsWith(".DOCX") ){
-				pdfPath = FrameworkUtils.migrateDAMContent(primaryCTALinkUrl, "", locale, sb);
+				pdfPath = FrameworkUtils.migrateDAMContent(primaryCTALinkUrl, "", locale, sb, catType, type);
 				log.debug("pdf path after migraiton is: "+ pdfPath);
 				return pdfPath;
 				

@@ -154,21 +154,21 @@ public class RServiceListingVariation2 extends BaseAction{
 							Element pElement = ele.getElementsByTag("p")
 									.first();
 							if (pElement != null) {
-								descText.append(FrameworkUtils.extractHtmlBlobContent(pElement, "",locale, sb, urlMap));
+								descText.append(FrameworkUtils.extractHtmlBlobContent(pElement, "",locale, sb, urlMap, catType, type));
 							} else {
 								sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 							}
 							Element ulElement = ele.getElementsByTag("ul")
 									.first();
 							if (ulElement != null) {
-								descText.append(FrameworkUtils.extractHtmlBlobContent(ulElement, "",locale, sb, urlMap));
+								descText.append(FrameworkUtils.extractHtmlBlobContent(ulElement, "",locale, sb, urlMap, catType, type));
 							}
 							if (spotlightNodeIterator.hasNext()) {
 								Node spotlightNode = (Node) spotlightNodeIterator
 										.next();
 								pText = descText.toString();
 								handleSpotlightMigration(spotlightNode, ele,
-										locale, h2Text, pText, aHref);
+										locale, h2Text, pText, aHref, catType, type);
 							} else {
 								sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 							}
@@ -195,7 +195,7 @@ public class RServiceListingVariation2 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before linkTitleUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 											log.debug("after linkTitleUrl" + aHref + "\n");
 											
 											
@@ -211,7 +211,7 @@ public class RServiceListingVariation2 extends BaseAction{
 									Element pElements = ele
 											.getElementsByTag("p").first();
 									if (pElements != null) {
-										pText = FrameworkUtils.extractHtmlBlobContent(pElements, "",locale, sb, urlMap);
+										pText = FrameworkUtils.extractHtmlBlobContent(pElements, "",locale, sb, urlMap, catType, type);
 									} else {
 										sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
 									}
@@ -220,7 +220,7 @@ public class RServiceListingVariation2 extends BaseAction{
 												.next();
 
 										handleSpotlightMigration(spotlightNode,
-												ele, locale, h3Text, pText, aHref);
+												ele, locale, h3Text, pText, aHref, catType, type);
 									} else {
 										sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
 									}
@@ -411,7 +411,7 @@ public class RServiceListingVariation2 extends BaseAction{
 												}
 												// Start extracting valid href
 												log.debug("Before linkUrl" + aHref + "\n");
-												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+												aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 												log.debug("after linkUrl" + aHref + "\n");
 												// End extracting valid href
 												if (aText != null) {
@@ -463,7 +463,7 @@ public class RServiceListingVariation2 extends BaseAction{
 										}
 										// Start extracting valid href
 										log.debug("Before linkUrl" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
 										log.debug("after linkUrl" + aHref + "\n");
 										// End extracting valid href
 										if (aText != null) {
@@ -503,7 +503,7 @@ public class RServiceListingVariation2 extends BaseAction{
 								listNode = rightListItemsNode;
 							if (listContainerNode != null) {
 								//String textEle = ele.html();
-								String textEle = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
+								String textEle = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
 								listContainerNode.setProperty("text",textEle);
 							}	
 							}
@@ -535,7 +535,7 @@ public class RServiceListingVariation2 extends BaseAction{
 	}
 
 	public void handleSpotlightMigration(Node spotlightNode, Element ele,
-			String locale, String hText, String pText, String aHref) {
+			String locale, String hText, String pText, String aHref, String catType, String type) {
 		try {
 			// start image
 			String spotLightImage = FrameworkUtils.extractImagePath(ele, sb);
@@ -547,7 +547,7 @@ public class RServiceListingVariation2 extends BaseAction{
 						.hasProperty("fileReference") ? spotLightImageNode
 						.getProperty("fileReference").getString() : "";
 				spotLightImage = FrameworkUtils.migrateDAMContent(
-						spotLightImage, fileReference, locale, sb);
+						spotLightImage, fileReference, locale, sb, catType, type);
 				log.debug("spotLightImage after migration : " + spotLightImage
 						+ "\n");
 				if (StringUtils.isNotBlank(spotLightImage)) {

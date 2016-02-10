@@ -88,7 +88,7 @@ public class TechnologyVariation1 extends BaseAction {
 					log.debug("start Text migration");
 					Elements textEles = doc.select("div.c00-pilot,div.cc00-pilot,div.nn13-pilot");
 					if(textEles != null){
-						migrateText(textEles , technologyLeftNode, locale , urlMap);
+						migrateText(textEles , technologyLeftNode, locale , urlMap, catType, type);
 						log.debug("Text Element Migrated");
 					}else{
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
@@ -104,7 +104,7 @@ public class TechnologyVariation1 extends BaseAction {
 					log.debug("start of list Component migration.");
 					Element listEle = doc.getElementsByClass("n13-pilot").first();
 					if(listEle != null){
-						migrateList(listEle,technologyRightNode,locale,urlMap);
+						migrateList(listEle,technologyRightNode,locale,urlMap, catType, type);
 					}else{
 						sb.append(Constants.LIST_COMPONENT_NOT_FOUND);
 					}
@@ -118,7 +118,7 @@ public class TechnologyVariation1 extends BaseAction {
 				try{
 					log.debug("start of tile Border Component migration.");
 					Elements tileEles = doc.select("div.c23-pilot,div.cc23-pilot");
-					migrateTileBoreder(tileEles,technologyRightNode,locale,urlMap);
+					migrateTileBoreder(tileEles,technologyRightNode,locale,urlMap, catType, type);
 				}catch(Exception e){
 					log.error("Exception in tileBolder migration");
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
@@ -139,7 +139,7 @@ public class TechnologyVariation1 extends BaseAction {
 		return sb.toString();
 	}	
 	private void migrateList(Element listEle, Node technologyRightNode,
-			String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException, JSONException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException, JSONException {
 		Node listNode = technologyRightNode.hasNode("list")?technologyRightNode.getNode("list"):null;
 		if(listNode != null){
 			Element title = listEle.getElementsByTag("h2").first();
@@ -158,7 +158,7 @@ public class TechnologyVariation1 extends BaseAction {
 					if(aUrl == ""){
 						aUrl = a.attr("href");
 					}
-					aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
+					aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
 					obj.put("linktext",a.text());
 					obj.put("linkurl",aUrl);
 					obj.put("icon","none");
@@ -177,7 +177,7 @@ public class TechnologyVariation1 extends BaseAction {
 
 	}
 	private void migrateTileBoreder(Elements tileEles,
-			Node technologyRightNode, String locale, Map<String, String> urlMap) throws RepositoryException {
+			Node technologyRightNode, String locale, Map<String, String> urlMap, String catType, String type) throws RepositoryException {
 		if(tileEles != null){
 			int eleSize = tileEles.size();
 			NodeIterator tileNodes = technologyRightNode.hasNode("tile_bordered_1")?technologyRightNode.getNodes("tile_bordered*"):null;
@@ -208,7 +208,7 @@ public class TechnologyVariation1 extends BaseAction {
 							if(linkurl.equals("")){
 								linkurl = anchor.attr("href");
 							}
-							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb);
+							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb, catType, type);
 							linkurl = linkurl.replaceAll(" ", "").replaceAll("%20", "");
 							tileNode.setProperty("linkurl", linkurl);
 						}else{
@@ -230,7 +230,7 @@ public class TechnologyVariation1 extends BaseAction {
 
 	}
 	private void migrateText(Elements textElements, Node technologyLeftNode,
-			String locale, Map<String, String> urlMap) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		NodeIterator textNodes = technologyLeftNode.hasNode("text")?technologyLeftNode.getNodes("text*"):null;
 		int eleSize = textElements.size();
 		if (textNodes != null) {
@@ -238,7 +238,7 @@ public class TechnologyVariation1 extends BaseAction {
 			for(Element textElement : textElements){
 				if(textNodes.hasNext()){
 					Node textNode = textNodes.nextNode();
-					textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap));
+					textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type));
 				}else{
 					sb.append(Constants.TEXT_NODE_MISMATCH+size+Constants.TEXT_ELEMENT_COUNT+eleSize+".</li>");
 				}
