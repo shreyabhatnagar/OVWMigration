@@ -94,7 +94,7 @@ public class BuyersGuideVariation03 extends BaseAction {
 //						htmlBlobLeftElement = htmlBlobLeftElement.removeClass("div.clearfix");
 							/*htmlBlobLeftElement.select("div.clearfix").remove().first();
 							htmlBlobLeftElement.select("div#top_r,div.fw-cisco-assistant").remove().first();*/
-						 rawHtml1 = FrameworkUtils.extractHtmlBlobContent(htmlBlobLeftElement, "", locale, sb, urlMap, catType, type);
+						 rawHtml1 = FrameworkUtils.extractHtmlBlobContent(htmlBlobLeftElement, "", locale, sb, urlMap);
 //					rawHtml1 = htmlBlobLeftElement.outerHtml();
 						 if (buyersTopNode.hasNode("htmlblob")) {
 								Node htmlBlobNode = buyersTopNode.getNode("htmlblob");

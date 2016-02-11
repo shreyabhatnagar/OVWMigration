@@ -82,7 +82,7 @@ public class WebVariation8 extends BaseAction {
 					Element heroEle = doc.select("div.c50v3-pilot").first();
 					Element headingEle = doc.select("div.c00v0-alt1-pilot").first();
 					if(heroEle != null){
-						migrateHero(industriesLeftNode, heroEle, headingEle , locale, urlMap, catType, type);
+						migrateHero(industriesLeftNode, heroEle, headingEle , locale, urlMap);
 						log.debug("Hero Element Migrated");
 					}else{
 						sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
@@ -98,7 +98,7 @@ public class WebVariation8 extends BaseAction {
 					log.debug("start Html Blobs migration");
 					Elements midEles = doc.select("div.gd42v1-pilot").first().select("div.c00-pilot");
 					if(midEles != null){
-						migrateHtmlBlobs(midEles , industriesLeftNode, locale , urlMap, catType, type);
+						migrateHtmlBlobs(midEles , industriesLeftNode, locale , urlMap);
 						log.debug("Html Blobs Element Migrated");
 					}else{
 						sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
@@ -116,7 +116,7 @@ public class WebVariation8 extends BaseAction {
 					if(topRightEle == null){
 						topRightEle = doc.select("div.feature-holder").first();
 					}
-					migrateHelpHtmlBlob(topRightEle , industriesRightNode, locale , urlMap, catType, type);
+					migrateHelpHtmlBlob(topRightEle , industriesRightNode, locale , urlMap);
 					log.debug("RightRail Element Migrated");
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -138,30 +138,30 @@ public class WebVariation8 extends BaseAction {
 	}
 
 
-	private void migrateHero(Node htmlBlob , Element htmlBlobEle , Element headingEle, String locale , Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateHero(Node htmlBlob , Element htmlBlobEle , Element headingEle, String locale , Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		Node htmlBlobNode = htmlBlob.hasNode("htmlblob")?htmlBlob.getNode("htmlblob"):null;
 		if(htmlBlobNode != null){
 			String heading = "";
 			if(headingEle != null){
-				heading = FrameworkUtils.extractHtmlBlobContent(headingEle, "", locale, sb, urlMap, catType, type);
+				heading = FrameworkUtils.extractHtmlBlobContent(headingEle, "", locale, sb, urlMap);
 			}else{
 				sb.append(Constants.LIST_HEADING_COMPONENT_NOT_FOUND);
 			}
-			htmlBlobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(htmlBlobEle, "", locale, sb, urlMap, catType, type)+heading);
+			htmlBlobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(htmlBlobEle, "", locale, sb, urlMap)+heading);
 		}else{
 			sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
 		}
 	}
 
-	private void migrateHelpHtmlBlob(Element topRightEle, Node industriesRightNode, String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateHelpHtmlBlob(Element topRightEle, Node industriesRightNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		if(topRightEle != null){
 			Node htmlBlobNode = industriesRightNode.hasNode("htmlblob")?industriesRightNode.getNode("htmlblob"):null;
 			if(htmlBlobNode != null){
-				String outerHtml1 = FrameworkUtils.extractHtmlBlobContent(topRightEle, "", locale, sb, urlMap, catType, type);
+				String outerHtml1 = FrameworkUtils.extractHtmlBlobContent(topRightEle, "", locale, sb, urlMap);
 				String outerHtml2 = "";
 				topRightEle = doc.select("div.n13v12-pilot").first();
 				if(topRightEle != null){
-					outerHtml2 = FrameworkUtils.extractHtmlBlobContent(topRightEle, "", locale, sb, urlMap, catType, type);
+					outerHtml2 = FrameworkUtils.extractHtmlBlobContent(topRightEle, "", locale, sb, urlMap);
 				}
 				htmlBlobNode.setProperty("html",outerHtml1+outerHtml2);
 			}else{
@@ -173,7 +173,7 @@ public class WebVariation8 extends BaseAction {
 	}
 
 	private void migrateHtmlBlobs(Elements midEles, Node industriesLeftNode,
-			String locale, Map<String, String> urlMap, String catType, String type) throws RepositoryException {
+			String locale, Map<String, String> urlMap) throws RepositoryException {
 		if(industriesLeftNode.hasNode("gd42v1")){
 			Node gd42viNode = industriesLeftNode.getNode("gd42v1");
 			NodeIterator midNodes = gd42viNode.hasNode("gd42v1-left")?gd42viNode.getNodes("gd42v1-*"):null;
@@ -185,7 +185,7 @@ public class WebVariation8 extends BaseAction {
 						Node midNode = midNodes.nextNode();
 						if(midNode.hasNode("htmlblob")){
 							Node htmlBlobNode = midNode.getNode("htmlblob");
-							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap, catType, type);
+							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
 							htmlBlobNode.setProperty("html", outerHtml);
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -196,7 +196,7 @@ public class WebVariation8 extends BaseAction {
 						Node midNode = midNodes.nextNode();
 						if(midNode.hasNode("htmlblob")){
 							Node htmlBlobNode = midNode.getNode("htmlblob");
-							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap, catType, type);
+							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
 							htmlBlobNode.setProperty("html", outerHtml);
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -211,7 +211,7 @@ public class WebVariation8 extends BaseAction {
 							Node midNode = midNodes.nextNode();
 							if(midNode.hasNode("htmlblob")){
 								Node htmlBlobNode = midNode.getNode("htmlblob");
-								String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap, catType, type);
+								String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
 								htmlBlobNode.setProperty("html", outerHtml);
 							}else{
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);

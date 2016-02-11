@@ -174,7 +174,7 @@ public class WebVariation2 extends BaseAction {
 													+ herolinkUrl);
 											herolinkUrl = FrameworkUtils
 													.getLocaleReference(herolinkUrl,
-															urlMap,locale, sb, catType, type);
+															urlMap,locale, sb);
 											log.debug("heroPanellinkUrl after migration : "
 													+ herolinkUrl);
 											// End extracting valid href
@@ -257,7 +257,7 @@ public class WebVariation2 extends BaseAction {
 																heroImage = FrameworkUtils
 																		.migrateDAMContent(heroImage,
 																				fileReference, locale,
-																				sb, catType, type);
+																				sb);
 																log.debug("heroImage : " + heroImage);
 																if (StringUtils.isNotBlank(heroImage)) {
 																	imageNode.setProperty(
@@ -325,7 +325,7 @@ public class WebVariation2 extends BaseAction {
 							// Start extracting valid href
 							log.debug("Before primaryCTALinkUrl" + aHref + "\n");
 							aHref = FrameworkUtils.getLocaleReference(aHref,
-									urlMap,locale, sb, catType, type);
+									urlMap,locale, sb);
 							log.debug("after primaryCTALinkUrl" + aHref + "\n");
 							// End extracting valid href
 						} else {
@@ -373,7 +373,7 @@ public class WebVariation2 extends BaseAction {
 						htmlEle.first().select("div.c50-pilot").remove();
 						htmlContent = FrameworkUtils
 								.extractHtmlBlobContent(htmlEle.first(), "",
-										locale, sb, urlMap, catType, type);
+										locale, sb, urlMap);
 					}else{
 						for (Element ele : htmlEle) {
 							if (count == 2) {
@@ -381,7 +381,7 @@ public class WebVariation2 extends BaseAction {
 								if (ele != null) {
 									htmlContent = FrameworkUtils
 											.extractHtmlBlobContent(ele, "",
-													locale, sb, urlMap, catType, type);
+													locale, sb, urlMap);
 								} else {
 									sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 								}
@@ -449,7 +449,7 @@ public class WebVariation2 extends BaseAction {
 						}
 						//End of Fix
 						htmlContent = FrameworkUtils.extractHtmlBlobContent(
-								htmlEle, "", locale, sb, urlMap, catType, type);
+								htmlEle, "", locale, sb, urlMap);
 					} else {
 						sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
 					}

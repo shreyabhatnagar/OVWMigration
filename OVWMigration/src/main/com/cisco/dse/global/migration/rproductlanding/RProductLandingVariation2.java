@@ -183,7 +183,7 @@ public class RProductLandingVariation2 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("Before heroPanellinkUrl" + heroPanellinkUrl + "\n");
-												heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb, catType, type);
+												heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap, locale, sb);
 												log.debug("after heroPanellinkUrl" + heroPanellinkUrl + "\n");
 												// End extracting valid href
 
@@ -262,7 +262,7 @@ public class RProductLandingVariation2 extends BaseAction {
 																				.migrateDAMContent(
 																						heroImage,
 																						fileReference,
-																						locale, sb, catType, type);
+																						locale, sb);
 																		log.debug("heroImage " + heroImage
 																				+ "\n");
 																		if (StringUtils
@@ -355,15 +355,15 @@ public class RProductLandingVariation2 extends BaseAction {
 								int nodeSize = (int)selectorBarPanel.getSize();
 								log.debug("selector component nodeSize : "+ nodeSize);
 								if(eleSize == nodeSize){
-									forSelectorBar(selectorBarLargeElements,selectorBarPanel,urlMap, locale, catType, type);
+									forSelectorBar(selectorBarLargeElements,selectorBarPanel,urlMap, locale);
 								}
 								else if(eleSize > nodeSize){
-									forSelectorBar(selectorBarLargeElements,selectorBarPanel,urlMap, locale, catType, type);
+									forSelectorBar(selectorBarLargeElements,selectorBarPanel,urlMap, locale);
 									sb.append("<li>Mismatch in the count of selector bar panel. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 
 								}
 								else if(eleSize < nodeSize){
-									forSelectorBar(selectorBarLargeElements,selectorBarPanel,urlMap, locale, catType, type);
+									forSelectorBar(selectorBarLargeElements,selectorBarPanel,urlMap, locale);
 									sb.append("<li>Mismatch in the count of selector bar panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");						
 								}
 							}
@@ -399,7 +399,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										Node imageNode = spNode.hasNode("image")?spNode.getNode("image"):null;
 										if(imageNode!=null){
 											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												imageNode.setProperty("fileReference" , spotLightImage);
@@ -446,7 +446,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										}
 										// end pop up
 										spNode.setProperty("title", h2Ele.text());
-										String pText = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap, catType, type);
+										String pText = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap);
 										spNode.setProperty("description", pText);
 										Element prevEle = h2Ele.previousElementSibling();
 										if(prevEle.hasAttr("href")){
@@ -468,7 +468,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before spotlight" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after spotlight" + aHref + "\n");
 											// End extracting valid href
 											spNode.setProperty("ctaText", aText);
@@ -498,7 +498,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										Node imageNode = spNode.hasNode("image")?spNode.getNode("image"):null;
 										if(imageNode!=null){
 											String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												imageNode.setProperty("fileReference" , spotLightImage);
@@ -545,7 +545,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										}
 										// end pop up
 										spNode.setProperty("title", h2Ele.text());
-										String pText = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap, catType, type);
+										String pText = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap);
 										spNode.setProperty("description", pText);
 										Element prevEle = h2Ele.previousElementSibling();
 										if(prevEle.hasAttr("href")){
@@ -566,7 +566,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before spotlight" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after spotlight" + aHref + "\n");
 											// End extracting valid href
 											spNode.setProperty("ctaText", aText);
@@ -614,7 +614,7 @@ public class RProductLandingVariation2 extends BaseAction {
 							for(Element text : textEle){
 								if(textNodeIterator.hasNext()){
 									textNode = (Node)textNodeIterator.next();
-									String textHtml = FrameworkUtils.extractHtmlBlobContent(text, "",locale, sb,urlMap, catType, type);
+									String textHtml = FrameworkUtils.extractHtmlBlobContent(text, "",locale, sb,urlMap);
 									textNode.setProperty("text",textHtml);
 								}
 								else{
@@ -698,7 +698,7 @@ public class RProductLandingVariation2 extends BaseAction {
 													log.debug("primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 													// Start extracting valid href
 													log.debug("Before primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
-													primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb, catType, type);
+													primaryCTALinkUrl = FrameworkUtils.getLocaleReference(primaryCTALinkUrl, urlMap, locale, sb);
 													log.debug("after primaryCTALinkUrl" + primaryCTALinkUrl + "\n");
 													// End extracting valid href
 
@@ -808,12 +808,12 @@ public class RProductLandingVariation2 extends BaseAction {
 						int tileNodeSize = (int)tileNodeIterator.getSize();
 
 						if(tileEleSize==tileNodeSize){
-							setTile(tileEle, tileNodeIterator,locale, urlMap, catType, type);
+							setTile(tileEle, tileNodeIterator,locale, urlMap);
 						}else if(tileEleSize>tileNodeSize){
-							setTile(tileEle, tileNodeIterator,locale,urlMap, catType, type);
+							setTile(tileEle, tileNodeIterator,locale,urlMap);
 							sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}else if(tileEleSize<tileNodeSize){
-							setTile(tileEle, tileNodeIterator,locale, urlMap, catType, type);
+							setTile(tileEle, tileNodeIterator,locale, urlMap);
 							sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}
 					}catch(Exception e){
@@ -838,9 +838,9 @@ public class RProductLandingVariation2 extends BaseAction {
 
 						if(listEleSize>0&&listNodeSize>0){
 							if(listEleSize==listNodeSize){
-								setList(listEle, listIterator,urlMap, locale, catType, type);
+								setList(listEle, listIterator,urlMap, locale);
 							}else{
-								setList(listEle, listIterator,urlMap, locale, catType, type);
+								setList(listEle, listIterator,urlMap, locale);
 								sb.append("Mis-match of list components in raight rail Elements are ("+listEleSize+") and nodes are ("+listNodeSize+").");
 							}
 						}else{
@@ -889,7 +889,7 @@ public class RProductLandingVariation2 extends BaseAction {
 												}
 												// Start extracting valid href
 												log.debug("Before spotlight" + linkUrl + "\n");
-												linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb, catType, type);
+												linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 												log.debug("after spotlight" + linkUrl + "\n");
 												// End extracting valid href
 												if(itemsItr.hasNext()){
@@ -1038,7 +1038,7 @@ public class RProductLandingVariation2 extends BaseAction {
 */
 	
 	//start setting of selectorbar
-	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele,Map<String,String> urlMap, String locale, String catType, String type) {
+	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele,Map<String,String> urlMap, String locale) {
 
 		try {
 			String title = (ele!=null?ele.getElementsByTag("a").first().text():"");
@@ -1048,7 +1048,7 @@ public class RProductLandingVariation2 extends BaseAction {
 			}
 			// Start extracting valid href
 			log.debug("Before selector bar title LinkUrl" + titleUrl + "\n");
-			titleUrl = FrameworkUtils.getLocaleReference(titleUrl, urlMap, locale, sb, catType, type);
+			titleUrl = FrameworkUtils.getLocaleReference(titleUrl, urlMap, locale, sb);
 			log.debug("after selector bar title LinkUrl" + titleUrl + "\n");
 			// End extracting valid href
 			log.debug("selector component titleUrl: "+ titleUrl);							
@@ -1073,7 +1073,7 @@ public class RProductLandingVariation2 extends BaseAction {
 						}
 						// Start extracting valid href
 						log.debug("Before selector bar menu LinkUrl" + allLinkUrl + "\n");
-						allLinkUrl = FrameworkUtils.getLocaleReference(allLinkUrl, urlMap, locale, sb, catType, type);
+						allLinkUrl = FrameworkUtils.getLocaleReference(allLinkUrl, urlMap, locale, sb);
 						log.debug("after selector bar menu LinkUrl" + allLinkUrl + "\n");
 						// End extracting valid href
 						selectorBarPanelNode.setProperty("seeall", allLinkText);
@@ -1098,7 +1098,7 @@ public class RProductLandingVariation2 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before li" + aHref + "\n");
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after li" + aHref + "\n");
 								// End extracting valid href
 								Node itemNode = (Node)itemsItr.next();
@@ -1115,7 +1115,7 @@ public class RProductLandingVariation2 extends BaseAction {
 								}
 								// Start extracting valid href
 								log.debug("Before li" + aHref + "\n");
-								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+								aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after li" + aHref + "\n");
 								// End extracting valid href
 								Node itemNode = null;
@@ -1148,19 +1148,19 @@ public class RProductLandingVariation2 extends BaseAction {
 	//end setting of selectorbar
 
 	//start for selector bar
-	public void forSelectorBar(Elements selectorBarLargeElements, NodeIterator selectorBarPanel,Map<String,String> urlMap, String locale, String catType, String type){
+	public void forSelectorBar(Elements selectorBarLargeElements, NodeIterator selectorBarPanel,Map<String,String> urlMap, String locale){
 		for(Element ele : selectorBarLargeElements){
 			Node selectorBarPanelNode;
 			if (selectorBarPanel.hasNext()) {
 				selectorBarPanelNode = (Node)selectorBarPanel.next();
-				selectorBarTranslate(selectorBarPanelNode, ele,urlMap, locale, catType, type);
+				selectorBarTranslate(selectorBarPanelNode, ele,urlMap, locale);
 			}
 		}
 	}
 	//end for selector bar
 
 	//start setTile
-	public void setTile(Elements tileEle,NodeIterator tileNodeIterator, String locale, Map<String, String> urlMap, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setTile(Elements tileEle,NodeIterator tileNodeIterator, String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		for(Element tile : tileEle){
 			Element imgEle = tile.getElementsByTag("img").first();
 			if(imgEle!=null){
@@ -1182,7 +1182,7 @@ public class RProductLandingVariation2 extends BaseAction {
 			}else{
 				Element ulEle = tile.getElementsByTag("ul").first();
 				if(ulEle!=null){
-					tDesc = FrameworkUtils.extractHtmlBlobContent(ulEle, "", locale, sb, urlMap, catType, type);
+					tDesc = FrameworkUtils.extractHtmlBlobContent(ulEle, "", locale, sb, urlMap);
 					check = false;
 				}else{
 					sb.append("<li>No description foud for tile in right rail.</li>");
@@ -1212,7 +1212,7 @@ public class RProductLandingVariation2 extends BaseAction {
 							}
 							// Start extracting valid href
 							log.debug("Before anchorHref" + aEle.attr("href") + "\n");
-							String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+							String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 							log.debug("after anchorHref" + anchorHref + "\n");
 							// End extracting valid href
 							ctaNode.setProperty("url",anchorHref);	
@@ -1227,7 +1227,7 @@ public class RProductLandingVariation2 extends BaseAction {
 	//end setTile
 
 	//start setList
-	public void setList(Elements listEle, NodeIterator listIterator,Map<String,String> urlMap, String locale, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setList(Elements listEle, NodeIterator listIterator,Map<String,String> urlMap, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		for(Element list : listEle){
 			Element h2Ele = list.getElementsByTag("h2").first();
 			Element ulEle = list.select("ul.no-bullets").first();
@@ -1267,7 +1267,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before li" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after li" + aHref + "\n");
 										// End extracting valid href
 										Node item = null;
@@ -1301,7 +1301,7 @@ public class RProductLandingVariation2 extends BaseAction {
 										}
 										// Start extracting valid href
 										log.debug("Before li" + aHref + "\n");
-										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+										aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 										log.debug("after li" + aHref + "\n");
 										// End extracting valid href
 										Node item = null;

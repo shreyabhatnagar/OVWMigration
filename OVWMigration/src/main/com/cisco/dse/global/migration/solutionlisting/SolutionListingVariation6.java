@@ -182,7 +182,7 @@ public class SolutionListingVariation6 extends BaseAction {
 											+ herolinkUrl);
 									herolinkUrl = FrameworkUtils
 											.getLocaleReference(herolinkUrl,
-													urlMap, locale, sb, catType, type);
+													urlMap, locale, sb);
 									log.debug("heroPanellinkUrl after migration : "
 											+ herolinkUrl);
 									// End extracting valid href
@@ -271,7 +271,7 @@ public class SolutionListingVariation6 extends BaseAction {
 										heroImage = FrameworkUtils
 												.migrateDAMContent(heroImage,
 														fileReference, locale,
-														sb, catType, type);
+														sb);
 										log.debug("heroImage : " + heroImage);
 										if (StringUtils.isNotBlank(heroImage)) {
 											imageNode.setProperty(
@@ -313,7 +313,7 @@ public class SolutionListingVariation6 extends BaseAction {
 					if (textEle != null) {
 						for (Element ele : textEle) {
 							text = FrameworkUtils.extractHtmlBlobContent(ele,
-									"", locale, sb, urlMap, catType, type);
+									"", locale, sb, urlMap);
 							textBuilder.append(text);
 						}
 					} else {
@@ -347,7 +347,7 @@ public class SolutionListingVariation6 extends BaseAction {
 						} else if (count == 2) {
 							tileSlpNode = solutionListSecondMidNode;
 						}
-						HandleTileSlpSection(ele, tileSlpNode, urlMap, locale, catType, type);
+						HandleTileSlpSection(ele, tileSlpNode, urlMap, locale);
 						count++;
 					}
 				} else {
@@ -374,7 +374,7 @@ public class SolutionListingVariation6 extends BaseAction {
 	}
 
 	public void HandleTileSlpSection(Element ele, Node tileSlpNode,
-			Map<String, String> urlMap, String locale, String catType, String type) {
+			Map<String, String> urlMap, String locale) {
 		try {
 			int count = 1;
 			Elements tileSlpLiElements = ele.getElementsByTag("li");
@@ -384,19 +384,19 @@ public class SolutionListingVariation6 extends BaseAction {
 							.hasNode("gd23v1-left/tile_slp_small") ? tileSlpNode
 							.getNode("gd23v1-left/tile_slp_small") : null;
 					setContentToTileSlp(tileSlpLiEle, leftSlpNode, urlMap,
-							locale, catType, type);
+							locale);
 				} else if (count == 2) {
 					Node midSlpNode = tileSlpNode
 							.hasNode("gd23v1-mid/tile_slp_small") ? tileSlpNode
 							.getNode("gd23v1-mid/tile_slp_small") : null;
 					setContentToTileSlp(tileSlpLiEle, midSlpNode, urlMap,
-							locale, catType, type);
+							locale);
 				} else if (count == 3) {
 					Node rightSlpNode = tileSlpNode
 							.hasNode("gd23v1-right/tile_slp_small") ? tileSlpNode
 							.getNode("gd23v1-right/tile_slp_small") : null;
 					setContentToTileSlp(tileSlpLiEle, rightSlpNode, urlMap,
-							locale, catType, type);
+							locale);
 				}
 				count++;
 			}
@@ -406,7 +406,7 @@ public class SolutionListingVariation6 extends BaseAction {
 	}
 
 	public void setContentToTileSlp(Element tileSlpEle, Node tileSlpNode,
-			Map<String, String> urlMap, String locale, String catType, String type) {
+			Map<String, String> urlMap, String locale) {
 		try {
 			String tileSlpTitle = "";
 			String tileSlpDesc = "";
@@ -445,7 +445,7 @@ public class SolutionListingVariation6 extends BaseAction {
 				// Start extracting valid href
 				log.debug("Before titleLink" + titleLink + "\n");
 				titleLink = FrameworkUtils
-						.getLocaleReference(titleLink, urlMap, locale, sb, catType, type);
+						.getLocaleReference(titleLink, urlMap, locale, sb);
 				log.debug("after titleLink" + titleLink + "\n");
 				// End extracting valid href
 
@@ -471,7 +471,7 @@ public class SolutionListingVariation6 extends BaseAction {
 								.hasProperty("fileReference") ? imageNode
 								.getProperty("fileReference").getString() : "";
 						tileSlpImage = FrameworkUtils.migrateDAMContent(
-								tileSlpImage, fileReference, locale, sb, catType, type);
+								tileSlpImage, fileReference, locale, sb);
 						log.debug("tileSlpImage " + tileSlpImage + "\n");
 						if (StringUtils.isNotBlank(tileSlpImage)) {
 							imageNode

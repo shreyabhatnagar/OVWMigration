@@ -101,7 +101,7 @@ public class ProductListingVariation7 extends BaseAction {
 					if (textElements != null && !textElements.isEmpty()) {
 						Element rightGridContent = textElements.first();
 						if(rightGridContent != null){
-							html = FrameworkUtils.extractHtmlBlobContent(rightGridContent, "",locale, sb, urlMap, catType, type);
+							html = FrameworkUtils.extractHtmlBlobContent(rightGridContent, "",locale, sb, urlMap);
 							if(textNodeOne !=null){
 								textNodeOne.setProperty("text",html);
 							}

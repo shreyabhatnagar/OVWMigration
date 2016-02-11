@@ -160,7 +160,7 @@ public class WebVariation9 extends BaseAction{
 											+ herolinkUrl);
 									herolinkUrl = FrameworkUtils
 											.getLocaleReference(herolinkUrl,
-													urlMap, locale, sb, catType, type);
+													urlMap, locale, sb);
 									log.debug("heroPanellinkUrl after migration : "
 											+ herolinkUrl);
 									// End extracting valid href
@@ -236,7 +236,7 @@ public class WebVariation9 extends BaseAction{
 										heroImage = FrameworkUtils
 												.migrateDAMContent(heroImage,
 														fileReference, locale,
-														sb, catType, type);
+														sb);
 										log.debug("heroImage : " + heroImage);
 										if (StringUtils.isNotBlank(heroImage)) {
 											imageNode.setProperty(
@@ -281,7 +281,7 @@ public class WebVariation9 extends BaseAction{
 						
 						for(Element ele:htmlBlobElements)
 						{
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 						}
 						
@@ -322,7 +322,7 @@ public class WebVariation9 extends BaseAction{
 					if (htmlBlobElements != null) {
 						for(Element ele : htmlBlobElements)
 						{
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 							}
 					}

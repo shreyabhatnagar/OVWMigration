@@ -96,7 +96,7 @@ public class WebVariation3 extends BaseAction{
 				// start set Hero Large component content.
 				try {
 					Elements heroLargeElements = doc.select("div.c50-pilot");
-					migrateHero(heroLargeElements,midSizeUpperLeftNode,locale,urlMap, catType, type);
+					migrateHero(heroLargeElements,midSizeUpperLeftNode,locale,urlMap);
 
 				} catch (Exception e) {
 					log.debug("<li>Unable to update hero_large component.</li>");
@@ -108,7 +108,7 @@ public class WebVariation3 extends BaseAction{
 				try {
 					log.debug("Started Migrating Upper Right.");
 					Element upperRightElement = doc.select("div.c47-pilot").first();
-					migratePrimaryCta(upperRightElement,midSizeUpperRightNode,locale,urlMap, catType, type);
+					migratePrimaryCta(upperRightElement,midSizeUpperRightNode,locale,urlMap);
 				}
 				catch (Exception e) {
 					log.debug("Excepiton : ", e);
@@ -120,7 +120,7 @@ public class WebVariation3 extends BaseAction{
 				try {
 					log.debug("Started Migrating  html blob.");
 					Element gdMidElement = doc.select("div.gd-mid").first();
-					migrateHtmlBlob(gdMidElement,midSizeMiddleNode,locale,urlMap, catType, type);
+					migrateHtmlBlob(gdMidElement,midSizeMiddleNode,locale,urlMap);
 				} catch (Exception e) {
 					log.debug("Excepiton : ", e);
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -131,7 +131,7 @@ public class WebVariation3 extends BaseAction{
 				try {
 					log.debug("Started Migrating text.");
 					Element textElement = doc.select("div.c00-pilot").first();
-					migrateText(textElement,midSizeLowerLeftNode,locale,urlMap, catType, type);
+					migrateText(textElement,midSizeLowerLeftNode,locale,urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
 					log.debug("Excepiton : ", e);
@@ -142,7 +142,7 @@ public class WebVariation3 extends BaseAction{
 				try{
 					log.debug("start spotlight migration.");
 					Elements spEles = doc.select("div.c11-pilot");
-					migrateSpotLight(spEles,midSizeLowerLeftNode,locale,urlMap, catType, type);
+					migrateSpotLight(spEles,midSizeLowerLeftNode,locale,urlMap);
 				}catch(Exception e){
 					log.error("Exception in spotlight migration.");
 					sb.append(Constants.EXCEPTION_SPOTLIGHT_COMPONENT);
@@ -153,7 +153,7 @@ public class WebVariation3 extends BaseAction{
 				try{
 					log.debug("start of tile Border Component migration.");
 					Elements tileEles = doc.getElementsByClass("c23-pilot");
-					migrateTileBoreder(tileEles,midSizeLowerRightNode,locale,urlMap, catType, type);
+					migrateTileBoreder(tileEles,midSizeLowerRightNode,locale,urlMap);
 				}catch(Exception e){
 					log.error("Exception in tileBolder migration");
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
@@ -164,7 +164,7 @@ public class WebVariation3 extends BaseAction{
 				try{
 					log.debug("start of RightRailImage Component migration.");
 					Element imageEle = doc.select("div.c00-pilot").last();
-					migrateRightRailImage(imageEle,midSizeLowerRightNode,locale,urlMap, catType, type);
+					migrateRightRailImage(imageEle,midSizeLowerRightNode,locale,urlMap);
 				}catch(Exception e){
 					log.error("Exception in tileBolder migration");
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
@@ -175,7 +175,7 @@ public class WebVariation3 extends BaseAction{
 				try{
 					log.debug("start of FollowUs Component migration.");
 					Element followUsEle = doc.select("div.s14-pilot").first();
-					migrateFollowUsImage(followUsEle,midSizeLowerRightNode,locale,urlMap, catType, type);
+					migrateFollowUsImage(followUsEle,midSizeLowerRightNode,locale,urlMap);
 				}catch(Exception e){
 					log.error("Exception in tileBolder migration");
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
@@ -195,7 +195,7 @@ public class WebVariation3 extends BaseAction{
 
 	private void migrateFollowUsImage(Element followUsEle,
 			Node midSizeLowerRightNode, String locale,
-			Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException, JSONException {
+			Map<String, String> urlMap) throws PathNotFoundException, RepositoryException, JSONException {
 		if(followUsEle != null){
 			if(midSizeLowerRightNode.hasNode("followus")){
 				Node followUsNode = midSizeLowerRightNode.getNode("followus");
@@ -215,7 +215,7 @@ public class WebVariation3 extends BaseAction{
 							if(aURL.equals("")){
 								aURL = a.attr("href");
 							}
-							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap,locale, sb, catType, type);
+							aURL = FrameworkUtils.getLocaleReference(aURL, urlMap,locale, sb);
 							JSONObject obj = new JSONObject();
 							obj.put("linktext", a.text());
 							obj.put("linkurl",aURL);
@@ -238,7 +238,7 @@ public class WebVariation3 extends BaseAction{
 	}
 
 	private void migrateHero(Elements heroLargeElements,
-			Node midSizeUpperLeftNode, String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException, JSONException {
+			Node midSizeUpperLeftNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException, JSONException {
 		Node heroLargeNode = null;
 		Value[] panelPropertiest = null;
 		if (midSizeUpperLeftNode.hasNode("hero_large")) {
@@ -319,7 +319,7 @@ public class WebVariation3 extends BaseAction{
 								}
 								// Start extracting valid href
 								log.debug("heroPanellinkUrl before migration : " + heroPanellinkUrl);
-								heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap,locale, sb, catType, type);
+								heroPanellinkUrl = FrameworkUtils.getLocaleReference(heroPanellinkUrl, urlMap,locale, sb);
 								log.debug("heroPanellinkUrl after migration : " + heroPanellinkUrl);
 								// End extracting valid href
 							} else {
@@ -396,7 +396,7 @@ public class WebVariation3 extends BaseAction{
 							if (heroPanelNode.hasNode("image")) {
 								Node imageNode = heroPanelNode.getNode("image");
 								String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString() : "";
-								heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale, sb, catType, type);
+								heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale, sb);
 								log.debug("heroImage : " + heroImage);
 								if (StringUtils.isNotBlank(heroImage)) {
 									imageNode.setProperty("fileReference", heroImage);
@@ -424,7 +424,7 @@ public class WebVariation3 extends BaseAction{
 
 	private void migratePrimaryCta(Element upperRightElement,
 			Node midSizeUpperRightNode, String locale,
-			Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			Map<String, String> urlMap) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if (upperRightElement != null) {
 			if (midSizeUpperRightNode.hasNode("primary_cta_v2")) {
 				Element title = upperRightElement.getElementsByTag("h3").first();
@@ -448,7 +448,7 @@ public class WebVariation3 extends BaseAction{
 						if(aUrl.equals("")){
 							aUrl = link.attr("href");
 						}
-						aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap,locale, sb, catType, type);
+						aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap,locale, sb);
 						Node linkUrlNode = ctaNode.getNode("linkurl");
 						linkUrlNode.setProperty("url", aUrl);
 					}else{
@@ -467,11 +467,11 @@ public class WebVariation3 extends BaseAction{
 	}
 
 	private void migrateHtmlBlob(Element gdMidElement, Node midSizeMiddleNode,
-			String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			String locale, Map<String, String> urlMap) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if (gdMidElement != null) {
 			if (midSizeMiddleNode.hasNode("htmlblob")) {
 				Node htmlblobNode = midSizeMiddleNode.getNode("htmlblob");
-				htmlblobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gdMidElement, "", locale, sb, urlMap, catType, type));
+				htmlblobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(gdMidElement, "", locale, sb, urlMap));
 			}else {
 				sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 			}
@@ -481,11 +481,11 @@ public class WebVariation3 extends BaseAction{
 	}
 
 	private void migrateText(Element textElement, Node midSizeLowerLeftNode,
-			String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			String locale, Map<String, String> urlMap) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if (textElement != null) {
 			if (midSizeLowerLeftNode.hasNode("text")) {
 				Node textNode = midSizeLowerLeftNode.getNode("text");
-				String text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type);
+				String text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
 				text = text.replace(text.substring(0, text.indexOf("<h2>")), "").replace("</div>", "");
 				textNode.setProperty("text",text );
 			}else{
@@ -497,7 +497,7 @@ public class WebVariation3 extends BaseAction{
 	}
 
 	private void migrateSpotLight(Elements spEles, Node midSizeLowerLeftNode,
-			String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+			String locale, Map<String, String> urlMap) throws PathNotFoundException, ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		if(spEles != null){
 			int elesize = spEles.size();
 			NodeIterator spNodes = midSizeLowerLeftNode.hasNode("spotlight_large_v2")?midSizeLowerLeftNode.getNodes("spotlight_large_v2*"):null;
@@ -523,7 +523,7 @@ public class WebVariation3 extends BaseAction{
 						if(bullets.size() == 0 ){
 							Element bullet = spEle.getElementsByTag("p").first();
 							if(bullet != null && !bullet.ownText().isEmpty()){
-								String link = FrameworkUtils.extractHtmlBlobContent(bullet, "", locale, sb, urlMap, catType, type);
+								String link = FrameworkUtils.extractHtmlBlobContent(bullet, "", locale, sb, urlMap);
 								String bulletValue[] = {link};
 								spNode.setProperty("bullets", bulletValue);
 								spEle.getElementsByTag("p").first().remove();
@@ -533,7 +533,7 @@ public class WebVariation3 extends BaseAction{
 						}else{
 							List<String> list = new ArrayList<String>();
 							for(Element li : bullets){
-								String link = FrameworkUtils.extractHtmlBlobContent(li, "", locale, sb, urlMap, catType, type);
+								String link = FrameworkUtils.extractHtmlBlobContent(li, "", locale, sb, urlMap);
 								link = link.replace("<li>", "").replace("</li>", "");
 								list.add(link);
 							}
@@ -551,7 +551,7 @@ public class WebVariation3 extends BaseAction{
 										if(aUrl.equals("")){
 											aUrl = spLink.attr("href");
 										}
-										aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
+										aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 										ctaNode.setProperty("url", aUrl);
 									}
 								}else{
@@ -566,7 +566,7 @@ public class WebVariation3 extends BaseAction{
 						if(spNode.hasNode("image")){
 							Node imageNode = spNode.getNode("image");
 							String fileReference = FrameworkUtils.extractImagePath(spEle, sb);
-							fileReference = FrameworkUtils.migrateDAMContent(fileReference, "", locale, sb, catType, type);
+							fileReference = FrameworkUtils.migrateDAMContent(fileReference, "", locale, sb);
 							if(fileReference != ""){
 								imageNode.setProperty("fileReference", fileReference);
 							}else{
@@ -593,11 +593,11 @@ public class WebVariation3 extends BaseAction{
 
 	private void migrateRightRailImage(Element imageEle,
 			Node midSizeLowerRightNode, String locale,
-			Map<String, String> urlMap, String catType, String type) throws RepositoryException {
+			Map<String, String> urlMap) throws RepositoryException {
 		if(imageEle != null){
 			if(midSizeLowerRightNode.hasNode("htmlblob_0")){
 				Node htmlBlobNode = midSizeLowerRightNode.getNode("htmlblob_0");
-				htmlBlobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(imageEle, "", locale, sb, urlMap, catType, type));
+				htmlBlobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(imageEle, "", locale, sb, urlMap));
 			}else{
 				sb.append(Constants.IMAGE_LINK_NODE_NOT_FOUND);
 			}
@@ -609,7 +609,7 @@ public class WebVariation3 extends BaseAction{
 
 	private void migrateTileBoreder(Elements tileEles,
 			Node midSizeLowerRightNode, String locale,
-			Map<String, String> urlMap, String catType, String type) throws RepositoryException {
+			Map<String, String> urlMap) throws RepositoryException {
 		if(tileEles != null){
 			int eleSize = tileEles.size();
 			NodeIterator tileNodes = midSizeLowerRightNode.hasNode("tile_bordered")?midSizeLowerRightNode.getNodes("tile_bordered*"):null;
@@ -637,7 +637,7 @@ public class WebVariation3 extends BaseAction{
 							if(linkurl.equals("")){
 								linkurl = anchor.attr("href");
 							}
-							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb, catType, type);
+							linkurl = FrameworkUtils.getLocaleReference(linkurl, urlMap, locale, sb);
 							tileNode.setProperty("linkurl", linkurl);
 						}else{
 							sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);

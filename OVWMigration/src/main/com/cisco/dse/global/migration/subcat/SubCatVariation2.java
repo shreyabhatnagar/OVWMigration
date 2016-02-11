@@ -182,7 +182,7 @@ public class SubCatVariation2 extends BaseAction{
 									}
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after heroPanelLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {
@@ -233,7 +233,7 @@ public class SubCatVariation2 extends BaseAction{
 													.migrateDAMContent(
 															heroImage,
 															fileReference,
-															locale,sb, catType, type);
+															locale,sb);
 											log.debug("heroImage " + heroImage
 													+ "\n");
 											if (StringUtils
@@ -369,7 +369,7 @@ public class SubCatVariation2 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before ListLinkUrl" + anchorHref + "\n");
-											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
+											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 											log.debug("after ListLinkUrl" + anchorHref + "\n");
 											// End extracting valid href
 											String anchorTarget = listItemAnchor
@@ -504,7 +504,7 @@ public class SubCatVariation2 extends BaseAction{
 									}
 									// Start extracting valid href
 									log.debug("Before followusLinkUrl" + href + "\n");
-									href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb, catType, type);
+									href = FrameworkUtils.getLocaleReference(href, urlMap, locale, sb);
 									log.debug("after followusLinkUrl" + href + "\n");
 									// End extracting valid href
 									obj.put("linktext", title);
@@ -550,7 +550,7 @@ public class SubCatVariation2 extends BaseAction{
 							if (htmlblobElement != null) {
 								html = htmlblobElement.outerHtml();
 								html = FrameworkUtils.extractHtmlBlobContent(
-										htmlblobElement, "", locale, sb,urlMap, catType, type);
+										htmlblobElement, "", locale, sb,urlMap);
 								//htmlBlobContent.append(html);
 							} else {
 								log.debug(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
@@ -593,7 +593,7 @@ public class SubCatVariation2 extends BaseAction{
 									String textProp = ele.html();
 									textProp = FrameworkUtils
 											.extractHtmlBlobContent(ele, "",
-													locale, sb,urlMap, catType, type);
+													locale, sb,urlMap);
 									log.debug("text property for first c00v0-pilottttt*******!: " + textProp);
 									textNode.setProperty("text", textProp);
 								} else {
@@ -624,7 +624,7 @@ public class SubCatVariation2 extends BaseAction{
 									String textProp = ele.html();
 									textProp = FrameworkUtils
 											.extractHtmlBlobContent(ele, "",
-													locale, sb,urlMap, catType, type);
+													locale, sb,urlMap);
 									log.debug("text property!: " + textProp);
 									textNode.setProperty("text", textProp);
 								} else {
@@ -654,7 +654,7 @@ public class SubCatVariation2 extends BaseAction{
 									String textProp = ele.html();
 									textProp = FrameworkUtils
 											.extractHtmlBlobContent(ele, "",
-													locale, sb,urlMap, catType, type);
+													locale, sb,urlMap);
 									log.debug("text property!: " + textProp);
 									textNode.setProperty("text", textProp);
 								} else {
@@ -705,7 +705,7 @@ public class SubCatVariation2 extends BaseAction{
 								Node imageNode = spNode.hasNode("image")?spNode.getNode("image"):null;
 								if(imageNode!=null){
 									String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-									spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+									spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 									log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 									if (StringUtils.isNotBlank(spotLightImage)) {
 										imageNode.setProperty("fileReference" , spotLightImage);
@@ -757,12 +757,12 @@ public class SubCatVariation2 extends BaseAction{
 								html = htmlblobElement.outerHtml();
 								if(count == htmlBlobElements.size()){
 								html = FrameworkUtils.extractHtmlBlobContent(
-										htmlblobElement, "", locale, sb,urlMap, catType, type);
+										htmlblobElement, "", locale, sb,urlMap);
 								html = headerOfHtmlBlob+html;
 								//htmlBlobContent.append(headerOfHtmlBlob+html);
 								}else{
 									html = FrameworkUtils.extractHtmlBlobContent(
-											htmlblobElement, "", locale, sb,urlMap, catType, type);
+											htmlblobElement, "", locale, sb,urlMap);
 								}
 							} else {
 								log.debug(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
@@ -837,7 +837,7 @@ public class SubCatVariation2 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before ListLinkUrl" + anchorHref + "\n");
-											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
+											anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 											log.debug("after ListLinkUrl" + anchorHref + "\n");
 											// End extracting valid href
 											String anchorTarget = listItemAnchor
@@ -961,7 +961,7 @@ public class SubCatVariation2 extends BaseAction{
 	}
 	
 	//start setting of spotlight
-		public void spotLightTranslate (Node slNode, Element spElement, String locale,Map<String,String> urlMap, String catType, String type) {
+		public void spotLightTranslate (Node slNode, Element spElement, String locale,Map<String,String> urlMap) {
 			try {
 				Element spotLightTitle = spElement.getElementsByTag("h2").first();
 				Element spotLightDescription = spElement.getElementsByTag("p").first();
@@ -975,7 +975,7 @@ public class SubCatVariation2 extends BaseAction{
 					if (slNode.hasNode("image")) {
 						Node spotLightImageNode = slNode.getNode("image");
 						String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-						spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+						spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 						log.debug("spotLightImage " + spotLightImage + "\n");
 						if (StringUtils.isNotBlank(spotLightImage)) {
 							spotLightImageNode.setProperty("fileReference" , spotLightImage);
@@ -1012,7 +1012,7 @@ public class SubCatVariation2 extends BaseAction{
 					}
 					// Start extracting valid href
 					log.debug("Before spotlight LinkUrl" + linkUrl + "\n");
-					linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb, catType, type);
+					linkUrl = FrameworkUtils.getLocaleReference(linkUrl, urlMap, locale, sb);
 					log.debug("after spotlight LinkUrl" + linkUrl + "\n");
 					// End extracting valid href
 					slNode.setProperty("linktext", linkText);
@@ -1039,7 +1039,7 @@ public class SubCatVariation2 extends BaseAction{
 						}
 						// Start extracting valid href
 						log.debug("Before spotlight LinkUrl" + slLinkUrl + "\n");
-						slLinkUrl = FrameworkUtils.getLocaleReference(slLinkUrl, urlMap, locale, sb, catType, type);
+						slLinkUrl = FrameworkUtils.getLocaleReference(slLinkUrl, urlMap, locale, sb);
 						log.debug("after spotlight LinkUrl" + slLinkUrl + "\n");
 						// End extracting valid href
 						slNode.setProperty("title", slLinkText);

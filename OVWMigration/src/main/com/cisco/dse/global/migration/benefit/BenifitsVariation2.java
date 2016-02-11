@@ -105,7 +105,7 @@ public class BenifitsVariation2 extends BaseAction{
 								for(Element text : textEle){
 									if(textNodeIterator.hasNext()){
 										textNode = (Node)textNodeIterator.next();
-										String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap, catType, type);
+										String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap);
 										textNode.setProperty("text", html);
 										log.debug("text node updated...");
 									}
@@ -114,7 +114,7 @@ public class BenifitsVariation2 extends BaseAction{
 								for(Element text : textEle){
 									if(textNodeIterator.hasNext()){
 										textNode = (Node)textNodeIterator.next();
-										String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap, catType, type);
+										String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap);
 										textNode.setProperty("text", html);
 										log.debug("text node updated...");
 									}
@@ -129,7 +129,7 @@ public class BenifitsVariation2 extends BaseAction{
 								if(list!=null){
 									if(textNodeIterator.hasNext()){
 										textNode = (Node)textNodeIterator.next();
-										String html = FrameworkUtils.extractHtmlBlobContent(list, "", locale, sb, urlMap, catType, type);
+										String html = FrameworkUtils.extractHtmlBlobContent(list, "", locale, sb, urlMap);
 										textNode.setProperty("text", html);
 										log.debug("text node updated...");
 									}
@@ -145,7 +145,7 @@ public class BenifitsVariation2 extends BaseAction{
 							}
 							if(textNodeIterator.hasNext()){
 								textNode = (Node)textNodeIterator.nextNode();
-								String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap, catType, type);
+								String html = FrameworkUtils.extractHtmlBlobContent(text, "", locale, sb, urlMap);
 								textNode.setProperty("text", html);
 								log.debug("text node updated...");
 							}
@@ -156,7 +156,7 @@ public class BenifitsVariation2 extends BaseAction{
 							}
 							if(textNodeIterator.hasNext()){
 								textNode = (Node)textNodeIterator.next();
-								String html = FrameworkUtils.extractHtmlBlobContent(list, "", locale, sb, urlMap, catType, type);
+								String html = FrameworkUtils.extractHtmlBlobContent(list, "", locale, sb, urlMap);
 								textNode.setProperty("text", html);
 								log.debug("text node updated...");
 							}
@@ -192,7 +192,7 @@ public class BenifitsVariation2 extends BaseAction{
 									Node imageNode = spNode.hasNode("image")?spNode.getNode("image"):null;
 									if(imageNode!=null){
 										String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 										log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											imageNode.setProperty("fileReference" , spotLightImage);
@@ -211,7 +211,7 @@ public class BenifitsVariation2 extends BaseAction{
 											if(StringUtil.isBlank(aHref)){
 												aHref = aEle.attr("href");
 											}
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											spCta.setProperty("url",aHref);
 										}else{
 											sb.append(Constants.CTA_NOT_AVAILABLE);
@@ -241,7 +241,7 @@ public class BenifitsVariation2 extends BaseAction{
 							Element iframe = htmlblobEle.getElementsByTag("iframe").first();
 							if(iframe!=null){
 								if(hBlobNode!=null){
-									String html = FrameworkUtils.extractHtmlBlobContent(htmlblobEle, "", locale, sb, urlMap, catType, type);
+									String html = FrameworkUtils.extractHtmlBlobContent(htmlblobEle, "", locale, sb, urlMap);
 									hBlobNode.setProperty("html", html);
 								}
 							}else{
@@ -267,12 +267,12 @@ public class BenifitsVariation2 extends BaseAction{
 						NodeIterator tileNodeIterator = benifitsRightNode.hasNode("tile_bordered")?benifitsRightNode.getNodes("tile_bordered*"):null;
 						int tileNodeSize = (int)tileNodeIterator.getSize();
 						if(tileEleSize==tileNodeSize){
-							setTile(tileEle, tileNodeIterator,urlMap, locale, catType, type);
+							setTile(tileEle, tileNodeIterator,urlMap, locale);
 						}else if(tileEleSize>tileNodeSize){
-							setTile(tileEle, tileNodeIterator,urlMap, locale, catType, type);
+							setTile(tileEle, tileNodeIterator,urlMap, locale);
 							sb.append(Constants.MISMATCH_OF_TILES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}else if(tileEleSize<tileNodeSize){
-							setTile(tileEle, tileNodeIterator,urlMap, locale, catType, type);
+							setTile(tileEle, tileNodeIterator,urlMap, locale);
 							sb.append(Constants.MISMATCH_OF_TILES_NODES_IN_RIGHT_RAIL+tileEleSize+Constants.LIST_NODES_COUNT+" ("+tileNodeSize+")");
 						}
 						log.debug("end of right rail..");
@@ -298,7 +298,7 @@ public class BenifitsVariation2 extends BaseAction{
 		session.save();
 		return sb.toString();
 	}
-	public void setTile(Elements tileEle,NodeIterator tileNodeIterator,Map<String,String> urlMap, String locale, String catType, String type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+	public void setTile(Elements tileEle,NodeIterator tileNodeIterator,Map<String,String> urlMap, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
 		if(tileEle!=null){
 			for(Element tile : tileEle){
 				Element tTitleEle = tile.getElementsByTag("h2").first();
@@ -319,7 +319,7 @@ public class BenifitsVariation2 extends BaseAction{
 						if(StringUtil.isBlank(aHref)){
 							aHref = aEle.attr("href");
 						}
-						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 						tileNode.setProperty("linkurl",aHref);	
 					}
 				}

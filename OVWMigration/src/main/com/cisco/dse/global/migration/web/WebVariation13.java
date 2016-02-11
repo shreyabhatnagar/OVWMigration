@@ -85,12 +85,12 @@ public class WebVariation13 extends BaseAction {
 					
 					Elements htmlBlobTitle = doc.select("div#mb-title-nav-bar");
 					if (htmlBlobTitle != null && !htmlBlobTitle.isEmpty()) {
-						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobTitle.last(), "", locale, sb, urlMap, catType, type);
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobTitle.last(), "", locale, sb, urlMap);
 						oldImage.append(htmlBlobContent);
 					}
 					Elements htmlBlobElements = doc.select("div#location_wrapper");
 					if (htmlBlobElements != null && !htmlBlobElements.isEmpty()) {
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 						}
 					
@@ -122,7 +122,7 @@ public class WebVariation13 extends BaseAction {
 					// Start get content.
 					Elements htmlBlobElements = doc.select("div.guest");
 					if(htmlBlobElements != null && !htmlBlobElements.isEmpty()){
-					htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap, catType, type);
+					htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
 }
 					//End of getContent
 					//Start of set content
@@ -152,7 +152,7 @@ public class WebVariation13 extends BaseAction {
 					Elements htmlBlobElements = doc.select("div.guest");
 					Elements htmlBlob4Ele  = htmlBlobElements.select("div#col3");
 					if (htmlBlob4Ele != null) {
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlob4Ele.first(), "", locale, sb, urlMap, catType,type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlob4Ele.first(), "", locale, sb, urlMap);
 					}
 					
 					

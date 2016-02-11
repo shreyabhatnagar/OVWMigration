@@ -158,7 +158,7 @@ public class RProductVariation1 extends BaseAction {
 							Node list_item_parsys = indexThirdNode11.getNode("list_item_parsys");
 							if(list_item_parsys.hasNode("list_content")){
 								Node list_content =  list_item_parsys.getNode("list_content");
-								migrateListContentT(thirdElement1, list_content,urlMap, locale, catType, type);
+								migrateListContentT(thirdElement1, list_content,urlMap, locale);
 							}else{
 								sb.append(Constants.NO_LIST_NODE_FOUND);
 							}
@@ -194,7 +194,7 @@ public class RProductVariation1 extends BaseAction {
 							Node list_item_parsys = indexThirdNode21.getNode("list_item_parsys");
 							if(list_item_parsys.hasNode("list_content")){
 								Node list_content =  list_item_parsys.getNode("list_content");
-								migrateListContent(thirdElement21,list_content,urlMap, locale, catType, type);
+								migrateListContent(thirdElement21,list_content,urlMap, locale);
 							}else{
 								sb.append(Constants.NO_LIST_NODE_FOUND);
 							}
@@ -222,7 +222,7 @@ public class RProductVariation1 extends BaseAction {
 							Node list_item_parsys = indexThirdNode22.getNode("list_item_parsys");
 							if(list_item_parsys.hasNode("list_content")){
 								Node list_content =  list_item_parsys.getNode("list_content");
-								migrateListContent(thirdElement22,list_content,urlMap, locale, catType, type);
+								migrateListContent(thirdElement22,list_content,urlMap, locale);
 							}
 							else{
 								sb.append(Constants.NO_LIST_NODE_FOUND);
@@ -251,7 +251,7 @@ public class RProductVariation1 extends BaseAction {
 							Node list_item_parsys = indexThirdNode31.getNode("list_item_parsys");
 							if(list_item_parsys.hasNode("list_content_3")){
 								Node list_content =  list_item_parsys.getNode("list_content_3");
-								migrateListContent(thirdElement31,list_content,urlMap, locale, catType, type);
+								migrateListContent(thirdElement31,list_content,urlMap, locale);
 							}
 							else{
 								sb.append(Constants.NO_LIST_NODE_FOUND);
@@ -280,7 +280,7 @@ public class RProductVariation1 extends BaseAction {
 							Node list_item_parsys = indexThirdNode32.getNode("list_item_parsys");
 							if(list_item_parsys.hasNode("list_content")){
 								Node list_content =  list_item_parsys.getNode("list_content");
-								migrateListContent(thirdElement32, list_content,urlMap, locale, catType, type);
+								migrateListContent(thirdElement32, list_content,urlMap, locale);
 							}
 							else{
 								sb.append(Constants.NO_LIST_NODE_FOUND);
@@ -308,7 +308,7 @@ public class RProductVariation1 extends BaseAction {
 							Node twoThird = twoThirdNodes.nextNode();
 							Node htmlBlob = twoThird.hasNode("htmlblob")?twoThird.getNode("htmlblob"):null;
 							if(htmlBlob != null){
-								String htmlWEBContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i), "", locale, sb, urlMap, catType, type)+FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i+1), "", locale, sb, urlMap, catType, type);
+								String htmlWEBContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i), "", locale, sb, urlMap)+FrameworkUtils.extractHtmlBlobContent(htmlBlobs.get(i+1), "", locale, sb, urlMap);
 								String htmlWEMContent = htmlBlob.hasProperty("html")?htmlBlob.getProperty("html").getString():"";
 								if(StringUtils.isNotBlank(htmlWEMContent)){
 									if(StringUtils.isNotBlank(htmlWEBContent)){
@@ -368,7 +368,7 @@ public class RProductVariation1 extends BaseAction {
 	}
 
 	//Migrate List Content Method
-	private void migrateListContent(Element thirdElement, Node list_content, Map<String, String> urlMap, String locale, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateListContent(Element thirdElement, Node list_content, Map<String, String> urlMap, String locale) throws PathNotFoundException, RepositoryException {
 		if(list_content.hasNode("listitems")){
 			Node listitems = list_content.getNode("listitems");
 			NodeIterator items = listitems.hasNode("item_1")?listitems.getNodes("item_*"):null;
@@ -383,7 +383,7 @@ public class RProductVariation1 extends BaseAction {
 						cqAnchor = ele.getElementsByTag("a").first();
 						if(cqAnchor != null){
 							anchorText = cqAnchor.text();
-							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale, catType, type);
+							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale);
 						}
 					}
 				}else if(nodeSize < eleSize){
@@ -394,7 +394,7 @@ public class RProductVariation1 extends BaseAction {
 							cqAnchor = ele.getElementsByTag("a").first();
 							if(cqAnchor != null){
 								anchorText = cqAnchor.text();
-								setThirdLinks(cqAnchor,items, anchorText,urlMap, locale, catType, type);
+								setThirdLinks(cqAnchor,items, anchorText,urlMap, locale);
 							}
 						}else{
 							sb.append(Constants.MISMATCH_IN_LIST_COUNT+eleSize+Constants.LIST_NODES_COUNT+nodeSize+".</li>");
@@ -408,7 +408,7 @@ public class RProductVariation1 extends BaseAction {
 						cqAnchor = ele.getElementsByTag("a").first();
 						if(cqAnchor != null){
 							anchorText = cqAnchor.text();
-							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale, catType, type);
+							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale);
 						}
 					}
 					sb.append(Constants.MISMATCH_IN_LIST_NODES+eleSize+Constants.LIST_NODES_COUNT+nodeSize+".</li>");
@@ -418,7 +418,7 @@ public class RProductVariation1 extends BaseAction {
 	}
 
 	//Migrate List Third1 Content Method
-	private void migrateListContentT(Element thirdElement, Node list_content, Map<String, String> urlMap, String locale, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateListContentT(Element thirdElement, Node list_content, Map<String, String> urlMap, String locale) throws PathNotFoundException, RepositoryException {
 		if(list_content.hasNode("listitems")){
 			Node listitems = list_content.getNode("listitems");
 			NodeIterator items = listitems.hasNode("item_1")?listitems.getNodes("item_*"):null;
@@ -433,7 +433,7 @@ public class RProductVariation1 extends BaseAction {
 						cqAnchor = ele.getElementsByTag("li").first().getElementsByTag("a").first();
 						if(cqAnchor != null){
 							anchorText = cqAnchor.text();
-							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale, catType, type);
+							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale);
 						}
 						if(ele.child(0).hasAttr("href")){
 							log.debug("Extra image link url : "+ele.child(0).attr("href"));
@@ -448,7 +448,7 @@ public class RProductVariation1 extends BaseAction {
 							cqAnchor = ele.getElementsByTag("li").first().getElementsByTag("a").first();
 							if(cqAnchor != null){
 								anchorText = cqAnchor.text();
-								setThirdLinks(cqAnchor,items, anchorText,urlMap, locale, catType, type);
+								setThirdLinks(cqAnchor,items, anchorText,urlMap, locale);
 							}
 							if(ele.child(0).hasAttr("href")){
 								log.debug("Extra image link url : "+ele.child(0).attr("href"));
@@ -466,7 +466,7 @@ public class RProductVariation1 extends BaseAction {
 						cqAnchor = ele.getElementsByTag("li").first().getElementsByTag("a").first();
 						if(cqAnchor != null){
 							anchorText = cqAnchor.text();
-							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale, catType, type);
+							setThirdLinks(cqAnchor,items, anchorText,urlMap, locale);
 						}
 						if(ele.child(0).hasAttr("href")){
 							log.debug("Extra image link url : "+ele.child(0).attr("href"));
@@ -480,12 +480,12 @@ public class RProductVariation1 extends BaseAction {
 	}
 
 	//Set ThirdLinks method
-	private void setThirdLinks(Element cqAnchor, NodeIterator items,String anchorText, Map<String, String> urlMap, String locale, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void setThirdLinks(Element cqAnchor, NodeIterator items,String anchorText, Map<String, String> urlMap, String locale) throws PathNotFoundException, RepositoryException {
 		String anchorHref  = cqAnchor.absUrl("href");
 		if(StringUtil.isBlank(anchorHref)){
 			anchorHref = cqAnchor.attr("href");
 		}
-		anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
+		anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 		Node item = items.nextNode();
 		Node linkdata = item.hasNode("linkdata")?item.getNode("linkdata"):null;
 		if(linkdata != null){

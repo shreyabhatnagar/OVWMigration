@@ -98,7 +98,7 @@ public class WebVariation15 extends BaseAction{
 					// Start get content.
 					Element htmlBlobElement = doc.select("div.gd21-pilot,gd12-pilot").first();
 					if (htmlBlobElement != null) {
-						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap, catType, type);
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
 						oldImage.append(htmlBlobContent);
 					}else {
 				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
@@ -134,7 +134,7 @@ public class WebVariation15 extends BaseAction{
 					Element htmlBlobElement = doc.select("div#framework-content-right,div.gd-right").first();
 					if (htmlBlobElement != null) {
 						
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElement, "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 							}
 					

@@ -88,7 +88,7 @@ public class TechnologyVariation2 extends BaseAction {
 
 							Element listEle = doc.select("div.gd-left").select("div.nn13-pilot").first();
 							String h1Tag = textEle.getElementsByTag("h1").first().outerHtml();
-							String textDesc = FrameworkUtils.extractHtmlBlobContent(textEle, "",locale, sb, urlMap, catType, type); //2
+							String textDesc = FrameworkUtils.extractHtmlBlobContent(textEle, "",locale, sb, urlMap); //2
 							if(textDesc.equals("")){ //3
 								textDesc = textEle.outerHtml();
 							} //3

@@ -89,7 +89,7 @@ public class WebVariation14 extends BaseAction {
 
 				//Start of migration of Hero Large Component
 				try {
-					migrateHeroLarge(doc, mobilityMidNode,locale, urlMap, catType, type);
+					migrateHeroLarge(doc, mobilityMidNode,locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
 					log.error("Exception : ", e);
@@ -98,7 +98,7 @@ public class WebVariation14 extends BaseAction {
 
 				//Start of migration of HTMLBLOB Component
 				try {
-					migrateHtmlBlob(doc, mobilityMidNode,locale, urlMap, catType, type);
+					migrateHtmlBlob(doc, mobilityMidNode,locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.error("Exception : ", e);
@@ -175,7 +175,7 @@ public class WebVariation14 extends BaseAction {
 	}
 
 	//Start of migration of hero Large
-	private void migrateHeroLarge(Document doc,Node mobilityMidNode, String locale,Map<String, String> urlMap, String catType, String type) {
+	private void migrateHeroLarge(Document doc,Node mobilityMidNode, String locale,Map<String, String> urlMap) {
 		// TODO Auto-generated method stub
 		try {
 			String h2Text = "";
@@ -224,7 +224,7 @@ public class WebVariation14 extends BaseAction {
 									aHref = anchorText.attr("href");
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after heroPanelLinkUrl" + aHref + "\n");
 									// End extracting valid href
 									heroPanelNode.setProperty("linktext", aText);
@@ -251,7 +251,7 @@ public class WebVariation14 extends BaseAction {
 								if (heroPanelNode.hasNode("image")) {
 									Node imageNode = heroPanelNode.getNode("image");
 									String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
-									heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
+									heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 									log.debug("heroImage after migration : " + heroImage + "\n");
 									if (StringUtils.isNotBlank(heroImage)) {
 										imageNode.setProperty("fileReference", heroImage);
@@ -288,7 +288,7 @@ public class WebVariation14 extends BaseAction {
 	//end of hero large migration
 
 	//start of migration of htmlblob
-	private void migrateHtmlBlob(Document doc,Node mobilityMidNode, String locale,Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateHtmlBlob(Document doc,Node mobilityMidNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		Elements textElements = doc.select("div.c00-pilot");
 		Node midNode = mobilityMidNode.hasNode("text") ? mobilityMidNode.getNode("text") : null ;
 		Element firstEle = null;
@@ -300,7 +300,7 @@ public class WebVariation14 extends BaseAction {
 				if(firstEle != null){
 					parentText = firstEle.parent();
 					if(parentText != null){
-						String html = FrameworkUtils.extractHtmlBlobContent(parentText, "",locale, sb, urlMap, catType, type);
+						String html = FrameworkUtils.extractHtmlBlobContent(parentText, "",locale, sb, urlMap);
 						midNode.setProperty("text", html);
 					}else {
 						sb.append("<li>Parent text does not exists</li>");

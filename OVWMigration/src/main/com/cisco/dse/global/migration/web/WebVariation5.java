@@ -89,7 +89,7 @@ public class WebVariation5 extends BaseAction{
 
 				//Start of migration of Hero Large Component
 				try {
-					migrateHeroLarge(doc, managedCloudServiceMidNode,locale, urlMap, catType, type);
+					migrateHeroLarge(doc, managedCloudServiceMidNode,locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -98,7 +98,7 @@ public class WebVariation5 extends BaseAction{
 				
 				//Start of migration of List Component
 				try {
-					migrateList(doc, managedCloudServiceMidNode,session, locale, urlMap, catType, type);
+					migrateList(doc, managedCloudServiceMidNode,session, locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -108,7 +108,7 @@ public class WebVariation5 extends BaseAction{
 				
 				//Start of migration of HTMLBLOB Component
 				try {
-					migrateHtmlBlob(doc, managedCloudServiceMidNode,locale, urlMap, catType, type);
+					migrateHtmlBlob(doc, managedCloudServiceMidNode,locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -130,7 +130,7 @@ public class WebVariation5 extends BaseAction{
 	}
 
 	//Start of migration of hero Large
-	private void migrateHeroLarge(Document doc,Node managedCloudServiceMidNode, String locale,Map<String, String> urlMap, String catType, String type) {
+	private void migrateHeroLarge(Document doc,Node managedCloudServiceMidNode, String locale,Map<String, String> urlMap) {
 		// TODO Auto-generated method stub
 		try {
 			String h2Text = "";
@@ -179,7 +179,7 @@ public class WebVariation5 extends BaseAction{
 									aHref = anchorText.attr("href");
 									// Start extracting valid href
 									log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after heroPanelLinkUrl" + aHref + "\n");
 									// End extracting valid href
 									heroPanelNode.setProperty("linktext", aText);
@@ -206,7 +206,7 @@ public class WebVariation5 extends BaseAction{
 								if (heroPanelNode.hasNode("image")) {
 									Node imageNode = heroPanelNode.getNode("image");
 									String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
-									heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
+									heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 									log.debug("heroImage after migration : " + heroImage + "\n");
 									if (StringUtils.isNotBlank(heroImage)) {
 										imageNode.setProperty("fileReference", heroImage);
@@ -243,7 +243,7 @@ public class WebVariation5 extends BaseAction{
 	//end of hero large migration
 
 
-	private void migrateList(Document doc,Node managedCloudServiceMidNode, Session session, String locale,Map<String, String> urlMap, String catType, String type) throws RepositoryException {
+	private void migrateList(Document doc,Node managedCloudServiceMidNode, Session session, String locale,Map<String, String> urlMap) throws RepositoryException {
 		Elements textElements = doc.select("div.c00-pilot");
 		Element listElement = textElements.last();
 
@@ -325,7 +325,7 @@ public class WebVariation5 extends BaseAction{
 								Element a = li.getElementsByTag("a").first();
 								// Start extracting valid href
 								log.debug("Before anchorHref" + a.absUrl("href") + "\n");
-								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap, locale, sb, catType, type);
+								String anchorHref = FrameworkUtils.getLocaleReference(a.absUrl("href"), urlMap, locale, sb);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								JSONObject obj = new JSONObject();
@@ -363,7 +363,7 @@ public class WebVariation5 extends BaseAction{
 	// End of Migrate List Elements Method
 
 	//start of migration of htmlblob
-	private void migrateHtmlBlob(Document doc,Node managedCloudServiceMidNode, String locale,Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateHtmlBlob(Document doc,Node managedCloudServiceMidNode, String locale,Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		Elements textElements = doc.select("div.c00-pilot");
 		Node midNode = managedCloudServiceMidNode.hasNode("htmlblob") ? managedCloudServiceMidNode.getNode("htmlblob") : null ;
 		Element h3Last = null;
@@ -381,7 +381,7 @@ public class WebVariation5 extends BaseAction{
 					if(ulLast != null){
 					ulLast.remove();
 					}
-					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap, catType, type);
+					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
 					midNode.setProperty("html", html);
 				}
 			}

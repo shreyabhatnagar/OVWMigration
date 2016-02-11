@@ -153,7 +153,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after primaryCTALinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -245,7 +245,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											}
 											// Start extracting valid href
 											log.debug("Before heroPanelLinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after heroPanelLinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -266,7 +266,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											if (heroPanelNode.hasNode("image")) {
 												Node imageNode = heroPanelNode.getNode("image");
 												String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString():"";
-													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
+													heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 													log.debug("heroImage after migration : " + heroImage + "\n");
 													if (StringUtils.isNotBlank(heroImage)) {
 														imageNode.setProperty("fileReference", heroImage);
@@ -364,7 +364,7 @@ public class ProductLandingVariation9 extends BaseAction{
 													}
 													// Start extracting valid href
 													log.debug("Before selectorbartitleLinkUrl" + titleURL + "\n");
-													titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap, locale, sb, catType, type);
+													titleURL = FrameworkUtils.getLocaleReference(titleURL, urlMap, locale, sb);
 													log.debug("after selectorbartitleLinkUrl" + titleURL + "\n");
 													// End extracting valid href
 												} else {
@@ -382,7 +382,7 @@ public class ProductLandingVariation9 extends BaseAction{
 													}
 													// Start extracting valid href
 													log.debug("Before selectorbarmenuLinkUrl" + aHref + "\n");
-													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 													log.debug("after selectorbarmenuLinkUrl" + aHref + "\n");
 													// End extracting valid href
 												} else {
@@ -422,7 +422,7 @@ public class ProductLandingVariation9 extends BaseAction{
 																}
 																// Start extracting valid href
 																log.debug("Before selectorbarLinkUrl" + anchorHref + "\n");
-																anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
+																anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 																log.debug("after selectorbarLinkUrl" + anchorHref + "\n");
 																// End extracting valid href
 																jsonObj.put("linktext", anchorText);
@@ -538,7 +538,7 @@ public class ProductLandingVariation9 extends BaseAction{
 										if (spotLightComponentNode.hasNode("image")) {
 											Node spotLightImageNode = spotLightComponentNode.getNode("image");
 											String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+											spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 											log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 											if (StringUtils.isNotBlank(spotLightImage)) {
 												spotLightImageNode.setProperty("fileReference" , spotLightImage);
@@ -604,7 +604,7 @@ public class ProductLandingVariation9 extends BaseAction{
 											if (spotLightComponentNode.hasNode("image")) {
 												Node spotLightImageNode = spotLightComponentNode.getNode("image");
 												String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+												spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 												log.debug("spotLightImage after migration : " + spotLightImage + "\n");
 												if (StringUtils.isNotBlank(spotLightImage)) {
 													spotLightImageNode.setProperty("fileReference" , spotLightImage);
@@ -700,7 +700,7 @@ public class ProductLandingVariation9 extends BaseAction{
 									}
 									// Start extracting valid href
 									log.debug("Before tileborderedLinkUrl" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after tileborderedLinkUrl" + aHref + "\n");
 									// End extracting valid href
 								} else {

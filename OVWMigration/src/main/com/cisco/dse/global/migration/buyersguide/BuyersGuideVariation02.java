@@ -155,7 +155,7 @@ public class BuyersGuideVariation02 extends BaseAction{
 										if(htmlblobNode!=null){
 											
 											
-											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap, catType, type);
+											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap);
 										   // log.debug("rawhtml:"+elemts.get(2).html());
 											htmlblobNode.setProperty("html",rawHtml );
 											
@@ -196,7 +196,7 @@ public class BuyersGuideVariation02 extends BaseAction{
 										if(htmlblobNode!=null){
 											
 											
-											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap, catType, type);
+											String rawHtml = FrameworkUtils.extractHtmlBlobContent(elemts.get(i), "", locale, sb, urlMap);
 											
 											htmlblobNode.setProperty("html",rawHtml );
 											

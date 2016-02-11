@@ -97,7 +97,7 @@ public class SolutionListingVariation12 extends BaseAction{
 								Element textElement = textElements.first();
 								if (textElement != null) {
 									
-									text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type);
+									text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
 								}
 							}
 							if (textNode != null) {
@@ -140,7 +140,7 @@ public class SolutionListingVariation12 extends BaseAction{
 									+ ") of html blob component doesn't match.</li>"); 
 						}
 						for (Element htmlblobElement : htmlblobElements) {
-							String htmlblobtext = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb, urlMap, catType, type);
+							String htmlblobtext = FrameworkUtils.extractHtmlBlobContent(htmlblobElement, "",locale, sb, urlMap);
 							//String htmlblobtext = htmlblobElement.outerHtml();
 
 							if (htmlBlobIterator != null && htmlBlobIterator.hasNext())

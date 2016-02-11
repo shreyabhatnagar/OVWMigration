@@ -82,7 +82,7 @@ public class WebVariation6 extends BaseAction{
 
 				//Start of migration of the page
 				try {
-					migratePageElements(doc, privateHybridRightNode, locale, urlMap, catType, type);
+					migratePageElements(doc, privateHybridRightNode, locale, urlMap);
 				} catch (Exception e) {
 					sb.append("Exception in List Component");
 					log.error("Exception : ", e);
@@ -104,7 +104,7 @@ public class WebVariation6 extends BaseAction{
 	}
 
 	//Start of page Migration
-	private void migratePageElements(Document doc,Node privateHybridRightNode,String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migratePageElements(Document doc,Node privateHybridRightNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
 		Elements rightElements = doc.select("div.gd12-pilot");
 		doc.select("div.gd-left").remove();
@@ -114,7 +114,7 @@ public class WebVariation6 extends BaseAction{
 			if(!rightElements.isEmpty()){
 				Element textElement = rightElements.first();
 				if(textElement != null){
-					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap, catType, type);
+					String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
 					midNode.setProperty("html", html);
 				}
 			}

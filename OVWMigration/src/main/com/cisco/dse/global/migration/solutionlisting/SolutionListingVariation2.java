@@ -100,7 +100,7 @@ public class SolutionListingVariation2 extends BaseAction{
 						}
 						for (Element textElement : textElements) {
 							String text = "";
-							text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type);
+							text = FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
 							if (textNodesIterator != null && textNodesIterator.hasNext())
 								textNode = textNodesIterator.nextNode();
 							if (textNode != null) {
@@ -151,7 +151,7 @@ public class SolutionListingVariation2 extends BaseAction{
 							}
 
 							String htmlblobtext = "";
-							htmlblobtext  = FrameworkUtils.extractHtmlBlobContent(htmlblobElement,"", locale, sb, urlMap, catType, type);
+							htmlblobtext  = FrameworkUtils.extractHtmlBlobContent(htmlblobElement,"", locale, sb, urlMap);
 							if (htmlBlobIterator != null && htmlBlobIterator.hasNext())
 								htmlBlobNode = htmlBlobIterator.nextNode();
 							if (htmlBlobNode != null) {

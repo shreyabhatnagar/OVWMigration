@@ -88,7 +88,7 @@ public class WebVariation12 extends BaseAction {
 					Elements htmlBlobElements = doc.select("div.gd-left").select("div.c00-pilot,div.cc00-pilot,div.c11-pilot");
 					if (htmlBlobElements != null) {
 						for(Element ele :htmlBlobElements ){
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 						}
 					}
@@ -128,7 +128,7 @@ public class WebVariation12 extends BaseAction {
 					// Start get content.
 					Element htmlBlobElements = doc.select("div.gd-right").last();
 					if (htmlBlobElements != null) {
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements, "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 					}
 					//End of getContent

@@ -36,7 +36,9 @@ import com.cisco.dse.global.migration.config.FrameworkUtils;
 public class BenefitsVariation03 extends BaseAction {
 
 	Document doc = null;
+
 	StringBuilder sb = new StringBuilder(1024);
+
 	Logger log = Logger.getLogger(BenefitsVariation03.class);
 
 	public String translate(String host, String loc, String prod, String type,
@@ -93,7 +95,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 				// start of text component
 				try {
-					migrateTextAndHtmlBlob(doc, benefitLeftNode,locale, urlMap, catType, type);
+					migrateTextAndHtmlBlob(doc, benefitLeftNode,locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 					log.error("Exception : ", e);
@@ -102,7 +104,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 				// Start of List Component
 				try {
-					migratelistElements(doc, benefitLeftNode, session, prod, locale, urlMap, catType, type);
+					migratelistElements(doc, benefitLeftNode, session, prod, locale, urlMap);
 				} catch (Exception e) {
 					sb.append("Exception in List Component");
 					log.error("Exception : ", e);
@@ -112,7 +114,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 				// Start of Right Rail
 				try {
-					migrateRightRailContent(doc, benefitRightNode, locale, urlMap, catType, type);
+					migrateRightRailContent(doc, benefitRightNode, locale, urlMap);
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 					log.error("Exception : ", e);
@@ -133,7 +135,7 @@ public class BenefitsVariation03 extends BaseAction {
 	}
 
 	//Start of migration of the Text and Text Description
-	private void migrateTextAndHtmlBlob(Document doc, Node benefitLeftNode,String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateTextAndHtmlBlob(Document doc, Node benefitLeftNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		Node firstTextNode = benefitLeftNode.hasNode("text") ? benefitLeftNode.getNode("text") : null;
 		Node lastTextNode = benefitLeftNode.hasNode("text_0") ? benefitLeftNode.getNode("text_0") : null;
 		log.debug("firstTextNode:"+firstTextNode);
@@ -144,29 +146,29 @@ public class BenefitsVariation03 extends BaseAction {
 			if(titleEle==null){
 				titleEle = textElements.first().getElementsByTag("h2").first();
 			}
-			migrateTextComponents(titleEle,firstTextNode, locale, urlMap, catType, type);
-			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale,urlMap, catType, type);
+			migrateTextComponents(titleEle,firstTextNode, locale, urlMap);
+			migrateTextDescriptionComponents(textElements.last(),lastTextNode, locale,urlMap);
 		} else if (textElements.size() == 1) {
 			Element titleEle = textElements.first();
 			Element titleEl = titleEle.getElementsByTag("h1").first();
 			if (titleEl == null) {
 				titleEl = titleEle.getElementsByTag("h2").first();
 			}
-			migrateTextComponents(titleEl, lastTextNode, locale, urlMap, catType, type);
+			migrateTextComponents(titleEl, lastTextNode, locale, urlMap);
 			if(titleEl != null){
 				titleEl.remove();
 			}
-			migrateTextDescriptionComponents(titleEle, firstTextNode,locale, urlMap, catType, type);
+			migrateTextDescriptionComponents(titleEle, firstTextNode,locale, urlMap);
 		}
 	}
 	//End of migration of the Text and Text Description
 
 	// Start of Text Content Migration
-	private void migrateTextComponents(Element textElements, Node textNode,String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateTextComponents(Element textElements, Node textNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 		if (textNode != null) {
 			log.debug("Text node path:"+textNode.getPath());
 			if (textElements != null) {
-				String html = FrameworkUtils.extractHtmlBlobContent(textElements, "",locale, sb, urlMap, catType, type);
+				String html = FrameworkUtils.extractHtmlBlobContent(textElements, "",locale, sb, urlMap);
 				textNode.setProperty("text", html);
 
 			} else {
@@ -181,12 +183,12 @@ public class BenefitsVariation03 extends BaseAction {
 
 	// Start of text description Content Migration
 	private void migrateTextDescriptionComponents(Element textElements, Node textNode,
-			String locale , Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+			String locale , Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
 		if (textNode != null) {
 			log.debug("Text node path:"+textNode.getPath());
 			if (textElements != null) {
-				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElements, "", locale, sb , urlMap, catType, type));
+				textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(textElements, "", locale, sb , urlMap));
 			} else {
 				sb.append(Constants.TEXT_DESCRIPTION_NOT_FOUND);
 			}
@@ -199,7 +201,7 @@ public class BenefitsVariation03 extends BaseAction {
 	// End of text description Content Migration
 
 	// Start of Migrate List Elements method
-	private void migratelistElements(Document doc, Node architectureLeftNode,Session session, String prod, String locale, Map<String, String> urlMap, String catType, String type) throws RepositoryException {
+	private void migratelistElements(Document doc, Node architectureLeftNode,Session session, String prod, String locale, Map<String, String> urlMap) throws RepositoryException {
 		Elements listElements = doc.select("div.n13-pilot");
 
 		if(listElements.isEmpty()){
@@ -215,14 +217,14 @@ public class BenefitsVariation03 extends BaseAction {
 				Node listNode = null;
 				for (Element ele : listElements) {
 					listNode = (Node) listNodeIterator.next();
-					setListElements(ele, listNode, session,prod, locale, urlMap, catType, type);
+					setListElements(ele, listNode, session,prod, locale, urlMap);
 				}
 			} else if (nodeSize < eleSize) {
 				Node listNode;
 				for (Element ele : listElements) {
 					if (listNodeIterator.hasNext()) {
 						listNode = (Node) listNodeIterator.next();
-						setListElements(ele, listNode, session,prod, locale, urlMap, catType, type);
+						setListElements(ele, listNode, session,prod, locale, urlMap);
 					}
 				}
 				sb.append(Constants.MISMATCH_IN_LIST_NODES + eleSize
@@ -233,7 +235,7 @@ public class BenefitsVariation03 extends BaseAction {
 				Node listNode;
 				for (Element ele : listElements) {
 					listNode = (Node) listNodeIterator.next();
-					setListElements(ele, listNode, session,prod, locale, urlMap, catType, type);
+					setListElements(ele, listNode, session,prod, locale, urlMap);
 				}
 				sb.append(Constants.MISMATCH_IN_LIST_NODES + eleSize
 						+ Constants.LIST_NODES_COUNT + nodeSize);
@@ -244,7 +246,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 	}
 
-	private void setListElements(Element ele, Node architectureListNode,Session session,String prod, String locale, Map<String, String> urlMap, String catType, String type) {
+	private void setListElements(Element ele, Node architectureListNode,Session session,String prod, String locale, Map<String, String> urlMap) {
 		try {
 			String ownPdfText = "";
 			String pdfIcon = "";
@@ -255,12 +257,12 @@ public class BenefitsVariation03 extends BaseAction {
 			int ulSize=0;
 			// start of handling title and subtitle of list component
 			if (h2Ele.size() == 3) {
-				setListTitles(h2Ele, architectureListNode,prod, locale, urlMap, catType, type);
+				setListTitles(h2Ele, architectureListNode,prod, locale, urlMap);
 			} else if (h3Ele.size() == 3) {
-				setListTitles(h3Ele, architectureListNode,prod, locale, urlMap, catType, type);
+				setListTitles(h3Ele, architectureListNode,prod, locale, urlMap);
 			} else {
 				Elements titleElements = ele.select("h2,h3");
-				setListTitles(titleElements, architectureListNode,prod, locale, urlMap, catType, type);
+				setListTitles(titleElements, architectureListNode,prod, locale, urlMap);
 			}
 			// end of handling title and subtitle of list component
 
@@ -368,7 +370,7 @@ public class BenefitsVariation03 extends BaseAction {
 								if(StringUtil.isBlank(aHref)){
 									aHref = a.attr("href");
 								}
-								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+								String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 								log.debug("after anchorHref" + anchorHref + "\n");
 								// End extracting valid href
 								obj.put("linktext", a.text()+ " "+text);
@@ -419,7 +421,7 @@ public class BenefitsVariation03 extends BaseAction {
 	// End of Migrate List Elements Method
 
 	// start of list title setting
-	private void setListTitles(Elements titleElements,Node architectureListNode, String prod, String locale, Map<String, String> urlMap, String catType, String type) {
+	private void setListTitles(Elements titleElements,Node architectureListNode, String prod, String locale, Map<String, String> urlMap) {
 		try {
 			int count = 1;
 			Node subtitleLastNodeIterator = architectureListNode.hasNode("element_subtitle_0") ? architectureListNode.getNode("element_subtitle_0") : null;
@@ -430,21 +432,21 @@ public class BenefitsVariation03 extends BaseAction {
 					architectureListNode.setProperty("title", ele.text());
 				} else if (count == 2) {
 					if (("unified-communications").equals(prod)) {
-						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap, catType, type);
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleFirstNodeIterator.setProperty("subtitle",
 								textEleHtml);
 					} else {
-						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap, catType, type);
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleLastNodeIterator.setProperty("subtitle",
 								textEleHtml);
 					}
 				} else if (count == 3) {
 					if (("unified-communications").equals(prod)) {
-						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap, catType, type);
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleLastNodeIterator.setProperty("subtitle",
 								textEleHtml);
 					} else {
-						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap, catType, type);
+						textEleHtml = FrameworkUtils.extractHtmlBlobContent(ele, "",locale, sb,urlMap);
 						subtitleFirstNodeIterator.setProperty("subtitle",
 								textEleHtml);
 					}
@@ -461,7 +463,7 @@ public class BenefitsVariation03 extends BaseAction {
 
 	// Start of Right rail migration
 	private void migrateRightRailContent(Document doc,
-			Node architectureRightNode, String locale, Map<String, String> urlMap, String catType, String type) {
+			Node architectureRightNode, String locale, Map<String, String> urlMap) {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select(
@@ -498,7 +500,7 @@ public class BenefitsVariation03 extends BaseAction {
 											for (Element rightListEle : rightRailList) {
 												if (tileIterator.hasNext()) {
 													listNode = (Node) tileIterator.next();
-													setRightRailContent(listNode, rightListEle,locale, urlMap, catType, type);
+													setRightRailContent(listNode, rightListEle,locale, urlMap);
 												} else {
 													log.debug("Next node not found");
 												}
@@ -508,7 +510,7 @@ public class BenefitsVariation03 extends BaseAction {
 											for (Element rightListEle : rightRailList) {
 												if (tileIterator.hasNext()) {
 													listNode = (Node) tileIterator.next();
-													setRightRailContent(listNode, rightListEle, locale, urlMap, catType, type);
+													setRightRailContent(listNode, rightListEle, locale, urlMap);
 												} else {
 													log.debug("Next node not found");
 													sb.append(Constants.RIGHT_RAIL_NODE_COUNT
@@ -523,7 +525,7 @@ public class BenefitsVariation03 extends BaseAction {
 											for (Element rightListEle : rightRailList) {
 												if (tileIterator.hasNext()) {
 													listNode = (Node) tileIterator.next();
-													setRightRailContent(listNode, rightListEle, locale, urlMap, catType, type);
+													setRightRailContent(listNode, rightListEle, locale, urlMap );
 												} else {
 													log.debug("Next node not found");
 												}
@@ -545,7 +547,7 @@ public class BenefitsVariation03 extends BaseAction {
 	// End of right rail migration
 
 	// Start of setting Right rail Content
-	public void setRightRailContent(Node listNode, Element rightListEle, String locale, Map<String, String> urlMap, String catType, String type) {
+	public void setRightRailContent(Node listNode, Element rightListEle, String locale, Map<String, String> urlMap) {
 		try {
 			Element title;
 			Element description;
@@ -563,7 +565,7 @@ public class BenefitsVariation03 extends BaseAction {
 				title = headElements.first();
 				description = rightListEle.getElementsByTag("p").first();
 			}
-			String descriptionHtml = FrameworkUtils.extractHtmlBlobContent(description, "",locale, sb,urlMap, catType, type);
+			String descriptionHtml = FrameworkUtils.extractHtmlBlobContent(description, "",locale, sb,urlMap);
 			listNode.setProperty("title", title.text());
 			listNode.setProperty("description", descriptionHtml);
 			String text = rightListEle.ownText();
@@ -577,7 +579,7 @@ public class BenefitsVariation03 extends BaseAction {
 				}
 				// Start extracting valid href
 				log.debug("Before anchorHref" + listurl.absUrl("href") + "\n");
-				String anchorHref = FrameworkUtils.getLocaleReference(listHref, urlMap, locale, sb, catType, type);
+				String anchorHref = FrameworkUtils.getLocaleReference(listHref, urlMap, locale, sb);
 				log.debug("after anchorHref" + anchorHref + "\n");
 				// End extracting valid href
 

@@ -91,7 +91,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 
 				//Start of text Element
 				try {
-					migrateTextContent(doc,solutionWideNode, locale, urlMap, catType, type);
+					migrateTextContent(doc,solutionWideNode, locale, urlMap);
 				}
 				catch(Exception e){
 					sb.append(Constants.UNABLE_TO_MIGRATE_TEXT);
@@ -110,7 +110,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 		return sb.toString();
 	}
 
-	private void migrateTextContent(Document doc, Node solutionWideNode, String locale, Map<String, String> urlMap, String catType, String type) throws PathNotFoundException, RepositoryException {
+	private void migrateTextContent(Document doc, Node solutionWideNode, String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
 		Elements rightElements = doc.select("div.gd-right");
 		Elements c100Elements = null;
@@ -149,7 +149,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 		String html = "";
 		if(headerNode != null){
 			if(setTitle != null){
-				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap, catType, type);
+				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap);
 				headerNode.setProperty("title", html);
 			}else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
@@ -157,7 +157,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 		}
 		else if(textNode != null){
 			if(setTitle != null){
-				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap, catType, type);
+				html = FrameworkUtils.extractHtmlBlobContent(setTitle, "",locale, sb, urlMap);
 				textNode.setProperty("text", html);
 			}else {
 				sb.append(Constants.TEXT_DOES_NOT_EXIST);
@@ -175,7 +175,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 					if (gdv1Element != null) {
 						if(setTitle != null){
 							String textString = setTitle.toString();
-							html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap, catType, type);
+							html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap);
 							textNode0.setProperty("text", html.replace(textString, ""));
 						}
 					}
@@ -185,7 +185,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 				if (rightElement != null) {
 					if(setTitle != null){
 						String textString = setTitle.toString();
-						html = FrameworkUtils.extractHtmlBlobContent(rightElement, "",locale, sb, urlMap, catType, type);
+						html = FrameworkUtils.extractHtmlBlobContent(rightElement, "",locale, sb, urlMap);
 						textNode0.setProperty("text", html.replace(textString, ""));
 					}
 				}
@@ -201,7 +201,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 					if (gdv1Element != null) {
 						if(setTitle != null){
 							String textString = setTitle.toString();
-							html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap, catType, type);
+							html = FrameworkUtils.extractHtmlBlobContent(gdv1Element, "",locale, sb, urlMap);
 							textNode.setProperty("text", html.replace(textString, ""));
 						}
 					}
@@ -216,7 +216,7 @@ public class RSolutionListingVariation01 extends BaseAction{
 							heroElement = heroElements.toString();
 						}
 						heroElements.remove();
-						html = FrameworkUtils.extractHtmlBlobContent(cc00Element, "",locale, sb, urlMap, catType, type);
+						html = FrameworkUtils.extractHtmlBlobContent(cc00Element, "",locale, sb, urlMap);
 						textNode.setProperty("text", html.replace(textString, ""));
 					}
 				}

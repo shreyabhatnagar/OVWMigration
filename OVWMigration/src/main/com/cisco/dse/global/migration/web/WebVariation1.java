@@ -105,14 +105,14 @@ public class WebVariation1 extends BaseAction{
 							NodeIterator heroPanelNodeIterator = heroNode.getNodes("heropanel*");
 							int nodeSize = (int)heroPanelNodeIterator.getSize();
 							if(eleSize == nodeSize){
-								setForHero(heroElements,heroNode,locale,urlMap, catType, type);
+								setForHero(heroElements,heroNode,locale,urlMap);
 							}
 							else if(nodeSize < eleSize){
-								setForHero(heroElements,heroNode,locale,urlMap, catType, type);
+								setForHero(heroElements,heroNode,locale,urlMap);
 								sb.append("<li>Mismatch in the count of hero panels. Additional panel(s) found on locale page. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 							}
 							else if (nodeSize > eleSize) {
-								setForHero(heroElements,heroNode,locale,urlMap, catType, type);
+								setForHero(heroElements,heroNode,locale,urlMap);
 								sb.append("<li>Mismatch in the count of hero panels. Additional node(s) found. Locale page has "+ eleSize +" panels and there are "+ nodeSize +" nodes.</li>");
 							}
 						}
@@ -143,7 +143,7 @@ public class WebVariation1 extends BaseAction{
 					if (htmlBlobElements != null) {
 						for(Element ele : htmlBlobElements )
 						{
-						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 						oldImage.append(htmlBlobContent);
 						}
 					}
@@ -189,7 +189,7 @@ public class WebVariation1 extends BaseAction{
 					if (htmlBlobElements != null) {
 						for(Element ele : htmlBlobElements )
 						{
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 							oldImage.append(htmlBlobContent);
 						}
 					}
@@ -238,7 +238,7 @@ public class WebVariation1 extends BaseAction{
 
 	}
 	//start setting of heropanel
-		public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale,Map<String,String> urlMap, String catType, String type) {
+		public void heroPanelTranslate(Node heroPanelNode, Element ele, String locale,Map<String,String> urlMap) {
 
 			try {			
 				String title = ele.getElementsByTag("h2")!=null?ele.getElementsByTag("h2").first().text():"";
@@ -249,7 +249,7 @@ public class WebVariation1 extends BaseAction{
 				String anchorHref = anchor.attr("href");
 				// Start extracting valid href
 				log.debug("Before heroPanelLinkUrl" + anchorHref + "\n");
-				anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb, catType, type);
+				anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
 				log.debug("after heroPanelLinkUrl" + anchorHref + "\n");
 				// End extracting valid href
 
@@ -261,7 +261,7 @@ public class WebVariation1 extends BaseAction{
 					if (heroPanelNode.hasNode("image")) {
 						Node imageNode = heroPanelNode.getNode("image");
 						String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-						heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
+						heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 						log.debug("heroImage after migration : " + heroImage + "\n");
 						if (StringUtils.isNotBlank(heroImage)) {
 							imageNode.setProperty("fileReference" , heroImage);
@@ -294,7 +294,7 @@ public class WebVariation1 extends BaseAction{
 			}
 		}
 		
-		public void setForHero(Elements heroElements, Node heroPanelMedium, String locale, Map<String, String> urlMap, String catType, String type) {
+		public void setForHero(Elements heroElements, Node heroPanelMedium, String locale, Map<String, String> urlMap) {
 			try {
 				Value[] panelPropertiest = null;
 				Property panelNodesProperty = heroPanelMedium.hasProperty("panelNodes") ? heroPanelMedium.getProperty("panelNodes") : null;
@@ -317,7 +317,7 @@ public class WebVariation1 extends BaseAction{
 					} else {
 						sb.append("<li>No heropanel Node found.</li>");
 					}
-					heroPanelTranslate(heroPanelNode, ele, locale, urlMap, catType, type);
+					heroPanelTranslate(heroPanelNode, ele, locale, urlMap);
 				}
 			} catch (Exception e) {
 			}

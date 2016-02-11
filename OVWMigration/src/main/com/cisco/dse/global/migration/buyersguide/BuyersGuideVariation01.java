@@ -110,7 +110,7 @@ public class BuyersGuideVariation01 extends BaseAction {
 					*/
 					if (tabElements != null){
 						log.debug("tabElements before:"+tabElements);
-							rawHtml = FrameworkUtils.extractHtmlBlobContent(tabElements, "", locale, sb, urlMap, catType, type);
+							rawHtml = FrameworkUtils.extractHtmlBlobContent(tabElements, "", locale, sb, urlMap);
 							log.debug("tabElements after:"+rawHtml);
 						 //oldImage.append(rawHtml2);
 						//log.debug("oldImage:"+oldImage);

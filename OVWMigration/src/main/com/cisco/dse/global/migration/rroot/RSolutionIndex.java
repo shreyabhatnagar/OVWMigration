@@ -175,7 +175,7 @@ public class RSolutionIndex extends BaseAction {
 							if (StringUtils.isNotBlank(imagePath)) {
 								String fileReference = imageNode.hasProperty("fileReference") ? imageNode.getProperty("fileReference").getString() : "";
 								log.debug("imagePath before migration : " + imagePath);
-								imagePath = FrameworkUtils.migrateDAMContent(imagePath, fileReference, locale, sb, catType, type);
+								imagePath = FrameworkUtils.migrateDAMContent(imagePath, fileReference, locale, sb);
 								log.debug("imagePath after migration : " + imagePath);
 								imageNode.setProperty("fileReference", imagePath);
 							} else {
@@ -224,19 +224,19 @@ public class RSolutionIndex extends BaseAction {
 									if (count == 0) {
 										if (thirds_0 != null && thirds_0.hasNode("Th-Third-1")) {
 											Node Th_Third_1 = thirds_0.getNode("Th-Third-1");
-											setHtmlContent(Th_Third_1, aElements, locale, urlMap, new Elements(), catType, type);
+											setHtmlContent(Th_Third_1, aElements, locale, urlMap, new Elements());
 										}
 									}
 									if (count == 1) {
 										if (thirds_0 != null && thirds_0.hasNode("Th-Third-2")) {
 											Node Th_Third_2 = thirds_0.getNode("Th-Third-2");
-											setHtmlContent(Th_Third_2, aElements, locale, urlMap, new Elements(), catType, type);
+											setHtmlContent(Th_Third_2, aElements, locale, urlMap, new Elements());
 										}
 									}
 									if (count == 2) {
 										if (thirds_0 != null && thirds_0.hasNode("Th-Third-3")) {
 											Node Th_Third_3 = thirds_0.getNode("Th-Third-3");
-											setHtmlContent(Th_Third_3, aElements, locale, urlMap, new Elements(), catType, type);
+											setHtmlContent(Th_Third_3, aElements, locale, urlMap, new Elements());
 										}
 									}
 									if (count > 2) {
@@ -312,7 +312,7 @@ public class RSolutionIndex extends BaseAction {
 										if (index == 0) {
 											if (thirds_1 != null && thirds_1.hasNode("Th-Third-1")) {
 												Node Th_Third_1 = thirds_1.getNode("Th-Third-1");
-												setHtmlContent(Th_Third_1, element, locale, urlMap, new Elements(), catType, type);
+												setHtmlContent(Th_Third_1, element, locale, urlMap, new Elements());
 											} else {
 												sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-1'");
 												log.debug("Node doesn't exist with name : 'Th-Third-1'");
@@ -322,7 +322,7 @@ public class RSolutionIndex extends BaseAction {
 										if (index == 1) {
 											if (thirds_1 != null && thirds_1.hasNode("Th-Third-2")) {
 												Node Th_Third_2 = thirds_1.getNode("Th-Third-2");
-												setHtmlContent(Th_Third_2, element, locale, urlMap, new Elements(), catType, type);
+												setHtmlContent(Th_Third_2, element, locale, urlMap, new Elements());
 											} else {
 												sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-2'");
 												log.debug("Node doesn't exist with name : 'Th-Third-2'");
@@ -333,7 +333,7 @@ public class RSolutionIndex extends BaseAction {
 										if (index == 2) {
 											if (thirds_1 != null && thirds_1.hasNode("Th-Third-3")) {
 												Node Th_Third_3 = thirds_1.getNode("Th-Third-3");
-												setHtmlContent(Th_Third_3, element, locale, urlMap, new Elements(), catType, type);
+												setHtmlContent(Th_Third_3, element, locale, urlMap, new Elements());
 											} else {
 												sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-3'");
 												log.debug("Node doesn't exist with name : 'Th-Third-3'");
@@ -401,7 +401,7 @@ public class RSolutionIndex extends BaseAction {
 								if (index == 0) {
 									if (thirds != null && thirds.hasNode("Th-Third-1")) {
 										Node Th_Third_1 = thirds.getNode("Th-Third-1");
-										setHtmlContent(Th_Third_1, element, locale, urlMap, imgElements, catType, type);
+										setHtmlContent(Th_Third_1, element, locale, urlMap, imgElements);
 									} else {
 										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-1'");
 										log.debug("Node doesn't exist with name : 'Th-Third-1'");
@@ -412,7 +412,7 @@ public class RSolutionIndex extends BaseAction {
 								if (index == 1) {
 									if (thirds != null && thirds.hasNode("Th-Third-2")) {
 										Node Th_Third_2 = thirds.getNode("Th-Third-2");
-										setHtmlContent(Th_Third_2, element, locale, urlMap, imgElements, catType, type);
+										setHtmlContent(Th_Third_2, element, locale, urlMap, imgElements);
 									} else {
 										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-2'");
 										log.debug("Node doesn't exist with name : 'Th-Third-2'");
@@ -424,7 +424,7 @@ public class RSolutionIndex extends BaseAction {
 								if (index == 2) {
 									if (thirds != null && thirds.hasNode("Th-Third-3")) {
 										Node Th_Third_3 = thirds.getNode("Th-Third-3");
-										setHtmlContent(Th_Third_3, element, locale, urlMap, imgElements, catType, type);
+										setHtmlContent(Th_Third_3, element, locale, urlMap, imgElements);
 									} else {
 										sb.append(Constants.HTMLBLOB_NODE_DOES_NOT_EXIST + " : 'Th-Third-3'");
 										log.debug("Node doesn't exist with name : 'Th-Third-3'");
@@ -445,17 +445,17 @@ public class RSolutionIndex extends BaseAction {
 					while(index < 3){
 						if(index == 0 && thirds != null && thirds.hasNode("Th-Third-1")){
 							Node Th_Third_1 = thirds.getNode("Th-Third-1");
-							setHtmlContent(Th_Third_1, new Elements(), locale, urlMap, new Elements(), catType, type);
+							setHtmlContent(Th_Third_1, new Elements(), locale, urlMap, new Elements());
 						}
 						
 						if(index == 1 && thirds != null && thirds.hasNode("Th-Third-2")){
 							Node Th_Third_2 = thirds.getNode("Th-Third-2");
-							setHtmlContent(Th_Third_2, new Elements(), locale, urlMap, new Elements(), catType, type);
+							setHtmlContent(Th_Third_2, new Elements(), locale, urlMap, new Elements());
 						}
 						
 						if(index == 2 && thirds != null && thirds.hasNode("Th-Third-3")){
 							Node Th_Third_3 = thirds.getNode("Th-Third-3");
-							setHtmlContent(Th_Third_3, new Elements(), locale, urlMap, new Elements(), catType, type);
+							setHtmlContent(Th_Third_3, new Elements(), locale, urlMap, new Elements());
 						}
 						index++;
 					}
@@ -477,7 +477,7 @@ public class RSolutionIndex extends BaseAction {
 	}
 
 	public void setHtmlContent(Node node, Elements aElements, String locale,
-			Map<String, String> urlMap, Elements imgElements, String catType, String type) {
+			Map<String, String> urlMap, Elements imgElements) {
 		log.debug("In the 'setHtmlContent' method to update the content in the html content of the wem");
 		try {
 			Elements product_contents = null;
@@ -520,7 +520,7 @@ public class RSolutionIndex extends BaseAction {
 									if(imgelements != null && !imgelements.isEmpty()){
 										Element imgelement = imgelements.first();
 										if(StringUtils.isNotBlank(imgSrc)){
-											imgSrc = FrameworkUtils.migrateDAMContent(imgSrc, "", locale, sb, catType, type);
+											imgSrc = FrameworkUtils.migrateDAMContent(imgSrc, "", locale, sb);
 											imgelement.attr("src",imgSrc);
 										}
 									}
@@ -559,7 +559,7 @@ public class RSolutionIndex extends BaseAction {
 				}
 			if (document1 != null) {
 				Element bodyContentElement = document1.getElementsByTag("body").first();
-				String html = FrameworkUtils.extractHtmlBlobContent(bodyContentElement, "", locale, sb, urlMap, catType, type);
+				String html = FrameworkUtils.extractHtmlBlobContent(bodyContentElement, "", locale, sb, urlMap);
 				if (htmlblob != null) {
 					htmlblob.setProperty("html", html);
 				}

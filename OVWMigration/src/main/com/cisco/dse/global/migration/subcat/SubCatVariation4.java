@@ -176,7 +176,7 @@ public class SubCatVariation4 extends BaseAction {
 											+ herolinkUrl);
 									herolinkUrl = FrameworkUtils
 											.getLocaleReference(herolinkUrl,
-													urlMap, locale, sb, catType, type);
+													urlMap, locale, sb);
 									log.debug("heroPanellinkUrl after migration : "
 											+ herolinkUrl);
 									// End extracting valid href
@@ -261,7 +261,7 @@ public class SubCatVariation4 extends BaseAction {
 										heroImage = FrameworkUtils
 												.migrateDAMContent(heroImage,
 														fileReference, locale,
-														sb, catType, type);
+														sb);
 										log.debug("heroImage : " + heroImage);
 										if (StringUtils.isNotBlank(heroImage)) {
 											imageNode.setProperty(
@@ -334,7 +334,7 @@ public class SubCatVariation4 extends BaseAction {
 									linkUrl = anchor.attr("href");
 								}
 								linkUrl = FrameworkUtils.getLocaleReference(
-										linkUrl, urlMap, locale, sb, catType, type);
+										linkUrl, urlMap, locale, sb);
 								JSONObject obj = new JSONObject();
 								obj.put("linktext", anchor.text());
 								obj.put("linkurl", linkUrl);
@@ -413,7 +413,7 @@ public class SubCatVariation4 extends BaseAction {
 								// Start extracting valid href
 								log.debug("Before pilotLinkUrl" + href + "\n");
 								href = FrameworkUtils.getLocaleReference(href,
-										urlMap, locale, sb, catType, type);
+										urlMap, locale, sb);
 								log.debug("after pilotLinkUrl" + href + "\n");
 								// End extracting valid href
 								obj.put("linktext", title);
@@ -460,14 +460,14 @@ public class SubCatVariation4 extends BaseAction {
 							.select("div.n13-pilot").first();
 					if (listEle != null) {
 						listText = FrameworkUtils.extractHtmlBlobContent(
-								listEle, "", locale, sb, urlMap, catType, type);
+								listEle, "", locale, sb, urlMap);
 						lastText.append(listText);
 					}
 					Elements textEle = doc.select("div.c00-pilot");
 					if (textEle != null) {
 						for (Element ele : textEle) {
 							text = FrameworkUtils.extractHtmlBlobContent(ele,
-									"", locale, sb, urlMap, catType, type);
+									"", locale, sb, urlMap);
 							if (count < 4) {
 								firstText.append(text);
 							} else {
@@ -546,7 +546,7 @@ public class SubCatVariation4 extends BaseAction {
 						// Start extracting valid href
 						log.debug("Before ctaLink" + ctaLink + "\n");
 						ctaLink = FrameworkUtils.getLocaleReference(ctaLink,
-								urlMap, locale, sb, catType, type);
+								urlMap, locale, sb);
 						log.debug("after ctaLink" + ctaLink + "\n");
 						// End extracting valid href
 
@@ -600,7 +600,7 @@ public class SubCatVariation4 extends BaseAction {
 										.getString() : "";
 								spotLightImage = FrameworkUtils
 										.migrateDAMContent(spotLightImage,
-												fileReference, locale, sb, catType, type);
+												fileReference, locale, sb);
 								log.debug("spotLightImage " + spotLightImage
 										+ "\n");
 								if (spotLightImage != null) {

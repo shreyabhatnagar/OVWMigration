@@ -102,7 +102,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 				// Start of List Component
 				try {
-					migrateListContent(doc, architectureLeftNode, urlMap, locale, catType, type);
+					migrateListContent(doc, architectureLeftNode, urlMap,
+							locale);
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_UPDATE_LIST);
 				}
@@ -111,7 +112,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 				// start of text component
 				try {
-					migrateTextContent(doc, architectureLeftNode, locale, urlMap, catType, type);
+					migrateTextContent(doc, architectureLeftNode, locale,
+							urlMap);
 				} catch (Exception e) {
 					log.error("exceptionnn" + e);
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
@@ -120,7 +122,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 				// Start of Right Rail
 				try {
-					migrateRightRailContent(doc, architectureRightNode, urlMap,locale, catType, type);
+					migrateRightRailContent(doc, architectureRightNode, urlMap,locale);
 				} catch (Exception e) {
 					sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
 				}
@@ -139,7 +141,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of Text Content migraion
 	public void migrateTextContent(Document doc, Node architectureLeftNode,
-			String locale, Map<String, String> urlMap, String catType, String type)
+			String locale, Map<String, String> urlMap)
 			throws RepositoryException {
 
 		Elements textElements = doc.select("div.c00-pilot");
@@ -197,7 +199,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 								}
 							}
 							textNode.setProperty("text", FrameworkUtils
-									.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type));
+									.extractHtmlBlobContent(ele, "", locale,
+											sb, urlMap));
 
 						} else {
 							lastUl = ele.getElementsByTag("ul");
@@ -212,7 +215,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 								}
 							}
 							textNode.setProperty("text", FrameworkUtils
-									.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type));
+									.extractHtmlBlobContent(ele, "", locale,
+											sb, urlMap));
 
 						}
 					}
@@ -232,7 +236,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 								}
 							}
 							textNode.setProperty("text", FrameworkUtils
-									.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type));
+									.extractHtmlBlobContent(ele, "", locale,
+											sb, urlMap));
 
 						} else {
 							lastUl = ele.getElementsByTag("ul");
@@ -247,7 +252,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 								}
 							}
 							textNode.setProperty("text", FrameworkUtils
-									.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type));
+									.extractHtmlBlobContent(ele, "", locale,
+											sb, urlMap));
 
 						}
 					}
@@ -267,7 +273,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 								}
 							}
 							textNode.setProperty("text", FrameworkUtils
-									.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type));
+									.extractHtmlBlobContent(ele, "", locale,
+											sb, urlMap));
 
 						} else {
 							lastUl = ele.getElementsByTag("ul");
@@ -282,7 +289,8 @@ public class ArchitechtureVariation3 extends BaseAction {
 								}
 							}
 							textNode.setProperty("text", FrameworkUtils
-									.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type));
+									.extractHtmlBlobContent(ele, "", locale,
+											sb, urlMap));
 
 						}
 					}
@@ -299,7 +307,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of List Content Migration
 	private void migrateListContent(Document doc, Node architectureLeftNode,
-			Map<String, String> urlMap, String locale, String catType, String type)
+			Map<String, String> urlMap, String locale)
 			throws RepositoryException {
 		Elements secondPilot = doc.select("div.c00-pilot");
 		Element lastTag = secondPilot.last().children().last();
@@ -327,13 +335,14 @@ public class ArchitechtureVariation3 extends BaseAction {
 				if ((lastTag.toString()).equals(ulEle.toString())) {
 					// ulEle = ulEles.last();
 					liEles = ulEle.getElementsByTag("li");
-					setListContentToNodes(liEles, elementNode, urlMap, locale, catType, type);
+					setListContentToNodes(liEles, elementNode, urlMap, locale);
 				} else {
 					if (tableUlLists != null) {
 						Element tableUllist = tableUlLists.last();
 						if ((lastTag.toString()).equals(tableUllist.toString())) {
 							liEles = tableUllist.getElementsByTag("li");
-							setListContentToNodes(liEles, elementNode, urlMap, locale, catType, type);
+							setListContentToNodes(liEles, elementNode, urlMap,
+									locale);
 						}
 					}
 				}
@@ -349,7 +358,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of Setting List Content
 	private void setListContentToNodes(Elements liList, Node elementNode,
-			Map<String, String> urlMap, String locale, String catType, String type) {
+			Map<String, String> urlMap, String locale) {
 		try {
 			List<String> listAdd = new ArrayList<String>();
 			boolean openNewWindow = false;
@@ -398,7 +407,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 					if(StringUtil.isBlank(aURL)){
 						aURL = a.attr("href");
 					}
-					aURL = FrameworkUtils.getLocaleReference(aURL, urlMap,locale,sb, catType, type);
+					aURL = FrameworkUtils.getLocaleReference(aURL, urlMap,locale,sb);
 					JSONObject obj = new JSONObject();
 					obj.put("linktext", a.text()+text);
 					obj.put("linkurl", aURL);
@@ -421,7 +430,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of Right rail migration
 	private void migrateRightRailContent(Document doc,
-			Node architectureRightNode, Map<String, String> urlMap, String locale, String catType, String type) {
+			Node architectureRightNode, Map<String, String> urlMap, String locale) {
 		try {
 			boolean migrate = true;
 			Elements rightRailList = doc.select("div.gd-right").select(
@@ -460,7 +469,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 								if (tileIterator.hasNext()) {
 									listNode = (Node) tileIterator.next();
 									setRightRailContent(listNode, rightListEle,
-											urlMap,locale, catType, type);
+											urlMap,locale);
 								} else {
 									log.debug("Next node not found");
 								}
@@ -471,7 +480,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 								if (tileIterator.hasNext()) {
 									listNode = (Node) tileIterator.next();
 									setRightRailContent(listNode, rightListEle,
-											urlMap,locale, catType, type);
+											urlMap,locale);
 								} else {
 									log.debug("Next node not found");
 									sb.append(Constants.RIGHT_RAIL_NODE_COUNT
@@ -487,7 +496,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 								if (tileIterator.hasNext()) {
 									listNode = (Node) tileIterator.next();
 									setRightRailContent(listNode, rightListEle,
-											urlMap,locale, catType, type);
+											urlMap,locale);
 								} else {
 									log.debug("Next node not found");
 								}
@@ -510,7 +519,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 
 	// Start of setting Right rail Content
 	public void setRightRailContent(Node listNode, Element rightListEle,
-			Map<String, String> urlMap, String locale, String catType, String type) {
+			Map<String, String> urlMap, String locale) {
 		try {
 			Element title;
 			Element description;
@@ -539,7 +548,7 @@ public class ArchitechtureVariation3 extends BaseAction {
 			if(StringUtil.isBlank(listurl)){
 				listurl = listtext.attr("href");
 			}
-			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap, locale, sb, catType, type);
+			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap, locale, sb);
 			String linkStringValue = null;
 			if (listNode.hasProperty("linktrigger")) {
 				Property linkTrigger = listNode.getProperty("linktrigger");

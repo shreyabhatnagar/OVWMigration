@@ -179,7 +179,7 @@ public class SolutionListingVariation08 extends BaseAction {
 													if (heroPanelNode.hasNode("image")) {
 														Node imageNode = heroPanelNode.getNode("image");
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
-														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb, catType, type);
+														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 														log.debug("heroImage after migration : " + heroImage);
 														if (StringUtils.isNotBlank(heroImage)) {															
 															imageNode.setProperty("fileReference" , heroImage);
@@ -243,7 +243,7 @@ public class SolutionListingVariation08 extends BaseAction {
 													}
 													// Start extracting valid href
 													log.debug("Before aHref" + aHref + "\n");
-													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+													aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 													log.debug("after primaryCTALinkUrl" + aHref + "\n");
 													// End extracting valid href
 												} else {
@@ -301,7 +301,7 @@ public class SolutionListingVariation08 extends BaseAction {
 					if (htmlblobElements != null && !htmlblobElements.isEmpty()) {
 						for(Element ele: htmlblobElements){
 							log.debug("html blob content: "+ ele);
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap, catType, type);
+							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap);
 						}
 					} else {
 						isHtml = false;//No Html node content node found.
@@ -366,7 +366,7 @@ public class SolutionListingVariation08 extends BaseAction {
 											}
 											// Start extracting valid href
 											log.debug("Before primaryCTALinkUrl" + aHref + "\n");
-											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+											aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 											log.debug("after primaryCTALinkUrl" + aHref + "\n");
 											// End extracting valid href
 										} else {
@@ -393,7 +393,7 @@ public class SolutionListingVariation08 extends BaseAction {
 									if (heroPanelNode.hasNode("image")) {
 										Node spotLightImageNode = heroPanelNode.getNode("image");
 										String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb, catType, type);
+										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage, fileReference, locale,sb);
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);

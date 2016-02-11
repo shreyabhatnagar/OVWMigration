@@ -86,7 +86,7 @@ public class ServiceListingVariation03 extends BaseAction {
 					Elements textElements = doc.select("div.c00-pilot");
 					if (textElements != null) {
 						for(Element textElement : textElements){
-						textProp = textProp+FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap, catType, type);
+						textProp = textProp+FrameworkUtils.extractHtmlBlobContent(textElement, "", locale, sb, urlMap);
 						}
 
 						Node textNode = serviceListingMidnode.hasNode("text") ? serviceListingMidnode
@@ -151,7 +151,7 @@ public class ServiceListingVariation03 extends BaseAction {
 								Elements descriptionText = ele.getElementsByTag("p");
 								if (descriptionText != null) {
 									for(Element descText : descriptionText){
-										pText = FrameworkUtils.extractHtmlBlobContent(descText, "", locale, sb, urlMap, catType, type);
+										pText = FrameworkUtils.extractHtmlBlobContent(descText, "", locale, sb, urlMap);
 									}
 								} else {
 									sb.append(Constants.SPOTLIGHT_DESCRIPTION_ELEMENT_NOT_FOUND);
@@ -164,7 +164,7 @@ public class ServiceListingVariation03 extends BaseAction {
 									if (spotLightComponentNode.hasNode("image")) {
 										Node spotLightImageNode = spotLightComponentNode.getNode("image");
 										String fileReference = spotLightImageNode.hasProperty("fileReference")?spotLightImageNode.getProperty("fileReference").getString():"";
-										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage,fileReference, locale,sb, catType, type);
+										spotLightImage = FrameworkUtils.migrateDAMContent(spotLightImage,fileReference, locale,sb);
 										log.debug("spotLightImage " + spotLightImage + "\n");
 										if (StringUtils.isNotBlank(spotLightImage)) {
 											spotLightImageNode.setProperty("fileReference" , spotLightImage);
@@ -185,7 +185,7 @@ public class ServiceListingVariation03 extends BaseAction {
 									}
 									// Start extracting valid href
 									log.debug("Before spotlight" + aHref + "\n");
-									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb, catType, type);
+									aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
 									log.debug("after spotlight" + aHref + "\n");
 									// End extracting valid href
 								} else {
