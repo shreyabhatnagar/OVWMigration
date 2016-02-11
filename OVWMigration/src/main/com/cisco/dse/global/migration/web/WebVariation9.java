@@ -111,20 +111,19 @@ public class WebVariation9 extends BaseAction{
 						log.debug("Node with name 'hero_Large' doesn't exist under");
 					}
 
-					Elements heroLargeElements = doc.select("div.c50-pilot");
-					if (!heroLargeElements.isEmpty()) {
-						
-						if(!heroLargeElements.select("div.frame").isEmpty()){
-							heroLargeElements = heroLargeElements.select("div.frame");
-						}
+					Element heroLargeElement = doc.select("div.c50-pilot")
+							.first();
+					if (heroLargeElement != null) {
+						Elements heroLargeFrameElements = heroLargeElement
+								.select("div.frame");
 						Node heroPanelNode = null;
-						if (heroLargeElements != null) {
-							if (heroLargeElements.size() != heroLargeNode
+						if (heroLargeFrameElements != null) {
+							if (heroLargeFrameElements.size() != heroLargeNode
 									.getNodes("heropanel*").getSize()) {
 								sb.append(Constants.MISMATCH_IN_HERO_SLIDES);
 							}
 							int i = 0;
-							for (Element ele : heroLargeElements) {
+							for (Element ele : heroLargeFrameElements) {
 								Element heroTitleElement = ele
 										.getElementsByTag("h2").first();
 								if (heroTitleElement != null) {
