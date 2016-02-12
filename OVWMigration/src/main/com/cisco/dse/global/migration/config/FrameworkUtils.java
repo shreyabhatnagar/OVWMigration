@@ -340,7 +340,7 @@ public class FrameworkUtils {
 			String error = "";
 			
 			//code for connection timed out.
-			for (int reconnection=0; reconnection<15; reconnection++) {
+			for (int reconnection=0; reconnection<3; reconnection++) {
 				log.debug("Count of reconnection" + reconnection);
 
 				if(resObj != null && resObj.has("error") && !resObj.has("newImagePath")){

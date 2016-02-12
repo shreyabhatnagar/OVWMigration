@@ -146,6 +146,56 @@
     		<artifactId>com.adobe.granite.asset.api</artifactId>
     		<version>1.6</version>
 		</dependency>
+		<dependency>
+			<groupId>com.day.jcr.vault</groupId>
+			<artifactId>com.day.jcr.vault</artifactId>
+			<version>2.4.6</version>
+		</dependency>
+		<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi</artifactId>
+	<version>3.12</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-examples</artifactId>
+	<version>3.12</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-excelant</artifactId>
+	<version>3.12</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-ooxml</artifactId>
+	<version>3.12</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-ooxml-schemas</artifactId>
+	<version>3.12</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-scratchpad</artifactId>
+	<version>3.12</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>ooxml-security</artifactId>
+	<version>1.0</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>ooxml-schemas</artifactId>
+	<version>1.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.xmlbeans</groupId>
+	<artifactId>xmlbeans</artifactId>
+	<version>2.6.0</version>
+</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -264,6 +314,18 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+				<plugin>
+                        <groupId>com.day.jcr.vault</groupId>
+                        <artifactId>maven-vault-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-package</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                  </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

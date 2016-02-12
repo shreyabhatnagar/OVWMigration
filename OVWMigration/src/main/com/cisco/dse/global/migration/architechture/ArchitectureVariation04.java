@@ -382,9 +382,9 @@ public class ArchitectureVariation04 extends BaseAction {
 								} else {
 									sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
 								}
-								Elements pElements = ele.select("p");
+								Element pElements = ele.select("p").first();
 								if (pElements != null) {
-									pText = pElements.outerHtml();
+									pText = FrameworkUtils.extractHtmlBlobContent(pElements, "", locale, sb, urlMap);
 									log.debug("pText:"+pText);
 									if (listNode.hasNode("intro")) {
 										Node introNode = listNode
