@@ -384,7 +384,7 @@ public class ArchitectureVariation04 extends BaseAction {
 								}
 								Element pElements = ele.select("p").first();
 								if (pElements != null) {
-									pText = FrameworkUtils.extractHtmlBlobContent(pElements, "", locale, sb, urlMap, catType, type);
+									pText = FrameworkUtils.extractHtmlBlobContent(pElements, "", locale, sb, urlMap);
 									log.debug("pText:"+pText);
 									if (listNode.hasNode("intro")) {
 										Node introNode = listNode
