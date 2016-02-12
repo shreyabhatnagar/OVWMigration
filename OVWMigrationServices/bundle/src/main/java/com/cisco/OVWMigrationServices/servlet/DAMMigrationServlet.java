@@ -70,13 +70,14 @@ public class DAMMigrationServlet extends SlingAllMethodsServlet {
 			Asset imageAsset = null;
 			if (is != null) {
 				if (StringUtils.isNotBlank(extension)) {
-					String mimeType = MimeTypes.getMimeType(extension);
+					String mimeType = MimeTypes.getMimeType(extension.toLowerCase());
 					if (StringUtils.isNotBlank(mimeType)) {
 						com.adobe.granite.asset.api.AssetManager asserts = resourceResolver.adaptTo(com.adobe.granite.asset.api.AssetManager.class);
 						boolean assetExists = asserts.assetExists(imgRef);
 						if (!assetExists) {
 							imageAsset = assetMgr.createAsset(imgRef, is, mimeType, true);
 						} else {
+							newImagePath = imgRef;
 							log.append("~asset already exists");
 						}
 					} else {
