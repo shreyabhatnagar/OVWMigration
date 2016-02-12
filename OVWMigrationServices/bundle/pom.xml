@@ -92,6 +92,46 @@
 		    <groupId>com.adobe.granite</groupId>
 		    <artifactId>com.adobe.granite.asset.api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.day.jcr.vault</groupId>
+			<artifactId>com.day.jcr.vault</artifactId>
+		</dependency>
+		<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-examples</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-excelant</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-ooxml</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-ooxml-schemas</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi-scratchpad</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>ooxml-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>ooxml-schemas</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.xmlbeans</groupId>
+	<artifactId>xmlbeans</artifactId>
+</dependency>
 	</dependencies>
 
 	<!-- ====================================================================== -->
@@ -138,6 +178,18 @@
 					</excludePackageNames>
 				</configuration>
 			</plugin>
+			<plugin>
+                        <groupId>com.day.jcr.vault</groupId>
+                        <artifactId>maven-vault-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-package</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 		</plugins>
 	</build>
 </project>
