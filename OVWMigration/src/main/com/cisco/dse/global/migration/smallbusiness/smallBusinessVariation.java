@@ -177,7 +177,7 @@ public class smallBusinessVariation extends BaseAction {
 									if(aUrl.equals("")){
 										aUrl = anchor.attr("href");
 									}
-									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
+									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 									if(!aUrl.equals("") && !aUrl.isEmpty()){
 										ctaNode.setProperty("url", aUrl);	
 									}else{
@@ -237,7 +237,7 @@ public class smallBusinessVariation extends BaseAction {
 									if(aUrl.equals("")){
 										aUrl = anchor.attr("href");
 									}
-									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
+									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 									if(!aUrl.equals("") && !aUrl.isEmpty()){
 										ctaNode.setProperty("url", aUrl);	
 									}else{
@@ -312,7 +312,7 @@ public class smallBusinessVariation extends BaseAction {
 																	if(!aUrl.isEmpty() && ! aUrl.equals("")){
 																		aUrl = anchor.attr("href");
 																	}
-																	aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
+																	aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 																	if(!aUrl.isEmpty() && !aUrl.equals("")){
 																		linkdataNode.setProperty("url", aUrl);
 																	}else{
@@ -404,7 +404,7 @@ public class smallBusinessVariation extends BaseAction {
 													if(!aUrl.isEmpty() && ! aUrl.equals("")){
 														aUrl = anchor.attr("href");
 													}
-													aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
+													aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 													if(!aUrl.isEmpty() && !aUrl.equals("")){
 														linkdataNode.setProperty("url", aUrl);
 													}else{
@@ -480,7 +480,7 @@ public class smallBusinessVariation extends BaseAction {
 									if(aUrl.equals("")){
 										aUrl = anchor.attr("href");
 									}
-									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb, catType, type);
+									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
 									if(!aUrl.equals("") && !aUrl.isEmpty()){
 										ctaNode.setProperty("url", aUrl);	
 									}else{
@@ -495,7 +495,7 @@ public class smallBusinessVariation extends BaseAction {
 							if(heroPanelNode.hasNode("image")){
 								Node imageNode = heroPanelNode.getNode("image");
 								String fileReference = FrameworkUtils.extractImagePath(heroEle, sb);
-								fileReference = FrameworkUtils.migrateDAMContent(fileReference, "", locale, sb, catType, type);
+								fileReference = FrameworkUtils.migrateDAMContent(fileReference, "", locale, sb);
 								if(!fileReference.equals("")){
 									imageNode.setProperty("fileReference", fileReference);
 								}else{
