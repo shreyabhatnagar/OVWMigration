@@ -56,6 +56,7 @@ import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation1;
 import com.cisco.dse.global.migration.rproductlisting.RProductListingVariation2;
 import com.cisco.dse.global.migration.rroot.RProductVariation1;
 import com.cisco.dse.global.migration.rroot.RSolutionIndex;
+import com.cisco.dse.global.migration.smallbusiness.smallBusinessVariation;
 import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation1;
 import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation2;
 import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation01;
@@ -178,7 +179,7 @@ public class OVWMigration {
 							log.debug("variation : " + variation);
 							log.debug("actual type : " + variationType);
 							String pageUrl = "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10")) {
+							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10") || variation.startsWith("small-business")) {
 								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 							} else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
 								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
@@ -658,6 +659,12 @@ public class OVWMigration {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new SolutionListingVariation6().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
+								sb.append("</tr>");
+								sb.append("<tr><td colspan='3'>.</td></tr>");
+							}else if ("small-business-var1".equals(type)) {
+								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+								sb.append("<tr>");
+								sb.append(new smallBusinessVariation().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
 							}
