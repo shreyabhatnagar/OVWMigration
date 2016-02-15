@@ -709,14 +709,10 @@ public class ProductLandingVariation11 extends BaseAction {
 				
 				//Start of Check for extra text content
 				try {
-					if ("es_mx".equals(locale) || "es_intl".equals(locale)) {
 						Elements textElements = doc.select("div.c00-pilot");
 						if(!textElements.isEmpty()){
 							sb.append(Constants.EXTRA_COMPONENT_BELOW_HERO);
 							log.debug("c00-pilot is available");
-						}else {
-							log.debug("c00-pilot is not available");
-						}
 					}
 				} catch (Exception e) {
 
