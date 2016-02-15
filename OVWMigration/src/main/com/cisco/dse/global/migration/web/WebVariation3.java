@@ -163,9 +163,11 @@ public class WebVariation3 extends BaseAction{
 				//start of RightRailImage Component migration.
 				try{
 					log.debug("start of RightRailImage Component migration.");
-					Element imageEle = doc.select("div.c00-pilot").last();
-					migrateRightRailImage(imageEle,midSizeLowerRightNode,locale,urlMap);
-				}catch(Exception e){
+					if(doc.select("div.c00-pilot").size() > 1){
+						Element imageEle = doc.select("div.c00-pilot").last();
+						migrateRightRailImage(imageEle,midSizeLowerRightNode,locale,urlMap);
+					}
+					}catch(Exception e){
 					log.error("Exception in tileBolder migration");
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 				}
