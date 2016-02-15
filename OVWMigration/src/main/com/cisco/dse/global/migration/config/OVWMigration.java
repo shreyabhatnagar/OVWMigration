@@ -179,7 +179,7 @@ public class OVWMigration {
 							log.debug("variation : " + variation);
 							log.debug("actual type : " + variationType);
 							String pageUrl = "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10") || variation.startsWith("small-business")) {
+							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10") || variation.startsWith("small-business") || variation.startsWith("order-services")) {
 								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 							} else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
 								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
