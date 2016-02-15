@@ -41,6 +41,7 @@ public class WebVariation11 extends BaseAction{
 
 		log.debug("In the translate method WebVariation11");
 		log.debug("In the translate method, catType is :" + catType);
+		prod = "order-services";
 		String pagePropertiesPath = "/content/<locale>/" + catType
 				+ "/<prod>/jcr:content";
 		String orderServicesLeft = "/content/<locale>/"
