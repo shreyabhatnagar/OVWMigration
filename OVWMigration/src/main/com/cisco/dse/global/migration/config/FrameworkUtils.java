@@ -243,8 +243,13 @@ public class FrameworkUtils {
 					//if there is fileReference property in the wem, then updating the path with 'assets' will be replaced with 'global/locale' and 'en/us' will be replaced with 'global/locale'.
 					//if the fileReference property in the wem is blank then the web page image url, 'web' will be replaced with 'content/dam/global/locale', if there is no string 'web' image path then directly appending '/content/dam/global/locale' 
 					if (StringUtils.isNotBlank(imgRef) && imgRef.indexOf(locale) == -1) {
-						imgRef = imgRef.replace("/assets", "/global/" + locale);
-						imgRef = imgRef.replace("/en/us", "/global/" + locale);
+						if(imgRef.indexOf("/en/us/")!=-1){
+							imgRef = imgRef.replace("/en/us/", "/global/" + locale + "/");
+						}else if(imgRef.indexOf("/en_us/")!=-1){
+							imgRef = imgRef.replace("/en_us/", "/global/" + locale + "/");
+						}else if(imgRef.indexOf("/assets/")!=-1){
+							imgRef = imgRef.replace("/assets/", "/global/" + locale + "/");
+						}
 					} else {
 						URL url = new URL(path);
 						String imagePath = url.getPath();
