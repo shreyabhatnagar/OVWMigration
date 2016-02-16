@@ -249,6 +249,7 @@ public class ProductListingVariation6 extends BaseAction {
 															Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
 															Elements clearfixdivs = drawerPanelLiElement.select("li.clearfix");
 															String previousTitle = null;
+															boolean imageSrcNotFoundFlagSubDrawer = false;
 															for (Element ss : subDrawerColl) {
 																String title = "";
 																String linkTitleUrl = "";
@@ -261,6 +262,7 @@ public class ProductListingVariation6 extends BaseAction {
 
 																if (subItems != null) {
 																	for (Element subItem : subItems) {
+																		imageSrcNotFoundFlagSubDrawer = false;
 																		if ((clearfixdivs.size() != subDrawerIterator.getSize())) {
 																			misMatchFlag = false;
 																		}
@@ -406,7 +408,7 @@ public class ProductListingVariation6 extends BaseAction {
 																				if (StringUtils.isNotBlank(subDrawerImage)) {
 																					subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
 																				}else{
-																					imageSrcNotFoundFlag = true;
+																					imageSrcNotFoundFlagSubDrawer = true;
 																				}
 																			} else {
 																				sb.append("<li>subdrawer image node doesn't exist</li>");
@@ -437,6 +439,9 @@ public class ProductListingVariation6 extends BaseAction {
 																			}
 																		}else{
 																			misMatchFlag = false;
+																		}
+																		if(imageSrcNotFoundFlagSubDrawer){
+																			sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+title);
 																		}
 																	}
 
