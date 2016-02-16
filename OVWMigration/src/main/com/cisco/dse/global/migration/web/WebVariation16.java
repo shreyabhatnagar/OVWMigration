@@ -106,6 +106,10 @@ public class WebVariation16 extends BaseAction {
 					if(cisEle!=null){
 						contEle = cisEle.select("div.s01-pilot").first();
 					}
+					Elements c00 = doc.select("div.gd-right").select("div.c00-pilot");
+					if(c00!=null&&!c00.isEmpty()){
+						sb.append("<li>Extra list component(s) found in right rail.</li>");
+					}
 					if(contEle!=null){
 						sb.append("<li>Extra Contact Us element found in left rail.</li>");
 					}
@@ -255,7 +259,12 @@ public class WebVariation16 extends BaseAction {
 			sb.append("<li>No title in left part of page.</li>");
 		}
 		if(pEle!=null){
-			intropara = pEle.text();
+			Element aInPara = pEle.getElementsByTag("a").first();
+			if(aInPara!=null){
+				intropara = FrameworkUtils.extractHtmlBlobContent(pEle, "",locale, sb, urlMap);
+			}else{
+				intropara = pEle.text();
+			}
 			log.debug("intropara is : "+intropara);
 		}else{
 			sb.append("<li>No description in left part of page.</li>");
@@ -400,8 +409,13 @@ public class WebVariation16 extends BaseAction {
 			if(!StringUtil.isBlank(linkText)){
 				ctaNode.setProperty("linktext",linkText);
 			}
-			if(!StringUtil.isBlank(url)){
-				ctaNode.setProperty("url",url);
+			String linkType = ctaNode.getProperty("linktype").getString();
+			if(linkType.equalsIgnoreCase("Url")){
+				if(!StringUtil.isBlank(url)){
+					ctaNode.setProperty("url",url);
+				}
+			}else{
+				sb.append("<li>linktype property set to 'lightbox' instead of 'Url' for  </li>"+ title);
 			}
 		}
 	}
