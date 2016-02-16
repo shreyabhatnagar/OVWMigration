@@ -84,6 +84,7 @@ import com.cisco.dse.global.migration.web.WebVariation11;
 import com.cisco.dse.global.migration.web.WebVariation12;
 import com.cisco.dse.global.migration.web.WebVariation13;
 import com.cisco.dse.global.migration.web.WebVariation14;
+import com.cisco.dse.global.migration.web.WebVariation16;
 import com.cisco.dse.global.migration.web.WebVariation2;
 import com.cisco.dse.global.migration.web.WebVariation3;
 import com.cisco.dse.global.migration.web.WebVariation4;
@@ -179,7 +180,7 @@ public class OVWMigration {
 							log.debug("variation : " + variation);
 							log.debug("actual type : " + variationType);
 							String pageUrl = "/content/<locale>/"+ cattype + "/<prod>/"+ variationType + ".html";
-							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10") || variation.startsWith("small-business")) {
+							if (StringUtils.isNotBlank(variation) && variation.startsWith("Rroot") || variation.startsWith("sWebVar10") || variation.startsWith("small-business") || variation.startsWith("order-services")) {
 								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
 							} else if (StringUtils.isNotBlank(variation) && variation.startsWith("WebVar13")) {
 								pageUrl = pageUrl.replace("<locale>", sheet.getSheetName()).replace("/<prod>", "");
@@ -665,6 +666,12 @@ public class OVWMigration {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new smallBusinessVariation().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
+								sb.append("</tr>");
+								sb.append("<tr><td colspan='3'>.</td></tr>");
+							}else if ("buy-Webvar16".equals(type)) {
+								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+								sb.append("<tr>");
+								sb.append(new WebVariation16().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
 							}

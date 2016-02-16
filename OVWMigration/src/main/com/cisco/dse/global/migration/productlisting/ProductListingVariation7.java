@@ -1,5 +1,10 @@
 package com.cisco.dse.global.migration.productlisting;
 
+/* S.No			Name		Date		Description of change
+ * 1			Saroja		
+ * 2			Bhavya		15-2-2015	Code changed after the live of es_mx,es_intl,en_cy,en_mt
+ * */
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -99,14 +104,18 @@ public class ProductListingVariation7 extends BaseAction {
 					String html = "";
 					Elements textElements = doc.select("div.gd-right");
 					if (textElements != null && !textElements.isEmpty()) {
-						Element rightGridContent = textElements.first();
-						if(rightGridContent != null){
-							html = FrameworkUtils.extractHtmlBlobContent(rightGridContent, "",locale, sb, urlMap);
-							if(textNodeOne !=null){
-								textNodeOne.setProperty("text",html);
+						textElements = textElements.select("div.c00-pilot");
+						if (textElements != null && !textElements.isEmpty()) {
+							Element rightGridContent = textElements.first();
+							if(rightGridContent != null){
+								html = FrameworkUtils.extractHtmlBlobContent(rightGridContent, "",locale, sb, urlMap);
+								if(textNodeOne !=null){
+									textNodeOne.setProperty("text",html);
+								}
 							}
+						} else {
+							sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 						}
-
 					} else {
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
@@ -120,7 +129,7 @@ public class ProductListingVariation7 extends BaseAction {
 				sb.append(Constants.URL_CONNECTION_EXCEPTION);
 			}
 		} catch (Exception e) {
-			sb.append("<li>unable to migrate page"+e+"</li>");
+			log.debug("<li>unable to migrate page"+e+"</li>");
 			log.debug("Exception as url cannot be connected: "+ e);
 		}
 		sb.append("</ul></td>");
