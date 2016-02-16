@@ -710,9 +710,11 @@ public class ProductLandingVariation12 extends BaseAction {
 
 									String anchorText = listItemAnchor != null ? listItemAnchor
 											.text() : "";
-									String anchorHref = listItemAnchor
-											.absUrl("href");
-									if(StringUtil.isBlank(anchorHref)){
+									String anchorHref = listItemAnchor != null ? listItemAnchor
+											.absUrl("href"): "";
+									if( listItemAnchor != null){
+										if(StringUtil.isBlank(anchorHref)){
+									
 										anchorHref = listItemAnchor.attr("href");
 									}
 									// Start extracting valid href
@@ -750,7 +752,7 @@ public class ProductLandingVariation12 extends BaseAction {
 								}
 							}
 								
-
+							}
 								//Node listNode = null;
 								NodeIterator elementList = null;
 								Node listNode = indexRightNode.hasNode("list")?

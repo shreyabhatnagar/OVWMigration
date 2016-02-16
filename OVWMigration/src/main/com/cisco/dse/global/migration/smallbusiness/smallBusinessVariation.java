@@ -46,6 +46,7 @@ public class smallBusinessVariation extends BaseAction {
 			String pageUrl = host + "/content/<locale>/"+ catType + "/small-business.html";
 			pageUrl = pageUrl.replace("<locale>", locale);
 			pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale);
+			String sBTitle = pagePropertiesPath+"/Title";
 			String sBTopRight = pagePropertiesPath+"/Grid/solutions/layout-solutions/widenarrow/WN-Narrow-2/list_container";
 			String sBHero = pagePropertiesPath+"/Grid/solutions/layout-solutions/widenarrow/WN-Wide-1/carousel/carouselContents";
 			String sBThird1 = pagePropertiesPath+"/Grid/solutions/layout-solutions/thirds";
@@ -55,12 +56,14 @@ public class smallBusinessVariation extends BaseAction {
 			sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 			sb.append("<td><ul>");
 
+			javax.jcr.Node sBTitleNode = null;
 			javax.jcr.Node sBTopRightNode = null;
 			javax.jcr.Node sBHeroNode = null;
 			javax.jcr.Node sBThirdNode1 = null;
 			javax.jcr.Node sBThirdNode2 = null;
 			javax.jcr.Node pageJcrNode = null;
 
+			sBTitleNode = session.getNode(sBTitle);
 			sBHeroNode = session.getNode(sBHero);
 			sBTopRightNode = session.getNode(sBTopRight);
 			sBThirdNode1 = session.getNode(sBThird1);
@@ -80,6 +83,29 @@ public class smallBusinessVariation extends BaseAction {
 				FrameworkUtils.setPageProperties(pageJcrNode, doc, session, sb);
 				// end set page properties.
 
+				//start title Migration
+				try{
+					log.debug("Start title Element Migration");
+					Element titleEle = doc.getElementsByClass("title-page").first();
+					if(titleEle != null){
+						if(sBTitleNode.hasNode("htmlblob")){
+							Node htmlBlob = sBTitleNode.getNode("htmlblob");
+							String title = htmlBlob.getProperty("html").getString();
+							title = title.replace("Small Business Technology", titleEle.text());
+							htmlBlob.setProperty("html", title);
+						}else{
+							sb.append("<li>Page title Node not found on locale page.</li>");
+						}
+					}else{
+						sb.append("<li>Page title Element not found on web page.</li>");
+					}
+					log.debug("title Element Migrated");
+				}catch(Exception e){
+					sb.append("<li>Exception in page title migration.</li>");
+					log.debug("Exception in Hero Element Migration"+e);
+				}
+				//End of title migration
+				
 				//start Hero Migration
 				try{
 					log.debug("Start Hero Element Migration");
