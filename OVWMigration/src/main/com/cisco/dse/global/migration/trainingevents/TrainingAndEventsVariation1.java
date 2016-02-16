@@ -48,14 +48,14 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 			ConstraintViolationException, RepositoryException {
 
 		log.debug("In the translate method TrainingAndEventsVariation1");
-		log.debug("In the translate method, catType is :" + catType);
-		String pagePropertiesPath = "/content/<locale>/" + catType+ "/jcr:content";
-		String trainingAndEventsLeft = "/content/<locale>/"+ catType + "/jcr:content/content_parsys/training/layout-training/gd12v2/gd12v2-left";
-		String trainingAndEventsRight = "/content/<locale>/"+ catType + "/jcr:content/content_parsys/training/layout-training/gd12v2/gd12v2-right";
-
-		String pageUrl = host + "/content/<locale>/" + catType+ ".html";
-		pageUrl = pageUrl.replace("<locale>", locale);
+		String pagePropertiesPath = "/content/<locale>/training-events";
 		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale);
+		String trainingAndEventsLeft = pagePropertiesPath + "/jcr:content/content_parsys/training/layout-training/gd12v2/gd12v2-left";
+		String trainingAndEventsRight = pagePropertiesPath + "/jcr:content/content_parsys/training/layout-training/gd12v2/gd12v2-right";
+
+		String pageUrl = host + "/content/<locale>/training-events.html";
+		pageUrl = pageUrl.replace("<locale>", locale);
+		
 		sb.append("<td>" + "<a href=" + pageUrl + ">" + pageUrl + "</a>" + "</td>");
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
