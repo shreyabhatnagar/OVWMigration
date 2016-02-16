@@ -259,7 +259,12 @@ public class WebVariation16 extends BaseAction {
 			sb.append("<li>No title in left part of page.</li>");
 		}
 		if(pEle!=null){
-			intropara = pEle.text();
+			Element aInPara = pEle.getElementsByTag("a").first();
+			if(aInPara!=null){
+				intropara = FrameworkUtils.extractHtmlBlobContent(pEle, "",locale, sb, urlMap);
+			}else{
+				intropara = pEle.text();
+			}
 			log.debug("intropara is : "+intropara);
 		}else{
 			sb.append("<li>No description in left part of page.</li>");
