@@ -84,6 +84,7 @@ import com.cisco.dse.global.migration.web.WebVariation11;
 import com.cisco.dse.global.migration.web.WebVariation12;
 import com.cisco.dse.global.migration.web.WebVariation13;
 import com.cisco.dse.global.migration.web.WebVariation14;
+import com.cisco.dse.global.migration.web.WebVariation16;
 import com.cisco.dse.global.migration.web.WebVariation2;
 import com.cisco.dse.global.migration.web.WebVariation3;
 import com.cisco.dse.global.migration.web.WebVariation4;
@@ -668,6 +669,12 @@ public class OVWMigration {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new smallBusinessVariation().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
+								sb.append("</tr>");
+								sb.append("<tr><td colspan='3'>.</td></tr>");
+							}else if ("buy-Webvar16".equals(type)) {
+								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+								sb.append("<tr>");
+								sb.append(new WebVariation16().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
 							}
