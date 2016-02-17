@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
@@ -59,8 +60,12 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 
 	protected void doPost(SlingHttpServletRequest request,
 			SlingHttpServletResponse response) throws IOException {
-
-		String packageName = "my package";
+		
+		String packageName = request.getParameter("name");
+		if(StringUtils.isBlank(packageName)){
+			java.util.Date date = new java.util.Date();
+			packageName = "my package" + "-" + new Timestamp(date.getTime()).toString().replace(":", "-").replace(".", "-");
+		}
 		String packageGroupName = "OVW-Migration";
 
 		PrintWriter printWritter = response.getWriter();
@@ -79,14 +84,7 @@ public class GetImagePaths extends SlingAllMethodsServlet {
 			 * will take default, packageName is the name of the package and 1.0
 			 * is the version of the package
 			 */
-			java.util.Date date = new java.util.Date();
-			JcrPackage pack = packageManager
-					.create(packageGroupName,
-							packageName
-									+ "-"
-									+ new Timestamp(date.getTime()).toString()
-											.replace(":", "-")
-											.replace(".", "-"), "1.0");
+			JcrPackage pack = packageManager.create(packageGroupName, packageName, "1.0");
 			JcrPackageDefinition definition = pack.getDefinition();
 
 			DefaultWorkspaceFilter filter = new DefaultWorkspaceFilter();
