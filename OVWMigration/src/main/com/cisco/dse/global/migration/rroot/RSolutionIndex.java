@@ -198,6 +198,9 @@ public class RSolutionIndex extends BaseAction {
 				try {
 					// start of get logic.
 					Elements grid_elements = doc.select("div.gd22v1-pilot");
+					if (grid_elements == null || grid_elements.isEmpty()) { 
+						grid_elements = doc.select("div.gd21v1-pilot");
+					}
 					String h2Text = "";
 					if (grid_elements != null && !grid_elements.isEmpty()) {
 						Element grid_element = grid_elements.first();
@@ -281,6 +284,9 @@ public class RSolutionIndex extends BaseAction {
 				// Start of logic for industries links migration.
 				try {
 					Elements grid_elements = doc.select("div.gd22v1-pilot");
+					if (grid_elements == null || grid_elements.isEmpty()) { 
+						grid_elements = doc.select("div.gd21v1-pilot");
+					}
 					String h2Text = "";
 					if (grid_elements != null && !grid_elements.isEmpty()) {
 						Element grid_element = grid_elements.first();
