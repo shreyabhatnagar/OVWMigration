@@ -288,6 +288,7 @@ public class ProductLandingVariation11 extends BaseAction {
 					String h2Text = "";
 					String pText = "";
 					String aText = "";
+					String aURL = "";
 					Elements spotLightElements = doc.select("div.c11-pilot");
 					if (spotLightElements != null) {
 						if (indexLeftNode != null) {
@@ -321,6 +322,11 @@ public class ProductLandingVariation11 extends BaseAction {
 								Elements anchorText = ele.getElementsByTag("a");
 								if (anchorText != null) {
 									aText = anchorText.text();
+									aURL = anchorText.first().absUrl("href");
+									if(aURL.equals("")){
+										aURL = anchorText.first().attr("href");
+									}
+									aURL = FrameworkUtils.getLocaleReference(aURL, urlMap, locale, sb);
 								} else {
 									sb.append("<li>Spotlight Component anchor tag not having any content in it ('<a>' is blank)</li>");
 								}
@@ -341,6 +347,16 @@ public class ProductLandingVariation11 extends BaseAction {
 											
 									} else {
 										sb.append("<li>spotlight image node doesn't exist</li>");
+									}
+									if(spotLightComponentNode.hasNode("cta")){
+										Node ctaNode = spotLightComponentNode.getNode("cta");
+										if(!aURL.equals("")){
+											ctaNode.setProperty("url", aURL);
+										}else{
+											sb.append(Constants.CTA_NOT_AVAILABLE);
+										}
+									}else{
+										sb.append("<li>Cta Node not found for link.</li>");
 									}
 								}
 								// end image
