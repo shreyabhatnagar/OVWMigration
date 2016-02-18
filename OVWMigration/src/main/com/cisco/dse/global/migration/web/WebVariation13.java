@@ -90,6 +90,7 @@ public class WebVariation13 extends BaseAction {
 				try {
 					String htmlBlobContent = "";
 					StringBuilder oldImage = new StringBuilder();
+					StringBuilder securedSb = new StringBuilder();
 					
 					
 					log.debug("Started migrating HtmlBlob content.");
@@ -125,18 +126,18 @@ public class WebVariation13 extends BaseAction {
 						Elements securedhtmlBlobTitle = securedDoc.select("div#mb-title-nav-bar");
 						if (securedhtmlBlobTitle != null && !htmlBlobTitle.isEmpty()) {
 							securedHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(securedhtmlBlobTitle.last(), "", locale, sb, urlMap);
-							oldImage.append(securedHtmlBlobContent);
+							securedSb.append(securedHtmlBlobContent);
 						}
 						Elements securedhtmlBlobElements = doc.select("div#location_wrapper");
 						if (securedhtmlBlobElements != null && !htmlBlobElements.isEmpty()) {
 							securedHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(securedhtmlBlobElements.first(), "", locale, sb, urlMap);
-								oldImage.append(securedHtmlBlobContent);
+							securedSb.append(securedHtmlBlobContent);
 							}
 						log.debug("securedHtmlBlobContent migrated is done." + securedHtmlBlobContent);
 						if (webSecuredTopNode.hasNode("gd11v1-mid/htmlblob")) {
 							Node htmlBlobNode = webSecuredTopNode.getNode("gd11v1-mid/htmlblob");
 							if (StringUtils.isNotBlank(securedHtmlBlobContent)) {
-								htmlBlobNode.setProperty("html",oldImage.toString());
+								htmlBlobNode.setProperty("html",securedSb.toString());
 								log.debug("securedHtmlBlob Content migration is done.");
 							}
 						} else {
