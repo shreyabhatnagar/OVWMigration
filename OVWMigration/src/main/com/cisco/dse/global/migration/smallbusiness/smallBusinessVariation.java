@@ -48,6 +48,7 @@ public class smallBusinessVariation extends BaseAction {
 			pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale);
 			String sBTitle = pagePropertiesPath+"/Title";
 			String sBTopRight = pagePropertiesPath+"/Grid/solutions/layout-solutions/widenarrow/WN-Narrow-2/list_container";
+			String sBTopR = pagePropertiesPath+"/Grid/solutions/layout-solutions/widenarrow/WN-Narrow-2/list_container_0";
 			String sBHero = pagePropertiesPath+"/Grid/solutions/layout-solutions/widenarrow/WN-Wide-1/carousel/carouselContents";
 			String sBThird1 = pagePropertiesPath+"/Grid/solutions/layout-solutions/thirds";
 			String sBThird2 = pagePropertiesPath+"/Grid/solutions/layout-solutions/thirds_0";
@@ -58,6 +59,7 @@ public class smallBusinessVariation extends BaseAction {
 
 			javax.jcr.Node sBTitleNode = null;
 			javax.jcr.Node sBTopRightNode = null;
+			javax.jcr.Node sBTopRNode = null;
 			javax.jcr.Node sBHeroNode = null;
 			javax.jcr.Node sBThirdNode1 = null;
 			javax.jcr.Node sBThirdNode2 = null;
@@ -66,6 +68,7 @@ public class smallBusinessVariation extends BaseAction {
 			sBTitleNode = session.getNode(sBTitle);
 			sBHeroNode = session.getNode(sBHero);
 			sBTopRightNode = session.getNode(sBTopRight);
+			sBTopRNode = session.getNode(sBTopR);
 			sBThirdNode1 = session.getNode(sBThird1);
 			sBThirdNode2 = session.getNode(sBThird2);
 			pageJcrNode = session.getNode(pagePropertiesPath);
@@ -124,6 +127,9 @@ public class smallBusinessVariation extends BaseAction {
 					Element listEle = doc.select("div.acc-panel").first();
 					migrateTopList(listEle , sBTopRightNode , locale , urlMap, catType, type);
 					log.debug("Top Right Element Migrated");
+					if(sBTopRNode.hasNode("list_item_parsys")){
+						sb.append(Constants.EXTRA_LIST_COMPONENT_FOUND);
+					}
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_UPDATING_LIST_COMPONENT);
 					log.debug("Exception in Top Right Element Migration"+e);
