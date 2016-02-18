@@ -998,7 +998,7 @@ public class ProductLandingVariation5 extends BaseAction {
 			}
 		} catch (Exception e) {
 			log.error("Exception : ", e);
-			sb.append("<li>Exception " + e + "</li>");
+			sb.append("<li>Exception</li>");
 		}
 
 		sb.append("</ul></td>");
