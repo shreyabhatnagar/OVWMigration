@@ -306,8 +306,8 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 		Elements listElements = doc.select("div.n13-pilot");
 		
 		//Check for the follow us
-			Elements followUs = doc.select("div.s14-pilot");
-			if(!followUs.isEmpty()){
+			Elements followUs = !doc.select("div.fw-cisco-assistant").isEmpty() ? doc.select("div.fw-cisco-assistant").select("div.s14-pilot") : null;
+			if(followUs != null && !followUs.isEmpty()){
 				sb.append(Constants.FOLLOWUS_NODE_NOT_FOUND);
 			}
 			else{
