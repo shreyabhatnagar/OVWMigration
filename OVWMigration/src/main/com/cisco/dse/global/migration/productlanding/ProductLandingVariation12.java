@@ -237,7 +237,7 @@ public class ProductLandingVariation12 extends BaseAction {
 										Elements lightBoxElements = ele.select("div.c50-text").select("a.c26v4-lightbox");
 										String popUpHeader = lightBoxElements.attr("data-config-targetlightbox");
 										log.debug("popupheader attr value" + popUpHeader);
-										String h2TextpopUp = "";
+										String h2TextpopUp = h2Text;
 										
 										if(!popUpHeader.isEmpty()){
 											Element popupValue = doc.getElementById(popUpHeader);
