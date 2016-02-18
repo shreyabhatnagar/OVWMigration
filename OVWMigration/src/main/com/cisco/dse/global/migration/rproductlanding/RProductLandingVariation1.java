@@ -1059,6 +1059,13 @@ public class RProductLandingVariation1 extends BaseAction {
 																				.setProperty(
 																						"linkTitleUrl",
 																						linkTitleUrl);
+																		if (subdrawerpanel.hasNode("titlelink")) {
+																			Node titleLinkNode = subdrawerpanel.getNode("titlelink");
+																			titleLinkNode
+																			.setProperty(
+																					"url",
+																					linkTitleUrl);
+																		}
 																	} else {
 																		linkUrlNotFoundFlag = true;
 																		log.debug("linkurl property is not set at "
