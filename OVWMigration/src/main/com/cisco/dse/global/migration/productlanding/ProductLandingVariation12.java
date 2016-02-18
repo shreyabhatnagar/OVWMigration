@@ -235,6 +235,18 @@ public class ProductLandingVariation12 extends BaseAction {
 										Node heroPanelPopUpNode = null;
 										Element lightBoxElement = null;
 										Elements lightBoxElements = ele.select("div.c50-text").select("a.c26v4-lightbox");
+										String popUpHeader = lightBoxElements.attr("data-config-targetlightbox");
+										log.debug("popupheader attr value" + popUpHeader);
+										String h2TextpopUp = "";
+										
+										if(!popUpHeader.isEmpty()){
+											Element popupValue = doc.getElementById(popUpHeader);
+											log.debug("pop up value"+ popupValue);
+											if(popupValue != null){
+												h2TextpopUp = !popupValue.getElementsByTag("h2").isEmpty()? popupValue.getElementsByTag("h2").first().html() : h2Text;
+												log.debug("popup text" + h2TextpopUp);
+											}
+										}
 										if(lightBoxElements != null && !lightBoxElements.isEmpty()){
 											lightBoxElement = lightBoxElements.first();
 										}
@@ -245,15 +257,17 @@ public class ProductLandingVariation12 extends BaseAction {
 										if (heroPanelPopUpNode != null && lightBoxElement == null) {
 											sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
 										}
-										if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2Text)) {
-											heroPanelPopUpNode.setProperty("popupHeader", h2Text);
+										if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2TextpopUp)) {
+											heroPanelPopUpNode.setProperty("popupHeader", h2TextpopUp);
 										}
 										//end of hero pop up
-										if(heroPanelPopUpNode != null){
-											heroPanelPopUpNode.setProperty("popupHeader", h2Text);
+										
+										//commented due to extra
+										/*if(heroPanelPopUpNode != null){
+											heroPanelPopUpNode.setProperty("popupHeader", h2TextpopUp);
 										}else{
 											sb.append("<li>Hero content video pop up node not found.</li>");
-										}
+										}*/
 										heroPanelNode.setProperty("title", h2Text);
 										heroPanelNode.setProperty("description", pText);
 										heroPanelNode.setProperty("linktext", aText);
