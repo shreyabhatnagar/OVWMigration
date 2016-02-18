@@ -517,11 +517,25 @@ public class FrameworkUtils {
 	public static String getLocaleReference(String primaryCTALinkUrl, Map<String, String> urlMap, String locale, StringBuilder sb) {
 		if (StringUtils.isNotBlank(primaryCTALinkUrl)) {
 			String pdfPath = "";
+			String query = "";
 			if(primaryCTALinkUrl.endsWith(".pdf")|| primaryCTALinkUrl.endsWith(".PDF") || primaryCTALinkUrl.endsWith(".doc") || primaryCTALinkUrl.endsWith(".DOC") || primaryCTALinkUrl.endsWith(".docx") || primaryCTALinkUrl.endsWith(".DOCX") ){
 				pdfPath = FrameworkUtils.migrateDAMContent(primaryCTALinkUrl, "", locale, sb);
 				log.debug("pdf path after migraiton is: "+ pdfPath);
 				return pdfPath;
 				
+			}
+			if ((primaryCTALinkUrl.indexOf("?") != -1 || primaryCTALinkUrl.indexOf("#") != -1) && !primaryCTALinkUrl.endsWith(".html#top")) {
+				String url = primaryCTALinkUrl;
+				if (primaryCTALinkUrl.indexOf("?") != -1) {
+					primaryCTALinkUrl = url.substring(0, url.indexOf("?"));
+					query = url.substring(url.indexOf("?"));
+				}
+				if (primaryCTALinkUrl.indexOf("#") != -1) {
+					primaryCTALinkUrl = url.substring(0, url.indexOf("#"));
+					query = url.substring(url.indexOf("#"));
+				}
+				log.debug("primaryCTALinkUrl having query : "+ primaryCTALinkUrl);
+				log.debug("query in primaryCTALinkUrl : "+ query);
 			}
 			if (urlMap.containsKey(primaryCTALinkUrl)) {
 				if(primaryCTALinkUrl.endsWith(".html#top")){  //code to remove if #top is in provided url for "back to top" issue.
@@ -533,6 +547,11 @@ public class FrameworkUtils {
 				
 				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
 			}
+			if (StringUtils.isNotBlank(query)) {
+				primaryCTALinkUrl = primaryCTALinkUrl + query;
+				log.debug("url with query:: " + primaryCTALinkUrl);
+			}
+			
 		}
 		return primaryCTALinkUrl;
 	}
