@@ -48,10 +48,10 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 			ConstraintViolationException, RepositoryException {
 
 		log.debug("In the translate method TrainingAndEventsVariation1");
-		String pagePropertiesPath = "/content/<locale>/training-events";
+		String pagePropertiesPath = "/content/<locale>/training-events/jcr:content";
 		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale);
-		String trainingAndEventsLeft = pagePropertiesPath + "/jcr:content/content_parsys/training/layout-training/gd12v2/gd12v2-left";
-		String trainingAndEventsRight = pagePropertiesPath + "/jcr:content/content_parsys/training/layout-training/gd12v2/gd12v2-right";
+		String trainingAndEventsLeft = pagePropertiesPath + "/content_parsys/training/layout-training/gd12v2/gd12v2-left";
+		String trainingAndEventsRight = pagePropertiesPath + "/content_parsys/training/layout-training/gd12v2/gd12v2-right";
 
 		String pageUrl = host + "/content/<locale>/training-events.html";
 		pageUrl = pageUrl.replace("<locale>", locale);

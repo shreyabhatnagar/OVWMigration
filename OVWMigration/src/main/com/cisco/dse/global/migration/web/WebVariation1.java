@@ -47,7 +47,7 @@ public class WebVariation1 extends BaseAction{
 		log.debug("In the translate method of WebVariation1");
 		log.debug("In the translate method, catType is :" + catType);
 
-		String pagePropertiesPath = "/content/<locale>/about";
+		String pagePropertiesPath = "/content/<locale>/about/jcr:content";
 		String pageUrl = host + "/content/<locale>/about.html";
 		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale)
 				.replace("<prod>", prod);
@@ -58,7 +58,7 @@ public class WebVariation1 extends BaseAction{
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
 		
-		String webNodePath = pagePropertiesPath+ "/jcr:content/content_parsys/generic/layout-generic/gd12v2";
+		String webNodePath = pagePropertiesPath+ "/content_parsys/generic/layout-generic/gd12v2";
 		javax.jcr.Node webNode = null;
 		javax.jcr.Node pageJcrNode = null;
 		try {
