@@ -298,7 +298,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
 												heroPanelPopUpNode.setProperty("header", heroPanelTitle);
 											}
-											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+											/*if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 												lightBoxElement = lightBoxElements.first();
 												if (StringUtils.isNotBlank(heroPanelTitle)) {
 													if (heroPanelPopUpNode != null) {
@@ -308,7 +308,7 @@ public class RProductLandingVariation2 extends BaseAction {
 														log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
 													}
 												}
-											}
+											}*/
 											Elements lightBoxElementsText = ele.select("div.c50-text").select("a.c26v4-lightbox");
 											Element lightBoxElementText = null;
 											if (lightBoxElementsText != null && !lightBoxElementsText.isEmpty()) {
