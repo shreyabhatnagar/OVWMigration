@@ -319,7 +319,7 @@ public class OVWMigration {
 							} else if ("product-listing-var4".equals(type)) {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
-								sb.append(new ProductListingVariation4().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session));
+								sb.append(new ProductListingVariation4().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
 							} else if ("product-listing-var3".equals(type)) {
@@ -655,7 +655,7 @@ public class OVWMigration {
 							} else if ("product-listing-var8".equals(type)) {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
-								sb.append(new ProductListingVariation8().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session));
+								sb.append(new ProductListingVariation8().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
 	
