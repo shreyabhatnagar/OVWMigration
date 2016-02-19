@@ -572,6 +572,10 @@ public class FrameworkUtils {
 					heroPanelPopUpNodes = heroLargeNodeSuperParent.getNodes("popup*");
 				}
 			}
+			if(heroPanelPopUpNodes.getSize() == 0){
+				heroLargeNodeParent = heroNode.getParent();
+				heroPanelPopUpNodes = heroLargeNodeParent.getNodes("c26v4_popup_cq*");
+			}
 			while (heroPanelPopUpNodes.hasNext()) {
 				Node heroPanelPopUpNode = (Node) heroPanelPopUpNodes.next();
 				String lightboxPopUpId = heroPanelPopUpNode.hasProperty("lightboxId") ? heroPanelPopUpNode.getProperty("lightboxId").getString() : "";

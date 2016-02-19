@@ -111,7 +111,10 @@ public class WebVariation4 extends BaseAction {
 				String titleContent = "";
 				for (Element midTitleElement : midTitleElements) {
 					log.debug("mid list element is ["+midTitleElement+"]");
-					Element paraElement = midTitleElement.select("div.c00-pilot").first().getElementsByTag("p").first();
+					Element paraElement = midTitleElement.select("div.c00-pilot")!=null?midTitleElement.select("div.c00-pilot").first(): null;
+							if(paraElement != null){
+								paraElement = paraElement.getElementsByTag("p").first();
+							}
 					if(paraElement != null && paraElement.hasAttr("align")) {
 						log.debug("This is a link for - back to top - element");
 						backToTopContent = FrameworkUtils.extractHtmlBlobContent(midTitleElement, "", locale, sb, urlMap);
