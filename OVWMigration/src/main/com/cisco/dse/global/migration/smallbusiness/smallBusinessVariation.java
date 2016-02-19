@@ -19,7 +19,7 @@ import org.apache.sling.commons.json.JSONException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+import org.apache.commons.lang.StringUtils;
 import com.cisco.dse.global.migration.config.BaseAction;
 import com.cisco.dse.global.migration.config.Constants;
 import com.cisco.dse.global.migration.config.FrameworkUtils;
@@ -206,7 +206,7 @@ public class smallBusinessVariation extends BaseAction {
 									Node ctaNode = tileNode.getNode("cta");
 									ctaNode.setProperty("linktext", anchor.text());
 									String aUrl = anchor.absUrl("href");
-									if(aUrl.equals("")){
+									if(StringUtils.isBlank(aUrl)){
 										aUrl = anchor.attr("href");
 									}
 									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
@@ -266,7 +266,7 @@ public class smallBusinessVariation extends BaseAction {
 									Node ctaNode = tileNode.getNode("cta");
 									ctaNode.setProperty("linktext", anchor.text());
 									String aUrl = anchor.absUrl("href");
-									if(aUrl.equals("")){
+									if(StringUtils.isBlank(aUrl)){
 										aUrl = anchor.attr("href");
 									}
 									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
@@ -341,7 +341,7 @@ public class smallBusinessVariation extends BaseAction {
 																if(anchor != null){
 																	linkdataNode.setProperty("linktext", anchor.text());
 																	String aUrl = anchor.absUrl("href");
-																	if(!aUrl.isEmpty() && ! aUrl.equals("")){
+																	if(StringUtils.isBlank(aUrl)){
 																		aUrl = anchor.attr("href");
 																	}
 																	aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
@@ -433,7 +433,7 @@ public class smallBusinessVariation extends BaseAction {
 												if(anchor != null){
 													linkdataNode.setProperty("linktext", anchor.text());
 													String aUrl = anchor.absUrl("href");
-													if(!aUrl.isEmpty() && ! aUrl.equals("")){
+													if(StringUtils.isBlank(aUrl)){
 														aUrl = anchor.attr("href");
 													}
 													aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
@@ -509,7 +509,7 @@ public class smallBusinessVariation extends BaseAction {
 								if(heroPanelNode.hasNode("cta")){
 									Node ctaNode = heroPanelNode.getNode("cta");
 									String aUrl = anchor.absUrl("href");
-									if(aUrl.equals("")){
+									if(StringUtils.isBlank(aUrl)){
 										aUrl = anchor.attr("href");
 									}
 									aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);

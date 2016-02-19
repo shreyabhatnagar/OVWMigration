@@ -458,7 +458,7 @@ public class SolutionListingVariation6 extends BaseAction {
 						tileSlpNode.setProperty("description", tileSlpDesc);
 					}
 					if (StringUtils.isNotEmpty(titleLink)) {
-						tileSlpNode.setProperty("linktext", titleLink);
+						tileSlpNode.setProperty("linkurl", titleLink);
 					}
 					// start image
 					String tileSlpImage = FrameworkUtils.extractImagePath(
