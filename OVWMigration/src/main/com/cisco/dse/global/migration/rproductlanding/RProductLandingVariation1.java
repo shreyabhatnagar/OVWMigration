@@ -1055,16 +1055,14 @@ public class RProductLandingVariation1 extends BaseAction {
 																	}
 																	if (StringUtils
 																			.isNotBlank(linkTitleUrl)) {
-																		subdrawerpanel
-																				.setProperty(
-																						"linkTitleUrl",
-																						linkTitleUrl);
 																		if (subdrawerpanel.hasNode("titlelink")) {
 																			Node titleLinkNode = subdrawerpanel.getNode("titlelink");
 																			titleLinkNode
 																			.setProperty(
 																					"url",
 																					linkTitleUrl);
+																		}else{
+																			sb.append("<li>TitleLink Node not found for subdrawer heading</li>");
 																		}
 																	} else {
 																		linkUrlNotFoundFlag = true;
