@@ -240,7 +240,10 @@ public class WebVariation1 extends BaseAction{
 
 				Element anchor = ele.getElementsByTag("a").first();		
 				String anchorText = anchor!=null?anchor.text():"";
-				String anchorHref = anchor.attr("href");
+				String anchorHref = anchor.absUrl("href");
+				if (StringUtils.isBlank(anchorHref)) {
+					anchorHref = anchor.attr("href");
+				}
 				// Start extracting valid href
 				log.debug("Before heroPanelLinkUrl" + anchorHref + "\n");
 				anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);

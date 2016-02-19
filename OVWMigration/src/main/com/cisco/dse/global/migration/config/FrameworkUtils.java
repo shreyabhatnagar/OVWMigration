@@ -464,6 +464,7 @@ public class FrameworkUtils {
 			while(anchorIterator.hasNext()){
 				Map.Entry anchor = (Map.Entry)anchorIterator.next();
 				String existingAnchorPath = anchor.getValue().toString();
+				String existingAnchorAbsolutePath = anchor.getKey().toString();
 				log.debug("Before anchorHref" + anchor.getKey().toString() + "\n");
 				updatedAnchorPath = FrameworkUtils.getLocaleReference(anchor.getKey().toString(), urlMap, locale, sb);
 				log.debug("after anchorHref" + updatedAnchorPath + "\n");
@@ -471,6 +472,9 @@ public class FrameworkUtils {
 				log.debug(StringEscapeUtils.escapeXml(existingAnchorPath) +" is updated to "+updatedAnchorPath);
 				if(StringUtils.isNotBlank(StringEscapeUtils.escapeXml(existingAnchorPath)) && StringUtils.isNotBlank(updatedAnchorPath)){
 					outeHtmlText = outeHtmlText.replace("\"" +StringEscapeUtils.escapeXml(existingAnchorPath) + "\"", "\"" + updatedAnchorPath + "\"");
+				}
+				if(StringUtils.isNotBlank(StringEscapeUtils.escapeXml(existingAnchorAbsolutePath)) && StringUtils.isNotBlank(updatedAnchorPath)){
+					outeHtmlText = outeHtmlText.replace("\"" +StringEscapeUtils.escapeXml(existingAnchorAbsolutePath) + "\"", "\"" + updatedAnchorPath + "\"");
 				}
 			}
 		}
