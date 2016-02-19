@@ -356,7 +356,11 @@ public class ProductLandingVariation11 extends BaseAction {
 											sb.append(Constants.CTA_NOT_AVAILABLE);
 										}
 									}else{
+										if(spotLightComponentNode.hasProperty("linkurl")){
+											spotLightComponentNode.setProperty("linkurl",aURL);
+										}else{
 										sb.append("<li>Cta Node not found for link.</li>");
+										}
 									}
 								}
 								// end image
