@@ -34,7 +34,7 @@ public class ProductListingVariation3 extends BaseAction{
 	static Logger log = Logger.getLogger(ProductListingVariation3.class);
 
 	public String translate(String host,String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -145,7 +145,7 @@ public class ProductListingVariation3 extends BaseAction{
 						Element pTagText = pTag.getElementsByTag("p").first();
 						//log.debug("pTagText property!: " + pTagText);
 						if(pTagText != null){
-							pTagVal = pTagText.outerHtml();	
+							pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap);	
 							if(textNodeTwo != null){
 								textNodeTwo.setProperty("text", pTagVal);
 							}
@@ -153,7 +153,7 @@ public class ProductListingVariation3 extends BaseAction{
 						}else if(pTag.parent().hasClass("c00-pilot") || pTag.parent().hasClass("cc00-pilot")){
 							pTagText = pTag.getElementsByTag("p").first();
 							if(pTagText != null){
-								pTagVal = pTagText.outerHtml();	
+								pTagVal = FrameworkUtils.extractHtmlBlobContent(pTagText, "", locale, sb, urlMap);	
 								if(textNodeTwo != null){
 									textNodeTwo.setProperty("text", pTagVal);
 								}

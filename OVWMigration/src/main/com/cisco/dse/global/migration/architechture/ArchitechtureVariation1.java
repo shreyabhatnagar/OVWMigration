@@ -471,7 +471,11 @@ public class ArchitechtureVariation1 extends BaseAction{
 			}
 			listurl = FrameworkUtils.getLocaleReference(listurl, urlMap, locale, sb);
 			listNode.setProperty("linktext", listtext.text()+rightListEle.ownText());
-			listNode.setProperty("linkurl",listurl);
+			if(!StringUtil.isBlank(listurl)){
+				listNode.setProperty("linkurl",listurl);
+			}else{
+				sb.append(Constants.LINK_URL_NOT_FOUND_IN_LIST);
+			}
 
 			log.debug("Updated title, descriptoin and linktext at "+listNode.getPath());
 		}
