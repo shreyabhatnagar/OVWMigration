@@ -412,7 +412,7 @@ public class OVWMigration {
 								sb.append(new RProductVariation1().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
-							} else if ("buyersguide-var1".equals(type)) {
+							} else if ("buyers-guide-var1".equals(type)) {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new BuyersGuideVariation01().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
@@ -466,13 +466,13 @@ public class OVWMigration {
 								sb.append(new BenifitsVariation2().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
-							} else if ("buyersguide-var2".equals(type)) {
+							} else if ("buyers-guide-var2".equals(type)) {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new BuyersGuideVariation02().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
-							} else if ("buyersguide-var3".equals(type)) {
+							} else if ("index-buyersguidevar3".equals(type)) {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new BuyersGuideVariation03().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));

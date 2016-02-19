@@ -460,7 +460,7 @@ public class WebVariation2 extends BaseAction {
 							if (htmlNode != null) {
 								if (StringUtils.isNotEmpty(htmlContent)
 										&& htmlContent != null) {
-									htmlNode.setProperty("html", htmlContent.replaceAll("<br>", ""));
+									htmlNode.setProperty("html", htmlContent);
 								}
 							} else {
 								sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);

@@ -313,10 +313,12 @@ public class WebVariation7 extends BaseAction{
 							}
 
 							if(gdRightEle!=null){	
+								log.debug("gdrightele:"+gdRightEle.outerHtml());
 								String gdRight = FrameworkUtils.extractHtmlBlobContent(gdRightEle, "",locale, sb, urlMap);
+								log.debug("gdright:"+gdRight);
 								Node rightBlob = indRightNode.hasNode("htmlblob")?indRightNode.getNode("htmlblob"):null;
 								if(rightBlob!=null){
-									rightBlob.setProperty("html",gdRight.replaceAll("<br>", ""));
+									rightBlob.setProperty("html",gdRight);
 								}else{
 									log.debug("html blob node not found.");
 									sb.append("<li>html blob node not found.</li>");
