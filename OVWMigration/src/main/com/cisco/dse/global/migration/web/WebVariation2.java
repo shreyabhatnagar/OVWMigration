@@ -441,8 +441,6 @@ public class WebVariation2 extends BaseAction {
 								}else{
 									sb.append("<li>PopUp anchor element not found in web page.</li>");
 								}
-							}else{
-								sb.append("<li>PopUp anchor element not found in web page.</li>");
 							}
 						}else{
 							sb.append("<li>PopUp anchor element not found in web page.</li>");
