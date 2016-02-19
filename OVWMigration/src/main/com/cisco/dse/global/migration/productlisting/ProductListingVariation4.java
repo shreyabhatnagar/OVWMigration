@@ -2,6 +2,7 @@ package com.cisco.dse.global.migration.productlisting;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -39,7 +40,7 @@ public class ProductListingVariation4 extends BaseAction{
 	static Logger log = Logger.getLogger(ProductListingVariation4.class);
 
 	public String translate(String host, String loc, String prod, String type,
-			String catType, String locale, Session session) throws IOException,
+			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
 			ConstraintViolationException, RepositoryException {
 		BasicConfigurator.configure();
@@ -90,7 +91,7 @@ public class ProductListingVariation4 extends BaseAction{
 				
 				// start of text component
 				try{
-					setText(doc, productListingMidNode);
+					setText(doc, productListingMidNode,urlMap,locale);
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}	
@@ -98,7 +99,7 @@ public class ProductListingVariation4 extends BaseAction{
 
 				// start of HtmlBlob
 				try {
-					setHTMLBlob(doc, productListingMidNode);
+					setHTMLBlob(doc, productListingMidNode,urlMap,locale);
 				}
 				catch (Exception e){
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
@@ -117,7 +118,7 @@ public class ProductListingVariation4 extends BaseAction{
 	}
 
 	// Set Text Method
-	public void setText(Document doc, Node productListingMidNode) throws RepositoryException{
+	public void setText(Document doc, Node productListingMidNode, Map<String, String> urlMap, String locale) throws RepositoryException{
 
 		Elements textElements = doc.select("div.c00-pilot");
 		if(textElements == null){
@@ -132,14 +133,14 @@ public class ProductListingVariation4 extends BaseAction{
 				if(eleSize == nodeSize){
 					for(Element ele : textElements){
 						Node textNode = (Node)textNodeIterator.next();
-						textNode.setProperty("text", ele.html());
+						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 					}
 				}
 				else if(nodeSize < eleSize){
 					for(Element ele : textElements){
 						if(textNodeIterator.hasNext()){
 							Node textNode = (Node)textNodeIterator.next();
-							textNode.setProperty("text", ele.html());
+							textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 						}
 						else{
 							sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
@@ -149,7 +150,7 @@ public class ProductListingVariation4 extends BaseAction{
 				else if(nodeSize > eleSize){
 					for(Element ele : textElements){
 						Node textNode = (Node)textNodeIterator.next();
-						textNode.setProperty("text", ele.html());
+						textNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(ele, "", locale, sb, urlMap));
 					}
 					sb.append(Constants.TEXT_NODE_COUNT+nodeSize+Constants.TEXT_ELEMENT_COUNT+eleSize+"</li>");
 				}
@@ -162,14 +163,14 @@ public class ProductListingVariation4 extends BaseAction{
 	//End of Text Method
 
 	//Start of setHTMLBlob
-	public void setHTMLBlob(Document doc, Node productListingMidNode) throws RepositoryException, UnsupportedEncodingException{
+	public void setHTMLBlob(Document doc, Node productListingMidNode, Map<String, String> urlMap, String locale) throws RepositoryException, UnsupportedEncodingException{
 		Element htmlblobele = doc.select("div.htmlblob").first();
 		Element htmlblobeleID = doc.getElementById("n21");
 
 		if(htmlblobele != null && !htmlblobele.equals("")){
 			Node blobNode = productListingMidNode.hasNode("htmlblob") ? productListingMidNode.getNode("htmlblob") : null;
 			if(blobNode != null){
-				blobNode.setProperty("html", htmlblobele.html());
+				blobNode.setProperty("html", FrameworkUtils.extractHtmlBlobContent(htmlblobele, "", locale, sb, urlMap));
 			}else
 			{
 				sb.append(Constants.HTMLBLOB_ELEMENT_NOT_FOUND);
@@ -181,7 +182,7 @@ public class ProductListingVariation4 extends BaseAction{
 						"<style type='text/css'>"+
 						".n21-images { background-image: url('www.cisco.com/assets/swa/img/pcr/uc_sprite.jpg'); }"+
 						"</style>";
-				blobNode.setProperty("html",htmlblobeleIDappend+htmlblobeleID.outerHtml());
+				blobNode.setProperty("html",htmlblobeleIDappend+FrameworkUtils.extractHtmlBlobContent(htmlblobeleID, "", locale, sb, urlMap));
 				sb.append("<li>Show and Hide text need to be migrated manually</li>");
 			}else
 			{
