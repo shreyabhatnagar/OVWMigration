@@ -815,6 +815,23 @@ public class ProductLandingVariation6 extends BaseAction {
 								} else {
 									sb.append("<li>No heading found in grid two.</li>");
 								}
+								Element h2Anchor= null;
+								String h2AnchorHref = "";
+								if(!h2Elements.isEmpty()){
+									Elements h2Anchors = h2Elements.first().getElementsByTag("a");
+									if(!h2Anchors.isEmpty()){
+										h2Anchor = h2Anchors.first();
+										h2AnchorHref = h2Anchor.absUrl("href");
+										if(StringUtil.isBlank(h2AnchorHref)){
+											h2AnchorHref = h2Anchor.attr("href");
+										}
+										// Start extracting valid h2AnchorHref
+										log.debug("Before gridtwoLinkUrl" + h2AnchorHref + "\n");
+										h2AnchorHref = FrameworkUtils.getLocaleReference(h2AnchorHref, urlMap, locale, sb);
+										log.debug("after gridtwoLinkUrl" + h2AnchorHref + "\n");
+										// End extracting valid h2AnchorHref
+									}
+								}
 								Elements pElements = slp_Element
 										.getElementsByTag("p");
 								if (pElements != null) {
@@ -856,6 +873,12 @@ public class ProductLandingVariation6 extends BaseAction {
 													h2Text);
 										} else {
 											sb.append("<li>No heading text found in the grid two.</li>");
+										}
+										if (StringUtils.isNotBlank(h2AnchorHref)) {
+											tile_slp_small.setProperty("linkurl",
+													h2AnchorHref);
+										}else {
+											sb.append("<li>Title link is not available in the grid two</li>");
 										}
 										if (StringUtils.isNotBlank(pText)) {
 											tile_slp_small.setProperty(
