@@ -281,7 +281,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											// start hero pop up
 											Node imageLinkNode = heroPanelNode.hasNode("imageLink")?heroPanelNode.getNode("imageLink"):null;
 											Node heroPanelPopUpNode = null;
-											Elements lightBoxElements = ele.select("div.c50-text").select("a.c26v4-lightbox");
+											Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
 											Element lightBoxElement = null;
 											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 												lightBoxElement = lightBoxElements.first();
@@ -300,6 +300,34 @@ public class RProductLandingVariation2 extends BaseAction {
 											}
 											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 												lightBoxElement = lightBoxElements.first();
+												if (StringUtils.isNotBlank(heroPanelTitle)) {
+													if (heroPanelPopUpNode != null) {
+														heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
+													} else {
+														sb.append("<li>Hero content video pop up node not found.</li>");
+														log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
+													}
+												}
+											}
+											Elements lightBoxElementsText = ele.select("div.c50-text").select("a.c26v4-lightbox");
+											Element lightBoxElementText = null;
+											if (lightBoxElementsText != null && !lightBoxElementsText.isEmpty()) {
+												lightBoxElementText = lightBoxElementsText.first();
+											}
+											if (imageLinkNode != null) {
+												heroPanelPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
+											}
+											if (heroPanelPopUpNode == null && lightBoxElementText != null) {
+												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+											}
+											if (heroPanelPopUpNode != null && lightBoxElementText == null) {
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+											}
+											if (heroPanelPopUpNode != null && lightBoxElementText != null && StringUtils.isNotBlank(heroPanelTitle)) {
+												heroPanelPopUpNode.setProperty("header", heroPanelTitle);
+											}
+											if (lightBoxElementsText != null && !lightBoxElementsText.isEmpty()) {
+												lightBoxElementText = lightBoxElementsText.first();
 												if (StringUtils.isNotBlank(heroPanelTitle)) {
 													if (heroPanelPopUpNode != null) {
 														heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);

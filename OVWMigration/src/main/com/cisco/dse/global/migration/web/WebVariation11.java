@@ -346,6 +346,12 @@ public class WebVariation11 extends BaseAction{
 //			textElements = doc.select("div.s01-pilot"); fix-Anudeep
 			textElements = doc.select("div#framework-content-right");
 		}
+		if(textElements.isEmpty()){
+			textElements = doc.select("div.fw-cisco-assistant,div.s01v8-pilot");
+		}
+		if(textElements.isEmpty()){
+			textElements = doc.select("div.s01-pilot");
+		}
 		boolean fHolderExists = false;
 		if(htmlBlob != null){
 			if(!textElements.isEmpty()){
