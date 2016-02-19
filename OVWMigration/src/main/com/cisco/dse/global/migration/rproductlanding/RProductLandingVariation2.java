@@ -293,7 +293,7 @@ public class RProductLandingVariation2 extends BaseAction {
 												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
 											}
 											if (heroPanelPopUpNode != null && lightBoxElement == null) {
-												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page in hero panel.</li>");
 											}
 											if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
 												heroPanelPopUpNode.setProperty("header", heroPanelTitle);
@@ -451,10 +451,10 @@ public class RProductLandingVariation2 extends BaseAction {
 											}
 											spotLightPopUpNode = FrameworkUtils.getHeroPopUpNode(imageLinkNode);
 											if (spotLightPopUpNode == null && lightBoxElement != null) {
-												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page in spotlight.</li>");
 											}
 											if (spotLightPopUpNode != null && lightBoxElement == null) {
-												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page in spotlight.</li>");
 											}
 											if (spotLightPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2Ele.text())) {
 												spotLightPopUpNode.setProperty("header", h2Ele.text());
