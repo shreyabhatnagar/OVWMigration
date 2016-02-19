@@ -188,6 +188,9 @@ public class WebVariation16 extends BaseAction {
 						Node luHelpNode = wnNarrow.hasNode("letushelp_eot")?wnNarrow.getNode("letushelp_eot"):null;
 						if(luHelpNode!=null){
 							Element letUsHelp = doc.select("div.f-holder").first();
+							if(letUsHelp==null){
+								letUsHelp = doc.select("div.local-feature-holder").first();
+							}
 							if(letUsHelp!=null){
 								Element h3Ele = letUsHelp.getElementsByTag("h3").first();
 								String title=null;

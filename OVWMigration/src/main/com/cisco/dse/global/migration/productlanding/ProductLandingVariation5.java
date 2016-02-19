@@ -339,8 +339,7 @@ public class ProductLandingVariation5 extends BaseAction {
 
 					} catch (Exception e) {
 						log.error("Exception : ", e);
-						sb.append("<li>Unable to update benefits text component."
-								+ e + "</li>");
+						sb.append("<li>Unable to update benefits text component.</li>");
 					}
 
 					// end of hero panel.

@@ -546,7 +546,26 @@ public class ArchitectureVariation04 extends BaseAction {
 							} else {
 								sb.append(Constants.TILE_BORDERED_TITLE_ELEMENT_NOT_FOUND);
 							}
-
+							//start of tile pop up 
+							Node tilePopUpNode = null;
+							Element lightBoxElement = null;
+							Elements lightBoxElements = ele.select("a.c26v4-lightbox");
+							log.debug("Light box ele:"+lightBoxElements);
+							if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+								  lightBoxElement = lightBoxElements.first();
+							}
+							tilePopUpNode = FrameworkUtils.getHeroPopUpNode(tileNode);
+							if (tilePopUpNode == null && lightBoxElement != null) {
+								sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
+							}
+							if (tilePopUpNode != null && lightBoxElement == null) {
+								sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
+							}
+							if (tilePopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(h2Text))  {
+								tilePopUpNode.setProperty("popupHeader", h2Text);
+							} 
+							//end of tile pop up
+							
 							Elements descriptionText = ele
 									.getElementsByTag("p");
 							if (descriptionText != null) {

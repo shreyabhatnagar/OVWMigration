@@ -343,6 +343,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 				}
 			}
 			NodeIterator listNodeIterator = trainingAndEventsRightNode.hasNodes() ? trainingAndEventsRightNode.getNodes("list*") : null;
+			Elements ulEle = null;
 			if (listNodeIterator != null) {
 				int nodeSize = (int) listNodeIterator.getSize();
 				log.debug("node Size" + nodeSize + "ele Size" + count);
@@ -355,9 +356,12 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 				} else if (nodeSize < count) {
 					Node listNode;
 					for (Element ele : listElements) {
+						ulEle = ele.getElementsByTag("ul");
 						if (listNodeIterator.hasNext()) {
+							if(!ulEle.isEmpty()){
 							listNode = (Node) listNodeIterator.next();
 							setListElements(ele, listNode, session, locale, urlMap);
+							}
 						}
 					}
 					sb.append(Constants.MISMATCH_IN_LIST_NODES + count
