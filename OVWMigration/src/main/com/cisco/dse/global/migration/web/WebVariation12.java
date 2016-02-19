@@ -129,6 +129,7 @@ public class WebVariation12 extends BaseAction {
 					Element htmlBlobElements = doc.select("div.gd-right").last();
 					if (htmlBlobElements != null) {
 							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements, "", locale, sb, urlMap);
+							
 							oldImage.append(htmlBlobContent);
 					}
 					//End of getContent
@@ -136,8 +137,8 @@ public class WebVariation12 extends BaseAction {
 					if (webNode.hasNode("gd22v2-right/htmlblob")) {
 						Node htmlBlobNode = webNode.getNode("gd22v2-right/htmlblob");
 						if (!StringUtils.isEmpty(htmlBlobContent)) {
-							String html =oldImage.toString().replaceAll("<br>", "");
-							htmlBlobNode.setProperty("html",html);
+							//String html =oldImage.toString().replaceAll("<br>", "");
+							htmlBlobNode.setProperty("html",oldImage.toString());
 							log.debug("HtmlBlob Content migrated is done.");
 						}
 					} else {
