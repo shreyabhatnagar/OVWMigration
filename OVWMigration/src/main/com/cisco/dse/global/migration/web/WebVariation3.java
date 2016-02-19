@@ -167,7 +167,7 @@ public class WebVariation3 extends BaseAction{
 						Element imageEle = doc.select("div.c00-pilot").last();
 						migrateRightRailImage(imageEle,midSizeLowerRightNode,locale,urlMap);
 					}
-					}catch(Exception e){
+				}catch(Exception e){
 					log.error("Exception in tileBolder migration");
 					sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
 				}
@@ -578,18 +578,21 @@ public class WebVariation3 extends BaseAction{
 							sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
 						}
 					}else{
-						sb.append(Constants.SPOTLIGHT_ELEMENT_MISMATCH+size+Constants.SPOTLIGHT_ELEMENT_COUNT+elesize+".</li>");
+						//						sb.append(Constants.SPOTLIGHT_ELEMENT_MISMATCH+size+Constants.SPOTLIGHT_ELEMENT_COUNT+elesize+".</li>");
 					}
 				}
-				if(spNodes.hasNext()){
+				if(size!=elesize){
 					sb.append(Constants.SPOTLIGHT_ELEMENT_MISMATCH+size+Constants.SPOTLIGHT_ELEMENT_COUNT+elesize+".</li>");
 				}
-			}else{
+				/*if(spNodes.hasNext()){
+					sb.append(Constants.SPOTLIGHT_ELEMENT_MISMATCH+size+Constants.SPOTLIGHT_ELEMENT_COUNT+elesize+".</li>");
+				}*/
+			}/*else{
 				sb.append(Constants.SPOTLIGHT_NODE_NOT_FOUND);
-			}
-		}else{
+			}*/
+		}/*else{
 			sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
-		}
+		}*/
 
 	}
 

@@ -348,7 +348,7 @@ public class ArchitechtureVariation1 extends BaseAction{
 							}
 							ulnodeList.setProperty("listitems",listAdd.toArray(new String[listAdd.size()]));
 						}else{
-							sb.append(Constants.LIST_NODE_NOT_FOUND);
+							sb.append("<li>Extra list elemnt found in web publisher page left rail. As there is no node to map it, that list is not migrated</li>");
 						}
 					}else{
 						sb.append(Constants.MISMATCH_IN_LIST_COUNT);

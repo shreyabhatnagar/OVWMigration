@@ -338,18 +338,20 @@ public class WebVariation11 extends BaseAction{
 
 	private void migrateRightPanel(Document doc, Node orderServicesRightNode,String locale, Map<String, String> urlMap) throws PathNotFoundException, RepositoryException {
 
-		Elements textElements = doc.select("div.fw-cisco-assistant,div.s01v8-pilot");
+//		Elements textElements = doc.select("div.fw-cisco-assistant,div.s01v8-pilot"); fix-Anudeep
+		Elements textElements = doc.select("div.contact_us");
 		Node htmlBlob = orderServicesRightNode.hasNode("htmlblob") ? orderServicesRightNode.getNode("htmlblob") : null;
 		
 		if(textElements.isEmpty()){
-			textElements = doc.select("div.s01-pilot");
+//			textElements = doc.select("div.s01-pilot"); fix-Anudeep
+			textElements = doc.select("div#framework-content-right");
 		}
 		boolean fHolderExists = false;
 		if(htmlBlob != null){
 			if(!textElements.isEmpty()){
 				Element textElement = textElements.first();
-				if(textElement != null){
-					Elements childelements = textElement.children();
+				/*if(textElement != null){
+					Elements childelements = textElement.children(); fix-Anudeep
 					for(Element childElement : childelements){
 						if(childElement.hasClass("local-f-holder_a")){
 							fHolderExists =  true;
@@ -359,14 +361,14 @@ public class WebVariation11 extends BaseAction{
 					if(!fHolderExists){
 						textElement = doc.select("div.contcss").first();
 						//log.debug("text element: "+ textElement);
-					}
+					}*/
 					if(textElement != null){
 						String html = FrameworkUtils.extractHtmlBlobContent(textElement, "",locale, sb, urlMap);
 						htmlBlob.setProperty("html", html);
 					}
 					
 					
-				}
+//				} fix-Anudeep
 			} else {
 				log.debug("Right panel is not available");
 				sb.append(Constants.RIGHT_PANEL_ELEMENT_NOT_FOUND);

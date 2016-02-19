@@ -281,7 +281,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											// start hero pop up
 											Node imageLinkNode = heroPanelNode.hasNode("imageLink")?heroPanelNode.getNode("imageLink"):null;
 											Node heroPanelPopUpNode = null;
-											Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+											Elements lightBoxElements = ele.select("div.c50-text").select("a.c26v4-lightbox");
 											Element lightBoxElement = null;
 											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 												lightBoxElement = lightBoxElements.first();
@@ -298,8 +298,8 @@ public class RProductLandingVariation2 extends BaseAction {
 											if (heroPanelPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(heroPanelTitle)) {
 												heroPanelPopUpNode.setProperty("header", heroPanelTitle);
 											}
-											/*if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
-												Element lightBoxElement = lightBoxElements.first();
+											if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
+												lightBoxElement = lightBoxElements.first();
 												if (StringUtils.isNotBlank(heroPanelTitle)) {
 													if (heroPanelPopUpNode != null) {
 														heroPanelPopUpNode.setProperty("popupHeader", heroPanelTitle);
@@ -308,7 +308,7 @@ public class RProductLandingVariation2 extends BaseAction {
 														log.debug("No pop-up node found for the hero panel node " + heroPanelNode.getPath());
 													}
 												}
-											}*/
+											}
 											// end hero pop up
 										}
 									}
