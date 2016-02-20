@@ -1273,7 +1273,9 @@ public class ProductLandingVariation6 extends BaseAction {
 								}
 
 							} else {
-								sb.append("<li>right most 'mbox' grid is missing.</li>");
+								if(c23v2_pilots.size() != 4){
+									sb.append("<li>right most 'mbox' grid is missing.</li>");
+								}
 							}
 
 						} else {
