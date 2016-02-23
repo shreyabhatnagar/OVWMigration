@@ -166,6 +166,8 @@ public class WebVariation3 extends BaseAction{
 					if(doc.select("div.c00-pilot").size() > 1){
 						Element imageEle = doc.select("div.c00-pilot").last();
 						migrateRightRailImage(imageEle,midSizeLowerRightNode,locale,urlMap);
+					}else{
+						sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 					}
 				}catch(Exception e){
 					log.error("Exception in tileBolder migration");

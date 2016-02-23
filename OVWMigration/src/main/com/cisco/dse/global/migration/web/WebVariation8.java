@@ -96,7 +96,7 @@ public class WebVariation8 extends BaseAction {
 				//start Html Blobs migration
 				try{
 					log.debug("start Html Blobs migration");
-					Elements midEles = doc.select("div.gd42v1-pilot").first().select("div.c00-pilot");
+					Elements midEles = !doc.select("div.gd42v1-pilot").isEmpty() ?doc.select("div.gd42v1-pilot").first().select("div.c00-pilot"):null;
 					if(midEles != null){
 						migrateHtmlBlobs(midEles , industriesLeftNode, locale , urlMap);
 						log.debug("Html Blobs Element Migrated");
