@@ -268,7 +268,7 @@ public class FrameworkUtils {
 						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/")) + imageName;
 					}
 					newImagePath = setContentToDAM(path, imgRef, locale);//method to hit the service to migrate the image.
-				} else if (!path.equalsIgnoreCase(imgRef)) {//if the image path is form content dam and if the image paths of the wem and web are different when returning the web image path.
+				} else if (!path.equalsIgnoreCase(imgRef)&&path.startsWith("/c/en/us")&&path.startsWith("/content/en/us")) {//if the image path is form content dam and if the image paths of the wem and web are different when returning the web image path.
 					log.debug("Path of the image is wem image path." + path);
 					if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
 						log.debug("Adding domain to the image path.");
