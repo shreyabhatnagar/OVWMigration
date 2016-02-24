@@ -134,7 +134,7 @@ public class FrameworkUtils {
 								}
 								if (StringUtils.isNotBlank(pageTitle)) {
 									pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
-									if(pageTitle.contains("- Cisco")){
+									if(pageTitle.trim().endsWith("- Cisco")){
                                         pageTitle = pageTitle.substring(0,pageTitle.lastIndexOf("- Cisco"));     
 									}
 									if (jcrNode.hasProperty("jcr:title")) {
