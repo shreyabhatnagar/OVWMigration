@@ -95,7 +95,7 @@ public class ProductLandingVariation6 extends BaseAction {
 							frameElements = heropanelElement
 									.select("div.frame");
 						} else {
-							sb.append("<li>Hero Panel is empty.</li>");
+							sb.append("<li>Hero Panel elements not found on web page.</li>");
 						}
 					} else {
 						sb.append("<li>No Hero Panel found.</li>");
@@ -349,7 +349,7 @@ public class ProductLandingVariation6 extends BaseAction {
 								}
 
 							} else {
-								sb.append("<li>Hero Panel text element not found ('div.c50-text' elements exists but size of the elements is zero)</li>");
+								sb.append("<li>Primary CTA element Not found.</li>");
 							}
 						} else {
 							sb.append("<li>Hero Panel text elements not found ('div.c50-text' class not found in the document)</li>");

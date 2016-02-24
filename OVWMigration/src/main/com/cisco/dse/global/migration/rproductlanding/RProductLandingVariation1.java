@@ -333,7 +333,7 @@ public class RProductLandingVariation1 extends BaseAction {
 					}
 
 					Elements heroLargeElements = doc.select("div.c50-pilot");
-					if (heroLargeElements != null) {
+					if (!heroLargeElements.isEmpty()) {
 						Element heroLargeElement = heroLargeElements.first();
 						if (heroLargeElement != null) {
 							Elements heroLargeFrameElements = heroLargeElement

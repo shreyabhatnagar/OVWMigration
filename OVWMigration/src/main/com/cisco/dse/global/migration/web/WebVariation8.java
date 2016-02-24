@@ -97,6 +97,11 @@ public class WebVariation8 extends BaseAction {
 				try{
 					log.debug("start Html Blobs migration");
 					Elements midEles = !doc.select("div.gd42v1-pilot").isEmpty() ?doc.select("div.gd42v1-pilot").first().select("div.c00-pilot"):null;
+					if(midEles == null){
+						
+						midEles = doc.select("div.standard-holder-in");
+						
+					}
 					if(midEles != null){
 						migrateHtmlBlobs(midEles , industriesLeftNode, locale , urlMap);
 						log.debug("Html Blobs Element Migrated");
@@ -105,7 +110,7 @@ public class WebVariation8 extends BaseAction {
 					}
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
-					log.debug("Exception in Html Blobs Element Migration"+e);
+					log.debug("Exception in Html Blobs Element Migration", e);
 				}
 				//end Html Blobs migration
 
