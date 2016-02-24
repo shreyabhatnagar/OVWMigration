@@ -421,7 +421,8 @@ public class WebVariation2 extends BaseAction {
 						}
 						log.debug("gd-right " + htmlEle);
 						//Fix By Aziz
-						Element popUp = htmlEle.getElementsByClass("c23-pilot").first().getElementsByTag("a").first();
+						Element c23Ele = htmlEle.getElementsByClass("c23-pilot").first();
+						Element popUp = c23Ele.getElementsByTag("a").first();
 						if(popUp != null){
 							if(popUp.hasAttr("data-config-targetlightbox")){
 								String id = popUp.attr("data-config-targetlightbox");
