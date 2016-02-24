@@ -509,7 +509,7 @@ public class ProductLandingVariation6 extends BaseAction {
 				try {
 					Elements gd11v1 = doc.select("div.gd11v1-mid");
 					int i = 0;
-					if (gd11v1 != null) {
+					if (gd11v1 != null && !gd11v1.isEmpty()) {
 						if (layoutOverViewNode != null) {
 							if (layoutOverViewNode.hasNode("gd11v1")) {
 								Node gd11v1_Nodes = layoutOverViewNode
