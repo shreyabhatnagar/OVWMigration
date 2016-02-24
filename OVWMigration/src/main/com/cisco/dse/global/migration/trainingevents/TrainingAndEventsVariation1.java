@@ -244,22 +244,21 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 		Elements htmlBlobElements = null;
 		
 		Node htmlBlobNode = trainingAndEventsLeftNode.hasNode("htmlblob_0") ? trainingAndEventsLeftNode.getNode("htmlblob_0") : null;
-		if (locale.equals("en_au")) {
+		if (locale.equals("en_au") || locale.equals("en_sg")) {
 			String html = "";
-			Elements gd21PilotElements = doc.select("div.gd21-pilot");
+			Elements gd21PilotElements = !doc.select("div.gd21-pilot").isEmpty()?doc.select("div.gd21-pilot").first().getElementsByTag("table"):null;
 			if (gd21PilotElements != null) {
-				for (Element gd21PilotElement : gd21PilotElements) {
-					if (gd21PilotElement.select("div.c50-pilot ").size() > 0) {
-						gd21PilotElement.select("div.c50-pilot ").remove();
-					}
-					html = html + FrameworkUtils.extractHtmlBlobContent(gd21PilotElement, "",locale, sb, urlMap);
-				}
+					html = html + FrameworkUtils.extractHtmlBlobContent(gd21PilotElements.first(), "",locale, sb, urlMap);
 			}
 			Elements gd22PilotElements = doc.select("div.gd22-pilot");
 			if (gd22PilotElements != null) {
 				for (Element gd22PilotElement : gd22PilotElements) {
 					html = html + FrameworkUtils.extractHtmlBlobContent(gd22PilotElement, "",locale, sb, urlMap);
 				}
+			}
+			Elements gd21LastPilotElements = !doc.select("div.gd21-pilot").isEmpty()?doc.select("div.gd21-pilot").last().select("div.gd-mid"):null;
+			if (gd21LastPilotElements != null && !gd21LastPilotElements.isEmpty()) {
+					html = html + FrameworkUtils.extractHtmlBlobContent(gd21LastPilotElements.first(), "",locale, sb, urlMap);
 			}
 			if(htmlBlobNode != null){
 				if (StringUtils.isNotBlank(html)) {
