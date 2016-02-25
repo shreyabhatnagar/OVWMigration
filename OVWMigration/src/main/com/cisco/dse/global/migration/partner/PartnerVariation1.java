@@ -188,12 +188,25 @@ public class PartnerVariation1 extends BaseAction {
 
 					log.debug("Secured start Text Migration");
 					Element secTextEle = securedDoc.select("div.gd11-pilot").last().select("div.gd13v2-pilot").first();
+					Elements eleOfgd13v2 = null;
 					if(secTextEle == null){
 						secTextEle = securedDoc.select("div.gd11-pilot").last().select("div.compact").first();
 						if(secTextEle == null){
 							secTextEle = securedDoc.select("div.gd12v1-pilot").last();
 							if(secTextEle == null){
 								secTextEle = securedDoc.select("div.gd13v2-pilot").last();
+								if(secTextEle != null){
+									eleOfgd13v2 = securedDoc.select("div.gd13v2-pilot");
+									if(eleOfgd13v2.size() > 2){
+										int i=0;
+										for(Element ele : eleOfgd13v2){
+											if(i == 1){
+												secTextEle.prepend(ele.html());
+											}
+											i++;
+										}
+									}
+								}
 							}
 						}
 					}

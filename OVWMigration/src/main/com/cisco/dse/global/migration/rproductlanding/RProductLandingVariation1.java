@@ -717,7 +717,7 @@ public class RProductLandingVariation1 extends BaseAction {
 
 														drawersPanelNode = drawerPanelsIterator
 																.nextNode();
-													}
+													
 													Elements seriesElements = drawerPanelLiElement
 															.select("div.series");
 													if (seriesElements != null) {
@@ -847,7 +847,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																List<String> list3 = new ArrayList<String>();
 																if (subDrawerIterator.hasNext()) {
 																	subdrawerpanel = subDrawerIterator.nextNode();
-																}
+																
 																if (subItem != null) {
 
 																	Elements siTitles = subItem.getElementsByTag("h4");
@@ -1154,6 +1154,7 @@ public class RProductLandingVariation1 extends BaseAction {
 																	misMatchFlag = false;
 																}
 															}
+															}
 
 														}
 
@@ -1176,6 +1177,7 @@ public class RProductLandingVariation1 extends BaseAction {
 													if(subdrawerTitleNotFoundFlag){
 														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 													}
+												}
 												}
 
 											}
