@@ -244,7 +244,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 		Elements htmlBlobElements = null;
 		
 		Node htmlBlobNode = trainingAndEventsLeftNode.hasNode("htmlblob_0") ? trainingAndEventsLeftNode.getNode("htmlblob_0") : null;
-		if (locale.equals("en_au") || locale.equals("en_sg")) {
+		if (locale.equals("en_au") || locale.equals("en_sg") || locale.equals("en_id")) {
 			String html = "";
 			Elements gd21PilotElements = !doc.select("div.gd21-pilot").isEmpty()?doc.select("div.gd21-pilot").first().getElementsByTag("table"):null;
 			if (gd21PilotElements != null) {

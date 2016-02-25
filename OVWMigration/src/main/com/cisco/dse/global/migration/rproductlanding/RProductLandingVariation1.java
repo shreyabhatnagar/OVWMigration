@@ -824,9 +824,11 @@ public class RProductLandingVariation1 extends BaseAction {
 													javax.jcr.Node subdrawerpanel = null;
 													Elements subDrawerColl = drawerPanelLiElement.select("ul.items");
 													Elements clearfixdivs = drawerPanelLiElement.select("li.clearfix");
+													boolean alignExists = false;
 													for(Element cFix : clearfixdivs){
 														Element div = cFix.getElementsByTag("div").first();
 														if(div.hasAttr("align")){
+															alignExists = true;
 															sb.append(Constants.EXTRA_LINK_IN_SUBDRAWER);
 														}
 													}
@@ -839,7 +841,11 @@ public class RProductLandingVariation1 extends BaseAction {
 
 														if (subItems != null) {
 															for (Element subItem : subItems) {
-																if ((clearfixdivs.size() != subDrawerIterator.getSize())) {
+																int clearFixDivSize = 0;
+																if(clearfixdivs.size() != 0 && alignExists){
+																	clearFixDivSize = clearfixdivs.size()-1;
+																}
+																if ((clearFixDivSize != subDrawerIterator.getSize())) {
 																	misMatchFlag = false;
 																}
 																List<String> list1 = new ArrayList<String>();
