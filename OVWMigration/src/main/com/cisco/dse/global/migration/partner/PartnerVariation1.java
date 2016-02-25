@@ -88,8 +88,8 @@ public class PartnerVariation1 extends BaseAction {
 
 			try{
 				securedDoc = getSecuredConnection(loc);
-				
-				
+
+
 			}catch(Exception e){
 				log.error("Exception : ",e);
 			}
@@ -114,7 +114,7 @@ public class PartnerVariation1 extends BaseAction {
 					}else{
 						sb.append(Constants.HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 					}
-					
+
 					log.debug("Start Secured Hero Element Migration.");
 					Element secHeroEle = securedDoc.select("div.c50v6-pilot").first();
 					if(secHeroEle != null){
@@ -128,7 +128,7 @@ public class PartnerVariation1 extends BaseAction {
 					}else{
 						sb.append(Constants.SECURED_HERO_CONTENT_PANEL_ELEMENT_NOT_FOUND);
 					}
-					
+
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HERO_MIGRATION);
 					log.debug("Exception in Hero Element Migration"+e);
@@ -157,7 +157,7 @@ public class PartnerVariation1 extends BaseAction {
 					}else{
 						sb.append(Constants.HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 					}
-					
+
 					log.debug("start Secured Html Blobs migration");
 					Element secMidEle = securedDoc.select("div.gd13v2-pilot").first();
 					if(secMidEle != null){
@@ -166,9 +166,9 @@ public class PartnerVariation1 extends BaseAction {
 					}else{
 						sb.append(Constants.SECURED_HTMLBLOB_CONTENT_DOES_NOT_EXIST);
 					}
-					
-					
-					
+
+
+
 				}catch(Exception e){
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.debug("Exception in Top Right Element Migration"+e);
@@ -185,7 +185,7 @@ public class PartnerVariation1 extends BaseAction {
 					}else{
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
-					
+
 					log.debug("Secured start Text Migration");
 					Element secTextEle = securedDoc.select("div.gd11-pilot").last().select("div.gd13v2-pilot").first();
 					if(secTextEle == null){
@@ -198,13 +198,13 @@ public class PartnerVariation1 extends BaseAction {
 						}
 					}
 					if(secTextEle != null){
-						
+
 						migrateText(secTextEle , partnerDownBottomNode , locale, urlMap);
 						log.debug("Secured Text is Migrated");
 					}else{
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
-					
+
 				}catch(Exception e){
 					log.debug("Exception in Text Migration");
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
@@ -252,12 +252,14 @@ public class PartnerVariation1 extends BaseAction {
 			}
 			String heroImage = FrameworkUtils.extractImagePath(heroEle, sb);
 			heroImage = FrameworkUtils.migrateDAMContent(heroImage, "", locale, sb);
-			if(heroImage != ""){
-				Node heroImageNode = heroPanelNode.hasNode("image")?heroPanelNode.getNode("image"):null;
-				if(heroImageNode != null){
-					heroImageNode.setProperty("fileReference", heroImage);
-				}else{
-					sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
+			if(heroImage!=null){
+				if(heroImage != ""){
+					Node heroImageNode = heroPanelNode.hasNode("image")?heroPanelNode.getNode("image"):null;
+					if(heroImageNode != null){
+						heroImageNode.setProperty("fileReference", heroImage);
+					}else{
+						sb.append(Constants.HERO_IMAGE_NODE_NOT_FOUND);
+					}
 				}
 			}else{
 				sb.append(Constants.HERO_IMAGE_NOT_AVAILABLE);
@@ -297,7 +299,7 @@ public class PartnerVariation1 extends BaseAction {
 						if(midNode.hasNode("htmlblob")){
 							Node htmlBlobNode = midNode.getNode("htmlblob");
 							String outerHtml = FrameworkUtils.extractHtmlBlobContent(htmlBlob, "", locale, sb, urlMap);
-							
+
 							htmlBlobNode.setProperty("html", outerHtml);
 						}else{
 							sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
@@ -381,10 +383,10 @@ public class PartnerVariation1 extends BaseAction {
 			String locale, Map<String, String> urlMap) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
 		Node textNode = partnerBottomNode.hasNode("text_0")?partnerBottomNode.getNode("text_0"):null;
 		if(textNode != null){
-			
+
 			String textToSet = FrameworkUtils.extractHtmlBlobContent(textEle, "", locale, sb, urlMap);
 			textNode.setProperty("text", textToSet.replaceAll("<p>&nbsp;</p>", ""));
-			
+
 		}else{
 			sb.append(Constants.TEXT_NODE_NOT_FOUND);
 		}
