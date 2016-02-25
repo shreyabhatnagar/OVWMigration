@@ -349,10 +349,14 @@ public class WebVariation2 extends BaseAction {
 										if (StringUtils.isNotBlank("aText")) {
 											primaryCtaNode.setProperty("linktext", aText);
 										}
+										Node linkUrlNode = primaryCtaNode.hasNode("linkurl")? primaryCtaNode.getNode("linkurl"):null;
+										if(linkUrlNode != null){
+										
 										if (StringUtils.isNotBlank("aHref")) {
-											primaryCtaNode.setProperty("linkurl", aHref);
+											linkUrlNode.setProperty("url", aHref);
 										}
-									} else {
+										}
+										} else {
 										sb.append("<li>Primary cta node not found.</li>");
 
 									}
