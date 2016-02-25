@@ -58,7 +58,7 @@ public class WebVariation1 extends BaseAction{
 		sb.append("<td>" + "<a href=" + loc + ">" + loc + "</a>" + "</td>");
 		sb.append("<td><ul>");
 		
-		String webNodePath = pagePropertiesPath+ "/content_parsys/generic/layout-generic/gd12v2";
+		String webNodePath = pagePropertiesPath+ "/content_parsys/about/layout-about/gd12v2";
 		javax.jcr.Node webNode = null;
 		javax.jcr.Node pageJcrNode = null;
 		try {
