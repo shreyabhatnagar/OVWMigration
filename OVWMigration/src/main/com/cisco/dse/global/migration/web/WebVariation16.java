@@ -120,6 +120,9 @@ public class WebVariation16 extends BaseAction {
 							for(Element e:h3Ele){
 								Element a = e.getElementsByTag("a").first();
 								if(a!=null){
+									if(e.nextElementSibling().tagName().equals("p")){
+										sb.append("<li>Extra description found in web page</li>");
+									}
 									e.remove();
 									sb.append("<li>Subtitle with link found extra in left rail.</li>");
 								}
