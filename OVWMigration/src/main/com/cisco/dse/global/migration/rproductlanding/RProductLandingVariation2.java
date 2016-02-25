@@ -244,8 +244,8 @@ public class RProductLandingVariation2 extends BaseAction {
 															heroCta.setProperty("linktype","Url");
 														}
 													}
-												heroCta.setProperty("url",
-														heroPanellinkUrl);
+													heroCta.setProperty("url",
+															heroPanellinkUrl);
 												}
 											} else {
 												sb.append(Constants.HERO_SLIDE_LINKURL_NOT_FOUND);
@@ -630,9 +630,9 @@ public class RProductLandingVariation2 extends BaseAction {
 					}catch(Exception e){
 						log.error("Exception in drawer : ",e);
 					}
-					
+
 					//end drawer
-					
+
 					//start of text
 					try{
 						Elements textEle = doc.select("div.gd-left").select("div.c00-pilot,div.cc00-pilot");
@@ -975,7 +975,7 @@ public class RProductLandingVariation2 extends BaseAction {
 		session.save();
 		return sb.toString();
 	}
-/*	public void setForHero(Elements heroElements, Node heroPanelLarge, String locale, Map<String, String> urlMap) {
+	/*	public void setForHero(Elements heroElements, Node heroPanelLarge, String locale, Map<String, String> urlMap) {
 		try {
 			Value[] panelPropertiest = null;
 			Property panelNodesProperty = heroPanelLarge.hasProperty("panelNodes") ? heroPanelLarge.getProperty("panelNodes") : null;
@@ -1063,8 +1063,8 @@ public class RProductLandingVariation2 extends BaseAction {
 		}
 	}
 	//end setting of heropanel
-*/
-	
+	 */
+
 	//start setting of selectorbar
 	public void selectorBarTranslate(Node selectorBarPanelNode, Element ele,Map<String,String> urlMap, String locale) {
 
@@ -1233,18 +1233,20 @@ public class RProductLandingVariation2 extends BaseAction {
 							aText = aText+" "+ownText;
 						}
 						ctaNode.setProperty("linktext",aText);
-						if(tileNode.hasProperty("url")){
-							String aHref = aEle.absUrl("href");
-							if(StringUtil.isBlank(aHref)){
-								aHref = aEle.attr("href");
-							}
-							// Start extracting valid href
-							log.debug("Before anchorHref" + aEle.attr("href") + "\n");
-							String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
-							log.debug("after anchorHref" + anchorHref + "\n");
-							// End extracting valid href
-							ctaNode.setProperty("url",anchorHref);	
+						//						if(tileNode.hasProperty("url")){
+						String aHref = aEle.absUrl("href");
+						if(StringUtil.isBlank(aHref)){
+							aHref = aEle.attr("href");
 						}
+						// Start extracting valid href
+						log.debug("Before anchorHref" + aEle.attr("href") + "\n");
+						String anchorHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+						log.debug("after anchorHref" + anchorHref + "\n");
+						// End extracting valid href
+						if(!StringUtil.isBlank(anchorHref)){
+							ctaNode.setProperty("url",anchorHref);
+						}
+						//						}
 					}
 				}else{
 					sb.append("<li>No cta link available for tile in right rail.</li>");
