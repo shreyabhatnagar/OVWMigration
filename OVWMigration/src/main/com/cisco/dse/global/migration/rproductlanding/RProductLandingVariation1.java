@@ -842,8 +842,12 @@ public class RProductLandingVariation1 extends BaseAction {
 														if (subItems != null) {
 															for (Element subItem : subItems) {
 																int clearFixDivSize = 0;
+																if(!clearfixdivs.isEmpty()){
 																if(clearfixdivs.size() != 0 && alignExists){
 																	clearFixDivSize = clearfixdivs.size()-1;
+																}else {
+																	clearFixDivSize = clearfixdivs.size();
+																}
 																}
 																if ((clearFixDivSize != subDrawerIterator.getSize())) {
 																	misMatchFlag = false;
