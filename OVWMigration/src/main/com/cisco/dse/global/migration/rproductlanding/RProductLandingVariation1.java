@@ -955,8 +955,11 @@ public class RProductLandingVariation1 extends BaseAction {
 																	if (indDetailsElements != null) {
 																		Element indDetailsElement = indDetailsElements
 																				.first();
+																		Document docString;
 																		if (indDetailsElement != null) {
-																			Elements indItems = indDetailsElement
+																			String html = FrameworkUtils.extractHtmlBlobContent(indDetailsElement, "", locale, sb, urlMap);
+																			docString = Jsoup.parse(html);
+																			Elements indItems = docString
 																					.getElementsByTag("li");
 																			if (indItems != null) {
 																				for (Element indItem : indItems) {
