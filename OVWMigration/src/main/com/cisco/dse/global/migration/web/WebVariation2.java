@@ -450,9 +450,9 @@ public class WebVariation2 extends BaseAction {
 									sb.append("<li>PopUp anchor element not found in web page.</li>");
 								}
 							}
-						}else{
+						}/*else{
 							sb.append("<li>PopUp anchor element not found in web page.</li>");
-						}
+						}*/
 						//End of Fix
 						htmlContent = FrameworkUtils.extractHtmlBlobContent(
 								htmlEle, "", locale, sb, urlMap);
