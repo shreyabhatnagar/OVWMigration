@@ -1308,7 +1308,11 @@ public class RProductLandingVariation1 extends BaseAction {
 												.getNode("cta") : null;
 										ctaNode.setProperty("linktext",
 												anchorText);
+										if(StringUtils.isNotBlank(anchorHref)){
 										ctaNode.setProperty("url", anchorHref);
+										}else{
+											sb.append("<li> Link is invalid/not found for tile bordered component. </li>");
+										}
 										log.debug("title, description, linktext and linkurl are created at "
 												+ rightRailNode.getPath());
 									} else {

@@ -154,7 +154,7 @@ public class ServiceListingVariation02 extends BaseAction {
 						sb.append(Constants.SPOTLIGHT_ELEMENT_NOT_FOUND);
 					}
 				}catch(Exception e){
-					log.error(e);
+					log.error("exception in updating spot light: ",e);
 					sb.append(Constants.UNABLE_TO_UPDATE_SPOTLIGHT);
 				}
 				// End of spotlight component
@@ -410,7 +410,8 @@ public class ServiceListingVariation02 extends BaseAction {
 		Element h2Ele = ele.getElementsByTag("h2").first();
 		if (h2Ele != null) {
 			title = h2Ele.text();
-			String tLink = h2Ele.getElementsByTag("a").first().absUrl("href");
+			String tLink = h2Ele.getElementsByTag("a") != null ?  h2Ele.getElementsByTag("a").first() !=  null ? h2Ele.getElementsByTag("a").first().absUrl("href"): null : "";
+			
 			if(StringUtil.isBlank(tLink)){
 				tLink = h2Ele.getElementsByTag("a").first().attr("href");
 			}
