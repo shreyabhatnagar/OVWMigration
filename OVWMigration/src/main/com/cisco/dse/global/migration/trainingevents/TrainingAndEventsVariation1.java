@@ -142,6 +142,7 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 			String pText = "";
 			String aText = "";
 			String aHref = "";
+			int pCount = 0;
 			Node heroPanelNode = null;
 			Elements heroElements = doc.select("div.c50-pilot");
 			if (heroElements.size() > 0) {
@@ -174,7 +175,17 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 	
 									Elements descriptionText = ele.getElementsByTag("p");
 									if (descriptionText != null) {
-										pText = descriptionText.first().text();
+										if(descriptionText.size() > 2){
+											for(Element desEle : descriptionText){
+												pCount ++;
+												pText = pText + desEle.outerHtml();
+												if(pCount == 2){
+													break;
+												}
+											}
+										}else{
+											pText = descriptionText.outerHtml();
+										}
 										heroPanelNode.setProperty("description", pText);
 									} else {
 										sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);

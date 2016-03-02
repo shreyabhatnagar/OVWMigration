@@ -134,6 +134,9 @@ public class WebVariation1 extends BaseAction{
 					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
 						htmlBlobElements = doc.select("div.gd23-pilot");
 					}
+					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
+						htmlBlobElements = doc.select("div.content-region-left-top");
+					}
 					if (htmlBlobElements != null) {
 						for(Element ele : htmlBlobElements )
 						{
@@ -177,6 +180,9 @@ public class WebVariation1 extends BaseAction{
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
 					Elements htmlBlobElements = doc.select("div.gd-right").select("div.c00v0-pilot");
+					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
+						htmlBlobElements = doc.select("div#framework-content-right");
+					}
 					if(htmlBlobElements==null || htmlBlobElements.isEmpty()){
 						htmlBlobElements = doc.select("div.f-holder");
 					}

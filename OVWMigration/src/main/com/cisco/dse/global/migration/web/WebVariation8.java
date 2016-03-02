@@ -98,9 +98,12 @@ public class WebVariation8 extends BaseAction {
 					log.debug("start Html Blobs migration");
 					Elements midEles = !doc.select("div.gd42v1-pilot").isEmpty() ?doc.select("div.gd42v1-pilot").first().select("div.c00-pilot"):null;
 					if(midEles == null){
-						
+
 						midEles = doc.select("div.standard-holder-in");
-						
+						if(midEles!=null){
+							midEles.select("h2").remove();
+						}
+
 					}
 					if(midEles != null){
 						migrateHtmlBlobs(midEles , industriesLeftNode, locale , urlMap);
