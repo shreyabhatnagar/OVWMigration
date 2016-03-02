@@ -212,7 +212,7 @@ public class WebVariation13 extends BaseAction {
 					log.debug("Started migrating HtmlBlob content.");
 					Elements htmlBlobElements = doc.select("div.guest");
 					Elements htmlBlob4Ele  = htmlBlobElements.select("div#col3");
-					if (htmlBlob4Ele != null) {
+					if (!htmlBlob4Ele.isEmpty()) {
 							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlob4Ele.first(), "", locale, sb, urlMap);
 						}
 					log.debug("htmlBlobContent third col3 migrated is done." + htmlBlobContent);
@@ -233,7 +233,7 @@ public class WebVariation13 extends BaseAction {
 						String securedHtmlBlobThirdContent = "";
 						Elements securedHtmlBlobElements = securedDoc.select("div.guest");
 						Elements securedHtmlBlob4Ele  = securedHtmlBlobElements.select("div#col3");
-						if (securedHtmlBlob4Ele != null) {
+						if (!securedHtmlBlob4Ele.isEmpty()) {
 							securedHtmlBlobThirdContent = FrameworkUtils.extractHtmlBlobContent(securedHtmlBlob4Ele.first(), "", locale, sb, urlMap);
 						}
 						log.debug("securedHtmlBlobContent third col3 migrated is done." + securedHtmlBlobThirdContent);

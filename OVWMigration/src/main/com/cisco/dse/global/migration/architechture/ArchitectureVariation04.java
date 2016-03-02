@@ -627,12 +627,17 @@ public class ArchitectureVariation04 extends BaseAction {
 					for (Element ele : aElements) {
 						JSONObject obj = new JSONObject();
 						Element aEle = ele.getElementsByTag("a").first();
-						String aText = aEle.text();
-						String aHref = aEle.absUrl("href");
+						String aText = "";
+						String aHref = "";
+						if(aEle != null){
+							aText = aEle.text();
+						
+						aHref = aEle.absUrl("href");
 						if(StringUtil.isBlank(aHref)){
 							aHref = aEle.attr("href");	
 						}
 						aHref = FrameworkUtils.getLocaleReference(aHref, urlMap, locale, sb);
+						}
 						obj.put("linktext", aText);
 						obj.put("linkurl", aHref);
 						obj.put("icon", "");
