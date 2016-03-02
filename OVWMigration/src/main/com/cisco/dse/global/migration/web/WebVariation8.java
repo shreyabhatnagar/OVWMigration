@@ -120,10 +120,14 @@ public class WebVariation8 extends BaseAction {
 				//start RightRail migration
 				try{
 					log.debug("start RightRail migration");
-					Element topRightEle = doc.select("div.f-holder").first();
+					Element topRightEle = doc.select("div#framework-content-right").last();
+					if(topRightEle ==null){
+					 topRightEle = doc.select("div.f-holder").first();
+					}
 					if(topRightEle == null){
 						topRightEle = doc.select("div.feature-holder").first();
 					}
+					
 					migrateHelpHtmlBlob(topRightEle , industriesRightNode, locale , urlMap);
 					log.debug("RightRail Element Migrated");
 				}catch(Exception e){
