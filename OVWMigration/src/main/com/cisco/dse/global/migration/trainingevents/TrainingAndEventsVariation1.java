@@ -178,13 +178,13 @@ public class TrainingAndEventsVariation1 extends BaseAction{
 										if(descriptionText.size() > 2){
 											for(Element desEle : descriptionText){
 												pCount ++;
-												pText = pText + desEle.outerHtml();
+												pText = pText + desEle.text();
 												if(pCount == 2){
 													break;
 												}
 											}
 										}else{
-											pText = descriptionText.outerHtml();
+											pText = descriptionText.first().text();
 										}
 										heroPanelNode.setProperty("description", pText);
 									} else {
