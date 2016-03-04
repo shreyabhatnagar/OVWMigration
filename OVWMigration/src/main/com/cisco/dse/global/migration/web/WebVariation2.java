@@ -355,6 +355,10 @@ public class WebVariation2 extends BaseAction {
 										if (StringUtils.isNotBlank("aHref")) {
 											linkUrlNode.setProperty("url", aHref);
 										}
+										}else{
+											if (StringUtils.isNotBlank("aHref")) {
+												primaryCtaNode.setProperty("linkurl", aHref);
+											}
 										}
 										} else {
 										sb.append("<li>Primary cta node not found.</li>");

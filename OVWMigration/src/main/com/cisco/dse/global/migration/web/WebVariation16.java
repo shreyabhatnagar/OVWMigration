@@ -311,7 +311,7 @@ public class WebVariation16 extends BaseAction {
 							if(StringUtil.isBlank(url)){
 								url = a.attr("href");
 							}
-							FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+							url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 							if(!StringUtil.isBlank(linktext)){
 								linkData.setProperty("linktext",linktext);
 							}
@@ -381,7 +381,7 @@ public class WebVariation16 extends BaseAction {
 							aElet.remove();
 						}
 					}
-					FrameworkUtils.getLocaleReference(lUrl, urlMap, locale, sb);
+					lUrl = FrameworkUtils.getLocaleReference(lUrl, urlMap, locale, sb);
 					if(!StringUtil.isBlank(linkText)){
 						linkdata.setProperty("linktext",linkText);
 					}
@@ -403,7 +403,7 @@ public class WebVariation16 extends BaseAction {
 		if(StringUtil.isBlank(url)){
 			url = anEle.attr("href");
 		}
-		FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+		url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 		if(!StringUtil.isBlank(title)){
 			tileNode.setProperty("title",title);
 		}
@@ -443,7 +443,7 @@ public class WebVariation16 extends BaseAction {
 					if(StringUtil.isBlank(url)){
 						url = aButton.attr("href");
 					}
-					FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
+					url = FrameworkUtils.getLocaleReference(url, urlMap, locale, sb);
 					if(!StringUtil.isBlank(linktext)){
 						ctanode.setProperty("linktext",linktext);
 					}

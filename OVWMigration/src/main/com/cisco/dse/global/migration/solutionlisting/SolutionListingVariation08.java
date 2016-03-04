@@ -410,8 +410,19 @@ public class SolutionListingVariation08 extends BaseAction {
 										sb.append(Constants.SPOTLIGHT_ANCHOR_TEXT_NOT_FOUND);
 									}
 									if (StringUtils.isNotBlank(aHref)) {
+										Node titleLinkNode = heroPanelNode.hasNode("titlelink") ? heroPanelNode.getNode("titlelink") : null;
+										if(heroPanelNode.hasProperty("title-linkurl")){
 										heroPanelNode.setProperty("title-linkurl",
 												aHref);
+										} else if (titleLinkNode != null){
+											if(titleLinkNode.hasProperty("url")){
+												titleLinkNode.setProperty("url", aHref);
+											}else {
+												sb.append("<li>Spotlight anchor url property is not found</li>");
+											}
+										} else {
+											sb.append("<li>Spotlight anchor url property is not found</li>");
+										}
 									} else {
 										sb.append(Constants.SPOTLIGHT_ANCHOR_LINK_NOT_FOUND);
 									}

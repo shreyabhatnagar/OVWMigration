@@ -148,11 +148,12 @@ public class ProductListingVariation6 extends BaseAction {
 										int count = 0;
 										for (Element drawersPanelElement : drawersPanelElements) {
 											String panelTitle = "";
-											boolean imageSrcNotFoundFlag = false;
+											//boolean imageSrcNotFoundFlag = false;
 											Elements drawerPanelLiElements = drawersPanelElement.getElementsByTag("li");
 											if (drawerPanelLiElements != null) {
 												for (Element drawerPanelLiElement : drawerPanelLiElements) {
 													boolean misMatchFlag = true;
+													boolean imageSrcNotFoundFlag = false;
 													Elements iconBlock = drawerPanelLiElement.select("div.series");
 													if (iconBlock.size() == 0) {
 														log.debug("SERIES SIZE0");
@@ -402,7 +403,7 @@ public class ProductListingVariation6 extends BaseAction {
 																				Node subDrawersImageNode = subdrawerpanel.getNode("subdrawers-image");
 																				String fileReference = subDrawersImageNode.hasProperty("fileReference")?subDrawersImageNode.getProperty("fileReference").getString():"";
 																				subDrawerImage = FrameworkUtils.migrateDAMContent(subDrawerImage, fileReference, locale,sb);
-																				log.debug("subDrawerImage after migration : " + subDrawerImage + "\n");
+																				log.debug("subDrawerImage after migration : " + subDrawerImage + "\n"+ title);
 																				if (StringUtils.isNotBlank(subDrawerImage)) {
 																					subDrawersImageNode.setProperty("fileReference" , subDrawerImage);
 																				}else{
