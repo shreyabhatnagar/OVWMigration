@@ -311,7 +311,7 @@ public class RProductLandingVariation2 extends BaseAction {
 											}*/
 											Elements lightBoxElementsText = ele.select("div.c50-text").select("a.c26v4-lightbox");
 											Element lightBoxElementText = null;
-											if (lightBoxElementsText != null && !lightBoxElementsText.isEmpty()) {
+											if (!lightBoxElementsText.isEmpty() && !lightBoxElementsText.isEmpty()) {
 												lightBoxElementText = lightBoxElementsText.first();
 											}
 											if (imageLinkNode != null) {
@@ -320,9 +320,9 @@ public class RProductLandingVariation2 extends BaseAction {
 											if (heroPanelPopUpNode == null && lightBoxElementText != null) {
 												sb.append("<li>video pop up is present in WEB page but it is not present in WEM page.</li>");
 											}
-											if (heroPanelPopUpNode != null && lightBoxElementText == null) {
+											/*if (heroPanelPopUpNode != null && lightBoxElementText == null) {
 												sb.append("<li>video pop up is present in WEM page but it is not present in WEB page.</li>");
-											}
+											}*/
 											if (heroPanelPopUpNode != null && lightBoxElementText != null && StringUtils.isNotBlank(heroPanelTitle)) {
 												heroPanelPopUpNode.setProperty("header", heroPanelTitle);
 											}

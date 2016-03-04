@@ -430,7 +430,7 @@ public class ProductLandingVariation3 extends BaseAction {
 							sb.append("<li>htmlblob content doesn't exist</li>");
 						}
 					}
-					sb.append("<li>drawer component content is extracted from htmlblob element. So showtext and hidetext of drawer component should be migrated manually </li>");
+					//sb.append("<li>drawer component content is extracted from htmlblob element. So showtext and hidetext of drawer component should be migrated manually </li>");
 				} catch (Exception e) {
 					sb.append("<li>Unable to update html blob component.</li>");
 					log.error("Exception : ",e);
