@@ -116,6 +116,9 @@ public class WebVariation9 extends BaseAction{
 					if (heroLargeElement != null) {
 						Elements heroLargeFrameElements = heroLargeElement
 								.select("div.frame");
+						if(heroLargeFrameElements.isEmpty()){
+							heroLargeFrameElements = doc.select("div.c50-pilot");
+						}
 						Node heroPanelNode = null;
 						if (heroLargeFrameElements != null) {
 							if (heroLargeFrameElements.size() != heroLargeNode
