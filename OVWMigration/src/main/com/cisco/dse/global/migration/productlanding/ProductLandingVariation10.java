@@ -197,13 +197,57 @@ public class ProductLandingVariation10 extends BaseAction {
 					}		
 
 					// end set Selector bar.
-
-					// start of text component
+					// Start of button
 					Node textNode2 = null;
+					try {
+						textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
+						Element a00v1CqElement = doc.select("div.a00v1-cq").first();
+						if(a00v1CqElement == null){
+							a00v1CqElement = !doc.select("a.a00v1").isEmpty() ?doc.select("a.a00v1").first():null;
+						}
+						if (textNode2 != null) {
+							Node buttonNode = textNode2.getNode("a00v1_cq");
+							if (buttonNode != null) {
+								if (a00v1CqElement != null) {
+									Element cqAnchor = a00v1CqElement.getElementsByTag("a").first();
+									String anchorText = cqAnchor != null ? cqAnchor.text() : "";
+									String anchorHref = cqAnchor.absUrl("href");
+									if(StringUtil.isBlank(anchorHref)){
+										anchorHref = cqAnchor.attr("href");
+									}
+									// Start extracting valid href
+									log.debug("Before ButtonLinkUrl" + anchorHref + "\n");
+									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
+									log.debug("after ButtonLinkUrl" + anchorHref + "\n");
+									// End extracting valid href
+									buttonNode.setProperty("linkText", anchorText);
+									buttonNode.setProperty("linkUrl", anchorHref);
+									doc.select("div.gd22v2-right").first().getElementsByTag("ul").first().remove();
+								}
+								else {
+									sb.append("<li>Button is not available on the locale page.</li>");
+									log.debug("This button does not exist.");
+								}
+							}
+							else {
+								if (a00v1CqElement != null) {
+									sb.append("<li>Additional button is available on the locale page.</li>");
+								}
+							}
+						}
+						else {
+							if (a00v1CqElement != null) {
+								sb.append("<li>Additional button is available on the locale page.</li>");
+							}
+						}
+					}catch (Exception e) {
+						sb.append("<li>Unable to update button component." + e + "</li>");
+					}
+					//End of button
+					// start of text component
 					try {
 						Elements textElements = doc.select("div.gd-left").select("div.c00-pilot");
 						Node textNode1 =indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-left").getNode("text") : indexLeftNode.getNode("text"); 
-						textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
 						if (textNode1 != null) {
 							if (textElements.isEmpty()) {
 								sb.append("<li>The first text element is not available on the locale page.</li>");
@@ -252,48 +296,6 @@ public class ProductLandingVariation10 extends BaseAction {
 						sb.append("<li>Unable to update text components.</li>");
 					}
 					// end of text component
-
-					// Start of button
-					try {
-						Element a00v1CqElement = doc.select("div.a00v1-cq").first();
-						if (textNode2 != null) {
-							Node buttonNode = textNode2.getNode("a00v1_cq");
-							if (buttonNode != null) {
-								if (a00v1CqElement != null) {
-									Element cqAnchor = a00v1CqElement.getElementsByTag("a").first();
-									String anchorText = cqAnchor != null ? cqAnchor.text() : "";
-									String anchorHref = cqAnchor.absUrl("href");
-									if(StringUtil.isBlank(anchorHref)){
-										anchorHref = cqAnchor.attr("href");
-									}
-									// Start extracting valid href
-									log.debug("Before ButtonLinkUrl" + anchorHref + "\n");
-									anchorHref = FrameworkUtils.getLocaleReference(anchorHref, urlMap, locale, sb);
-									log.debug("after ButtonLinkUrl" + anchorHref + "\n");
-									// End extracting valid href
-									buttonNode.setProperty("linkText", anchorText);
-									buttonNode.setProperty("linkUrl", anchorHref);
-								}
-								else {
-									sb.append("<li>Button is not available on the locale page.</li>");
-									log.debug("This button does not exist.");
-								}
-							}
-							else {
-								if (a00v1CqElement != null) {
-									sb.append("<li>Additional button is available on the locale page.</li>");
-								}
-							}
-						}
-						else {
-							if (a00v1CqElement != null) {
-								sb.append("<li>Additional button is available on the locale page.</li>");
-							}
-						}
-					}catch (Exception e) {
-						sb.append("<li>Unable to update button component." + e + "</li>");
-					}
-					//End of button
 
 					// start set spotlight component.
 					try {
@@ -522,6 +524,13 @@ public class ProductLandingVariation10 extends BaseAction {
 					}
 
 					// end of follow us component
+					//start of image
+					Elements imgEle = !doc.select("div.gd-right").isEmpty()?doc.select("div.gd-right").last().getElementsByTag("img"):null;
+					log.debug("Image check:"+imgEle);
+					if(imgEle != null && !imgEle.isEmpty()){
+						sb.append("<li>Extra Image found in web page.</li>");
+					}
+					//end of image
 
 				} else {
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);

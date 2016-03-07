@@ -400,7 +400,10 @@ public class ArchitechtureVariation3 extends BaseAction {
 				}
 				pdf = pdf.trim();
 				// end pdf
-
+				if(pdf.contains("min")){
+					log.debug("Inside the loop");
+					pdf = "";
+				}
 				Elements aEle = li.getElementsByTag("a");
 				for (Element a : aEle) {
 					String aURL = a.absUrl("href");

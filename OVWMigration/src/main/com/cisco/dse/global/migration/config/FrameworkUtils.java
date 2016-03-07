@@ -566,6 +566,10 @@ public class FrameworkUtils {
 		try {
 			log.debug("In the getPopUpNode method to get the pop up node for " + heroNode.getPath());
 			String lightboxId = heroNode.hasProperty("lightboxid") ? heroNode.getProperty("lightboxid").getString() : "";
+			log.debug("lightboxId:"+lightboxId);
+			if(lightboxId.isEmpty()){
+				lightboxId = heroNode.hasProperty("imagelightboxid") ? heroNode.getProperty("imagelightboxid").getString() : "";
+			}
 			Node heroLargeNodeParent = heroNode.getParent().getParent();
 			NodeIterator heroPanelPopUpNodes = heroLargeNodeParent.getNodes("c26v4_popup_cq*");
 			if(heroPanelPopUpNodes.getSize() == 0){

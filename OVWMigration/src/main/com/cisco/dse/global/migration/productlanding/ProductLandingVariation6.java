@@ -236,11 +236,13 @@ public class ProductLandingVariation6 extends BaseAction {
 														String fileReference = imageNode.hasProperty("fileReference")?imageNode.getProperty("fileReference").getString():"";
 														heroImage = FrameworkUtils.migrateDAMContent(heroImage, fileReference, locale,sb);
 														log.debug("heroImage " + heroImage + "\n");
+														if(heroImage != null){
 														if (StringUtils.isNotBlank(heroImage)) {
 															imageNode.setProperty("fileReference" , heroImage);
-														}else{
-																sb.append("<li> image is not found on locale page's hero element. </li>");
 														}
+														}else{
+															sb.append("<li> image is not found on locale page's hero element. </li>");
+													}
 													} else {
 														sb.append("<li>hero image node doesn't exist</li>");
 													}
@@ -874,12 +876,12 @@ public class ProductLandingVariation6 extends BaseAction {
 										} else {
 											sb.append("<li>No heading text found in the grid two.</li>");
 										}
-										if (StringUtils.isNotBlank(h2AnchorHref)) {
+										/*if (StringUtils.isNotBlank(h2AnchorHref)) {
 											tile_slp_small.setProperty("linkurl",
 													h2AnchorHref);
 										}else {
 											sb.append("<li>Title link is not available in the grid two</li>");
-										}
+										}*/
 										if (StringUtils.isNotBlank(pText)) {
 											tile_slp_small.setProperty(
 													"description", pText);
