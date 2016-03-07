@@ -531,7 +531,12 @@ public class ProductLandingVariation10 extends BaseAction {
 						sb.append("<li>Extra Image found in web page.</li>");
 					}
 					//end of image
-
+					// start of c42-pilot component
+					Elements c42Ele = doc.select("div.c42-pilot");
+					if(c42Ele != null && !c42Ele.isEmpty()){
+						sb.append("<li>Extra component mbwtile found on wem page</li>");
+					}
+					// end of c42-pilot component 
 				} else {
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);
 				}
