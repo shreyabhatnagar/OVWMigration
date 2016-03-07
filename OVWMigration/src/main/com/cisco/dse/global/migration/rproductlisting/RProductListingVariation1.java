@@ -94,6 +94,12 @@ public class RProductListingVariation1 extends BaseAction{
 
 				// end set page properties.
 				// ------------------------------------------------------------------------------------------------------------------------------------------
+				//start of hero check
+				Elements heroEle = doc.select("div.c50-pilot");
+				if(heroEle != null && !heroEle.isEmpty()){
+					sb.append(Constants.HERO_NODE_NOT_AVAILABLE);
+				}
+				//end of hero check
 				// start set text component.
 				try {
 					String h2TagVal = "";

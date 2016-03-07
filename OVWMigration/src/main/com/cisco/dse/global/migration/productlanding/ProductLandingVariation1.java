@@ -332,7 +332,26 @@ public class ProductLandingVariation1 extends BaseAction {
 										//start of hero pop up 
 										Node heroPanelPopUpNode = null;
 										Element lightBoxElement = null;
-										Elements lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+										Elements lightBoxElements = null;
+										if(ele != null){
+										lightBoxElements = ele.select("div.c50-image").select("a.c26v4-lightbox");
+										if(lightBoxElements.isEmpty()){
+											String lightBoxFlag = !ele
+													.select("div.c50-image").isEmpty()?!ele
+													.select("div.c50-image")
+													.select("a").isEmpty() ? ele
+													.select("div.c50-image")
+													.select("a").first()
+													.hasAttr("rel") ? ele
+													.select("div.c50-image")
+													.select("a").first()
+													.attr("rel") : null
+													: null:null;
+											if((StringUtils.isNotBlank(lightBoxFlag)) && lightBoxFlag.startsWith("lightbox")){
+											lightBoxElements = ele.select("div.c50-image").select("a");
+										}
+										}
+										}
 										if (lightBoxElements != null && !lightBoxElements.isEmpty()) {
 											  lightBoxElement = lightBoxElements.first();
 										}
@@ -457,7 +476,7 @@ public class ProductLandingVariation1 extends BaseAction {
 										}
 									} else {
 										log.debug("No attribute found with name 'data-config-hidetext' in the doc So show Text and hide Text canot be migrated.");
-										sb.append("No attribute found with name 'data-config-hidetext' in the doc So show Text and hide Text canot be migrated.");
+										sb.append("<li>No attribute found with name 'data-config-hidetext' in the doc So show Text and hide Text canot be migrated.</li>");
 									}
 									Element drawerHeaderLinksElement = drawerComponentHeader.select("div.clearfix").first();
 									JSONObject jsonObj = new JSONObject();
