@@ -72,10 +72,11 @@ public class ProductLandingVariation10 extends BaseAction {
 			indexRightNode = session.getNode(indexRight);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
-				doc = Jsoup.connect(loc).get();
-				log.debug("Connected to the provided URL");
+//				doc = Jsoup.connect(loc).get();
+				doc = getConnection(loc);
 				
 				if(doc != null){
+					log.debug("Connected to the provided URL");
 					// ------------------------------------------------------------------------------------------------------------------------------------------
 					// start set page properties.
 					
@@ -541,7 +542,8 @@ public class ProductLandingVariation10 extends BaseAction {
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);
 				}
 			} catch (Exception e) {
-				doc = getConnection(loc);
+//				doc = getConnection(loc);
+				log.error("Exception : ",e);
 			}
 
 		} catch (Exception e) {

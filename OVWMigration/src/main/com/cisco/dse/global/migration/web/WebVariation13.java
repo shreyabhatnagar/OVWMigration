@@ -31,9 +31,9 @@ public class WebVariation13 extends BaseAction {
 	Document securedDoc;
 	StringBuilder sb = new StringBuilder(1024);
 	static Logger log = Logger.getLogger(WebVariation13.class);
-	
+
 	int noImageCount = 0;
-	
+
 	public String translate(String host, String loc, String prod, String type,
 			String catType, String locale, Session session, Map<String, String> urlMap) throws IOException,
 			ValueFormatException, VersionException, LockException,
@@ -44,7 +44,7 @@ public class WebVariation13 extends BaseAction {
 		String pagePropertiesPath = "/content/<locale>/" + catType + "/index/jcr:content";
 		//end
 		String pageUrl = host + "/content/<locale>/"+catType+"/index.html";
-		
+
 		pageUrl = pageUrl.replace("<locale>", locale);
 		pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale);
 		String webNodeTopPath = pagePropertiesPath+"/content_parsys/solutions/layout-solutions/gd11v1";
@@ -54,7 +54,7 @@ public class WebVariation13 extends BaseAction {
 		sb.append("<td>" + "<a href="+pageUrl+">"+pageUrl+"</a>"+"</td>");
 		sb.append("<td>" + "<a href="+loc+">"+loc +"</a>"+ "</td>");
 		sb.append("<td><ul>");
-		
+
 		javax.jcr.Node webTopNode = null;
 		javax.jcr.Node webBottomNode = null;
 		javax.jcr.Node webSecuredTopNode = null;
@@ -91,11 +91,11 @@ public class WebVariation13 extends BaseAction {
 					String htmlBlobContent = "";
 					StringBuilder oldImage = new StringBuilder();
 					StringBuilder securedSb = new StringBuilder();
-					
-					
+
+
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					
+
 					Elements htmlBlobTitle = doc.select("div#mb-title-nav-bar");
 					if (htmlBlobTitle != null && !htmlBlobTitle.isEmpty()) {
 						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobTitle.last(), "", locale, sb, urlMap);
@@ -103,10 +103,10 @@ public class WebVariation13 extends BaseAction {
 					}
 					Elements htmlBlobElements = doc.select("div#location_wrapper");
 					if (htmlBlobElements != null && !htmlBlobElements.isEmpty()) {
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
-							oldImage.append(htmlBlobContent);
-						}
-					
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
+						oldImage.append(htmlBlobContent);
+					}
+
 					//End of getContent
 					//Start of set content
 					if (webTopNode.hasNode("gd11v1-mid/htmlblob")) {
@@ -118,7 +118,7 @@ public class WebVariation13 extends BaseAction {
 					} else {
 						sb.append(Constants.HTMLBLOB_NODE_NOT_FOUND);
 					}
-				
+
 					log.debug("htmlBlobContent migrated is done." + htmlBlobContent);
 					// secure 
 					if (securedDoc != null) {
@@ -132,7 +132,7 @@ public class WebVariation13 extends BaseAction {
 						if (securedhtmlBlobElements != null && !htmlBlobElements.isEmpty()) {
 							securedHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(securedhtmlBlobElements.first(), "", locale, sb, urlMap);
 							securedSb.append(securedHtmlBlobContent);
-							}
+						}
 						log.debug("securedHtmlBlobContent migrated is done." + securedHtmlBlobContent);
 						if (webSecuredTopNode.hasNode("gd11v1-mid/htmlblob")) {
 							Node htmlBlobNode = webSecuredTopNode.getNode("gd11v1-mid/htmlblob");
@@ -150,20 +150,22 @@ public class WebVariation13 extends BaseAction {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.error("Exception " , e);
 				}
-				
-				
+
+
 				//--------------------------------------------------------------------------------------
 				//start of left html blob component
 				try {
 					String htmlBlobContent = "";
-					
-					
+
+
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
 					Elements htmlBlobElements = doc.select("div.guest");
 					if(htmlBlobElements != null && !htmlBlobElements.isEmpty()){
-					htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
-}
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlobElements.first(), "", locale, sb, urlMap);
+						String relPageUrl = pageUrl.replace(host,"");
+						htmlBlobContent = htmlBlobContent.replace(relPageUrl,"");
+					}
 					//End of getContent
 					//Start of set content
 					if (webBottomNode.hasNode("gd12v2-left/htmlblob")) {
@@ -184,7 +186,7 @@ public class WebVariation13 extends BaseAction {
 							securedHtmlBlobContent = FrameworkUtils.extractHtmlBlobContent(securedHtmlBlobElements.first(), "", locale, sb, urlMap);
 						}
 						log.debug("securedHtmlBlobContent second guest migrated is done." + securedHtmlBlobContent);
-						
+
 						if (webSecuredBottomNode.hasNode("gd12v2-left/htmlblob")) {
 							Node htmlBlobNode = webSecuredBottomNode.getNode("gd12v2-left/htmlblob");
 							if (StringUtils.isNotBlank(securedHtmlBlobContent)) {
@@ -201,11 +203,11 @@ public class WebVariation13 extends BaseAction {
 					sb.append(Constants.EXCEPTION_IN_HTMLBLOB);
 					log.error("Exception " , e);
 				}
-				
+
 
 				// End get content.
-			//End of htmlblob Component
-			//-------------------------------------------------------------------------------------
+				//End of htmlblob Component
+				//-------------------------------------------------------------------------------------
 				//start of right html blob component
 				try {
 					String htmlBlobContent = "";
@@ -213,10 +215,10 @@ public class WebVariation13 extends BaseAction {
 					Elements htmlBlobElements = doc.select("div.guest");
 					Elements htmlBlob4Ele  = htmlBlobElements.select("div#col3");
 					if (!htmlBlob4Ele.isEmpty()) {
-							htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlob4Ele.first(), "", locale, sb, urlMap);
-						}
+						htmlBlobContent = FrameworkUtils.extractHtmlBlobContent(htmlBlob4Ele.first(), "", locale, sb, urlMap);
+					}
 					log.debug("htmlBlobContent third col3 migrated is done." + htmlBlobContent);
-					
+
 					//End of getContent
 					//Start of set content
 					if (webBottomNode.hasNode("gd12v2-right/htmlblob")) {
@@ -237,7 +239,7 @@ public class WebVariation13 extends BaseAction {
 							securedHtmlBlobThirdContent = FrameworkUtils.extractHtmlBlobContent(securedHtmlBlob4Ele.first(), "", locale, sb, urlMap);
 						}
 						log.debug("securedHtmlBlobContent third col3 migrated is done." + securedHtmlBlobThirdContent);
-						
+
 						if (webSecuredBottomNode.hasNode("gd12v2-right/htmlblob")) {
 							Node htmlBlobNode = webSecuredBottomNode.getNode("gd12v2-right/htmlblob");
 							if (StringUtils.isNotBlank(securedHtmlBlobThirdContent)) {

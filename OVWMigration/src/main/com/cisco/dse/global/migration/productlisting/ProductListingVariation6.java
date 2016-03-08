@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.sling.commons.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -317,9 +318,14 @@ public class ProductListingVariation6 extends BaseAction {
 
 																			if (indDetailsElements != null) {
 																				Element indDetailsElement = indDetailsElements.first();
+																				Document docString;
 																				if (indDetailsElement != null) {
-																					Elements indItems = indDetailsElement
+																					String html = FrameworkUtils.extractHtmlBlobContent(indDetailsElement, "", locale, sb, urlMap);
+																					docString = Jsoup.parse(html);
+																					Elements indItems = docString
 																							.getElementsByTag("li");
+																					/*Elements indItems = indDetailsElement
+																							.getElementsByTag("li");*/
 																					if (indItems != null) {
 																						for (Element indItem : indItems) {
 																							String ownText = indItem.ownText();
