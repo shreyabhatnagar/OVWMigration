@@ -526,9 +526,9 @@ public class ProductLandingVariation10 extends BaseAction {
 
 					// end of follow us component
 					//start of image
-					Elements imgEle = !doc.select("div.gd-right").isEmpty()?doc.select("div.gd-right").last().getElementsByTag("img"):null;
+					Elements imgEle = !doc.select("div.gd-right").isEmpty()?doc.select("div.gd-right").select("img"):null;
 					log.debug("Image check:"+imgEle);
-					if(imgEle != null && !imgEle.isEmpty()){
+					if(imgEle != null && !imgEle.isEmpty() && imgEle.size() > 1){
 						sb.append("<li>Extra Image found in web page.</li>");
 					}
 					//end of image
