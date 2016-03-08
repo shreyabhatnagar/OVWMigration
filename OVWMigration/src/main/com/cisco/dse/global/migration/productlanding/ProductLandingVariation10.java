@@ -533,8 +533,8 @@ public class ProductLandingVariation10 extends BaseAction {
 					//end of image
 					// start of c42-pilot component
 					Elements c42Ele = doc.select("div.c42-pilot");
-					if(c42Ele != null && !c42Ele.isEmpty()){
-						sb.append("<li>Extra component mbwtile found on wem page</li>");
+					if(!c42Ele.isEmpty()){
+						sb.append("<li>Extra component mbwtile found on web page</li>");
 					}
 					// end of c42-pilot component 
 				} else {
