@@ -413,7 +413,7 @@ public class ServiceListingVariation02 extends BaseAction {
 			String tLink = h2Ele.getElementsByTag("a") != null ?  h2Ele.getElementsByTag("a").first() !=  null ? h2Ele.getElementsByTag("a").first().absUrl("href"): null : "";
 			
 			if(StringUtil.isBlank(tLink)){
-				tLink = h2Ele.getElementsByTag("a").first().attr("href");
+				tLink = h2Ele.getElementsByTag("a").first() !=null ? h2Ele.getElementsByTag("a").first().attr("href") : "";
 			}
 			// Start extracting valid href
 			log.debug("Before spotlight" + tLink + "\n");
