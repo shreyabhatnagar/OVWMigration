@@ -223,7 +223,8 @@ public class ProductLandingVariation10 extends BaseAction {
 									// End extracting valid href
 									buttonNode.setProperty("linkText", anchorText);
 									buttonNode.setProperty("linkUrl", anchorHref);
-									doc.select("div.gd22v2-right").first().getElementsByTag("ul").first().remove();
+									a00v1CqElement.remove();
+//									doc.select("div.gd22v2-right").first().getElementsByTag("ul").first().remove();
 								}
 								else {
 									sb.append("<li>Button is not available on the locale page.</li>");
