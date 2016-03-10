@@ -72,10 +72,11 @@ public class ProductLandingVariation10 extends BaseAction {
 			indexRightNode = session.getNode(indexRight);
 			pageJcrNode = session.getNode(pagePropertiesPath);
 			try {
-				doc = Jsoup.connect(loc).get();
-				log.debug("Connected to the provided URL");
+//				doc = Jsoup.connect(loc).get();
+				doc = getConnection(loc);
 				
 				if(doc != null){
+					log.debug("Connected to the provided URL");
 					// ------------------------------------------------------------------------------------------------------------------------------------------
 					// start set page properties.
 					
@@ -222,7 +223,8 @@ public class ProductLandingVariation10 extends BaseAction {
 									// End extracting valid href
 									buttonNode.setProperty("linkText", anchorText);
 									buttonNode.setProperty("linkUrl", anchorHref);
-									doc.select("div.gd22v2-right").first().getElementsByTag("ul").first().remove();
+									a00v1CqElement.remove();
+//									doc.select("div.gd22v2-right").first().getElementsByTag("ul").first().remove();
 								}
 								else {
 									sb.append("<li>Button is not available on the locale page.</li>");
@@ -541,7 +543,8 @@ public class ProductLandingVariation10 extends BaseAction {
 					sb.append(Constants.URL_CONNECTION_EXCEPTION);
 				}
 			} catch (Exception e) {
-				doc = getConnection(loc);
+//				doc = getConnection(loc);
+				log.error("Exception : ",e);
 			}
 
 		} catch (Exception e) {

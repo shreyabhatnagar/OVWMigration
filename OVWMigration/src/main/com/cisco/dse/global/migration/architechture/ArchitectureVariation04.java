@@ -382,23 +382,27 @@ public class ArchitectureVariation04 extends BaseAction {
 								} else {
 									sb.append(Constants.TITLE_OF_LIST_ELEMENT_NOT_FOUND);
 								}
-								Element pElements = ele.select("p").first();
-								if (pElements != null) {
-									pText = FrameworkUtils.extractHtmlBlobContent(pElements, "", locale, sb, urlMap);
-									log.debug("pText:"+pText);
+								Element pElement = null;
+								StringBuilder sbuilder = new StringBuilder();
+								Elements pElements = ele.select("p");
+								for(Element paraElement : pElements){
+										pText = FrameworkUtils.extractHtmlBlobContent(paraElement, "", locale, sb, urlMap);
+										sbuilder.append(pText);
+										
+									}
+	
+								
+								
 									if (listNode.hasNode("intro")) {
 										Node introNode = listNode
 												.getNode("intro");
 										if (pText != null) {
 											introNode.setProperty(
-													"paragraph_rte", pText);
+													"paragraph_rte", sbuilder.toString());
 										}
 									} else {
-										sb.append(Constants.LIST_INTRO_PARAGRAPH_ELEMENT_NOT_FOUND);
+										sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
 									}
-								} else {
-									sb.append(Constants.LIST_INTRO_NODE_NOT_FOUND);
-								}
 								Elements liElements = ele.select("li");
 								for (Element liEle : liElements) {
 									String linkurl = "";
@@ -439,6 +443,8 @@ public class ArchitectureVariation04 extends BaseAction {
 								} else {
 									sb.append(Constants.LIST_ELEMENT_LIST_NODE_NOT_FOUND);
 								}
+							}else{
+								sb.append(Constants.LIST_NODE_NOT_FOUND);
 							}
 							count++;
 						}

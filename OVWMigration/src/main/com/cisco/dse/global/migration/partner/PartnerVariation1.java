@@ -249,7 +249,7 @@ public class PartnerVariation1 extends BaseAction {
 			}
 			Element pHero = heroEle.getElementsByTag("p").first();
 			if(pHero != null){
-				heroPanelNode.setProperty("description", pHero.text());
+				heroPanelNode.setProperty("description", pHero.html());
 			}else{
 				sb.append(Constants.HERO_CONTENT_DESCRIPTION_ELEMENT_DOESNOT_EXISTS);
 			}
