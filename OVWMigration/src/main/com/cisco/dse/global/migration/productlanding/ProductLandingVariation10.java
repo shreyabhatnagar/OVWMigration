@@ -527,11 +527,19 @@ public class ProductLandingVariation10 extends BaseAction {
 
 					// end of follow us component
 					//start of image
-					Elements imgEle = !doc.select("div.gd-right").isEmpty()?doc.select("div.gd-right").select("img"):null;
-					log.debug("Image check:"+imgEle);
-					if(imgEle != null && !imgEle.isEmpty() && imgEle.size() > 1){
-						sb.append("<li>Extra Image found in web page.</li>");
+					Elements aEle = !doc.select("div.gd12-pilot").select("div.gd-right").isEmpty()?doc.select("div.gd12-pilot").select("div.gd-right").select("a"):null;
+					log.debug("Image check:"+aEle);
+					if(!aEle.isEmpty() && aEle != null){
+						for(Element aEl : aEle){
+							Element imgEle = aEl.getElementsByTag("img").first();
+							if(imgEle != null){
+								sb.append("<li>Extra Image found in web page.</li>");
+							}
+						}
 					}
+					/*if(aEle != null && !aEle.isEmpty() && aEle.size() > 1){
+						sb.append("<li>Extra Image found in web page.</li>");
+					}*/
 					//end of image
 					// start of c42-pilot component
 					Elements c42Ele = doc.select("div.c42-pilot");
