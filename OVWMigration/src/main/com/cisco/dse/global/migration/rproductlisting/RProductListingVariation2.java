@@ -285,7 +285,7 @@ public class RProductListingVariation2 extends BaseAction{
 														if (htmlblobNode != null) {
 															log.debug("node path is : "+ htmlblobNode.getPath());
 															String htmlContentPropertyValue = htmlblobNode.hasProperty("html")?htmlblobNode.getProperty("html").getString():"";
-															String modifiedHtml = FrameworkUtils.updateHtmlBlobContent(htmContent, htmlContentPropertyValue, loc, sb);
+															String modifiedHtml = FrameworkUtils.updateHtmlBlobContent(doc,htmContent, htmlContentPropertyValue, loc, sb);
 															
 															log.debug("modified html is "+ modifiedHtml);
 															if (StringUtils

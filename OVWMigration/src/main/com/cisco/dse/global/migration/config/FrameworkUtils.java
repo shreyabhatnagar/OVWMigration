@@ -752,19 +752,19 @@ public class FrameworkUtils {
 		return wemElement.outerHtml();
 	}
 	
-	public static String updateHtmlBlobContent(String htmlWEBContent,
+	public static String updateHtmlBlobContent(Document doc,String htmlWEBContent,
 			String htmlWEMContent, String loc, StringBuilder sb) throws JSONException{
 
 		List<String> htmlList = new ArrayList<String>() {};
 		Element wemElement = null;
-		Document doc = null;
+		/*Document doc = null;
 		
 				try {
 					doc = Jsoup.connect(loc).get();
 				} catch (IOException e) {
 				
 				}
-				log.debug("Connected to the provided URL");
+				log.debug("Connected to the provided URL");*/;
 			//-------------------------------------------------------------------------------------------------------------------------------
 			//start of Logic to retrieve all the hyper links text and url and save in a map.
 				try{
