@@ -289,7 +289,7 @@ public class RProductListingVariation2 extends BaseAction{
 															
 															log.debug("modified html is "+ modifiedHtml);
 															if (StringUtils
-																	.isNotBlank(htmContent)) {
+																	.isNotBlank(modifiedHtml)) {
 																htmlblobNode
 																		.setProperty(
 																				"html",
