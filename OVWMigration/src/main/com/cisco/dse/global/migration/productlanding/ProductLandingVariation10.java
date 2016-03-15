@@ -202,9 +202,19 @@ public class ProductLandingVariation10 extends BaseAction {
 					Node textNode2 = null;
 					try {
 						textNode2 = indexLeftNode.hasNode("gd22v2") ? indexLeftNode.getNode("gd22v2").getNode("gd22v2-right") : null;
-						Element a00v1CqElement = doc.select("div.a00v1-cq").first();
+						Element a00v1CqElement = !doc.select(
+								"div.cl-grids").isEmpty() ? !doc
+								.select("div.cl-grids")
+								.select("div.a00v1-cq").isEmpty() ? doc
+								.select("div.cl-grids")
+								.select("div.a00v1-cq").first() : null : null;
 						if(a00v1CqElement == null){
-							a00v1CqElement = !doc.select("a.a00v1").isEmpty() ?doc.select("a.a00v1").first():null;
+							a00v1CqElement = !doc.select("div.cl-grids")
+									.isEmpty() ? !doc
+									.select("div.cl-grids")
+									.select("a.a00v1").isEmpty() ? doc
+									.select("div.cl-grids")
+									.select("a.a00v1").first() : null : null;
 						}
 						if (textNode2 != null) {
 							Node buttonNode = textNode2.getNode("a00v1_cq");
