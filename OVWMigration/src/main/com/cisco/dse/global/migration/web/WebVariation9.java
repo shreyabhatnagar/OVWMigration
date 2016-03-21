@@ -277,7 +277,7 @@ public class WebVariation9 extends BaseAction{
 					
 					log.debug("Started migrating HtmlBlob content.");
 					// Start get content.
-					Elements htmlBlobElements = doc.select("div.gd-left").select("div.c00-pilot,div.c11-pilot");
+					Elements htmlBlobElements = doc.select("div.gd-left").select("div.c00-pilot,div.c11-pilot,div.n12-pilot");
 					if (htmlBlobElements != null) {
 						/*Element h2Ele = htmlBlobElements.select("h2").first();
 						oldImage.append(h2Ele);*/
