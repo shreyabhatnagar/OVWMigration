@@ -429,7 +429,7 @@ public class WebVariation2 extends BaseAction {
 						}
 						log.debug("gd-right " + htmlEle);
 						//Fix By Aziz
-						Element c23Ele = htmlEle.getElementsByClass("c23-pilot").first();
+						/*Element c23Ele = htmlEle.getElementsByClass("c23-pilot").first();
 						Element popUp = null;
 						if(c23Ele!=null){
 							popUp = c23Ele.getElementsByTag("a").first();
@@ -454,7 +454,7 @@ public class WebVariation2 extends BaseAction {
 									sb.append("<li>PopUp anchor element not found in web page.</li>");
 								}
 							}
-						}/*else{
+						}*//*else{
 							sb.append("<li>PopUp anchor element not found in web page.</li>");
 						}*/
 						//End of Fix
