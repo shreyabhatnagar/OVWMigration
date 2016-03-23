@@ -560,7 +560,27 @@ public class RServiceListingVariation2 extends BaseAction{
 				sb.append(Constants.SPOTLIGHT_IMAGE_NODE_NOT_AVAILABLE);
 			}
 			// end image
-
+			
+			//video pop up
+			Node spotLightPopUpNode = null;
+			Element lightBoxElement = null;
+			Elements lightBoxElements = ele.select("a.lbt");
+			spotLightPopUpNode = FrameworkUtils.getHeroPopUpNode(spotlightNode);
+			if(lightBoxElements != null && !lightBoxElements.isEmpty()){
+				lightBoxElement = lightBoxElements.first();
+			}
+			if (spotLightPopUpNode == null && lightBoxElement != null) {
+				sb.append("<li>video pop up is present in WEB page but it is not present in WEM page for spotlight.</li>");
+			}
+			if (spotLightPopUpNode != null && lightBoxElement == null) {
+				sb.append("<li>video pop up is present in WEM page but it is not present in WEB page for spotlight.</li>");
+			}
+			if (spotLightPopUpNode != null && lightBoxElement != null && StringUtils.isNotBlank(hText)) {
+				spotLightPopUpNode.setProperty("popupHeader", hText);
+			}
+			//video pop up end
+			
+			
 			if (hText != null) {
 				spotlightNode.setProperty("title",hText);
 			}
