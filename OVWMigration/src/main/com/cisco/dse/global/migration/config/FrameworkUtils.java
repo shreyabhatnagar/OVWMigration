@@ -530,7 +530,7 @@ public class FrameworkUtils {
 				return pdfPath;
 				
 			}
-			if ((primaryCTALinkUrl.indexOf("?") != -1 || primaryCTALinkUrl.indexOf("#") != -1) && !primaryCTALinkUrl.endsWith(".html#top")) {
+			if (((primaryCTALinkUrl.indexOf("?") != -1 || primaryCTALinkUrl.indexOf("#") != -1)) && !primaryCTALinkUrl.endsWith(".html#top")) {
 				String url = primaryCTALinkUrl;
 				if (primaryCTALinkUrl.indexOf("?") != -1) {
 					primaryCTALinkUrl = url.substring(0, url.indexOf("?"));
@@ -543,16 +543,19 @@ public class FrameworkUtils {
 				log.debug("primaryCTALinkUrl having query : "+ primaryCTALinkUrl);
 				log.debug("query in primaryCTALinkUrl : "+ query);
 			}
-			if (urlMap.containsKey(primaryCTALinkUrl)) {
+//			if (urlMap.containsKey(primaryCTALinkUrl)) {
 				if(primaryCTALinkUrl.endsWith(".html#top")){  //code to remove if #top is in provided url for "back to top" issue.
 					log.debug("link with #top before trim : "+ primaryCTALinkUrl );
 					primaryCTALinkUrl ="#top";
 					log.debug("link with #top after trim : "+ primaryCTALinkUrl );
+					if (urlMap.containsKey(primaryCTALinkUrl)) {		
+					primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
+					}
 				}
 				
 				
-				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
-			}
+//				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
+//			}
 			if (StringUtils.isNotBlank(query)) {
 				primaryCTALinkUrl = primaryCTALinkUrl + query;
 				log.debug("url with query:: " + primaryCTALinkUrl);
