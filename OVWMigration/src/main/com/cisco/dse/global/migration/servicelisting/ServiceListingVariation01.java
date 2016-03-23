@@ -453,8 +453,8 @@ public class ServiceListingVariation01 extends BaseAction {
 										count = count + 1;
 									}
 									else {
-										//pText = pText + "<br>";
-										//pText = pText + pElement.ownText();
+										pText = pText + "<br>";
+										pText = pText + pElement.ownText();
 										linkTextTobeAdded = pElement.ownText();
 										break;
 									}
@@ -507,7 +507,7 @@ public class ServiceListingVariation01 extends BaseAction {
 						if (midBottomNode.hasNode("gd23v1-right")) {
 							Node gd23v1_mid_Node = midBottomNode
 									.getNode("gd23v1-right");
-							if(anchor){
+							//if(anchor){
 							if (gd23v1_mid_Node.hasNode("list")) {
 								Node listNode = gd23v1_mid_Node.getNode("list");
 								if (StringUtils.isNotBlank(h2Text)) {
@@ -528,7 +528,7 @@ public class ServiceListingVariation01 extends BaseAction {
 										element_list_0.setProperty("listitems",
 												list.toArray(new String[list
 														.size()]));
-									} else {
+									} else if (size>0) {
 										element_list_0.setProperty(
 												"listitems",
 												list.get(0));
@@ -556,7 +556,7 @@ public class ServiceListingVariation01 extends BaseAction {
 									sb.append(Constants.UNABLE_TO_MIGRATE_RIGHT_GRID);
 								}
 							}
-							}
+							//}
 						} else {
 							sb.append(Constants.RIGHT_GRID_NODE_NOT_FOUND);
 						}
