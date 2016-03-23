@@ -141,6 +141,9 @@ public class ProductLandingVariation6 extends BaseAction {
 
 									if (frameElements != null) {
 										if (frameElements.size()>0) {
+											if (frameElements.size() != hero_large.getNodes("heropanel*").getSize()) {
+												sb.append("<li>Mismatch in the count of slides in the hero component </li>");
+											}
 											int i = 0;
 											for (Element ele : frameElements) {
 												Node heropanelNode = null;
