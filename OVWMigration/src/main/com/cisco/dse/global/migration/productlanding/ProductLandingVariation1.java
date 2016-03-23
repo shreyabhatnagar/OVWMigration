@@ -944,6 +944,7 @@ public class ProductLandingVariation1 extends BaseAction {
 								Elements ulElements = ele.getElementsByTag("ul");
 								if (ulElements.size() > 0) {
 									log.debug("found ul elements in c23-pilot so skipping.");
+									sb.append("<li>Extra Tile Border Element with list elements found on web page.</li>");
 									continue;
 								}
 								count = count + 1;
