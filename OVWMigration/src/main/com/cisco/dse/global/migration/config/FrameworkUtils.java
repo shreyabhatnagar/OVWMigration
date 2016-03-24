@@ -135,7 +135,7 @@ public class FrameworkUtils {
 								if (StringUtils.isNotBlank(pageTitle)) {
 									pageTitle = pageTitle.substring(0,pageTitle.indexOf("- Cisco Systems"));
 									if(pageTitle.trim().endsWith("- Cisco")){
-                                        pageTitle = pageTitle.substring(0,pageTitle.lastIndexOf("- Cisco"));     
+										pageTitle = pageTitle.substring(0,pageTitle.lastIndexOf("- Cisco"));     
 									}
 									if (jcrNode.hasProperty("jcr:title")) {
 										jcrNode.setProperty("jcr:title",pageTitle);
@@ -174,119 +174,119 @@ public class FrameworkUtils {
 		Session session = getSession();
 
 		try {
-			
+
 			//returning the image path if it have the current locale in it, since if the image is having locale then it is said to be already migrated.
 			if(imgRef.indexOf(locale) != -1){
 				return imgRef;
 			}
-			
+
 			if (StringUtils.isNotBlank(path)) {
 				//-----------------------------------------------------------------------------------------------
 				//If the image path is having '/content/en/us' or  '/c/en/us' then if condition is satisfied to get the imgReference property from the current image path.
 				if (path.indexOf("/content/en/us") != -1 || path.indexOf("/c/en/us") != -1) {
 					log.debug("image path is being from /c/en/us : " + path);
-					
-					
-				if(path.lastIndexOf(".img") != -1){	
-					path = path.substring(0, path.lastIndexOf(".img"));//image path to get the node.
-					//if the image path is having any domain then removing the domain from url.
-					if (path.indexOf("http://") != -1 || path.indexOf("https://") != -1) {
-						try {
-							URL url = new URL(path);
-							path = url.getPath();
-						} catch (Exception e) {
-							log.error("Excepiton : ", e);
+
+
+					if(path.lastIndexOf(".img") != -1){	
+						path = path.substring(0, path.lastIndexOf(".img"));//image path to get the node.
+						//if the image path is having any domain then removing the domain from url.
+						if (path.indexOf("http://") != -1 || path.indexOf("https://") != -1) {
+							try {
+								URL url = new URL(path);
+								path = url.getPath();
+							} catch (Exception e) {
+								log.error("Excepiton : ", e);
+							}
+						}
+						//'/c' is a short url, hence updating it with the long url to get the node structure.
+						if (path.startsWith("/c/")) {
+							path = path.replace("/c/", "/content/");
+						}
+						//image path should have 'jcr:content' instead of '_jcr_content'.
+						if (path.indexOf("_jcr_content") != -1) {
+							path = path.replace("_jcr_content", "jcr:content");
+						}
+						Node referenceNodePath = null;
+						if(session.itemExists(path)){
+							referenceNodePath = session.getNode(path);
+						}else{
+							log.debug("Path not found in the node structure : "+path);
+						}
+						if (referenceNodePath != null) {
+							path = referenceNodePath.hasProperty("fileReference") ? referenceNodePath.getProperty("fileReference").getString() : "";
+							log.debug("fileReference path for /c/en/us image path is : " + path);
+						}else{
+							log.debug("No fileReference path found in the path : ");
 						}
 					}
-					//'/c' is a short url, hence updating it with the long url to get the node structure.
-					if (path.startsWith("/c/")) {
-						path = path.replace("/c/", "/content/");
-					}
-					//image path should have 'jcr:content' instead of '_jcr_content'.
-					if (path.indexOf("_jcr_content") != -1) {
-						path = path.replace("_jcr_content", "jcr:content");
-					}
-					Node referenceNodePath = null;
-					if(session.itemExists(path)){
-						referenceNodePath = session.getNode(path);
-					}else{
-						log.debug("Path not found in the node structure : "+path);
-					}
-					if (referenceNodePath != null) {
-						path = referenceNodePath.hasProperty("fileReference") ? referenceNodePath.getProperty("fileReference").getString() : "";
-						log.debug("fileReference path for /c/en/us image path is : " + path);
-					}else{
-						log.debug("No fileReference path found in the path : ");
-					}
-				}
-					
-					
+
+
 					log.debug("Hence retriving the file reference path is : " + path);
 				}
 				//--------------------------------------------------------------------------------------------------------
 				//if the current image path is not having '/content/dam/en/us' or '/content/dam' then if block will be executed.
 				if (StringUtils.isNotBlank(path)) {
-				if (path.indexOf("/content/dam/en/us") == -1
-						&& path.indexOf("/content/dam") == -1
-						&& path.indexOf("/content/en/us") == -1
-						&& path.indexOf("/c/dam/en/us") == -1
-						&& path.indexOf("/c/dam") == -1
-						&& path.indexOf("/c/en/us") == -1) {
-					log.debug("Path of the image is not a wem image path.");
-					//Adding the domain to the web image path, since to get the IO we need absolute url.
-					if (path.indexOf("http:") == -1
-							&& path.indexOf("https:") == -1) {
-						log.debug("Adding domain to the image path.");
-						path = path.trim();
-						path = "http://www.cisco.com" + path;
-					}
-					//if there is fileReference property in the wem, then updating the path with 'assets' will be replaced with 'global/locale' and 'en/us' will be replaced with 'global/locale'.
-					//if the fileReference property in the wem is blank then the web page image url, 'web' will be replaced with 'content/dam/global/locale', if there is no string 'web' image path then directly appending '/content/dam/global/locale' 
-					if (StringUtils.isNotBlank(imgRef) && imgRef.indexOf(locale) == -1) {
-						if(imgRef.indexOf("/en/us/")!=-1){
-							imgRef = imgRef.replace("/en/us/", "/global/" + locale + "/");
-						}else if(imgRef.indexOf("/en_us/")!=-1){
-							imgRef = imgRef.replace("/en_us/", "/global/" + locale + "/");
-						}else if(imgRef.indexOf("/assets/")!=-1){
-							imgRef = imgRef.replace("/assets/", "/global/" + locale + "/");
+					if (path.indexOf("/content/dam/en/us") == -1
+							&& path.indexOf("/content/dam") == -1
+							&& path.indexOf("/content/en/us") == -1
+							&& path.indexOf("/c/dam/en/us") == -1
+							&& path.indexOf("/c/dam") == -1
+							&& path.indexOf("/c/en/us") == -1) {
+						log.debug("Path of the image is not a wem image path.");
+						//Adding the domain to the web image path, since to get the IO we need absolute url.
+						if (path.indexOf("http:") == -1
+								&& path.indexOf("https:") == -1) {
+							log.debug("Adding domain to the image path.");
+							path = path.trim();
+							path = "http://www.cisco.com" + path;
 						}
-					} else {
-						URL url = new URL(path);
-						String imagePath = url.getPath();
-						if (imagePath.startsWith("/web/")) {
-							imgRef = imagePath.replace("/web/", "/content/dam/global/" + locale+"/");
-						}else if(imagePath.toLowerCase().startsWith("/en/us/")){
-							imgRef = imagePath.replace("/en/us/", "/content/dam/global/" + locale+"/");
-							imgRef = imagePath.replace("/en/US/", "/content/dam/global/" + locale+"/");
+						//if there is fileReference property in the wem, then updating the path with 'assets' will be replaced with 'global/locale' and 'en/us' will be replaced with 'global/locale'.
+						//if the fileReference property in the wem is blank then the web page image url, 'web' will be replaced with 'content/dam/global/locale', if there is no string 'web' image path then directly appending '/content/dam/global/locale' 
+						if (StringUtils.isNotBlank(imgRef) && imgRef.indexOf(locale) == -1) {
+							if(imgRef.indexOf("/en/us/")!=-1){
+								imgRef = imgRef.replace("/en/us/", "/global/" + locale + "/");
+							}else if(imgRef.indexOf("/en_us/")!=-1){
+								imgRef = imgRef.replace("/en_us/", "/global/" + locale + "/");
+							}else if(imgRef.indexOf("/assets/")!=-1){
+								imgRef = imgRef.replace("/assets/", "/global/" + locale + "/");
+							}
 						} else {
-							imgRef = "/content/dam/global/" + locale + imagePath;
+							URL url = new URL(path);
+							String imagePath = url.getPath();
+							if (imagePath.startsWith("/web/")) {
+								imgRef = imagePath.replace("/web/", "/content/dam/global/" + locale+"/");
+							}else if(imagePath.toLowerCase().startsWith("/en/us/")){
+								imgRef = imagePath.replace("/en/us/", "/content/dam/global/" + locale+"/");
+								imgRef = imagePath.replace("/en/US/", "/content/dam/global/" + locale+"/");
+							} else {
+								imgRef = "/content/dam/global/" + locale + imagePath;
+							}
 						}
+						//updating the name of the wem image path with the web image path.
+						if (path.lastIndexOf("/") != -1 && imgRef.lastIndexOf("/") != -1) {
+							String imageName = path.substring(path.lastIndexOf("/"), path.length());
+							imgRef = imgRef.substring(0, imgRef.lastIndexOf("/")) + imageName;
+						}
+						newImagePath = setContentToDAM(path, imgRef, locale);//method to hit the service to migrate the image.
+					}else if(path.startsWith("/c/en/us")||path.startsWith("/content/en/us")){
+						return "";
+					} else if (!path.equalsIgnoreCase(imgRef)) {//if the image path is form content dam and if the image paths of the wem and web are different when returning the web image path.
+						log.debug("Path of the image is wem image path." + path);
+						if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
+							log.debug("Adding domain to the image path.");
+							path = "http://www.cisco.com" + path;
+						}
+						URL url = new URL(path);
+						path = url.getPath();
+						log.debug("getPath : " + path);
+						return path;
+					} else {//if both the image paths are same in the wem and web then returning blank, which meaning to not update the fileReference.
+						return "";
 					}
-					//updating the name of the wem image path with the web image path.
-					if (path.lastIndexOf("/") != -1 && imgRef.lastIndexOf("/") != -1) {
-						String imageName = path.substring(path.lastIndexOf("/"), path.length());
-						imgRef = imgRef.substring(0, imgRef.lastIndexOf("/")) + imageName;
-					}
-					newImagePath = setContentToDAM(path, imgRef, locale);//method to hit the service to migrate the image.
-				}else if(path.startsWith("/c/en/us")||path.startsWith("/content/en/us")){
-					return "";
-				} else if (!path.equalsIgnoreCase(imgRef)) {//if the image path is form content dam and if the image paths of the wem and web are different when returning the web image path.
-					log.debug("Path of the image is wem image path." + path);
-					if (path.indexOf("http:") == -1 && path.indexOf("https:") == -1) {
-						log.debug("Adding domain to the image path.");
-						path = "http://www.cisco.com" + path;
-					}
-					URL url = new URL(path);
-					path = url.getPath();
-					log.debug("getPath : " + path);
-					return path;
-				} else {//if both the image paths are same in the wem and web then returning blank, which meaning to not update the fileReference.
-					return "";
+				} else {
+					log.debug("returning null : " + path);
+					return null;
 				}
-			} else {
-				log.debug("returning null : " + path);
-				return null;
-			}
 			}
 		} catch (Exception e) {
 			log.error("Exception : ", e);
@@ -345,7 +345,7 @@ public class FrameworkUtils {
 			}
 			String newImagePath = "";
 			String error = "";
-			
+
 			//code for connection timed out.
 			for (int reconnection=0; reconnection<3; reconnection++) {
 				log.debug("Count of reconnection" + reconnection);
@@ -372,7 +372,7 @@ public class FrameworkUtils {
 					break;
 				}
 			}
-			
+
 			if (resObj != null && resObj.has("newImagePath")) {
 				newImagePath = (String) resObj.get("newImagePath");
 				log.debug("Updated dam Image path : " + newImagePath);
@@ -528,9 +528,9 @@ public class FrameworkUtils {
 				pdfPath = FrameworkUtils.migrateDAMContent(primaryCTALinkUrl, "", locale, sb);
 				log.debug("pdf path after migraiton is: "+ pdfPath);
 				return pdfPath;
-				
+
 			}
-			if (((primaryCTALinkUrl.indexOf("?") != -1 || primaryCTALinkUrl.indexOf("#") != -1)) && !primaryCTALinkUrl.endsWith(".html#top")) {
+			if ((primaryCTALinkUrl.indexOf("?") != -1 || primaryCTALinkUrl.indexOf("#") != -1) && !primaryCTALinkUrl.endsWith(".html#top")) {
 				String url = primaryCTALinkUrl;
 				if (primaryCTALinkUrl.indexOf("?") != -1) {
 					primaryCTALinkUrl = url.substring(0, url.indexOf("?"));
@@ -543,24 +543,25 @@ public class FrameworkUtils {
 				log.debug("primaryCTALinkUrl having query : "+ primaryCTALinkUrl);
 				log.debug("query in primaryCTALinkUrl : "+ query);
 			}
-//			if (urlMap.containsKey(primaryCTALinkUrl)) {
-				if(primaryCTALinkUrl.endsWith(".html#top")){  //code to remove if #top is in provided url for "back to top" issue.
-					log.debug("link with #top before trim : "+ primaryCTALinkUrl );
-					primaryCTALinkUrl ="#top";
-					log.debug("link with #top after trim : "+ primaryCTALinkUrl );
-					if (urlMap.containsKey(primaryCTALinkUrl)) {		
-					primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
-					}
-				}
-				
-				
-//				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
-//			}
+			//			if (urlMap.containsKey(primaryCTALinkUrl)) {
+			if(primaryCTALinkUrl.endsWith(".html#top")){  //code to remove if #top is in provided url for "back to top" issue.
+				log.debug("link with #top before trim : "+ primaryCTALinkUrl );
+				primaryCTALinkUrl ="#top";
+				log.debug("link with #top after trim : "+ primaryCTALinkUrl );
+
+			}
+			if (urlMap.containsKey(primaryCTALinkUrl)) {		
+				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
+			}
+
+
+			//				primaryCTALinkUrl = urlMap.get(primaryCTALinkUrl);
+			//			}
 			if (StringUtils.isNotBlank(query)) {
 				primaryCTALinkUrl = primaryCTALinkUrl + query;
 				log.debug("url with query:: " + primaryCTALinkUrl);
 			}
-			
+
 		}
 		return primaryCTALinkUrl;
 	}
@@ -617,20 +618,20 @@ public class FrameworkUtils {
 		if (doc != null) {
 			//-------------------------------------------------------------------------------------------------------------------------------
 			//start of Logic to retrieve all the hyper links text and url and save in a map.
-			
+
 			Element webElement = doc.html(htmlWEBContent);
 			String title = "";
 			Elements titleElements = webElement.select("h2.bdr-1");
 			Elements titleLinks = webElement.select("div.c00v0-pilot");
-			
-			
+
+
 			if(titleElements != null && !titleElements.isEmpty()){
 				Element titleElement = titleElements.first();
 				title = titleElement.ownText();
 			}else{
 				log.debug("No title found in web content with class 'bdr-1'");
 			}
-			
+
 			String aHeadingText = "";
 			String aHeadingLink = "";
 			if(titleLinks != null && !titleLinks.isEmpty()){
@@ -646,7 +647,7 @@ public class FrameworkUtils {
 			}else{
 				log.debug("No links found in the heading section with in the class 'c00v0-pilot'.");
 			}
-			
+
 			Elements liElements = webElement.getElementsByTag("li");
 			if(liElements != null && !liElements.isEmpty()){
 				for(Element ele : liElements){
@@ -671,7 +672,7 @@ public class FrameworkUtils {
 			}else{
 				log.debug("No li elements found in source html content.");
 			}
-			
+
 			//end of Logic to retrieve all the hyper links text and url and save in a map.
 			//-------------------------------------------------------------------------------------------------------------------------------
 			//start of logic to update all the links in the wem html content from the map.
@@ -681,7 +682,7 @@ public class FrameworkUtils {
 				log.debug("'product-content' class not found, searching for li elements.");
 				productContentElements = wemElement.getElementsByTag("li");
 			}
-			
+
 			int i = 0;
 			if(i<productContentElements.size()){
 				Set<String> keys = map.keySet();
@@ -689,7 +690,7 @@ public class FrameworkUtils {
 					String val = map.get(key);
 					Element productElement = productContentElements.get(i);
 					Elements anchorElements = productElement.getElementsByTag("a");
-					
+
 					if(anchorElements != null && !anchorElements.isEmpty()){
 						Element anchorElement = anchorElements.first();
 						anchorElement.attr("href", val);
@@ -710,7 +711,7 @@ public class FrameworkUtils {
 			//end of logic to update all the links in the wem html content from the map.
 			//-------------------------------------------------------------------------------------------------------------------------------
 			//Start of log to update the title of the content.
-			
+
 			log.debug("Title of the web page content : "+title);
 			titleElements = wemElement.select("span.arrow");
 			if(titleElements != null && !titleElements.isEmpty() && StringUtils.isNotBlank(title)){
@@ -719,32 +720,32 @@ public class FrameworkUtils {
 			}else{
 				log.debug("No title foundin wem content with class 'arrow'");
 			}
-			
-			
+
+
 			log.debug("Title link text of the web page content : "+aHeadingText);
 			log.debug("Title link href of the web page content : "+aHeadingLink);
-			
+
 			Elements titleLinkElements = wemElement.select("span.view-all-link");
 			if(titleLinkElements != null && !titleLinkElements.isEmpty()){
-					Element titleLinkElement = titleLinkElements.first();
-					Elements titleaElements = titleLinkElement.getElementsByTag("a");
-					if(titleaElements != null && !titleaElements.isEmpty()){
-						Element titleaElement = titleaElements.first();
-						if(StringUtils.isNotBlank(aHeadingText)){
-							titleaElement.text(aHeadingText);
-						}else{
-							log.debug("No heading link text found in web content.");
-						}
-						if(StringUtils.isNotBlank(aHeadingLink)){
-							titleaElement.attr("href", aHeadingLink);
-						}else{
-							log.debug("No heading link found in web content.");
-						}
-						
-						
+				Element titleLinkElement = titleLinkElements.first();
+				Elements titleaElements = titleLinkElement.getElementsByTag("a");
+				if(titleaElements != null && !titleaElements.isEmpty()){
+					Element titleaElement = titleaElements.first();
+					if(StringUtils.isNotBlank(aHeadingText)){
+						titleaElement.text(aHeadingText);
 					}else{
-						log.debug("no anchor links found in the wem content.");
+						log.debug("No heading link text found in web content.");
 					}
+					if(StringUtils.isNotBlank(aHeadingLink)){
+						titleaElement.attr("href", aHeadingLink);
+					}else{
+						log.debug("No heading link found in web content.");
+					}
+
+
+				}else{
+					log.debug("no anchor links found in the wem content.");
+				}
 			}else{
 				log.debug("No element found with the class 'view-all-link' in wem content.");
 			}
@@ -754,117 +755,117 @@ public class FrameworkUtils {
 		}
 		return wemElement.outerHtml();
 	}
-	
+
 	public static String updateHtmlBlobContent(Document doc,String htmlWEBContent,
 			String htmlWEMContent, String loc, StringBuilder sb) throws JSONException{
 
 		List<String> htmlList = new ArrayList<String>() {};
 		Element wemElement = null;
 		/*Document doc = null;
-		
+
 				try {
 					doc = Jsoup.connect(loc).get();
 				} catch (IOException e) {
-				
+
 				}
 				log.debug("Connected to the provided URL");*/;
-			//-------------------------------------------------------------------------------------------------------------------------------
-			//start of Logic to retrieve all the hyper links text and url and save in a map.
+				//-------------------------------------------------------------------------------------------------------------------------------
+				//start of Logic to retrieve all the hyper links text and url and save in a map.
 				try{
 					if (doc != null) {
-				
-			Element webElement = doc.html(htmlWEBContent);
-			String title = "";
-			String paragraph = "";
-			Elements titleElements = webElement.select("h3");
-			Elements paragraphElements = webElement.select("p");
-			if(titleElements != null && !titleElements.isEmpty()){
-				Element titleElement = titleElements.first();
-				title = titleElement.text();
-				log.debug("title******* : "+title);
-			}else{
-				log.debug("No title found in web content with class 'bdr-1'");
-			}
-			if(paragraphElements != null && !paragraphElements.isEmpty()){
-				Element pElement = paragraphElements.first();
-				paragraph = pElement.text();
-				log.debug("link href is blank in the element : "+paragraph);
-			}else{
-				log.debug("No p tag found in web content with class 'bdr-1'");
-			}
-			Elements liElements = webElement.select("li.clearfix");
-			String subDrawerContentStr = "";
-			if(liElements != null && !liElements.isEmpty()){
-				for(Element ele : liElements){
-					 subDrawerContentStr = ele.html();
-							if(StringUtils.isNotBlank(subDrawerContentStr)){
-						htmlList.add(subDrawerContentStr);
-							}else{
-								log.debug("link href is blank in the element : "+ele.html());
-				}
-				}
-				//log.debug("subdrawer cotnendkeddsm"+ liElements.);
-			}
-			
-			
-			//end of Logic to retrieve all the hyper links text and url and save in a map.
-			//-------------------------------------------------------------------------------------------------------------------------------
-			//start of logic to update all the links in the wem html content from the map.
-			wemElement = doc.html(htmlWEMContent);
-			Elements dmcDrawerContentElements = wemElement.select("div.dmc-drawer-content");
-			if(liElements != null && dmcDrawerContentElements != null){
-				if(liElements.size() != dmcDrawerContentElements.size()){
-					log.debug("liElements.size() content"+liElements.size()+ "::: "+dmcDrawerContentElements.size());
-				sb.append("<li> Mismatch in the count of sub drawer panels for "+title+" drawer </li>");
-				}}
-			int ele=0; 
-			for(Element dmcDrawerContentElement : dmcDrawerContentElements ){
-				
-				if(ele < htmlList.size()){
-					log.debug("actual content"+htmlList.get(ele));
-					dmcDrawerContentElement.html(htmlList.get(ele)+"<div style=\"clear:both;\"></div>");
-					ele++;
-				}
-				
-			}
-		//	dmcDrawerContentElements.html(liElements.outerHtml());
-			//end of logic to update all the links in the wem html content from the map.
-			//-------------------------------------------------------------------------------------------------------------------------------
-			//Start of log to update the title of the content.
-			
-			log.debug("Title of the web page content : "+title);
-			titleElements = wemElement.select("h3");
-			if(titleElements != null && !titleElements.isEmpty() && StringUtils.isNotBlank(title)){
-				Element titleElement = titleElements.first();
-				titleElement.text(title);
-			}else{
-				log.debug("No title foundin wem content with class 'arrow'");
-			}
-			
-			paragraphElements = wemElement.select("p");
-			if(paragraphElements != null && !paragraphElements.isEmpty() && StringUtils.isNotBlank(paragraph)){
-				Element paraElement = paragraphElements.first();
-				paraElement.text(paragraph);
-			}else{
-				log.debug("No title foundin wem content with class 'arrow'");
-			}
-			
-			log.debug("Title text of the web page content : "+title);
-			log.debug("Title p href of the web page content : "+paragraph);
-			
-			//End of log to update the title of the content.
-			return wemElement.outerHtml();
-		}else {
-			log.debug("doc is null.");
-		}
-					}catch(Exception e){
+
+						Element webElement = doc.html(htmlWEBContent);
+						String title = "";
+						String paragraph = "";
+						Elements titleElements = webElement.select("h3");
+						Elements paragraphElements = webElement.select("p");
+						if(titleElements != null && !titleElements.isEmpty()){
+							Element titleElement = titleElements.first();
+							title = titleElement.text();
+							log.debug("title******* : "+title);
+						}else{
+							log.debug("No title found in web content with class 'bdr-1'");
+						}
+						if(paragraphElements != null && !paragraphElements.isEmpty()){
+							Element pElement = paragraphElements.first();
+							paragraph = pElement.text();
+							log.debug("link href is blank in the element : "+paragraph);
+						}else{
+							log.debug("No p tag found in web content with class 'bdr-1'");
+						}
+						Elements liElements = webElement.select("li.clearfix");
+						String subDrawerContentStr = "";
+						if(liElements != null && !liElements.isEmpty()){
+							for(Element ele : liElements){
+								subDrawerContentStr = ele.html();
+								if(StringUtils.isNotBlank(subDrawerContentStr)){
+									htmlList.add(subDrawerContentStr);
+								}else{
+									log.debug("link href is blank in the element : "+ele.html());
+								}
+							}
+							//log.debug("subdrawer cotnendkeddsm"+ liElements.);
+						}
+
+
+						//end of Logic to retrieve all the hyper links text and url and save in a map.
+						//-------------------------------------------------------------------------------------------------------------------------------
+						//start of logic to update all the links in the wem html content from the map.
+						wemElement = doc.html(htmlWEMContent);
+						Elements dmcDrawerContentElements = wemElement.select("div.dmc-drawer-content");
+						if(liElements != null && dmcDrawerContentElements != null){
+							if(liElements.size() != dmcDrawerContentElements.size()){
+								log.debug("liElements.size() content"+liElements.size()+ "::: "+dmcDrawerContentElements.size());
+								sb.append("<li> Mismatch in the count of sub drawer panels for "+title+" drawer </li>");
+							}}
+						int ele=0; 
+						for(Element dmcDrawerContentElement : dmcDrawerContentElements ){
+
+							if(ele < htmlList.size()){
+								log.debug("actual content"+htmlList.get(ele));
+								dmcDrawerContentElement.html(htmlList.get(ele)+"<div style=\"clear:both;\"></div>");
+								ele++;
+							}
+
+						}
+						//	dmcDrawerContentElements.html(liElements.outerHtml());
+						//end of logic to update all the links in the wem html content from the map.
+						//-------------------------------------------------------------------------------------------------------------------------------
+						//Start of log to update the title of the content.
+
+						log.debug("Title of the web page content : "+title);
+						titleElements = wemElement.select("h3");
+						if(titleElements != null && !titleElements.isEmpty() && StringUtils.isNotBlank(title)){
+							Element titleElement = titleElements.first();
+							titleElement.text(title);
+						}else{
+							log.debug("No title foundin wem content with class 'arrow'");
+						}
+
+						paragraphElements = wemElement.select("p");
+						if(paragraphElements != null && !paragraphElements.isEmpty() && StringUtils.isNotBlank(paragraph)){
+							Element paraElement = paragraphElements.first();
+							paraElement.text(paragraph);
+						}else{
+							log.debug("No title foundin wem content with class 'arrow'");
+						}
+
+						log.debug("Title text of the web page content : "+title);
+						log.debug("Title p href of the web page content : "+paragraph);
+
+						//End of log to update the title of the content.
+						return wemElement.outerHtml();
+					}else {
 						log.debug("doc is null.");
 					}
-	
+				}catch(Exception e){
+					log.debug("doc is null.");
+				}
 
-		return null;
-		}
-		
+
+				return null;
+	}
+
 	public static Session getSession() {
 		Repository repository = null;
 		Session session = null;
