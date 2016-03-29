@@ -62,6 +62,7 @@ import com.cisco.dse.global.migration.rservicelisting.RServiceListingVariation2;
 import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation01;
 import com.cisco.dse.global.migration.rsolutionlisting.RSolutionListingVariation02;
 import com.cisco.dse.global.migration.rtechnology.RTechnologyVariation1;
+import com.cisco.dse.global.migration.rtechnology.RTechnologyVariation2;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation01;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation02;
 import com.cisco.dse.global.migration.servicelisting.ServiceListingVariation03;
@@ -442,7 +443,14 @@ public class OVWMigration {
 								sb.append(new RTechnologyVariation1().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
 								sb.append("</tr>");
 								sb.append("<tr><td colspan='3'>.</td></tr>");
-							} else if ("index-Rrootvar2".equals(type)) {
+							} 
+							else if ("technology-rvar2".equals(type)) {
+								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
+								sb.append("<tr>");
+								sb.append(new RTechnologyVariation2().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
+								sb.append("</tr>");
+								sb.append("<tr><td colspan='3'>.</td></tr>");
+							}else if ("index-Rrootvar2".equals(type)) {
 								sb.append("<tr bgcolor='#888888'><th style='width:500px'>WEM url</th><th style='width:500px'>Web Publisher url</th><th style='width:500px'>Comments</th></tr>");
 								sb.append("<tr>");
 								sb.append(new RSolutionIndex().translate(host, gLink, prod, type, cattype, sheet.getSheetName(), session, urlMap));
