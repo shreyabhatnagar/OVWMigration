@@ -547,7 +547,7 @@ public class ProductLandingVariation1 extends BaseAction {
 													count = count + 1;
 													if (drawerPanelsIterator.hasNext()) {
 														drawersPanelNode = drawerPanelsIterator.nextNode();
-													}
+													
 													Elements seriesElements = drawerPanelLiElement.select("div.series");
 													if (seriesElements != null) {
 														Element seriesElement = seriesElements.first();
@@ -650,7 +650,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																List<String> list2 = new ArrayList<String>();
 																if (subDrawerIterator.hasNext()) {
 																	subdrawerpanel = subDrawerIterator.nextNode();
-																}
+																
 																if (subItem != null) {
 																	Elements siTitles = subItem.getElementsByTag("h4");
 																	if (siTitles != null) {
@@ -800,6 +800,7 @@ public class ProductLandingVariation1 extends BaseAction {
 																	misMatchFlag = false;
 																}
 															}
+															}
 														}
 														
 													}
@@ -822,6 +823,7 @@ public class ProductLandingVariation1 extends BaseAction {
 													if(subdrawerTitleNotFoundFlag){
 														sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE+" "+panelTitle);
 													}
+												}
 												}
 											}
 										}
