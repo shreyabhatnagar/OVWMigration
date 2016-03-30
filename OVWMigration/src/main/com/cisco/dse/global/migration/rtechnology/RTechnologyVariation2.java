@@ -15,6 +15,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,7 +46,7 @@ public class RTechnologyVariation2 extends BaseAction {
 			pageUrl = pageUrl.replace("<locale>", locale).replace("<prod>", prod);
 			pagePropertiesPath = pagePropertiesPath.replace("<locale>", locale).replace("<prod>", prod);
 			String technologyLeft = pagePropertiesPath+"Grid/category/layout-category/widenarrow/WN-Wide-1";
-			String technologyRight = pagePropertiesPath+"Grid/category/layout-category/widenarrow/WN-Narrow-2/list_container";
+			String technologyRight = pagePropertiesPath+"Grid/category/layout-category/widenarrow/WN-Narrow-2";
 
 			log.debug("Path is "+technologyLeft);
 			log.debug("Path is "+technologyRight);
@@ -81,10 +82,14 @@ public class RTechnologyVariation2 extends BaseAction {
 				try{
 					log.debug("start Text Migration");
 					Element textEle = doc.select("div.c100-pilot").first();
+					if(textEle==null){
+						log.debug("$$$$$$$$$$$$$$$$$$$$");
+						textEle = doc.select("div.c00-pilot").first();
+					}
 					migrateText(textEle , technologyLeftNode , locale, urlMap);
 					log.debug("Text is Migrated");
 				}catch(Exception e){
-					log.debug("Exception in Text Migration");
+					log.debug("Exception in Text Migration",e);
 					sb.append(Constants.EXCEPTION_TEXT_COMPONENT);
 				}
 				//End text Migration
@@ -104,7 +109,26 @@ public class RTechnologyVariation2 extends BaseAction {
 				//Start tile Border Migration
 				try{
 					log.debug("start tile Border Migration");
-					sb.append("<li>Mis match of right rail components.</li>");
+					try{
+						log.debug("start tile Border Migration");
+						Elements tileBorderEles = doc.select("div.c23-pilot");
+						NodeIterator tileItr = technologyRightNode.hasNodes()?technologyRightNode.getNodes("tile*"):null;
+						Node tileNode=null;
+						for(Element tileBorderEle : tileBorderEles){
+							if(tileItr.hasNext()){
+								tileNode = tileItr.nextNode();
+								migrateTileElements(tileBorderEle , tileNode , urlMap, locale);
+							}
+						}
+						Elements extraEle = doc.select("div.gd-right").select("div.module-related");
+						if(!extraEle.isEmpty()){
+							sb.append("<li>"+extraEle.size()+" Extra list elements found in right rail.</li>");
+						}
+						log.debug("Tile Border is Migrated");
+					}catch(Exception e){
+						log.debug("Exception in tile Border Migration");
+						sb.append(Constants.UNABLE_TO_MIGRATE_TILE_BORDERED_COMPONENTS);
+					}
 					log.debug("Tile Border is Migrated");
 				}catch(Exception e){
 					log.debug("Exception in tile Border Migration");
@@ -141,58 +165,127 @@ public class RTechnologyVariation2 extends BaseAction {
 				}else{
 					sb.append(Constants.TEXT_HAEDING_NOT_FOUND);
 				}
-
+				String listTitle = null;
+				String listDesc = null;
 				if(textNodes.hasNext()){
 					Node textNode = textNodes.nextNode();
-					Element pEle = textEle.select("div.c00-pilot").first();
-					Element n13Ele = textEle.select("div.n13-pilot").first();
-					String c00Text = pEle.outerHtml();
-					String n13Text = n13Ele.outerHtml();
+					Element pEle = null;
+					if(textEle.hasClass("c00-pilot")){
+						for(int i=0;i<textEle.children().size();i++){
+							Element test = textEle.child(i);
+							if(test.hasClass("c00-pilot")){
+								pEle = test;
+								break;
+							}
+						}
+					}else{
+						pEle = textEle.select("div.c00-pilot").first();
+					}
+					/*String pEleStr = pEle.html();
+					Document d = Jsoup.parse(pEleStr);
+					Element el = d.select("div.c00-pilot").first();
+					log.debug("my doc : "+el.outerHtml());*/
+					Element listTitleEle  = pEle.getElementsByTag("h2").last();
+					listTitle = listTitleEle.outerHtml();
+					listTitleEle.remove();
+					Element listDescEle  = pEle.getElementsByTag("p").last();
+					listDesc = listDescEle.outerHtml();
+					listDescEle.remove();
+					String c00Text = FrameworkUtils.extractHtmlBlobContent(pEle, "", locale, sb, urlMap);
 					if(pEle != null){
-						eleSize++;
-						textNode.setProperty("text",c00Text+n13Text);
+						textNode.setProperty("text",c00Text);
 						pEle.remove();
-						n13Ele.remove();
 					}else{
 						sb.append(Constants.TEXT_ELEMENT_NOT_FOUND);
 					}
 
-					Element imageEle = textEle.getElementsByTag("img").first();
-					Element imgPar = imageEle.parent();
-					String imaparTag = imgPar.tagName();
-					log.debug("Image parent tag name : "+imaparTag);
-					if(imageEle != null){
-						if(!imaparTag.equalsIgnoreCase("li")){
-							Node textImgaeNode = technologyLeftNode.hasNode("image")?technologyLeftNode.getNode("image"):null;
-							String textImageEle = FrameworkUtils.extractImagePath(imageEle, sb);
-							String textImage = FrameworkUtils.migrateDAMContent(textImageEle, "", locale, sb);
-							if(textImage != ""){
-								Node imageNode = textImgaeNode.hasNode("image")?textImgaeNode.getNode("image"):null;
-								if(imageNode != null){
-									imageNode.setProperty("fileReference", textImage);	
-								}else{
-									sb.append(Constants.IMAGE_LINK_NODE_NOT_FOUND);
+					Node listNode = technologyLeftNode.hasNode("list_container_0")?technologyLeftNode.getNode("list_container_0"):null;
+					Element n13Ele = textEle.select("div.n13-pilot").first();
+					Element ulEle = null;
+					if(n13Ele!=null){
+						ulEle = n13Ele.getElementsByTag("ul").first();
+					}
+					if(ulEle!=null){
+						Elements liEle = ulEle.getElementsByTag("li");
+						int liSize = liEle.size();
+						if(listNode!=null){
+							listNode.setProperty("title",listTitle);
+							listNode.setProperty("intropara",listDesc);
+							Node listItemsNode = listNode.getNode("list_item_parsys").getNode("list_content").getNode("listitems");
+							if(listItemsNode!=null){
+								NodeIterator itemsItr = listItemsNode.hasNodes()?listItemsNode.getNodes("item_*"):null;
+								int itemsSize = (int)itemsItr.getSize();
+								if(liSize!=itemsSize){
+									sb.append("<li>Mismatch in list Elements WEB page has ("+liSize+") and WEM has ("+itemsSize+").</li>");
 								}
-							}else{
-								if(textImageEle.isEmpty()){
-									sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
-								}else {
-									log.debug("image path returned is null but image exists in the both the pages");
+								Node item = null;
+								Element aEl = null;
+								Element pEl = null;
+								String aText = null;
+								String aUrl = null;
+								String desc = null;
+								int count = 0;
+								for(Element li : liEle){
+									count+=1;
+									if(count==2){
+										continue;
+									}
+									aUrl = "";
+									if(itemsItr.hasNext()){
+										log.debug("items available..");
+										item = itemsItr.nextNode();
+										aEl = li.getElementsByTag("a").first();
+										pEl = li.getElementsByTag("p").first();
+										desc = pEl.text();
+										item.setProperty("description",desc);
+										if(aEl!=null){
+											aText = aEl.text();
+											aUrl = aEl.absUrl("href");
+											if(StringUtil.isBlank(aUrl)){
+												aUrl = aEl.attr("href");
+											}
+											aUrl = FrameworkUtils.getLocaleReference(aUrl, urlMap, locale, sb);
+											
+										}else{
+											aText = li.getElementsByTag("h3").first().text();
+										}
+										Node linkData = item.hasNode("linkdata")?item.getNode("linkdata"):null;
+										if(linkData!=null){
+											linkData.setProperty("linktext",aText);
+											if(!StringUtil.isBlank(aUrl)){
+												if(linkData.hasProperty("linktype")){
+													linkData.setProperty("url",aUrl);
+												}else{
+													sb.append("<li>link node not found in WEM for list in Left rail.</li>");
+												}
+											}
+										}
+										
+									}
 								}
 							}
-						}else{
-							sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 						}
-						imageEle.remove();
-					}else{
-						sb.append(Constants.IMAGE_NOT_FOUND_IN_LOCALE_PAGE);
 					}
+					n13Ele.remove();
 
 					if(textNodes.hasNext()){
 						Node textLastNode = textNodes.nextNode();
-						Element c00Ele = textEle.select("div.c00-pilot").first();
+						Element c00Ele = null;
+						if(textEle.hasClass("c00-pilot")){
+							for(int i=0;i<textEle.children().size();i++){
+								Element test = textEle.child(i);
+								if(test.hasClass("c00-pilot")){
+									c00Ele = test;
+									break;
+								}
+							}
+						}else{
+							c00Ele = textEle.select("div.c00-pilot").first();
+						}
+//						c00Ele = textEle.select("div.c00-pilot").first();
 						if(c00Ele!=null){
 							textLastNode.setProperty("text", FrameworkUtils.extractHtmlBlobContent(c00Ele, "", locale, sb, urlMap));
+							//							c00Ele.remove();
 						}else{
 							sb.append("<li>Text element not found in WEB page.</li>");
 						}
@@ -237,6 +330,20 @@ public class RTechnologyVariation2 extends BaseAction {
 									if(size == eleSize){
 										for(Element anchor:listEles){
 											Node itemNode = itemNodes.nextNode();
+											Element li = anchor.parent();
+											String liOwn = li.ownText();
+											if(!StringUtil.isBlank(liOwn)){
+												log.debug("liOWN text : "+liOwn);
+												liOwn= liOwn.replace("(","");
+												liOwn= liOwn.replace(")","");
+												liOwn= liOwn.replace("PDF","");
+												liOwn= liOwn.replace("-","");
+												liOwn.trim();
+												log.debug("liOWN text after : "+liOwn);
+												if(itemNode.hasProperty("size")){
+													itemNode.setProperty("size", liOwn);
+												}
+											}
 											if(itemNode.hasNode("linkdata")){
 												Node linkdataNode = itemNode.getNode("linkdata");
 												String linkText = anchor.text();
@@ -254,6 +361,20 @@ public class RTechnologyVariation2 extends BaseAction {
 									}else if(size > eleSize){
 										for(Element anchor:listEles){
 											Node itemNode = itemNodes.nextNode();
+											Element li = anchor.parent();
+											String liOwn = li.ownText();
+											if(!StringUtil.isBlank(liOwn)){
+												log.debug("liOWN text : "+liOwn);
+												liOwn= liOwn.replace("(","");
+												liOwn= liOwn.replace(")","");
+												liOwn= liOwn.replace("PDF","");
+												liOwn= liOwn.replace("-","");
+												liOwn.trim();
+												log.debug("liOWN text after : "+liOwn);
+												if(itemNode.hasProperty("size")){
+													itemNode.setProperty("size", liOwn);
+												}
+											}
 											if(itemNode.hasNode("linkdata")){
 												Node linkdataNode = itemNode.getNode("linkdata");
 												String linkText = anchor.text();
@@ -275,6 +396,21 @@ public class RTechnologyVariation2 extends BaseAction {
 										for(Element anchor:listEles){
 											if(itemNodes.hasNext()){
 												Node itemNode = itemNodes.nextNode();
+												Element li = anchor.parent();
+												String liOwn = li.ownText();
+												if(!StringUtil.isBlank(liOwn)){
+													log.debug("liOWN text : "+liOwn);
+													liOwn= liOwn.replace("(","");
+													liOwn= liOwn.replace(")","");
+													liOwn= liOwn.replace("PDF","");
+													liOwn= liOwn.replace("-","");
+													liOwn.trim();
+													log.debug("liOWN text after : "+liOwn);
+													liOwn.trim();
+													if(itemNode.hasProperty("size")){
+														itemNode.setProperty("size", liOwn);
+													}
+												}
 												if(itemNode.hasNode("linkdata")){
 													Node linkdataNode = itemNode.getNode("linkdata");
 													String linkText = anchor.text();
@@ -317,5 +453,41 @@ public class RTechnologyVariation2 extends BaseAction {
 		}
 
 	}
+	private void migrateTileElements(Element tileBorderEle,
+			Node technologyRightNode, Map<String, String> urlMap, String locale) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+		if(tileBorderEle != null){
+			Element heading = tileBorderEle.getElementsByTag("h2").first();
+			Element descEle = tileBorderEle.getElementsByTag("p").first();
+			if(heading != null){
+				technologyRightNode.setProperty("title", heading.text());
+				if(descEle!=null){
+					technologyRightNode.setProperty("description", descEle.text());
+				}else{
+					sb.append("<li>Tile Element Description not found.</li>");
+				}
+			}else{
+				sb.append(Constants.TILE_BORDERED_TITLE_NOT_FOUND);
+			}
+			Element listEles = tileBorderEle.getElementsByTag("a").first();
+			String aText = null;
+			String aUrl = null;
+			if(listEles != null){
+				aText = listEles.text();
+				aUrl = listEles.absUrl("href");
+				if(StringUtil.isBlank(aUrl)){
+					aUrl = listEles.attr("href");
+				}
+				Node cta = technologyRightNode.hasNode("cta")?technologyRightNode.getNode("cta"):null;
+				cta.setProperty("linktext",aText);
+				if(!StringUtil.isBlank(aUrl)){
+					cta.setProperty("url",aUrl);
+				}
+			}else{
+				sb.append(Constants.TILE_BORDERED_ANCHOR_ELEMENTS_NOT_FOUND);
+			}
+		}else{
+			sb.append(Constants.TILE_BORDERED_COMPONENT_NOT_FOUND);
+		}
 
+	}
 }
