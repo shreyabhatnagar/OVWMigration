@@ -143,6 +143,7 @@ public class ProductListingVariation3 extends BaseAction{
 
 						Elements pElements = pTagElements.select("p");
 						Element pTag = pElements.first();
+						if(pTag != null){
 						Element pTagText = pTag.getElementsByTag("p").first();
 						//log.debug("pTagText property!: " + pTagText);
 						if(pTagText != null){
@@ -164,14 +165,16 @@ public class ProductListingVariation3 extends BaseAction{
 
 							sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 						}
+						}else{
+							sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
+						}
 					}else{
 
 						sb.append(Constants.CHILD_TEXT_ELEMENT_NOT_FOUND);
 					}
 					
 				} catch (Exception e) {
-					sb.append("<li>" + Constants.EXCEPTION_TEXT_COMPONENT
-							+ e + "</li>");
+					log.debug("Exception", e);
 				}
 				session.save();
 			}

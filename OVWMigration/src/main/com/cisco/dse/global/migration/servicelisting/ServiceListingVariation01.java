@@ -453,8 +453,8 @@ public class ServiceListingVariation01 extends BaseAction {
 										count = count + 1;
 									}
 									else {
-										pText = pText + "<br>";
-										pText = pText + pElement.ownText();
+										//pText = pText + "<br>";
+										//pText = pText + pElement.ownText();
 										linkTextTobeAdded = pElement.ownText();
 										break;
 									}
