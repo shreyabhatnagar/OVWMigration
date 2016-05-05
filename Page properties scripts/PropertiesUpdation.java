@@ -15,6 +15,7 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
+import javax.jcr.nodetype.ConstraintViolationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.commons.JcrUtils;
@@ -24,11 +25,11 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class PagePropertiesUpdation {
+public class PropertiesUpdation {
 
 	static Repository repository = null;
 	static Session session = null;
-	static Logger log = Logger.getLogger(PagePropertiesUpdation.class);
+	static Logger log = Logger.getLogger(PropertiesUpdation.class);
 
 	public static void main(String s[]) throws FileNotFoundException,
 			IOException {
@@ -45,8 +46,8 @@ public class PagePropertiesUpdation {
 		String repo = null;
 
 		try {
-			String filename = "pageConfig.properties";
-			input = PagePropertiesUpdation.class.getClassLoader()
+			String filename = "config.properties";
+			input = PropertiesUpdation.class.getClassLoader()
 					.getResourceAsStream(filename);
 			if (input == null) {
 				log.debug("Input is null");
@@ -100,8 +101,9 @@ public class PagePropertiesUpdation {
 
 				for (XSSFSheet sheet : workbook) {
 					log.debug("Sheet name : " + sheet.getSheetName());
-
+					
 					XSSFRow firstRow = sheet.getRow(0);
+					if(firstRow!=null){
 					short cellnum1 = firstRow.getLastCellNum();
 					List<String> propertyNamesList = new ArrayList<String>();
 					List<String> propertyValuesList = new ArrayList<String>();
@@ -122,37 +124,37 @@ public class PagePropertiesUpdation {
 									propertyValuesList.get(i));
 						}
 
-						pagePropertiesUpdation(propertyNamesList, rowList);
+						propertiesUpdation(propertyNamesList, rowList);
 						rowList.clear();
 					}
+				}else{
+					log.debug("Input sheet is null");
 				}
 				workbook.close();
 				session.logout();
+				}
 			} else {
 				log.debug("config.properties file is not configured with 'serverurl' or 'aemuser' or 'aempassword' or 'workspace' or 'workbookpath' or 'reportspath'");
 			}
 		} catch (Exception e) {
-			log.error("Exception in main of PagePropertiesUpdation : ", e);
+			log.error("Exception in main of PropertiesUpdation : ", e);
 		}
 	}
 
-	private static void pagePropertiesUpdation(List<String> propertyNamesList,
+	private static void propertiesUpdation(List<String> propertyNamesList,
 			HashMap<String, String> rowList) {
 		String propMulVal[] = new String[1000];
-		String pageUrl = rowList.get("URL");
-		log.debug("----------Stated updating page properties of " + pageUrl
+		String nodePath = rowList.get("URL");
+		log.debug("----------Stated updating properties of node " + nodePath
 				+ "----------");
-		if (pageUrl.indexOf("/content") != -1)
-			pageUrl = pageUrl.substring(pageUrl.indexOf("/content"),
-					pageUrl.length());
-		if (pageUrl.contains(".html")) {
-			pageUrl = pageUrl.substring(0, pageUrl.lastIndexOf("."));
-		}
-		log.debug("Page path is " + pageUrl);
+		if (nodePath.indexOf("/content") != -1)
+			nodePath = nodePath.substring(nodePath.indexOf("/content"),
+					nodePath.length());
+		log.debug("Node path is " + nodePath);
 
 		try {
-			Node pageNode = session.getNode(pageUrl + "/jcr:content");
-			if (pageNode != null) {
+			Node node = session.getNode(nodePath);
+			if (node != null) {
 				for (String propertyName : propertyNamesList) {
 					String prpValue = rowList.get(propertyName);
 
@@ -162,23 +164,31 @@ public class PagePropertiesUpdation {
 						prpValue = "false";
 					}
 					if (StringUtils.isNotBlank(propertyName)
-							&& pageNode.hasProperty(propertyName)) {
-						boolean isMulti = pageNode.getProperty(propertyName)
+							&& node.hasProperty(propertyName)) {
+						boolean isMulti = node.getProperty(propertyName)
 								.isMultiple();
 
 						if (!isMulti) {
 							log.debug("Property "
 									+ propertyName
 									+ " already exists, it's old value is: "
-									+ pageNode.getProperty(propertyName)
+									+ node.getProperty(propertyName)
 											.getString());
-							pageNode.setProperty(propertyName,
+							try{
+							node.setProperty(propertyName,
 									rowList.get(propertyName));
+							}catch(ConstraintViolationException e){
+								log.debug("Cannot modify the property "+ propertyName);
+							}
 						} else {
 							log.debug("Property " + propertyName
 									+ " already exists ");
-							propMulVal = rowList.get(propertyName).split(",");
-							pageNode.setProperty(propertyName, propMulVal);
+							propMulVal = rowList.get(propertyName).split(":,");
+							try{
+							node.setProperty(propertyName, propMulVal);
+							}catch(ConstraintViolationException e){
+								log.debug("Cannot modify the property "+ propertyName);
+							}
 						}
 
 						log.debug(propertyName + " is set to " + prpValue);
@@ -186,7 +196,7 @@ public class PagePropertiesUpdation {
 						if (StringUtils.isNotBlank(propertyName)
 								&& !"URL".equals(propertyName)
 								&& StringUtils.isNotBlank(prpValue)) {
-							pageNode.setProperty(propertyName, prpValue);
+							node.setProperty(propertyName, prpValue);
 							log.debug(propertyName + " is set to " + prpValue);
 
 						}
@@ -194,8 +204,8 @@ public class PagePropertiesUpdation {
 					session.save();
 				}
 			}
-			log.debug("----------Done with the updation of page properties "
-					+ pageUrl + "----------");
+			log.debug("----------Done with the updation of properties "
+					+ nodePath + "----------");
 		} catch (PathNotFoundException e) {
 			log.debug("PathNotFoundException :", e);
 		} catch (RepositoryException e) {
