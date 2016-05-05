@@ -224,7 +224,7 @@ public class pagePropertiesCreation {
 				FileOutputStream out = new FileOutputStream(new File("C:/test/OVWDEMOPage.xlsx"));
 				workbook.write(out);
 				out.close();
-				System.out.println("Value wrote in excel");
+				System.out.println("Value wrote in excel ");
 				}
 			}
 		
