@@ -177,7 +177,7 @@ public class PagePropertiesUpdation {
 						} else {
 							log.debug("Property " + propertyName
 									+ " already exists ");
-							propMulVal = rowList.get(propertyName).split(",");
+							propMulVal = rowList.get(propertyName).split(":,");
 							pageNode.setProperty(propertyName, propMulVal);
 						}
 
