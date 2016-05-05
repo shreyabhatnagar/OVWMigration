@@ -11,19 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
 import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
+import javax.jcr.Value;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -104,6 +101,7 @@ public class pagePropertiesCreation {
 						workbookpath));
 
 				for (XSSFSheet sheet : workbook) {
+					if(sheet.getRow(0) != null){
 					log.debug("Sheet name : " + sheet.getSheetName());
 
 					XSSFRow firstRow = sheet.getRow(0);
@@ -126,8 +124,8 @@ public class pagePropertiesCreation {
 						if(!tempRow.getCell(0).getStringCellValue().equals("URL")){
 						
 						String nodePath = tempRow.getCell(0) != null ? tempRow.getCell(0).getStringCellValue() : "";
-						nodePath = nodePath.replace(".html", "");
-						String pagePropertiesPath = nodePath+"/jcr:content";
+				//		nodePath = nodePath.replace(".html", "");
+						String pagePropertiesPath = nodePath/*+"/jcr:content"*/;
 						log.debug("node path" + pagePropertiesPath);
 						javax.jcr.Node pageJcrNode = null;
 					
@@ -143,9 +141,35 @@ public class pagePropertiesCreation {
 						for (int i = 0; i < propertyNamesList.size(); i++) {
 							String propertyValue = "";
 							if(pageJcrNode.hasProperty(propertyNamesList.get(i))){
-								propertyValue = pageJcrNode.getProperty(propertyNamesList.get(i)).getValue().getString();
+							/*	propertyValue = pageJcrNode.getProperty(propertyNamesList.get(i)).getValue().getString();
 							
 								log.debug("propertyValue " + propertyValue);
+							*/
+								
+							//new code
+								Property propName = pageJcrNode.getProperty(propertyNamesList.get(i));
+								int type = propName.getType();
+								log.debug("typee "+ type);
+								
+								if(propName.isMultiple()){
+								Value[] values = propName.getValues();
+								log.debug("conn " + values);
+								if(values.length > 0){
+								for (int j=0;j<values.length;j++){
+									if(j==0)
+										propertyValue = propertyValue.concat(values[j].getString());
+									else
+										propertyValue = propertyValue.concat(":,"+values[j].getString());
+								}
+								}	
+								}
+								else {
+									propertyValue = propName.getValue().getString();
+								}
+								
+								log.debug("propertyValue " + propertyValue);
+							//end
+							
 							}else {
 								if(propertyNamesList.get(i).equals("URL")){
 									propertyValue ="Firstrow";
@@ -169,14 +193,17 @@ public class pagePropertiesCreation {
 						}
 					}
 
-					log.debug("In the main method of PagePropertiesUpdation");
+					log.debug("In the main method of PagePropertiesCreation");
+					}else{
+						log.debug("Empty sheet");
+					}
 					}
 				workbook.close();
 			} else {
 				log.debug("config.properties file is not configured with 'serverurl' or 'aemuser' or 'aempassword' or 'workspace' or 'workbookpath' or 'reportspath'");
 			}
 		} catch (Exception e) {
-			log.error("Exception in main of PagePropertiesUpdation : ", e);
+			log.error("Exception in main of PagePropertiesCreation : ", e);
 		}
 		finally {
 			log.debug("Session completed");
